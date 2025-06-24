@@ -16,7 +16,18 @@
     "import-data:clear": "node scripts/import-data.js --clear",
     "convert-import": "node scripts/convert-and-import.js",
     "convert-import:clear": "node scripts/convert-and-import.js --clear",
-    "seed:aizawl-east": "tsx scripts/seed-aizawl-east.ts"
+    "seed:aizawl-east": "tsx scripts/seed-aizawl-east.ts",
+    "seed:aizawl-west": "tsx scripts/seed-aizawl-west.ts",
+    "seed:champhai": "tsx scripts/seed-champhai.ts",
+    "seed:hnahthial": "tsx scripts/seed-hnahthial.ts",
+    "seed:khawzawl": "tsx scripts/seed-khawzawl.ts",
+    "seed:kolasib": "tsx scripts/seed-kolasib.ts",
+    "seed:lawngtlai": "tsx scripts/seed-lawngtlai.ts",
+    "seed:lunglei": "tsx scripts/seed-lunglei.ts",
+    "seed:mamit": "tsx scripts/seed-mamit.ts",
+    "seed:saitual": "tsx scripts/seed-saitual.ts",
+    "seed:serchhip": "tsx scripts/seed-serchhip.ts",
+    "seed:siaha": "tsx scripts/seed-siaha.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
