@@ -15,7 +15,8 @@
     "import-data": "node scripts/import-data.js",
     "import-data:clear": "node scripts/import-data.js --clear",
     "convert-import": "node scripts/convert-and-import.js",
-    "convert-import:clear": "node scripts/convert-and-import.js --clear"
+    "convert-import:clear": "node scripts/convert-and-import.js --clear",
+    "seed:aizawl-east": "tsx scripts/seed-aizawl-east.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
@@ -60,6 +61,7 @@
     "tailwindcss": "^4",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "tw-animate-css": "^1.3.4",
     "typescript": "^5"
   },
