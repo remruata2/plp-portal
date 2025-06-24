@@ -130,6 +130,41 @@ exports.Prisma.UserScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.DistrictScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.FacilityTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.FacilityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  facility_code: 'facility_code',
+  nin: 'nin',
+  district_id: 'district_id',
+  facility_type_id: 'facility_type_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SubCentreScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  facility_code: 'facility_code',
+  nin: 'nin',
+  facility_id: 'facility_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -150,7 +185,11 @@ exports.UserRole = exports.$Enums.UserRole = {
 };
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  District: 'District',
+  FacilityType: 'FacilityType',
+  Facility: 'Facility',
+  SubCentre: 'SubCentre'
 };
 
 /**
