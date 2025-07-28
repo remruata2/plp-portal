@@ -44,9 +44,9 @@ export default function AdminPage() {
         ]);
 
         setStats({
-          districts: districts.length,
-          facilityTypes: facilityTypes.length,
-          facilities: facilities.length,
+          districts: districts.districts?.length || 0,
+          facilityTypes: facilityTypes.facilityTypes?.length || 0,
+          facilities: facilities.facilities?.length || 0,
         });
       }
     } catch (error) {

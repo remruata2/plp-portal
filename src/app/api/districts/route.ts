@@ -10,6 +10,10 @@ export async function GET() {
       select: {
         id: true,
         name: true,
+        created_at: true,
+        _count: {
+          select: { facilities: true },
+        },
       },
     });
 

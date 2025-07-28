@@ -28,6 +28,7 @@
     "seed:saitual": "tsx scripts/seed-saitual.ts",
     "seed:serchhip": "tsx scripts/seed-serchhip.ts",
     "seed:siaha": "tsx scripts/seed-siaha.ts",
+    "seed:facilities": "tsx prisma/seed-all-facilities.ts",
     "seed:indicators": "tsx scripts/seed-indicators.ts",
     "seed:sample-data": "tsx scripts/seed-sample-data.ts"
   },
