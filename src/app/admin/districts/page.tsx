@@ -53,7 +53,7 @@ export default function DistrictsPage() {
       const response = await fetch("/api/districts");
       if (response.ok) {
         const data = await response.json();
-        setDistricts(data);
+        setDistricts(data.districts || data);
       } else {
         toast.error("Failed to fetch districts");
       }
@@ -205,56 +205,57 @@ export default function DistrictsPage() {
       </div>
 
       <div className="grid gap-4">
-        {districts.map((district) => (
-          <Card key={district.id}>
-            <CardContent className="p-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="text-lg font-semibold">{district.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    Facilities: {district._count?.facilities || 0} | Created:{" "}
-                    {new Date(district.created_at).toLocaleDateString()}
-                  </p>
+        {Array.isArray(districts) &&
+          districts.map((district) => (
+            <Card key={district.id}>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg font-semibold">{district.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      Facilities: {district._count?.facilities || 0} | Created:{" "}
+                      {new Date(district.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEdit(district)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete District</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{district.name}"?
+                            This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() =>
+                              handleDelete(district.id, district.name)
+                            }
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openEdit(district)}
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="sm">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete District</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete "{district.name}"?
-                          This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() =>
-                            handleDelete(district.id, district.name)
-                          }
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
       </div>
 
       {/* Edit Dialog */}

@@ -147,27 +147,101 @@ exports.Prisma.FacilityTypeScalarFieldEnum = {
 exports.Prisma.FacilityScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  facility_code: 'facility_code',
-  nin: 'nin',
   district_id: 'district_id',
   facility_type_id: 'facility_type_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  facility_code: 'facility_code',
+  nin: 'nin'
+};
+
+exports.Prisma.MonthlyHealthDataScalarFieldEnum = {
+  id: 'id',
+  facility_id: 'facility_id',
+  sub_centre_id: 'sub_centre_id',
+  district_id: 'district_id',
+  indicator_id: 'indicator_id',
+  report_month: 'report_month',
+  value: 'value',
+  data_quality: 'data_quality',
+  remarks: 'remarks',
+  uploaded_by: 'uploaded_by',
+  approved_by: 'approved_by',
+  approved_at: 'approved_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  achievement: 'achievement',
+  denominator: 'denominator',
+  numerator: 'numerator',
+  target_value: 'target_value'
+};
+
+exports.Prisma.DataUploadSessionScalarFieldEnum = {
+  id: 'id',
+  file_name: 'file_name',
+  file_path: 'file_path',
+  report_month: 'report_month',
+  total_records: 'total_records',
+  success_count: 'success_count',
+  error_count: 'error_count',
+  status: 'status',
+  upload_summary: 'upload_summary',
+  uploaded_by: 'uploaded_by',
+  created_at: 'created_at',
+  completed_at: 'completed_at'
+};
+
+exports.Prisma.FormulaScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  structure: 'structure',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
 
-exports.Prisma.SubCentreScalarFieldEnum = {
+exports.Prisma.IndicatorScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
-  facility_code: 'facility_code',
-  nin: 'nin',
-  facility_id: 'facility_id',
+  description: 'description',
+  type: 'type',
+  structure: 'structure',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.FieldScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.Sub_centreScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  facility_id: 'facility_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  facility_code: 'facility_code',
+  nin: 'nin'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -179,9 +253,29 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.UserRole = exports.$Enums.UserRole = {
   admin: 'admin',
   staff: 'staff'
+};
+
+exports.DataQuality = exports.$Enums.DataQuality = {
+  PENDING: 'PENDING',
+  VALIDATED: 'VALIDATED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.UploadStatus = exports.$Enums.UploadStatus = {
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.Prisma.ModelName = {
@@ -189,7 +283,12 @@ exports.Prisma.ModelName = {
   District: 'District',
   FacilityType: 'FacilityType',
   Facility: 'Facility',
-  SubCentre: 'SubCentre'
+  MonthlyHealthData: 'MonthlyHealthData',
+  DataUploadSession: 'DataUploadSession',
+  Formula: 'Formula',
+  Indicator: 'Indicator',
+  field: 'field',
+  sub_centre: 'sub_centre'
 };
 
 /**

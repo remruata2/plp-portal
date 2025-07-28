@@ -7,33 +7,34 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const districtId = searchParams.get("districtId");
-    const facilityTypeId = searchParams.get("facilityTypeId");
 
-    const where: any = {};
-
+    const whereClause: any = {};
     if (districtId) {
-      where.district_id = parseInt(districtId);
-    }
-
-    if (facilityTypeId) {
-      where.facility_type_id = parseInt(facilityTypeId);
+      whereClause.district_id = parseInt(districtId);
     }
 
     const facilities = await prisma.facility.findMany({
-      where,
-      orderBy: { name: "asc" },
+      where: whereClause,
       include: {
-        district: true,
-        facility_type: true,
+        district: {
+          select: { name: true },
+        },
+        facility_type: {
+          select: { name: true },
+        },
         _count: {
-          select: { sub_centres: true },
+          select: { sub_centre: true },
         },
       },
+      orderBy: [{ district: { name: "asc" } }, { name: "asc" }],
     });
 
-    return NextResponse.json(facilities);
+    return NextResponse.json({
+      success: true,
+      facilities,
+    });
   } catch (error) {
-    console.error("Error fetching facilities:", error);
+    console.error("Facilities fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch facilities" },
       { status: 500 }

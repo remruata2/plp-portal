@@ -10,7 +10,6 @@ interface DashboardStats {
   districts: number;
   facilityTypes: number;
   facilities: number;
-  subCentres: number;
 }
 
 export default function AdminPage() {
@@ -19,7 +18,6 @@ export default function AdminPage() {
     districts: 0,
     facilityTypes: 0,
     facilities: 0,
-    subCentres: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -30,33 +28,25 @@ export default function AdminPage() {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const [districtsRes, facilityTypesRes, facilitiesRes, subCentresRes] =
-        await Promise.all([
+      const [districtsRes, facilityTypesRes, facilitiesRes] = await Promise.all(
+        [
           fetch("/api/districts"),
           fetch("/api/facility-types"),
           fetch("/api/facilities"),
-          fetch("/api/sub-centres"),
-        ]);
+        ]
+      );
 
-      if (
-        districtsRes.ok &&
-        facilityTypesRes.ok &&
-        facilitiesRes.ok &&
-        subCentresRes.ok
-      ) {
-        const [districts, facilityTypes, facilities, subCentres] =
-          await Promise.all([
-            districtsRes.json(),
-            facilityTypesRes.json(),
-            facilitiesRes.json(),
-            subCentresRes.json(),
-          ]);
+      if (districtsRes.ok && facilityTypesRes.ok && facilitiesRes.ok) {
+        const [districts, facilityTypes, facilities] = await Promise.all([
+          districtsRes.json(),
+          facilityTypesRes.json(),
+          facilitiesRes.json(),
+        ]);
 
         setStats({
           districts: districts.length,
           facilityTypes: facilityTypes.length,
           facilities: facilities.length,
-          subCentres: subCentres.length,
         });
       }
     } catch (error) {
@@ -90,14 +80,6 @@ export default function AdminPage() {
       color: "text-purple-600",
       bgColor: "bg-purple-50",
       href: "/admin/facilities",
-    },
-    {
-      title: "Sub-centres",
-      value: stats.subCentres,
-      icon: Home,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
-      href: "/admin/sub-centres",
     },
   ];
 

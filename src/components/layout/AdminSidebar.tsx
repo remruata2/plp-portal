@@ -152,31 +152,6 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
             </Link>
 
             <Link
-              href="/admin/sub-centres"
-              onClick={() => setSidebarOpen && setSidebarOpen(false)}
-              className={`${baseLinkClasses} ${
-                pathname.startsWith("/admin/sub-centres")
-                  ? activeLinkClasses
-                  : inactiveLinkClasses
-              }`}
-            >
-              <svg
-                className="mr-3 h-5 w-5 text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-                />
-              </svg>
-              Sub-centres
-            </Link>
-
-            <Link
               href="/admin/users"
               onClick={() => setSidebarOpen && setSidebarOpen(false)}
               className={`${baseLinkClasses} ${
@@ -199,6 +174,65 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
                 />
               </svg>
               User Management
+            </Link>
+
+            {/* Health Data Management Section */}
+            <div className="mt-6 mb-2">
+              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Health Data
+              </h3>
+            </div>
+
+
+
+            <Link
+              href="/admin/health-data/upload"
+              onClick={() => setSidebarOpen && setSidebarOpen(false)}
+              className={`${baseLinkClasses} ${
+                pathname.startsWith("/admin/health-data/upload")
+                  ? activeLinkClasses
+                  : inactiveLinkClasses
+              }`}
+            >
+              <svg
+                className="mr-3 h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              Upload Data
+            </Link>
+
+            <Link
+              href="/admin/indicators"
+              onClick={() => setSidebarOpen && setSidebarOpen(false)}
+              className={`${baseLinkClasses} ${
+                pathname.startsWith("/admin/indicators")
+                  ? activeLinkClasses
+                  : inactiveLinkClasses
+              }`}
+            >
+              <svg
+                className="mr-3 h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              Indicators
             </Link>
           </>
         )}

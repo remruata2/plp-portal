@@ -7,16 +7,18 @@ export async function GET() {
   try {
     const districts = await prisma.district.findMany({
       orderBy: { name: "asc" },
-      include: {
-        _count: {
-          select: { facilities: true },
-        },
+      select: {
+        id: true,
+        name: true,
       },
     });
 
-    return NextResponse.json(districts);
+    return NextResponse.json({
+      success: true,
+      districts,
+    });
   } catch (error) {
-    console.error("Error fetching districts:", error);
+    console.error("Districts fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch districts" },
       { status: 500 }

@@ -47,7 +47,7 @@ interface Facility {
   district: District;
   facility_type: FacilityType;
   _count?: {
-    sub_centres: number;
+    sub_centre: number;
   };
 }
 
@@ -98,9 +98,9 @@ export default function FacilitiesPage() {
             facilityTypesRes.json(),
           ]);
 
-        setFacilities(facilitiesData);
-        setDistricts(districtsData);
-        setFacilityTypes(facilityTypesData);
+        setFacilities(facilitiesData.facilities || facilitiesData);
+        setDistricts(districtsData.districts || districtsData);
+        setFacilityTypes(facilityTypesData.facilityTypes || facilityTypesData);
       } else {
         toast.error("Failed to fetch data");
       }
@@ -121,7 +121,7 @@ export default function FacilitiesPage() {
       const response = await fetch(`/api/facilities?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setFacilities(data);
+        setFacilities(data.facilities || data);
       }
     } catch (error) {
       console.error("Error fetching facilities:", error);
@@ -169,6 +169,12 @@ export default function FacilitiesPage() {
       !editingFacility
     ) {
       toast.error("Name, district, and facility type are required");
+      return;
+    }
+
+    // Validate that sub-centres have a parent facility
+    if (formData.facility_type_id === "6" && !formData.parent_id) {
+      toast.error("Sub-centres must have a parent facility");
       return;
     }
 
@@ -220,6 +226,7 @@ export default function FacilitiesPage() {
       nin: facility.nin || "",
       district_id: facility.district_id.toString(),
       facility_type_id: facility.facility_type_id.toString(),
+      parent_id: facility.parent_id?.toString() || "",
     });
     setIsEditOpen(true);
   };
@@ -231,6 +238,7 @@ export default function FacilitiesPage() {
       nin: "",
       district_id: "",
       facility_type_id: "",
+      parent_id: "",
     });
   };
 
@@ -319,11 +327,12 @@ export default function FacilitiesPage() {
                     required
                   >
                     <option value="">Select District</option>
-                    {districts.map((district) => (
-                      <option key={district.id} value={district.id}>
-                        {district.name}
-                      </option>
-                    ))}
+                    {Array.isArray(districts) &&
+                      districts.map((district) => (
+                        <option key={district.id} value={district.id}>
+                          {district.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div>
@@ -342,14 +351,46 @@ export default function FacilitiesPage() {
                     required
                   >
                     <option value="">Select Facility Type</option>
-                    {facilityTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
+                    {Array.isArray(facilityTypes) &&
+                      facilityTypes.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
+              {formData.facility_type_id === "6" && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Parent Facility *
+                  </label>
+                  <select
+                    value={formData.parent_id}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        parent_id: e.target.value,
+                      })
+                    }
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                  >
+                    <option value="">Select Parent Facility</option>
+                    {Array.isArray(facilities) &&
+                      facilities
+                        .filter((facility) => !facility.parent_id) // Only show parent facilities
+                        .map((facility) => (
+                          <option key={facility.id} value={facility.id}>
+                            {facility.name} ({facility.facility_type.name})
+                          </option>
+                        ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Sub-centres must have a parent facility
+                  </p>
+                </div>
+              )}
               <div className="flex justify-end space-x-2">
                 <Button
                   type="button"
@@ -377,11 +418,12 @@ export default function FacilitiesPage() {
             className="p-2 border border-gray-300 rounded-md"
           >
             <option value="">All Districts</option>
-            {districts.map((district) => (
-              <option key={district.id} value={district.id}>
-                {district.name}
-              </option>
-            ))}
+            {Array.isArray(districts) &&
+              districts.map((district) => (
+                <option key={district.id} value={district.id}>
+                  {district.name}
+                </option>
+              ))}
           </select>
           <select
             value={filters.facilityTypeId}
@@ -391,11 +433,12 @@ export default function FacilitiesPage() {
             className="p-2 border border-gray-300 rounded-md"
           >
             <option value="">All Facility Types</option>
-            {facilityTypes.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
+            {Array.isArray(facilityTypes) &&
+              facilityTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.name}
+                </option>
+              ))}
           </select>
           {(filters.districtId || filters.facilityTypeId) && (
             <Button
@@ -410,67 +453,68 @@ export default function FacilitiesPage() {
       </div>
 
       <div className="grid gap-4">
-        {facilities.map((facility) => (
-          <Card key={facility.id}>
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold">{facility.name}</h3>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <p>
-                      Code: {facility.facility_code || "N/A"} | NIN:{" "}
-                      {facility.nin || "N/A"}
-                    </p>
-                    <p>
-                      District: {facility.district.name} | Type:{" "}
-                      {facility.facility_type.name}
-                    </p>
-                    <p>
-                      Sub-centres: {facility._count?.sub_centres || 0} |
-                      Created:{" "}
-                      {new Date(facility.created_at).toLocaleDateString()}
-                    </p>
+        {Array.isArray(facilities) &&
+          facilities.map((facility) => (
+            <Card key={facility.id}>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold">{facility.name}</h3>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <p>
+                        Code: {facility.facility_code || "N/A"} | NIN:{" "}
+                        {facility.nin || "N/A"}
+                      </p>
+                      <p>
+                        District: {facility.district.name} | Type:{" "}
+                        {facility.facility_type.name}
+                      </p>
+                      <p>
+                        Child Facilities: {facility._count?.children || 0} |
+                        Created:{" "}
+                        {new Date(facility.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEdit(facility)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Facility</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{facility.name}"?
+                            This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() =>
+                              handleDelete(facility.id, facility.name)
+                            }
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openEdit(facility)}
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="sm">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Facility</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete "{facility.name}"?
-                          This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() =>
-                            handleDelete(facility.id, facility.name)
-                          }
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
       </div>
 
       {/* Edit Dialog */}
@@ -531,11 +575,12 @@ export default function FacilitiesPage() {
                   required
                 >
                   <option value="">Select District</option>
-                  {districts.map((district) => (
-                    <option key={district.id} value={district.id}>
-                      {district.name}
-                    </option>
-                  ))}
+                  {Array.isArray(districts) &&
+                    districts.map((district) => (
+                      <option key={district.id} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div>
@@ -554,14 +599,50 @@ export default function FacilitiesPage() {
                   required
                 >
                   <option value="">Select Facility Type</option>
-                  {facilityTypes.map((type) => (
-                    <option key={type.id} value={type.id}>
-                      {type.name}
-                    </option>
-                  ))}
+                  {Array.isArray(facilityTypes) &&
+                    facilityTypes.map((type) => (
+                      <option key={type.id} value={type.id}>
+                        {type.name}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
+            {formData.facility_type_id === "6" && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Parent Facility *
+                </label>
+                <select
+                  value={formData.parent_id}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      parent_id: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  required
+                >
+                  <option value="">Select Parent Facility</option>
+                  {Array.isArray(facilities) &&
+                    facilities
+                      .filter(
+                        (facility) =>
+                          !facility.parent_id &&
+                          facility.id !== editingFacility?.id
+                      ) // Exclude current facility and only show parent facilities
+                      .map((facility) => (
+                        <option key={facility.id} value={facility.id}>
+                          {facility.name} ({facility.facility_type.name})
+                        </option>
+                      ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Sub-centres must have a parent facility
+                </p>
+              </div>
+            )}
             <div className="flex justify-end space-x-2">
               <Button
                 type="button"

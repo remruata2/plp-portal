@@ -23,7 +23,7 @@ export async function GET(
         district: true,
         facility_type: true,
         _count: {
-          select: { sub_centres: true },
+          select: { children: true },
         },
       },
     });
@@ -52,7 +52,14 @@ export async function PUT(
   try {
     const id = parseInt(params.id);
     const body = await request.json();
-    const { name, facility_code, nin, district_id, facility_type_id } = body;
+    const {
+      name,
+      facility_code,
+      nin,
+      district_id,
+      facility_type_id,
+      parent_id,
+    } = body;
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -72,6 +79,7 @@ export async function PUT(
       name,
       district_id: parseInt(district_id),
       facility_type_id: parseInt(facility_type_id),
+      parent_id: parent_id ? parseInt(parent_id) : null,
     };
 
     if (facility_code) updateData.facility_code = facility_code;
@@ -84,7 +92,7 @@ export async function PUT(
         district: true,
         facility_type: true,
         _count: {
-          select: { sub_centres: true },
+          select: { children: true },
         },
       },
     });
@@ -128,15 +136,15 @@ export async function DELETE(
       );
     }
 
-    // Check if facility has sub-centres
-    const subCentreCount = await prisma.subCentre.count({
-      where: { facility_id: id },
+    // Check if facility has children
+    const childrenCount = await prisma.facility.count({
+      where: { parent_id: id },
     });
 
-    if (subCentreCount > 0) {
+    if (childrenCount > 0) {
       return NextResponse.json(
         {
-          error: `Cannot delete facility. It has ${subCentreCount} sub-centres associated with it.`,
+          error: `Cannot delete facility. It has ${childrenCount} child facilities associated with it.`,
         },
         { status: 400 }
       );
