@@ -133,8 +133,23 @@ const allocation = {
 | **SC_HWC**    | ₹18,000          | HWO + HW + ASHA             | Subcenter with Health & Wellness Officer   |
 | **A_HWC**     | ₹17,500          | AYUSH MO + HW + ASHA        | AYUSH facility with Medical Officer        |
 | **PHC**       | ₹10,000          | MO + Colocated SC HW + ASHA | Primary Health Centre with Medical Officer |
-| **UPHC**      | ₹10,000          | MO + HW + ASHA              | Urban Primary Health Centre                |
-| **U_HWC**     | ₹10,000          | MO + HW + ASHA              | Urban Health & Wellness Centre             |
+| **UPHC**      | ₹7,500           | MO only                      | Urban Primary Health Centre (Team-based)   |
+| **U_HWC**     | ₹7,500           | MO only                      | Urban Health & Wellness Centre (Team-based)|
+
+## 🎯 **Team-Based vs Performance-Based Facilities**
+
+### **Team-Based Facilities (UPHC, U_HWC)**
+- **UPHC** and **U_HWC** operate on a completely team-based incentive system
+- Only **MO (Medical Officer)** workers are allowed
+- MO incentives are included in the facility total and not shown individually
+- No individual worker incentives are calculated or displayed
+- Total allocation: ₹7,500 per facility (MO only)
+
+### **Performance-Based Facilities (SC_HWC, A_HWC, PHC)**
+- These facilities support both team-based and performance-based workers
+- Team-based workers (HWO, MO, AYUSH MO) are not shown individually
+- Performance-based workers (HW, ASHA, Colocated SC HW) are shown individually
+- Individual worker incentives are calculated based on facility performance
 
 ## 🚀 **Implementation Features**
 

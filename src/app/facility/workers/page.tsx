@@ -406,6 +406,24 @@ export default function FacilityWorkersPage() {
         </Button>
       </div>
 
+      {/* Team-Based Facility Notice */}
+      {(facility?.facility_type.name === 'UPHC' || facility?.facility_type.name === 'U_HWC') && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Users className="h-6 w-6 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-blue-800">Team-Based Facility</h3>
+                <p className="text-sm text-blue-700">
+                  This facility operates on a team-based incentive system. Only Medical Officers (MO) can be added.
+                  No individual worker incentives are calculated.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
@@ -620,19 +638,28 @@ export default function FacilityWorkersPage() {
                   <SelectValue placeholder="Select employee type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {allocationConfig.map((config) => {
-                    const currentCount = workers.filter(w => w.worker_type === config.worker_type && w.is_active).length;
-                    const canAdd = currentCount < config.max_count;
-                    return (
-                      <SelectItem 
-                        key={config.worker_type} 
-                        value={config.worker_type}
-                        disabled={!canAdd}
-                      >
-                        {config.worker_role} {!canAdd && `(Max: ${config.max_count})`}
-                      </SelectItem>
-                    );
-                  })}
+                  {allocationConfig
+                    .filter(config => {
+                      // For UPHC and UHWC, only allow MO workers (team-based facilities)
+                      if (facility?.facility_type.name === 'UPHC' || facility?.facility_type.name === 'U_HWC') {
+                        return config.worker_type === 'mo';
+                      }
+                      // For other facilities, allow all worker types
+                      return true;
+                    })
+                    .map((config) => {
+                      const currentCount = workers.filter(w => w.worker_type === config.worker_type && w.is_active).length;
+                      const canAdd = currentCount < config.max_count;
+                      return (
+                        <SelectItem 
+                          key={config.worker_type} 
+                          value={config.worker_type}
+                          disabled={!canAdd}
+                        >
+                          {config.worker_role} {!canAdd && `(Max: ${config.max_count})`}
+                        </SelectItem>
+                      );
+                    })}
                 </SelectContent>
               </Select>
             </div>
@@ -696,11 +723,20 @@ export default function FacilityWorkersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {allocationConfig.map((config) => (
-                    <SelectItem key={config.worker_type} value={config.worker_type}>
-                      {config.worker_role}
-                    </SelectItem>
-                  ))}
+                  {allocationConfig
+                    .filter(config => {
+                      // For UPHC and UHWC, only allow MO workers (team-based facilities)
+                      if (facility?.facility_type.name === 'UPHC' || facility?.facility_type.name === 'U_HWC') {
+                        return config.worker_type === 'mo';
+                      }
+                      // For other facilities, allow all worker types
+                      return true;
+                    })
+                    .map((config) => (
+                      <SelectItem key={config.worker_type} value={config.worker_type}>
+                        {config.worker_role}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>

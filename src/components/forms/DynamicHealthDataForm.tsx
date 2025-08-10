@@ -890,6 +890,7 @@ export default function DynamicHealthDataForm({
                 facilityId={facilityId}
                 selectedWorkers={selectedWorkers}
                 onWorkersChange={setSelectedWorkers}
+                facilityType={facilityType}
               />
             </div>
 

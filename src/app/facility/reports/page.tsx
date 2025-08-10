@@ -102,7 +102,8 @@ interface MonthlyReport {
 
 export default function FacilityReportsPage() {
   const { data: session, status } = useSession();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [calculating, setCalculating] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [report, setReport] = useState<MonthlyReport | null>(null);
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
@@ -206,6 +207,39 @@ export default function FacilityReportsPage() {
     }
   };
 
+  const calculateRemuneration = async () => {
+    if (!selectedMonth) {
+      toast.error("Please select a month first");
+      return;
+    }
+
+    try {
+      setCalculating(true);
+      const response = await fetch("/api/facility/reports/calculate-remuneration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ month: selectedMonth }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success("Remuneration records calculated and stored successfully");
+        // Reload the report to show the cached data
+        await loadReport(selectedMonth);
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to calculate remuneration");
+      }
+    } catch (error) {
+      console.error("Error calculating remuneration:", error);
+      toast.error("Failed to calculate remuneration");
+    } finally {
+      setCalculating(false);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const config = {
       achieved: {
@@ -295,6 +329,27 @@ export default function FacilityReportsPage() {
               </SelectContent>
             </Select>
           </div>
+          
+          {selectedMonth && (
+            <Button
+              onClick={calculateRemuneration}
+              disabled={calculating}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              {calculating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+                  Calculating...
+                </>
+              ) : (
+                <>
+                  <Award className="h-4 w-4" />
+                  Calculate Remuneration
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -337,7 +392,7 @@ export default function FacilityReportsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  {['PHC', 'UPHC'].includes(report.facility.type) ? 'Team Incentives' : 'Facility Incentives'}
+                  {['PHC', 'UPHC', 'U_HWC'].includes(report.facility.type) ? 'Team Incentives' : 'Facility Incentives'}
                 </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
@@ -346,7 +401,7 @@ export default function FacilityReportsPage() {
                   ₹{report.totalIncentive.toFixed(2)}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {['PHC', 'UPHC'].includes(report.facility.type) ? 'MO team-based incentive' : 'Facility incentives'}
+                  {['PHC', 'UPHC', 'U_HWC'].includes(report.facility.type) ? 'MO team-based incentive' : 'Facility incentives'}
                 </p>
               </CardContent>
             </Card>
@@ -620,7 +675,25 @@ export default function FacilityReportsPage() {
                 </div>
 
                 {/* Workers Section */}
-                {report.workers.length > 0 && (
+                {['UPHC', 'U_HWC'].includes(report.facility.type) ? (
+                  // UPHC and UHWC are completely team-based - no individual workers
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center gap-3">
+                      <Users className="h-6 w-6 text-blue-600" />
+                      <div>
+                        <h4 className="text-lg font-semibold text-blue-800">
+                          Team-Based Facility
+                        </h4>
+                        <p className="text-blue-700 text-sm">
+                          This facility operates on a team-based incentive system. 
+                          Medical Officers receive team-based incentives included in the facility total.
+                          No individual worker incentives are calculated.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : report.workers.length > 0 ? (
+                  // Other facilities show individual workers
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                       <Users className="h-5 w-5" /> Workers ({report.workers.length})
@@ -675,29 +748,54 @@ export default function FacilityReportsPage() {
                       </table>
                     </div>
                   </div>
-                )}
+                ) : null}
 
                 {/* Total Remuneration */}
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-purple-800">
-                        Total Worker Remuneration
-                      </h3>
-                      <p className="text-purple-600">
-                        Based on performance and allocated amounts
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-purple-800">
-                        ₹{report.totalWorkerRemuneration.toFixed(2)}
+                {['UPHC', 'U_HWC'].includes(report.facility.type) ? (
+                  // UPHC and UHWC - team-based incentives only
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-green-800">
+                          Team-Based Incentives
+                        </h3>
+                        <p className="text-green-700">
+                          Medical Officer incentives included in facility total
+                        </p>
                       </div>
-                      <p className="text-sm text-purple-600">
-                        {report.workers.length} workers at {typeof report.performancePercentage === 'number' ? report.performancePercentage.toFixed(1) : '0.0'}% performance
-                      </p>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold text-green-800">
+                          ₹0.00
+                        </div>
+                        <p className="text-sm text-green-600">
+                          No individual worker incentives
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  // Other facilities - individual worker incentives
+                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-purple-800">
+                          Total Worker Remuneration
+                        </h3>
+                        <p className="text-purple-600">
+                          Based on performance and allocated amounts
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold text-purple-800">
+                          ₹{report.totalWorkerRemuneration.toFixed(2)}
+                        </div>
+                        <p className="text-sm text-purple-600">
+                          {report.workers.length} workers at {typeof report.performancePercentage === 'number' ? report.performancePercentage.toFixed(1) : '0.0'}% performance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

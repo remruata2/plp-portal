@@ -96,60 +96,24 @@ async function seedWorkerAllocationConfig() {
           "ASHA Workers - Multiple positions allowed, total allocation 1000",
       },
 
-      // UPHC (Urban Primary Health Centre)
+      // UPHC (Urban Primary Health Centre) - Team-based only
       {
         facilityTypeName: "UPHC",
         workerType: "mo",
         workerRole: "MO",
         maxCount: 1,
         allocatedAmount: 7500,
-        description: "Medical Officer - Single position per facility",
-      },
-      {
-        facilityTypeName: "UPHC",
-        workerType: "hw",
-        workerRole: "HW",
-        maxCount: 3, // Multiple HW workers allowed
-        allocatedAmount: 1500,
-        description:
-          "Health Workers - Multiple positions allowed, total allocation 1500",
-      },
-      {
-        facilityTypeName: "UPHC",
-        workerType: "asha",
-        workerRole: "ASHA",
-        maxCount: 3, // Multiple ASHA workers allowed
-        allocatedAmount: 1000,
-        description:
-          "ASHA Workers - Multiple positions allowed, total allocation 1000",
+        description: "Medical Officer - Single position per facility (team-based)",
       },
 
-      // U_HWC (Urban Health & Wellness Centre)
+      // U_HWC (Urban Health & Wellness Centre) - Team-based only
       {
         facilityTypeName: "U_HWC",
         workerType: "mo",
         workerRole: "MO",
         maxCount: 1,
         allocatedAmount: 7500,
-        description: "Medical Officer - Single position per facility",
-      },
-      {
-        facilityTypeName: "U_HWC",
-        workerType: "hw",
-        workerRole: "HW",
-        maxCount: 3, // Multiple HW workers allowed
-        allocatedAmount: 1500,
-        description:
-          "Health Workers - Multiple positions allowed, total allocation 1500",
-      },
-      {
-        facilityTypeName: "U_HWC",
-        workerType: "asha",
-        workerRole: "ASHA",
-        maxCount: 3, // Multiple ASHA workers allowed
-        allocatedAmount: 1000,
-        description:
-          "ASHA Workers - Multiple positions allowed, total allocation 1000",
+        description: "Medical Officer - Single position per facility (team-based)",
       },
     ];
 

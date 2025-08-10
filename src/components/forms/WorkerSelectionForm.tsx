@@ -21,12 +21,14 @@ interface WorkerSelectionFormProps {
   facilityId: string;
   selectedWorkers: number[];
   onWorkersChange: (workerIds: number[]) => void;
+  facilityType?: string; // Add facility type parameter
 }
 
 export default function WorkerSelectionForm({
   facilityId,
   selectedWorkers,
   onWorkersChange,
+  facilityType,
 }: WorkerSelectionFormProps) {
   const [workersByType, setWorkersByType] = useState<Record<string, Worker[]>>({});
   const [workerAllocationConfig, setWorkerAllocationConfig] = useState<Record<string, { max_count: number; allocated_amount: number; worker_role: string }>>({});
@@ -99,6 +101,37 @@ export default function WorkerSelectionForm({
         <CardContent>
           <div className="flex items-center justify-center p-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // UPHC and UHWC are completely team-based - hide worker selection
+  if (facilityType && ['UPHC', 'U_HWC'].includes(facilityType)) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Team-Based Facility
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center gap-3 justify-center mb-3">
+                <Users className="h-6 w-6 text-blue-600" />
+                <h4 className="text-lg font-semibold text-blue-800">
+                  No Worker Selection Required
+                </h4>
+              </div>
+              <p className="text-blue-700 text-sm">
+                This facility operates on a team-based incentive system. 
+                Medical Officers receive team-based incentives included in the facility total.
+                No individual worker selection is needed.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

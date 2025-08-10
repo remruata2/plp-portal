@@ -415,12 +415,24 @@ export async function GET(
     // Define worker types and their calculation methods
     // - HWO, MO, and AYUSH MO: Team-based (NOT listed individually - their incentives are already in facility total)
     // - HW, ASHA, Colocated SC HW: Performance-based (listed individually with performance-based calculation)
+    // Note: UPHC and UHWC (U_HWC) are COMPLETELY team-based facilities - they cannot have individual workers
     const teamBasedWorkerTypes = ['hwo', 'mo', 'ayush_mo']; // These are NOT listed individually
     const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // These ARE listed individually
     
+    // UPHC and UHWC are completely team-based - they should not have any individual workers
+    const completelyTeamBasedFacilities = ['UPHC', 'U_HWC'];
+    
     // Calculate worker remuneration - ONLY show performance-based workers
+    // UPHC and UHWC are completely team-based - they should not show any individual workers
     const workersRemuneration = workers
-      .filter(worker => performanceBasedWorkerTypes.includes(worker.worker_type.toLowerCase())) // Only show performance-based workers
+      .filter(worker => {
+        // For UPHC and UHWC, don't show any individual workers (they are completely team-based)
+        if (completelyTeamBasedFacilities.includes(facility.facility_type.name)) {
+          return false;
+        }
+        // For other facilities, only show performance-based workers
+        return performanceBasedWorkerTypes.includes(worker.worker_type.toLowerCase());
+      })
       .map((worker) => {
         const workerType = worker.worker_type.toLowerCase();
         
