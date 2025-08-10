@@ -49,10 +49,27 @@ export async function POST(
       performanceResults
     );
 
-    // Calculate overall performance percentage (average of all indicator achievements)
-    const overallPerformance = performanceResults.length > 0 
-      ? performanceResults.reduce((sum, result) => sum + result.percentage, 0) / performanceResults.length
-      : 0;
+    // Calculate overall performance percentage
+    // Use weighted average based on indicator importance and cap at 100%
+    let overallPerformance = 0;
+    if (performanceResults.length > 0) {
+      // Calculate weighted performance based on incentive amounts (more important indicators have higher weight)
+      const totalIncentive = performanceResults.reduce((sum, result) => sum + result.incentive_amount, 0);
+      
+      if (totalIncentive > 0) {
+        const weightedSum = performanceResults.reduce((sum, result) => {
+          const weight = result.incentive_amount / totalIncentive;
+          // Cap individual indicator performance at 100% to prevent inflation
+          const cappedPercentage = Math.min(result.percentage || 0, 100);
+          return sum + (cappedPercentage * weight);
+        }, 0);
+        overallPerformance = Math.min(weightedSum, 100); // Cap overall at 100%
+      } else {
+        // Fallback to simple average but cap at 100%
+        const avgPercentage = performanceResults.reduce((sum, result) => sum + (result.percentage || 0), 0) / performanceResults.length;
+        overallPerformance = Math.min(avgPercentage, 100);
+      }
+    }
 
     // Get health workers for the facility
     const healthWorkers = await prisma.healthWorker.findMany({
@@ -74,8 +91,8 @@ export async function POST(
       // Upsert worker remuneration
       await prisma.workerRemuneration.upsert({
         where: {
-          worker_id_report_month: {
-            worker_id: worker.id,
+          health_worker_id_report_month: {
+            health_worker_id: worker.id,
             report_month: reportMonth,
           },
         },
@@ -86,7 +103,7 @@ export async function POST(
           calculated_at: new Date(),
         },
         create: {
-          worker_id: worker.id,
+          health_worker_id: worker.id,
           report_month: reportMonth,
           allocated_amount: allocatedAmount.toString(),
           performance_percentage: overallPerformance.toString(),

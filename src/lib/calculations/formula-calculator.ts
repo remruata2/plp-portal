@@ -324,11 +324,14 @@ export class FormulaCalculator {
 
     // Calculate user-facing achievement percentage (simple percentage of max target)
     const userAchievement = (submittedValue / max) * 100;
+    
+    // Cap the achievement percentage at 100% to prevent inflation
+    const cappedUserAchievement = Math.min(userAchievement, 100);
 
     // If submitted value is below minimum, return 0% achievement
     if (submittedValue < min) {
       return {
-        achievement: userAchievement, // Show actual percentage to user
+        achievement: cappedUserAchievement, // Show capped percentage to user
         remuneration: 0,
         remunerationPercentage: 0,
         status: "BELOW_TARGET",
@@ -339,7 +342,7 @@ export class FormulaCalculator {
     // If submitted value is at or above maximum, return 100% achievement
     if (submittedValue >= max) {
       return {
-        achievement: 100,
+        achievement: 100, // Cap at 100% for display
         remuneration: maxRemuneration,
         remunerationPercentage: 100,
         status: "ACHIEVED",
@@ -358,11 +361,11 @@ export class FormulaCalculator {
     const remuneration = (remunerationPercentage / 100) * maxRemuneration;
 
     return {
-      achievement: userAchievement, // Show simple percentage to user
+      achievement: cappedUserAchievement, // Show capped percentage to user
       remuneration: Math.round(remuneration),
       remunerationPercentage: remunerationPercentage,
       status: "PARTIALLY_ACHIEVED",
-      message: `Achieved ${submittedValue} out of ${max} (${userAchievement.toFixed(
+      message: `Achieved ${submittedValue} out of ${max} (${cappedUserAchievement.toFixed(
         1
       )}% achievement, ${remunerationPercentage.toFixed(1)}% remuneration)`,
     };
@@ -440,27 +443,30 @@ export class FormulaCalculator {
       ? this.calculateMathematicalFormula(submittedValue, targetValue, config.calculationFormula)
       : (submittedValue / targetValue) * 100; // Fallback
 
+    // Cap the achievement percentage at 100% to prevent inflation
+    const cappedActualPercentage = Math.min(actualPercentage, 100);
+
     // Below minimum threshold - no remuneration
-    if (actualPercentage < min) {
+    if (cappedActualPercentage < min) {
       return {
-        achievement: actualPercentage, // Show actual percentage to user
+        achievement: cappedActualPercentage, // Show capped percentage to user
         remuneration: 0,
         remunerationPercentage: 0,
         status: "BELOW_TARGET",
-        message: `Below minimum threshold of ${min}% (achieved: ${actualPercentage.toFixed(
+        message: `Below minimum threshold of ${min}% (achieved: ${cappedActualPercentage.toFixed(
           1
         )}%)`,
       };
     }
 
     // At or above maximum threshold - full remuneration
-    if (actualPercentage >= max) {
+    if (cappedActualPercentage >= max) {
       return {
-        achievement: actualPercentage, // Show actual percentage to user
+        achievement: 100, // Cap at 100% for display
         remuneration: maxRemuneration,
         remunerationPercentage: 100,
         status: "ACHIEVED",
-        message: `At or above maximum threshold of ${max}% (achieved: ${actualPercentage.toFixed(
+        message: `At or above maximum threshold of ${max}% (achieved: ${cappedActualPercentage.toFixed(
           1
         )}%)`,
       };
@@ -475,14 +481,14 @@ export class FormulaCalculator {
       // 3% → 60%, 4% → 80%, 5% → 100%
       const baseRemuneration = 60; // 3% gives 60% remuneration
       const rangeSize = max - min; // 2%
-      const achievedWithinRange = actualPercentage - min; // How much above 3%
+      const achievedWithinRange = cappedActualPercentage - min; // How much above 3%
       const additionalRemuneration = (achievedWithinRange / rangeSize) * 40; // Scale 0-40%
       
       remunerationPercentage = baseRemuneration + additionalRemuneration;
     } else {
       // For other percentage ranges, use standard linear scaling (50%-100%)
       const rangeSize = max - min;
-      const achievedWithinRange = actualPercentage - min;
+      const achievedWithinRange = cappedActualPercentage - min;
       const positionInRange = achievedWithinRange / rangeSize;
       
       // Most percentage ranges scale from 50%-100%
@@ -492,11 +498,11 @@ export class FormulaCalculator {
     const remuneration = (remunerationPercentage / 100) * maxRemuneration;
 
     return {
-      achievement: actualPercentage, // Show actual percentage to user
+      achievement: cappedActualPercentage, // Show capped percentage to user
       remuneration: Math.round(remuneration),
       remunerationPercentage: remunerationPercentage,
       status: "PARTIALLY_ACHIEVED",
-      message: `Within range ${min}-${max}% (achieved: ${actualPercentage.toFixed(
+      message: `Within range ${min}-${max}% (achieved: ${cappedActualPercentage.toFixed(
         1
       )}%, remuneration: ${remunerationPercentage.toFixed(1)}%)`,
     };

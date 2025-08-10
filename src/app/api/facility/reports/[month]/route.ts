@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
+import { RemunerationRecordsService } from "@/lib/services/remuneration-records";
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,7 @@ export async function GET(
         { status: 400 }
       );
     }
+
     // Get facility details
     const facility = await prisma.facility.findUnique({
       where: { id: facilityId },
@@ -35,6 +37,44 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    // Check if remuneration records already exist for this month
+    const hasRecords = await RemunerationRecordsService.hasRemunerationRecords(facilityId, month);
+    
+    if (hasRecords) {
+      console.log(`📊 Using cached remuneration records for facility ${facilityId}, month ${month}`);
+      
+      // Retrieve pre-calculated remuneration records
+      const remunerationData = await RemunerationRecordsService.getRemunerationRecords(facilityId, month);
+      
+      // Get additional facility and summary data
+      const summary = await calculateSummary(remunerationData.indicators);
+      const performancePercentage = calculateOverallPerformance(remunerationData.indicators);
+      
+      const report = {
+        reportMonth: month,
+        facility: {
+          id: facility.id,
+          name: facility.name,
+          display_name: facility.display_name,
+          type: facility.facility_type.name,
+          type_display_name: facility.facility_type.display_name,
+        },
+        totalIncentive: remunerationData.totals.totalIncentive,
+        totalWorkerRemuneration: remunerationData.totals.totalWorkerRemuneration,
+        totalRemuneration: remunerationData.totals.totalRemuneration,
+        performancePercentage,
+        indicators: remunerationData.indicators,
+        workers: remunerationData.workers,
+        summary,
+      };
+
+      return NextResponse.json(report);
+    }
+
+    // If no records exist, calculate and store them
+    console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
+    
     // Get all indicators for this facility type
     const indicators = await prisma.indicator.findMany({
       where: {
@@ -356,7 +396,7 @@ export async function GET(
     });
     
     // Get worker allocation config to map worker types to roles
-    const workerConfig = await prisma.workerAllocationConfig.findMany({
+    const workerConfigs = await prisma.workerAllocationConfig.findMany({
       where: {
         facility_type_id: facility.facility_type_id,
         is_active: true,
@@ -364,7 +404,7 @@ export async function GET(
     });
     
     // Create a map of worker types to their roles
-    const workerRoleMap = new Map(workerConfig.map(config => [config.worker_type, config.worker_role]));
+    const workerRoleMap = new Map(workerConfigs.map(config => [config.worker_type, config.worker_role]));
 
     // Calculate worker remuneration based on facility performance
     const performancePercentage = indicators.length > 0 ? (achievedCount / indicators.length) * 100 : 0;
@@ -373,36 +413,29 @@ export async function GET(
     const facilityIncentive = totalIncentive; // This is the facility incentive amount
 
     // Define worker types and their calculation methods
-    // - HWO and AYUSH MO: Individual-based (receive full facility incentive)
-    // - MO: Team-based (not listed individually)
-    // - Others (HW, ASHA, Colocated SC HW): Performance-based
-    const individualBasedWorkerTypes = ['hwo', 'ayush_mo']; // These receive full facility incentive
-    const teamBasedWorkerTypes = ['mo']; // MO incentive is team-based, not listed individually
-    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // These get performance-based calculation
+    // - HWO, MO, and AYUSH MO: Team-based (NOT listed individually - their incentives are already in facility total)
+    // - HW, ASHA, Colocated SC HW: Performance-based (listed individually with performance-based calculation)
+    const teamBasedWorkerTypes = ['hwo', 'mo', 'ayush_mo']; // These are NOT listed individually
+    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // These ARE listed individually
     
-    // Calculate worker remuneration
+    // Calculate worker remuneration - ONLY show performance-based workers
     const workersRemuneration = workers
-      .filter(worker => !teamBasedWorkerTypes.includes(worker.worker_type.toLowerCase())) // Exclude MO from individual listing
+      .filter(worker => performanceBasedWorkerTypes.includes(worker.worker_type.toLowerCase())) // Only show performance-based workers
       .map((worker) => {
         const workerType = worker.worker_type.toLowerCase();
-        let calculatedAmount;
         
-        if (individualBasedWorkerTypes.includes(workerType)) {
-          // HWO and AYUSH MO receive the full facility incentive
-          calculatedAmount = facilityIncentive;
-        } else if (performanceBasedWorkerTypes.includes(workerType)) {
-          // HW, ASHA, Colocated SC HW get performance-based calculation
-          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
-        } else {
-          // Default fallback to performance-based
-          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
-        }
+        // Get the proper role from worker allocation config
+        const workerConfig = workerConfigs.find(config => config.worker_type === worker.worker_type);
+        const workerRole = workerConfig?.worker_role || worker.worker_type.toUpperCase();
+        
+        // Performance-based calculation for individual workers
+        const calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
         
         return {
           id: worker.id,
           name: worker.name,
           worker_type: worker.worker_type,
-          worker_role: workerRoleMap.get(worker.worker_type) || worker.worker_type,
+          worker_role: workerRole, // Use proper role from config
           allocated_amount: Number(worker.allocated_amount),
           performance_percentage: performancePercentage,
           calculated_amount: calculatedAmount,
@@ -417,8 +450,8 @@ export async function GET(
 
     const totalRemuneration = totalIncentive + totalWorkerRemuneration;
 
-    // Count workers by type
-    const workerCounts = workers.reduce((counts: Record<string, number>, worker) => {
+    // Count workers by type (only performance-based workers that are displayed)
+    const workerCounts = workersRemuneration.reduce((counts: Record<string, number>, worker) => {
       const type = worker.worker_type;
       counts[type] = (counts[type] || 0) + 1;
       return counts;
@@ -450,12 +483,48 @@ export async function GET(
         workerCounts: workerCounts,
       },
     };
+
+    // Store the calculated remuneration records
+    await RemunerationRecordsService.storeRemunerationRecords(
+      facilityId, 
+      month, 
+      performanceIndicators, 
+      workers
+    );
+
     return NextResponse.json(report);
   } catch (error) {
-    console.error("Error in facility reports API:", error);
+    console.error("Error generating report:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to generate report" },
       { status: 500 }
     );
   }
+}
+
+// Helper function to calculate summary statistics
+async function calculateSummary(indicators: any[]) {
+  const totalIndicators = indicators.length;
+  const achievedIndicators = indicators.filter(ind => ind.status === "achieved").length;
+  const partialIndicators = indicators.filter(ind => ind.status === "partial").length;
+  const notAchievedIndicators = indicators.filter(ind => ind.status === "not_achieved").length;
+
+  // Count workers by type (this would need to be implemented based on your worker data structure)
+  const workerCounts: Record<string, number> = {};
+
+  return {
+    totalIndicators,
+    achievedIndicators,
+    partialIndicators,
+    notAchievedIndicators,
+    workerCounts,
+  };
+}
+
+// Helper function to calculate overall performance percentage
+function calculateOverallPerformance(indicators: any[]) {
+  if (indicators.length === 0) return 0;
+  
+  const totalPercentage = indicators.reduce((sum, ind) => sum + (ind.percentage || 0), 0);
+  return totalPercentage / indicators.length;
 }

@@ -1,0 +1,223 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
+import { PrismaClient } from "@/generated/prisma";
+import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
+import { RemunerationRecordsService } from "@/lib/services/remuneration-records";
+
+const prisma = new PrismaClient();
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { month } = await request.json();
+    if (!month) {
+      return NextResponse.json({ error: "Month is required" }, { status: 400 });
+    }
+
+    const facilityId = session.user.facility_id;
+    if (!facilityId) {
+      return NextResponse.json(
+        { error: "No facility assigned" },
+        { status: 400 }
+      );
+    }
+
+    // Get facility details
+    const facility = await prisma.facility.findUnique({
+      where: { id: facilityId },
+      include: { facility_type: true },
+    });
+    if (!facility) {
+      return NextResponse.json(
+        { error: "Facility not found" },
+        { status: 404 }
+      );
+    }
+
+    console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
+
+    // Get all indicators for this facility type
+    const indicators = await prisma.indicator.findMany({
+      where: {
+        applicable_facility_types: {
+          array_contains: [facility.facility_type.name],
+        },
+      },
+      include: {
+        remunerations: {
+          where: {
+            facility_type_remuneration: {
+              facility_type_id: facility.facility_type.id,
+            },
+          },
+          include: { facility_type_remuneration: true },
+        },
+        numerator_field: true,
+        denominator_field: true,
+        target_field: true,
+      },
+    });
+
+    // Get field values for this facility and month
+    const fieldValues = await prisma.fieldValue.findMany({
+      where: {
+        facility_id: facilityId,
+        report_month: month,
+      },
+      include: { field: true },
+    });
+
+    // Create a map of field values for easy lookup
+    const fieldValueMap = new Map();
+    fieldValues.forEach((fv) => {
+      const value = fv.string_value || fv.numeric_value || fv.boolean_value;
+      fieldValueMap.set(fv.field_id, value);
+    });
+
+    // Calculate performance for each indicator
+    const performanceIndicators = [];
+    for (let i = 0; i < indicators.length; i++) {
+      const indicator = indicators[i];
+      const remuneration = indicator.remunerations[0];
+      
+      if (!remuneration) {
+        console.log(`Skipping indicator ${indicator.code} - no remuneration configured`);
+        continue;
+      }
+
+      // Get the actual value for this indicator
+      const actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
+      
+      // Get denominator value
+      let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
+      
+      // Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
+      if (indicator.code === "PS001") {
+        denominatorValue = 5;
+      }
+
+      // Calculate percentage and status
+      let percentage = 0;
+      let status: "achieved" | "partial" | "not_achieved" = "not_achieved";
+      
+      if (denominatorValue && denominatorValue > 0) {
+        // Calculate raw percentage but cap it at 100% to prevent inflation
+        const rawPercentage = (actualValue / denominatorValue) * 100;
+        percentage = Math.min(rawPercentage, 100); // Cap at 100%
+        
+        if (percentage >= 100) {
+          status = "achieved";
+        } else if (percentage >= 50) {
+          status = "partial";
+        } else {
+          status = "not_achieved";
+        }
+      }
+
+      // Calculate incentive amount based on status
+      let incentiveAmount = 0;
+      if (status === "achieved") {
+        incentiveAmount = Number(remuneration.base_amount);
+      } else if (status === "partial") {
+        incentiveAmount = Number(remuneration.base_amount) * 0.5; // 50% for partial achievement
+      }
+
+      performanceIndicators.push({
+        id: indicator.id,
+        name: indicator.name,
+        target: indicator.target_value || "",
+        actual: actualValue,
+        percentage,
+        status,
+        incentive_amount: incentiveAmount,
+        indicator_code: indicator.code,
+        target_type: indicator.target_type,
+        target_description: indicator.target_value || "",
+        target_value_for_calculation: denominatorValue,
+        numerator_value: actualValue,
+        denominator_value: denominatorValue,
+        max_remuneration: Number(remuneration.base_amount),
+        raw_percentage: percentage,
+        numerator_field: indicator.numerator_field,
+        denominator_field: indicator.denominator_field,
+        target_field: indicator.target_field,
+      });
+    }
+
+    // Calculate worker remuneration (simplified version)
+    const workers = await prisma.healthWorker.findMany({
+      where: { facility_id: facilityId },
+    });
+
+    // Calculate overall facility performance correctly
+    // Use weighted average based on indicator importance and cap at 100%
+    let overallPerformance = 0;
+    if (performanceIndicators.length > 0) {
+      // Calculate weighted performance based on incentive amounts (more important indicators have higher weight)
+      const totalIncentive = performanceIndicators.reduce((sum, ind) => sum + ind.incentive_amount, 0);
+      
+      if (totalIncentive > 0) {
+        const weightedSum = performanceIndicators.reduce((sum, ind) => {
+          const weight = ind.incentive_amount / totalIncentive;
+          // Cap individual indicator performance at 100% to prevent inflation
+          const cappedPercentage = Math.min(ind.percentage, 100);
+          return sum + (cappedPercentage * weight);
+        }, 0);
+        
+        overallPerformance = Math.min(weightedSum, 100); // Cap overall performance at 100%
+      } else {
+        // Fallback: simple average but cap individual percentages
+        const cappedPercentages = performanceIndicators.map(ind => Math.min(ind.percentage, 100));
+        overallPerformance = cappedPercentages.reduce((sum, p) => sum + p, 0) / cappedPercentages.length;
+      }
+    }
+
+    const workerRemuneration = workers.map((worker) => {
+      const allocatedAmount = Number(worker.allocated_amount) || 0;
+      // Fix: Don't divide by 100 since overallPerformance is already a percentage
+      const calculatedAmount = (allocatedAmount * overallPerformance) / 100;
+
+      return {
+        id: worker.id,
+        name: worker.name,
+        worker_type: worker.worker_type,
+        worker_role: worker.worker_type, // Use worker_type as role
+        allocated_amount: allocatedAmount,
+        performance_percentage: overallPerformance,
+        calculated_amount: calculatedAmount,
+      };
+    });
+
+    // Store the calculated remuneration records
+    await RemunerationRecordsService.storeRemunerationRecords(
+      facilityId,
+      month,
+      performanceIndicators,
+      workerRemuneration
+    );
+
+    console.log(`✅ Successfully calculated and stored remuneration records for facility ${facilityId}, month ${month}`);
+
+    return NextResponse.json({
+      success: true,
+      message: "Remuneration records calculated and stored successfully",
+      data: {
+        indicatorsCount: performanceIndicators.length,
+        workersCount: workerRemuneration.length,
+        month,
+      },
+    });
+
+  } catch (error) {
+    console.error("Error calculating remuneration:", error);
+    return NextResponse.json(
+      { error: "Failed to calculate remuneration" },
+      { status: 500 }
+    );
+  }
+}
