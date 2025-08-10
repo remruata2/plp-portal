@@ -31,11 +31,29 @@ export async function middleware(req: NextRequest) {
   console.log("Middleware: Token found:", !!token, "Path:", path);
 
   // Handle authentication logic
+  const isRootRoute = path === "/";
   const isAuthRoute = path === "/login";
   const isDashboardRoute = path.startsWith("/dashboard");
   const isAdminRoute = path.startsWith("/admin");
   const isFacilityRoute = path.startsWith("/facility");
   const isApiRoute = path.startsWith("/api/");
+
+  // If user is on root page but not authenticated, redirect to login
+  if (isRootRoute && !token) {
+    console.log("Middleware: Root route without token, redirecting to login");
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // If user is on root page and authenticated, redirect based on role
+  if (isRootRoute && token) {
+    if (token.role === UserRole.facility) {
+      return NextResponse.redirect(new URL("/facility/dashboard", req.url));
+    } else if (token.role === UserRole.admin) {
+      return NextResponse.redirect(new URL("/admin", req.url));
+    }
+    // Default fallback
+    return NextResponse.redirect(new URL("/admin", req.url));
+  }
 
   // If user is on login page but already authenticated, redirect based on role
   if (isAuthRoute && token) {
@@ -106,6 +124,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/dashboard/:path*",
     "/admin/:path*",
     "/facility/:path*",
