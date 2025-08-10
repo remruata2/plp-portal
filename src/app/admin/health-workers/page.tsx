@@ -127,7 +127,7 @@ export default function HealthWorkersPage() {
       await Promise.all([loadHealthWorkers(), loadFacilities()]);
     } catch (error) {
       console.error("Error loading data:", error);
-      toast.error("Failed to load health workers data");
+      toast.error("Failed to load facility employees data");
     } finally {
       setLoading(false);
     }
@@ -260,15 +260,15 @@ export default function HealthWorkersPage() {
       );
 
       if (response.ok) {
-        toast.success("Worker deleted successfully");
+        toast.success("Employee deleted successfully");
         loadHealthWorkers();
       } else {
         const error = await response.json();
-        toast.error(error.error || "Failed to delete worker");
+        toast.error(error.error || "Failed to delete employee");
       }
     } catch (error) {
       console.error("Error deleting worker:", error);
-      toast.error("Error deleting worker");
+      toast.error("Error deleting employee");
     }
   };
 
@@ -293,16 +293,16 @@ export default function HealthWorkersPage() {
       });
 
       if (response.ok) {
-        toast.success("Worker added successfully");
+        toast.success("Employee added successfully");
         setIsAddModalOpen(false);
         loadHealthWorkers();
       } else {
         const error = await response.json();
-        toast.error(error.error || "Failed to add worker");
+        toast.error(error.error || "Failed to add employee");
       }
     } catch (error) {
       console.error("Error adding worker:", error);
-      toast.error("Error adding worker");
+      toast.error("Error adding employee");
     }
   };
 
@@ -323,16 +323,16 @@ export default function HealthWorkersPage() {
       });
 
       if (response.ok) {
-        toast.success("Worker updated successfully");
+        toast.success("Employee updated successfully");
         setIsEditModalOpen(false);
         loadHealthWorkers();
       } else {
         const error = await response.json();
-        toast.error(error.error || "Failed to update worker");
+        toast.error(error.error || "Failed to update employee");
       }
     } catch (error) {
       console.error("Error updating worker:", error);
-      toast.error("Error updating worker");
+      toast.error("Error updating employee");
     }
   };
 
@@ -348,7 +348,7 @@ export default function HealthWorkersPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex items-center gap-2">
           <Loader2 className="h-6 w-6 animate-spin" />
-          <span>Loading health workers data...</span>
+          <span>Loading facility employees data...</span>
         </div>
       </div>
     );
@@ -359,10 +359,10 @@ export default function HealthWorkersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Health Workers & ASHA Workers
+            Facility Employees
           </h1>
           <p className="text-gray-600">
-            Manage health workers and ASHA workers for facilities
+            Manage facility employees across all facilities
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -371,7 +371,7 @@ export default function HealthWorkersPage() {
           </Badge>
           <Button onClick={handleAddWorker} className="flex items-center gap-2">
             <UserPlus className="h-4 w-4" />
-            Add Worker
+            Add Employee
           </Button>
         </div>
       </div>
@@ -383,7 +383,7 @@ export default function HealthWorkersPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Total Workers
+                  Total Employees
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {healthWorkers.length}

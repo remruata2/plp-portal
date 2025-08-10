@@ -71,7 +71,7 @@ export default function WorkerManagementForm({
         }
       } catch (error) {
         console.error("Error loading data:", error);
-        toast.error("Failed to load worker data");
+        toast.error("Failed to load facility employee data");
       } finally {
         setLoading(false);
       }
@@ -132,7 +132,7 @@ export default function WorkerManagementForm({
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
-          toast.success("Workers saved successfully!");
+          toast.success("Facility employees saved successfully!");
           if (onWorkersUpdated) {
             onWorkersUpdated();
           }
@@ -145,7 +145,7 @@ export default function WorkerManagementForm({
       }
     } catch (error) {
       console.error("Error saving workers:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to save workers");
+        toast.error(error instanceof Error ? error.message : "Failed to save facility employees");
     } finally {
       setSaving(false);
     }
@@ -155,7 +155,7 @@ export default function WorkerManagementForm({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Loading workers...</CardTitle>
+          <CardTitle>Loading facility employees...</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center p-8">
@@ -171,7 +171,7 @@ export default function WorkerManagementForm({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5" />
-          Worker Management - {facilityName}
+          Facility Employees Management - {facilityName}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">

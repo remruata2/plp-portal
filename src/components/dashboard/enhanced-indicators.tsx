@@ -160,7 +160,7 @@ export default function EnhancedIndicators() {
     if (code.includes('_AHWC') || code.includes('A-HWC')) return "A-HWC";
     
     // Check for generic indicators that appear in multiple source files
-    if (['TF001', 'WS001', 'TC001', 'TS001', 'CT001', 'DC001', 'PS001', 'EP001', 'EC001', 'JM001'].includes(code)) {
+    if (['WS001', 'TC001', 'CT001', 'DC001', 'PS001', 'EP001', 'EC001', 'JM001'].includes(code)) {
       return "Multi-source";
     }
     

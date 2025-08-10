@@ -212,7 +212,7 @@ export default function EnhancedIndicatorForm({
                       id="code"
                       value={formData.code}
                       onChange={(e) => updateFormData({ code: e.target.value })}
-                      placeholder="e.g., TF001"
+                      placeholder="e.g., TF001_PHC"
                     />
                   </div>
                   <div>

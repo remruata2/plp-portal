@@ -62,7 +62,7 @@ export default function WorkerSelectionForm({
         }
       } catch (error) {
         console.error("Error loading workers and config:", error);
-        toast.error("Failed to load workers");
+        toast.error("Failed to load facility employees");
       } finally {
         setLoading(false);
       }
@@ -94,7 +94,7 @@ export default function WorkerSelectionForm({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Loading workers...</CardTitle>
+          <CardTitle>Loading facility employees...</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center p-8">
@@ -127,7 +127,7 @@ export default function WorkerSelectionForm({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5" />
-          Worker Selection for Incentives
+          Facility Employee Selection for Incentives
           {selectedCount > 0 && (
             <span className="text-sm font-normal text-gray-600">
               ({selectedCount} selected)
@@ -139,10 +139,10 @@ export default function WorkerSelectionForm({
         {totalWorkers === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 mb-4">
-              No workers found for this facility
+              No facility employees found for this facility
             </p>
             <p className="text-sm text-gray-400">
-              Please add workers in the Worker Management section first.
+              Please add employees in the Facility Employees section first.
             </p>
           </div>
         ) : (

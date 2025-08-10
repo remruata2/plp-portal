@@ -106,10 +106,10 @@ async function updateFacilitySpecificTargets() {
       },
     });
 
-    // 3. Update DI001 (DVDMS Issues)
-    console.log("📝 Updating DI001 (DVDMS Issues)...");
+    // 3. Update DV001_PHC (DVDMS Issues - PHC)
+    console.log("📝 Updating DV001_PHC (DVDMS Issues - PHC)...");
     await prisma.indicator.update({
-      where: { code: "DI001" },
+      where: { code: "DV001_PHC" },
       data: {
         formula_config: {
           type: "PERCENTAGE_RANGE",
@@ -120,38 +120,60 @@ async function updateFacilitySpecificTargets() {
           targetValue: "25-100",
           targetFormula: "25% and above",
           calculationFormula: "(A/B)*100",
-          facilitySpecificTargets: {
-            SC_HWC: {
-              range: {
-                max: 100,
-                min: 25,
-              },
-            },
-            PHC: {
-              range: {
-                max: 100,
-                min: 25,
-              },
-            },
-            UPHC: {
-              range: {
-                max: 100,
-                min: 25,
-              },
-            },
-            U_HWC: {
-              range: {
-                max: 100,
-                min: 25,
-              },
-            },
-            A_HWC: {
-              range: {
-                max: 100,
-                min: 25,
-              },
-            },
+        },
+      },
+    });
+
+    // 4. Update DV001_SC (DVDMS Issues - SC-HWC)
+    console.log("📝 Updating DV001_SC (DVDMS Issues - SC-HWC)...");
+    await prisma.indicator.update({
+      where: { code: "DV001_SC" },
+      data: {
+        formula_config: {
+          type: "PERCENTAGE_RANGE",
+          range: {
+            max: 100,
+            min: 25,
           },
+          targetValue: "25-100",
+          targetFormula: "25% and above",
+          calculationFormula: "(A/B)*100",
+        },
+      },
+    });
+
+    // 5. Update DV001_UHWC (DVDMS Issues - U-HWC)
+    console.log("📝 Updating DV001_UHWC (DVDMS Issues - U-HWC)...");
+    await prisma.indicator.update({
+      where: { code: "DV001_UHWC" },
+      data: {
+        formula_config: {
+          type: "PERCENTAGE_RANGE",
+          range: {
+            max: 100,
+            min: 25,
+          },
+          targetValue: "25-100",
+          targetFormula: "25% and above",
+          calculationFormula: "(A/B)*100",
+        },
+      },
+    });
+
+    // 6. Update DV001_AHWC (DVDMS Issues - A-HWC)
+    console.log("📝 Updating DV001_AHWC (DVDMS Issues - A-HWC)...");
+    await prisma.indicator.update({
+      where: { code: "DV001_AHWC" },
+      data: {
+        formula_config: {
+          type: "PERCENTAGE_RANGE",
+          range: {
+            max: 100,
+            min: 25,
+          },
+          targetValue: "25-100",
+          targetFormula: "25% and above",
+          calculationFormula: "(A/B)*100",
         },
       },
     });
@@ -164,7 +186,10 @@ async function updateFacilitySpecificTargets() {
       "- TC001: Uses facility-specific targets (12-25 for SC, 25-50 for others)"
     );
     console.log("- EC001: Uses percentage range (25-100%) for all facilities");
-    console.log("- DI001: Uses percentage range (25-100%) for all facilities");
+    console.log("- DV001_PHC: Uses percentage range (25-100%) for PHC");
+    console.log("- DV001_SC: Uses percentage range (25-100%) for SC-HWC");
+    console.log("- DV001_UHWC: Uses percentage range (25-100%) for U-HWC");
+    console.log("- DV001_AHWC: Uses percentage range (25-100%) for A-HWC");
   } catch (error) {
     console.error("❌ Error updating indicators:", error);
     throw error;

@@ -58,15 +58,15 @@ function testSimplifiedFormulaSystem() {
 
   // Test PERCENTAGE_RANGE (3-5%)
   console.log("\n📊 PERCENTAGE_RANGE (3-5%) - Total Footfall:");
-  testPercentageRange(3, 100, 500, testConfigs.percentageRange_3_5, "TF001");
-  testPercentageRange(4, 100, 500, testConfigs.percentageRange_3_5, "TF001");
-  testPercentageRange(5, 100, 500, testConfigs.percentageRange_3_5, "TF001");
+  testPercentageRange(3, 100, 500, testConfigs.percentageRange_3_5, "TF001_PHC");
+  testPercentageRange(4, 100, 500, testConfigs.percentageRange_3_5, "TF001_PHC");
+  testPercentageRange(5, 100, 500, testConfigs.percentageRange_3_5, "TF001_PHC");
 
   // Test PERCENTAGE_RANGE (50-100%) - Former PERCENTAGE_CAP
   console.log("\n📊 PERCENTAGE_RANGE (50-100%) - ANC Footfall (Former PERCENTAGE_CAP):");
-  testPercentageRange(50, 100, 300, testConfigs.percentageRange_50_100, "AF001");
-  testPercentageRange(75, 100, 300, testConfigs.percentageRange_50_100, "AF001");
-  testPercentageRange(100, 100, 300, testConfigs.percentageRange_50_100, "AF001");
+  testPercentageRange(50, 100, 300, testConfigs.percentageRange_50_100, "AF001_PHC");
+  testPercentageRange(75, 100, 300, testConfigs.percentageRange_50_100, "AF001_PHC");
+  testPercentageRange(100, 100, 300, testConfigs.percentageRange_50_100, "AF001_PHC");
 
   // Test PERCENTAGE_RANGE (70-100%)
   console.log("\n📊 PERCENTAGE_RANGE (70-100%) - Patient Satisfaction:");

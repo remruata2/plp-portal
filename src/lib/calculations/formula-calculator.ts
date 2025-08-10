@@ -33,8 +33,9 @@ export interface FormulaConfig {
 }
 
 export interface CalculationResult {
-  achievement: number;
+  achievement: number; // User-facing achievement percentage (e.g., 56% for 28/50 calls)
   remuneration: number;
+  remunerationPercentage: number; // Internal remuneration percentage (e.g., 56% achievement might give 53% remuneration)
   status:
     | "BELOW_TARGET"
     | "PARTIALLY_ACHIEVED"
@@ -72,6 +73,7 @@ export class FormulaCalculator {
       return {
         achievement: 0,
         remuneration: naCheck.remuneration || 0,
+        remunerationPercentage: 0,
         status: "NA",
         message: naCheck.message,
         conditionalRemuneration: naCheck.conditionalRemuneration,
@@ -113,6 +115,7 @@ export class FormulaCalculator {
         return {
           achievement: 0,
           remuneration: 0,
+          remunerationPercentage: 0,
           status: "BELOW_TARGET",
           message: "Unknown formula type",
         };
@@ -319,11 +322,15 @@ export class FormulaCalculator {
   ): CalculationResult {
     const { min, max } = config.range || { min: 5, max: 10 };
 
+    // Calculate user-facing achievement percentage (simple percentage of max target)
+    const userAchievement = (submittedValue / max) * 100;
+
     // If submitted value is below minimum, return 0% achievement
     if (submittedValue < min) {
       return {
-        achievement: 0,
+        achievement: userAchievement, // Show actual percentage to user
         remuneration: 0,
+        remunerationPercentage: 0,
         status: "BELOW_TARGET",
         message: `Below minimum threshold of ${min}`,
       };
@@ -334,24 +341,30 @@ export class FormulaCalculator {
       return {
         achievement: 100,
         remuneration: maxRemuneration,
+        remunerationPercentage: 100,
         status: "ACHIEVED",
         message: `Achieved maximum threshold of ${max}`,
       };
     }
 
-    // Direct achievement-based incentive calculation
-    // Calculate actual achievement percentage based on submitted value vs target
-    // For range-based indicators, use the submitted value as the achievement percentage
-    const achievement = submittedValue;
-    const remuneration = (achievement / 100) * maxRemuneration;
+    // FIXED: Linear calculation for RANGE indicators
+    // Map range (min-max) to achievement scale (50%-100%)
+    const rangeSize = max - min;
+    const achievedWithinRange = submittedValue - min;
+    const positionInRange = achievedWithinRange / rangeSize; // 0.0 to 1.0
+    
+    // Linear scaling for remuneration: min = 50% remuneration, max = 100% remuneration
+    const remunerationPercentage = 50 + (positionInRange * 50);
+    const remuneration = (remunerationPercentage / 100) * maxRemuneration;
 
     return {
-      achievement: achievement,
+      achievement: userAchievement, // Show simple percentage to user
       remuneration: Math.round(remuneration),
+      remunerationPercentage: remunerationPercentage,
       status: "PARTIALLY_ACHIEVED",
-      message: `Achieved ${submittedValue} out of ${max} (${achievement.toFixed(
+      message: `Achieved ${submittedValue} out of ${max} (${userAchievement.toFixed(
         1
-      )}%)`,
+      )}% achievement, ${remunerationPercentage.toFixed(1)}% remuneration)`,
     };
   }
 
@@ -383,6 +396,7 @@ export class FormulaCalculator {
       return {
         achievement: 100,
         remuneration: maxRemuneration,
+        remunerationPercentage: 100,
         status: "ACHIEVED",
         message: `Achieved binary threshold of ${threshold}`,
       };
@@ -391,6 +405,7 @@ export class FormulaCalculator {
     return {
       achievement: 0,
       remuneration: 0,
+      remunerationPercentage: 0,
       status: "BELOW_TARGET",
       message: `Below binary threshold of ${threshold}`,
     };
@@ -414,51 +429,76 @@ export class FormulaCalculator {
       return {
         achievement: 0,
         remuneration: 0,
+        remunerationPercentage: 0,
         status: "BELOW_TARGET",
         message: "Target value is zero",
       };
     }
 
-    // Use calculation formula instead of direct calculation
-    const achievement = config.calculationFormula 
+    // Calculate the actual percentage achieved using the formula (user-facing)
+    const actualPercentage = config.calculationFormula 
       ? this.calculateMathematicalFormula(submittedValue, targetValue, config.calculationFormula)
       : (submittedValue / targetValue) * 100; // Fallback
 
     // Below minimum threshold - no remuneration
-    if (achievement < min) {
+    if (actualPercentage < min) {
       return {
-        achievement: 0,
+        achievement: actualPercentage, // Show actual percentage to user
         remuneration: 0,
+        remunerationPercentage: 0,
         status: "BELOW_TARGET",
-        message: `Below minimum threshold of ${min}% (achieved: ${achievement.toFixed(
+        message: `Below minimum threshold of ${min}% (achieved: ${actualPercentage.toFixed(
           1
         )}%)`,
       };
     }
 
     // At or above maximum threshold - full remuneration
-    if (achievement >= max) {
+    if (actualPercentage >= max) {
       return {
-        achievement: 100,
+        achievement: actualPercentage, // Show actual percentage to user
         remuneration: maxRemuneration,
+        remunerationPercentage: 100,
         status: "ACHIEVED",
-        message: `At or above maximum threshold of ${max}% (achieved: ${achievement.toFixed(
+        message: `At or above maximum threshold of ${max}% (achieved: ${actualPercentage.toFixed(
           1
         )}%)`,
       };
     }
 
-    // Direct achievement-based incentive calculation
-    // If achievement is 60%, incentive should be 60% of max remuneration
-    const remuneration = (achievement / 100) * maxRemuneration;
+    // FIXED: Linear incentive calculation based on government formula requirements
+    // For 3%-5% range: 3% = 60% remuneration, 4% = 80%, 5% = 100%
+    let remunerationPercentage: number;
+    
+    if (min === 3 && max === 5) {
+      // Special case for Total Footfall (3%-5%) - from ALL_INDICATORS_FORMULA_REVIEW.md
+      // 3% → 60%, 4% → 80%, 5% → 100%
+      const baseRemuneration = 60; // 3% gives 60% remuneration
+      const rangeSize = max - min; // 2%
+      const achievedWithinRange = actualPercentage - min; // How much above 3%
+      const additionalRemuneration = (achievedWithinRange / rangeSize) * 40; // Scale 0-40%
+      
+      remunerationPercentage = baseRemuneration + additionalRemuneration;
+    } else {
+      // For other percentage ranges, use standard linear scaling (50%-100%)
+      const rangeSize = max - min;
+      const achievedWithinRange = actualPercentage - min;
+      const positionInRange = achievedWithinRange / rangeSize;
+      
+      // Most percentage ranges scale from 50%-100%
+      remunerationPercentage = 50 + (positionInRange * 50);
+    }
+
+    const remuneration = (remunerationPercentage / 100) * maxRemuneration;
 
     return {
-      achievement: achievement,
+      achievement: actualPercentage, // Show actual percentage to user
       remuneration: Math.round(remuneration),
+      remunerationPercentage: remunerationPercentage,
       status: "PARTIALLY_ACHIEVED",
-      message: `Within range ${min}-${max}% (achieved: ${achievement.toFixed(
+      message: `Within range ${min}-${max}% (achieved: ${actualPercentage.toFixed(
         1
-      )}%, incentive: ${remuneration.toFixed(0)} of ${maxRemuneration})`,
+      )}%, remuneration: ${remunerationPercentage.toFixed(1)}%)`,
     };
   }
 

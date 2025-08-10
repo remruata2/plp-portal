@@ -160,9 +160,12 @@ export default function DynamicHealthDataForm({
       'population_30_plus_female': { code: 'POP001', name: 'Population Data' },
       'population_18_plus': { code: 'POP001', name: 'Population Data' },
       
-      // ANC indicators
-      'anc_due_list': { code: 'AF001', name: 'Total ANC footfall' },
-      'anc_footfall': { code: 'AF001', name: 'Total ANC footfall' },
+      // ANC indicators - facility-specific mappings
+      'anc_due_list': { code: 'AF001_PHC', name: 'Total ANC footfall - PHC' }, // Will be mapped based on facility type
+      'anc_footfall': { code: 'AF001_PHC', name: 'Total ANC footfall - PHC' }, // Will be mapped based on facility type
+      'anc_footfall_phc': { code: 'AF001_PHC', name: 'Total ANC footfall - PHC' },
+      'anc_footfall_sc': { code: 'AF001_SC', name: 'Total ANC footfall - SC-HWC' },
+      'anc_footfall_ahwc': { code: 'AF001_AHWC', name: 'Total ANC footfall - A-HWC' },
       'anc_tested_hb': { code: 'HT001', name: 'Pregnant women tested for Hb' },
       
       // RI indicators
@@ -171,10 +174,15 @@ export default function DynamicHealthDataForm({
       'ri_beneficiaries_due': { code: 'RF001', name: 'RI footfall' },
       'ri_footfall': { code: 'RF001', name: 'RI footfall' },
       
-      // TB indicators - updated to match source files exactly
+      // TB indicators - facility-specific mappings
       'pulmonary_tb_patients': { code: 'CT001', name: 'Household visited for TB contact tracing' },
       'total_tb_patients': { code: 'DC001', name: 'No. of TB patients visited for Differentiated TB Care' },
-      'tb_screenings': { code: 'TS001', name: 'Individuals screened for TB' },
+      'tb_screenings': { code: 'TS001_PHC', name: 'Individuals screened for TB - PHC' }, // Will be mapped based on facility type
+      'tb_screenings_phc': { code: 'TS001_PHC', name: 'Individuals screened for TB - PHC' },
+      'tb_screenings_sc': { code: 'TS001_SC', name: 'Individuals screened for TB - SC-HWC' },
+      'tb_screenings_uhwc': { code: 'TS001_UHWC', name: 'Individuals screened for TB - U-HWC' },
+      'tb_screenings_ahwc': { code: 'TS001_AHWC', name: 'Individuals screened for TB - A-HWC' },
+      'tb_screenings_uphc': { code: 'TS001_UPHC', name: 'Individuals screened for TB - UPHC' },
       'tb_contact_tracing_households': { code: 'CT001', name: 'Household visited for TB contact tracing' },
       'tb_differentiated_care_visits': { code: 'DC001', name: 'No. of TB patients visited for Differentiated TB Care' },
       
@@ -188,10 +196,12 @@ export default function DynamicHealthDataForm({
       'ncd_referred_from_sc': { code: 'ND001', name: 'NCD Diagnosed & Tx completed' },
       
       // Service indicators
-      'total_footfall': { code: 'TF001', name: 'Total Footfall (M&F)' },
+      'total_footfall': { code: 'TF001_PHC', name: 'Total Footfall (M&F) - PHC' }, // Will be mapped based on facility type
       'total_footfall_phc_colocated_sc': { code: 'TF001_PHC', name: 'Total Footfall (M&F) - PHC' },
       'total_footfall_sc_clinic': { code: 'TF001_SC', name: 'Total Footfall (M&F) - SC-HWC' },
       'total_footfall_uhwc': { code: 'TF001_UHWC', name: 'Total Footfall (M&F) - U-HWC' },
+      'total_footfall_ahwc': { code: 'TF001_AHWC', name: 'Total Footfall (M&F) - A-HWC' },
+      'total_footfall_uphc': { code: 'TF001_UPHC', name: 'Total Footfall (M&F) - UPHC' },
       'wellness_sessions_conducted': { code: 'WS001', name: 'Total Wellness sessions' },
       'teleconsultation_conducted': { code: 'TC001', name: 'Teleconsultation' },
       'prakriti_parikshan_conducted': { code: 'PP001', name: 'Prakriti Parikshan conducted' },
@@ -206,7 +216,11 @@ export default function DynamicHealthDataForm({
       
       // Administrative indicators
       'jas_meetings_conducted': { code: 'JM001', name: 'No of JAS meeting conducted' },
-      'dvdms_issues_generated': { code: 'DI001', name: 'No. of issues generated in DVDMS' },
+      'dvdms_issues_generated': { code: 'DV001_PHC', name: 'No. of issues generated in DVDMS - PHC' }, // Will be mapped based on facility type
+      'dvdms_issues_generated_phc': { code: 'DV001_PHC', name: 'No. of issues generated in DVDMS - PHC' },
+      'dvdms_issues_generated_sc': { code: 'DV001_SC', name: 'No. of issues generated in DVDMS - SC-HWC' },
+      'dvdms_issues_generated_uhwc': { code: 'DV001_UHWC', name: 'No. of issues generated in DVDMS - U-HWC' },
+      'dvdms_issues_generated_ahwc': { code: 'DV001_AHWC', name: 'No. of issues generated in DVDMS - A-HWC' },
     };
 
     // Group fields by indicator
@@ -232,7 +246,7 @@ export default function DynamicHealthDataForm({
     // Convert to array and sort by proper indicator order (as per source files)
     const indicatorOrder = [
       'POP001', // Population Data (foundational)
-      'TF001',  // 1. Total Footfall (M&F) - Generic
+      // Total Footfall - facility-specific
       'TF001_PHC',  // 1. Total Footfall (M&F) - PHC
       'TF001_SC',  // 1. Total Footfall (M&F) - SC-HWC
       'TF001_UHWC',  // 1. Total Footfall (M&F) - U-HWC
@@ -240,9 +254,12 @@ export default function DynamicHealthDataForm({
       'TF001_UPHC',  // 1. Total Footfall (M&F) - UPHC
       'WS001',  // 2. Total Wellness sessions
       'TC001',  // 3. Teleconsultation
-      'AF001',  // 4. Total ANC footfall
+      // ANC Footfall - facility-specific
+      'AF001_PHC',  // 4. Total ANC footfall - PHC
+      'AF001_SC',  // 4. Total ANC footfall - SC-HWC
+      'AF001_AHWC',  // 4. Total ANC footfall - A-HWC
       'HT001',  // 5. Pregnant women tested for Hb
-      'TS001',  // 6. Individuals screened for TB - Generic
+      // TB Screenings - facility-specific
       'TS001_PHC',  // 6. Individuals screened for TB - PHC
       'TS001_SC',  // 6. Individuals screened for TB - SC-HWC
       'TS001_UHWC',  // 6. Individuals screened for TB - U-HWC
@@ -261,11 +278,16 @@ export default function DynamicHealthDataForm({
       'PS001',  // 17. Patient satisfaction score
       'EP001',  // 18. Elderly & Palliative patients visited
       'EC001',  // 19. Elderly clinic conducted
-      'JM001',  // 20. JAS meetings conducted
-      'DI001',  // 21. Issues generated in DVDMS
-      'PP001',  // 22. Prakriti Parikshan conducted (A_HWC specific)
+      'JM001',  // 20. JAS meeting conducted
+      // DVDMS Issues - facility-specific
+      'DV001_PHC',  // 21. Issues generated in DVDMS - PHC
+      'DV001_SC',  // 21. Issues generated in DVDMS - SC-HWC
+      'DV001_UHWC',  // 21. Issues generated in DVDMS - U-HWC
+      'DV001_AHWC',  // 21. Issues generated in DVDMS - A-HWC
+      // AYUSH-specific indicators
+      'PP001',  // 22. Prakriti Parikshan conducted
       'ES001',  // 23. Elderly Support Group formed
-      'EA001',  // 24. Elderly Support Group activity conducted
+      'EA001',  // 24. Elderly Support Group activity
       'OTHER'   // Other fields (at the end)
     ];
     

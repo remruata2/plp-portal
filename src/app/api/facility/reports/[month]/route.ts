@@ -88,8 +88,9 @@ export async function GET(
 
       // Get the actual value for this indicator
       const actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
-      const denominatorValue =
-        fieldValueMap.get(indicator.denominator_field_id) || 1;
+      
+      // Get denominator value - now that field mappings are fixed, this should work correctly
+      const denominatorValue = fieldValueMap.get(indicator.denominator_field_id) || 1;
 
       // Get target value from the database (seeded from indicator source files)
       let targetValue = 0;
@@ -208,20 +209,47 @@ export async function GET(
         achievementPercentage = 0;
       }
 
-      // Build formula config for calculation
+      // Build formula config for calculation with proper range extraction
+      let rangeData = formulaConfig.range;
+      
+      // Extract range from target_value if not in formula_config
+      if (!rangeData && indicator.target_value) {
+        const targetValueStr = indicator.target_value.toString();
+        
+        // Try parsing JSON range first
+        if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
+          try {
+            const parsedRange = JSON.parse(targetValueStr);
+            if (parsedRange.min !== undefined && parsedRange.max !== undefined) {
+              rangeData = { min: parsedRange.min, max: parsedRange.max };
+            }
+          } catch (error) {
+            console.warn(`Error parsing JSON range from target_value "${targetValueStr}":`, error);
+          }
+        }
+        // Try parsing string range like "3-5"
+        else if (targetValueStr.includes('-')) {
+          const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
+          if (rangeMatch) {
+            rangeData = { min: parseInt(rangeMatch[1]), max: parseInt(rangeMatch[2]) };
+          }
+        }
+      }
+      
       const calculationConfig = {
         type: indicator.target_type,
         targetValue: targetValue,
-        range: formulaConfig.range,
+        range: rangeData, // Use extracted range data
         percentageCap: formulaConfig.percentageCap,
         calculationFormula: formulaConfig.calculationFormula,
         facilitySpecificTargets: formulaConfig.facilitySpecificTargets,
       };
 
-      // Calculate remuneration using FormulaCalculator with achievement percentage
+      // Calculate remuneration using FormulaCalculator
+      // FormulaCalculator expects raw numerator values and handles all calculations internally
       const result = FormulaCalculator.calculateRemuneration(
-        achievementPercentage, // Use achievement percentage instead of raw value
-        targetValue,
+        actualValue, // Always pass raw numerator value - FormulaCalculator handles the formula
+        denominatorValue, // Pass raw denominator value 
         maxRemuneration,
         calculationConfig,
         facility.facility_type.name,
@@ -255,7 +283,7 @@ export async function GET(
         name: indicator.name,
         target: targetDescription, // Show target description instead of max value
         actual: actualValue,
-        percentage: achievementPercentage,
+        percentage: result.achievement, // Use FormulaCalculator result achievement percentage
         status: status,
         incentive_amount: result.remuneration,
         target_type: indicator.target_type,
@@ -276,7 +304,7 @@ export async function GET(
         formula_config: indicator.formula_config,
         calculation_result: result,
         max_remuneration: remuneration.base_amount,
-        raw_percentage: achievementPercentage, // Use achievement percentage for display
+        raw_percentage: achievementPercentage, // Keep raw calculation for debugging
         // Add field information
         numerator_field: indicator.numerator_field ? {
           id: indicator.numerator_field.id,
@@ -316,24 +344,46 @@ export async function GET(
 
     // Calculate worker remuneration based on facility performance
     const performancePercentage = indicators.length > 0 ? (achievedCount / indicators.length) * 100 : 0;
-
-    // Define which worker types have personal incentives vs team-based incentives
-    const teamBasedWorkerTypes = ['mo']; // MO incentive is team-based and included in facility incentive
-    const personalIncentiveWorkerTypes = ['hw', 'asha', 'ayush_mo', 'hwo', 'colocated_sc_hw']; // These have personal incentives
     
-    // Calculate worker remuneration for workers with personal incentives only
+    // Calculate facility incentive (Total Incentive Earned from image)
+    const facilityIncentive = totalIncentive; // This is the facility incentive amount
+
+    // Define worker types and their calculation methods
+    // - HWO and AYUSH MO: Individual-based (receive full facility incentive)
+    // - MO: Team-based (not listed individually)
+    // - Others (HW, ASHA, Colocated SC HW): Performance-based
+    const individualBasedWorkerTypes = ['hwo', 'ayush_mo']; // These receive full facility incentive
+    const teamBasedWorkerTypes = ['mo']; // MO incentive is team-based, not listed individually
+    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // These get performance-based calculation
+    
+    // Calculate worker remuneration
     const workersRemuneration = workers
-      .filter(worker => personalIncentiveWorkerTypes.includes(worker.worker_type.toLowerCase()))
-      .map((worker) => ({
-        id: worker.id,
-        name: worker.name,
-        worker_type: worker.worker_type,
-        worker_role: workerRoleMap.get(worker.worker_type) || worker.worker_type,
-        allocated_amount: Number(worker.allocated_amount),
-        performance_percentage: performancePercentage,
-        calculated_amount:
-          (Number(worker.allocated_amount) * performancePercentage) / 100,
-      }));
+      .filter(worker => !teamBasedWorkerTypes.includes(worker.worker_type.toLowerCase())) // Exclude MO from individual listing
+      .map((worker) => {
+        const workerType = worker.worker_type.toLowerCase();
+        let calculatedAmount;
+        
+        if (individualBasedWorkerTypes.includes(workerType)) {
+          // HWO and AYUSH MO receive the full facility incentive
+          calculatedAmount = facilityIncentive;
+        } else if (performanceBasedWorkerTypes.includes(workerType)) {
+          // HW, ASHA, Colocated SC HW get performance-based calculation
+          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
+        } else {
+          // Default fallback to performance-based
+          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
+        }
+        
+        return {
+          id: worker.id,
+          name: worker.name,
+          worker_type: worker.worker_type,
+          worker_role: workerRoleMap.get(worker.worker_type) || worker.worker_type,
+          allocated_amount: Number(worker.allocated_amount),
+          performance_percentage: performancePercentage,
+          calculated_amount: calculatedAmount,
+        };
+      });
 
     // Calculate total worker remuneration (only personal incentives)
     const totalWorkerRemuneration = workersRemuneration.reduce(
