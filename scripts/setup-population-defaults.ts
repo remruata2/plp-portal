@@ -23,8 +23,8 @@ async function setupPopulationDefaults() {
       where: {
         OR: [
           { code: { contains: "population" } },
-          { code: "total_population_30_plus" },
-          { code: "total_female_population_30_plus" },
+          { code: "population_30_plus" },
+          { code: "population_30_plus_female" },
         ],
       },
     });
@@ -34,24 +34,24 @@ async function setupPopulationDefaults() {
     // Default population values by facility type
     const defaultPopulationValues = {
       PHC: {
-        total_population_30_plus: 25000,
-        total_female_population_30_plus: 12500,
+        population_30_plus: 25000,
+        population_30_plus_female: 12500,
       },
       SC_HWC: {
-        total_population_30_plus: 3000,
-        total_female_population_30_plus: 1500,
+        population_30_plus: 3000,
+        population_30_plus_female: 1500,
       },
       A_HWC: {
-        total_population_30_plus: 3000,
-        total_female_population_30_plus: 1500,
+        population_30_plus: 3000,
+        population_30_plus_female: 1500,
       },
       U_HWC: {
-        total_population_30_plus: 10000,
-        total_female_population_30_plus: 5000,
+        population_30_plus: 10000,
+        population_30_plus_female: 5000,
       },
       UPHC: {
-        total_population_30_plus: 50000,
-        total_female_population_30_plus: 25000,
+        population_30_plus: 50000,
+        population_30_plus_female: 25000,
       },
     };
 
@@ -83,13 +83,13 @@ async function setupPopulationDefaults() {
 
         // Get the appropriate default value for this field
         let defaultValue = null;
-        if (field.code === "total_population_30_plus") {
-          defaultValue = defaultValues.total_population_30_plus;
-        } else if (field.code === "total_female_population_30_plus") {
-          defaultValue = defaultValues.total_female_population_30_plus;
+        if (field.code === "population_30_plus") {
+          defaultValue = defaultValues.population_30_plus;
+        } else if (field.code === "population_30_plus_female") {
+          defaultValue = defaultValues.population_30_plus_female;
         } else if (field.code.includes("population")) {
           // For other population fields, use the general population value
-          defaultValue = defaultValues.total_population_30_plus;
+          defaultValue = defaultValues.population_30_plus;
         }
 
         if (defaultValue) {
@@ -119,7 +119,7 @@ async function setupPopulationDefaults() {
       where: {
         denominator_field: {
           code: {
-            in: ["total_population_30_plus", "total_female_population_30_plus"],
+            in: ["population_30_plus", "population_30_plus_female"],
           },
         },
       },

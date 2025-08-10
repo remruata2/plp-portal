@@ -72,6 +72,10 @@ async function testFacilityReportsTargets() {
         // DVDMS: 40 issues vs 100 target
         fieldValueMap.set(indicator.numerator_field_id, 40);
         fieldValueMap.set(indicator.denominator_field_id, 100);
+      } else if (indicator.code === "PS001") {
+        // Patient Satisfaction: 4 out of 5 scale (80%)
+        fieldValueMap.set(indicator.numerator_field_id, 4);
+        // Note: denominator is handled specially in calculation (fixed scale of 5)
       } else if (indicator.code === "JM001") {
         // JAS: 1 meeting vs 1 target
         fieldValueMap.set(indicator.numerator_field_id, 1);
@@ -176,8 +180,33 @@ async function testFacilityReportsTargets() {
 
       // Calculate remuneration
       const actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
-      const denominatorValue =
-        fieldValueMap.get(indicator.denominator_field_id) || 1;
+      
+      // Get denominator value - use proper population defaults instead of fallback to 1
+      let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
+      
+      // Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
+      if (indicator.code === "PS001") {
+        denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
+        console.log(`🎯 PS001: Using fixed denominator value of 5 for satisfaction scale`);
+      }
+      // If denominator value is missing, use facility-type based population defaults
+      else if (denominatorValue === undefined || denominatorValue === null) {
+        const facilityTypeName = facility.facility_type.name;
+        
+        // Default population values by facility type (based on typical catchment sizes)
+        const defaultPopulationValues: Record<string, number> = {
+          'PHC': 25000,
+          'SC_HWC': 3000,
+          'A_HWC': 3000,
+          'U_HWC': 10000,
+          'UPHC': 50000,
+        };
+        
+        // Use default based on facility type, or a reasonable fallback
+        denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
+        
+        console.log(`⚠️ Missing denominator value for indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`);
+      }
 
       // Calculate achievement percentage based on target value
       let achievementPercentage = 0;
@@ -223,6 +252,8 @@ async function testFacilityReportsTargets() {
         const expectedTarget =
           expectedTargets[facility.facility_type.name] || 50;
         console.log(`   ✅ Expected: ${expectedTarget} issues target`);
+      } else if (indicator.code === "PS001") {
+        console.log(`   ✅ Expected: 4/5 = 80% satisfaction score`);
       } else if (indicator.code === "JM001") {
         console.log(`   ✅ Expected: 1 meeting target`);
       }

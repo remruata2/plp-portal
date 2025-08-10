@@ -81,8 +81,33 @@ async function testFacilityReportsAPI() {
     for (const indicator of indicators) {
       const numeratorValue =
         fieldValueMap.get(indicator.numerator_field_id) || 0;
-      const denominatorValue =
-        fieldValueMap.get(indicator.denominator_field_id) || 1;
+      
+      // Get denominator value - use proper population defaults instead of fallback to 1
+      let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
+      
+      // Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
+      if (indicator.code === "PS001") {
+        denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
+        console.log(`🎯 PS001: Using fixed denominator value of 5 for satisfaction scale`);
+      }
+      // If denominator value is missing, use facility-type based population defaults
+      else if (denominatorValue === undefined || denominatorValue === null) {
+        const facilityTypeName = facility.facility_type.name;
+        
+        // Default population values by facility type (based on typical catchment sizes)
+        const defaultPopulationValues: Record<string, number> = {
+          'PHC': 25000,
+          'SC_HWC': 3000,
+          'A_HWC': 3000,
+          'U_HWC': 10000,
+          'UPHC': 50000,
+        };
+        
+        // Use default based on facility type, or a reasonable fallback
+        denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
+        
+        console.log(`⚠️ Missing denominator value for indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`);
+      }
 
       let actualValue = numeratorValue;
       if (indicator.denominator_field_id && denominatorValue > 0) {
@@ -124,6 +149,10 @@ async function testFacilityReportsAPI() {
           };
           targetValue = dvdmsTargets[facility.facility_type.name] || 50;
           targetDescription = `Target: ${targetValue} issues`;
+          break;
+        case "PS001": // Patient Satisfaction
+          targetValue = 5; // 5-point scale
+          targetDescription = "Target: 5/5 satisfaction score (70%-100% range)";
           break;
         case "EC001": // Elderly Clinic
           const elderlyTargets: Record<string, number> = {

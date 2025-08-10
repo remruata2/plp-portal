@@ -467,20 +467,22 @@ async function seedFinalCorrectedIndicators() {
     {
       code: "PS001",
       name: "Patient satisfaction score for the month",
-      description: "Patient satisfaction score against maximum",
+      description: "Patient satisfaction score (1-5 scale) converted to percentage",
       numerator_field_code: "patient_satisfaction_score",
-      denominator_field_code: "patient_satisfaction_max",
+      denominator_field_code: null, // No denominator field needed - fixed scale of 5
       numerator_label: "Patient Satisfaction Score",
-      denominator_label: "Max Score (5)",
+      denominator_label: "Fixed Scale (5)",
       target_type: "PERCENTAGE_RANGE" as const,
       target_value: JSON.stringify({ min: 70, max: 100 }),
-      target_formula: "70-100%",
-      conditions: "Monthly target achievement",
+      target_formula: "70-100% (3.5-5.0 out of 5)",
+      conditions: "Monthly target achievement - Score 1-5 converted to percentage",
       applicable_facility_types: ["PHC", "UPHC", "SC_HWC", "A_HWC"],
       source_of_verification: "QA Mizoram KPI dashboard",
       formula_config: {
-        calculationFormula: "(A/B)*100",
-        description: "Patient Satisfaction Score / Max Score × 100"
+        calculationFormula: "(A/5)*100",
+        description: "Patient Satisfaction Score / 5 × 100 (converts 1-5 scale to 20%-100%)",
+        scoreScale: 5,
+        isDirectScore: true
       },
       worker_allocation: {
         mo: 300,      // PHC
@@ -677,7 +679,7 @@ async function seedFinalCorrectedIndicators() {
       name: "CBAC filled for the month (including rescreened)",
       description: "CBAC filled for the month (including rescreened)",
       numerator_field_code: "cbac_forms_filled",
-      denominator_field_code: "total_population_30_plus",
+      denominator_field_code: "population_30_plus",
       numerator_label: "CBAC filled for the month (including rescreened)",
       denominator_label: "Total 30+ population/12",
       target_type: "PERCENTAGE_RANGE" as const,
@@ -703,7 +705,7 @@ async function seedFinalCorrectedIndicators() {
       name: "HTN screened (including rescreened) for the month",
       description: "HTN screened (including rescreened) for the month",
       numerator_field_code: "htn_screened",
-      denominator_field_code: "total_population_30_plus",
+      denominator_field_code: "population_30_plus",
       numerator_label: "HTN screened (including rescreened) for the month",
       denominator_label: "Total 30+ population/12",
       target_type: "PERCENTAGE_RANGE" as const,
@@ -729,9 +731,9 @@ async function seedFinalCorrectedIndicators() {
       name: "DM screened (including rescreened) for the month",
       description: "DM screened (including rescreened) for the month",
       numerator_field_code: "dm_screened",
-      denominator_field_code: "total_population_30_plus",
+      denominator_field_code: "population_30_plus",
       numerator_label: "DM screened (including rescreened) for the month",
-      denominator_label: "Total 30+ population/12",
+      denominator_label: "Total 30+ Population / 12",
       target_type: "PERCENTAGE_RANGE" as const,
       target_value: JSON.stringify({ min: 50, max: 100 }),
       target_formula: "50-100%",
@@ -755,7 +757,7 @@ async function seedFinalCorrectedIndicators() {
       name: "Oral Ca. Screened for the month",
       description: "Oral Ca. Screened for the month",
       numerator_field_code: "oral_cancer_screened",
-      denominator_field_code: "total_population_30_plus",
+      denominator_field_code: "population_30_plus",
       numerator_label: "Oral Ca. Screened for the month",
       denominator_label: "Total 30+ population/60",
       target_type: "PERCENTAGE_RANGE" as const,
@@ -781,7 +783,7 @@ async function seedFinalCorrectedIndicators() {
       name: "Breast & Cervical Ca. screened for the month",
       description: "Breast & Cervical Ca. screened for the month",
       numerator_field_code: "breast_cervical_cancer_screened",
-      denominator_field_code: "total_female_population_30_plus",
+      denominator_field_code: "population_30_plus_female",
       numerator_label: "Breast & Cervical Ca. screened for the month",
       denominator_label: "Total Female 30+ population/60",
       target_type: "PERCENTAGE_RANGE" as const,
@@ -795,7 +797,7 @@ async function seedFinalCorrectedIndicators() {
         description: "Breast & Cervical Cancer Screened / (Female 30+ Population / 60) × 100"
       },
       worker_allocation: {
-        mo: 250,      // PHC
+        mo: 250,      // PHM
         hwo: 500,     // SC-HWC
         ayush_mo: 500, // A-HWC
       },
