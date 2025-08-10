@@ -3,7 +3,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Plus, Edit, Trash2, Filter } from "lucide-react";
+import { Plus, Edit, Trash2, Filter, Download, Search, Building, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 interface District {
@@ -40,6 +48,10 @@ interface Facility {
   name: string;
   district_id: string;
   facility_type_id: string;
+  address?: string;
+  contact_number?: string;
+  email?: string;
+  is_active?: boolean;
   created_at: string;
   updated_at: string;
   district: District;
@@ -49,8 +61,16 @@ interface Facility {
   };
 }
 
+interface FacilityFilters {
+  facilityType: string;
+  district: string;
+  status: string;
+  searchTerm: string;
+}
+
 export default function FacilitiesPage() {
   const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [filteredFacilities, setFilteredFacilities] = useState<Facility[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [facilityTypes, setFacilityTypes] = useState<FacilityType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,11 +81,15 @@ export default function FacilitiesPage() {
     name: "",
     district_id: "",
     facility_type_id: "",
+    address: "",
+    contact_number: "",
+    email: "",
   });
-  const [filters, setFilters] = useState({
-    districtId: "",
-    facilityTypeId: "",
-    search: "",
+  const [filters, setFilters] = useState<FacilityFilters>({
+    facilityType: "all",
+    district: "all",
+    status: "all",
+    searchTerm: "",
   });
 
   useEffect(() => {
@@ -73,17 +97,8 @@ export default function FacilitiesPage() {
   }, []);
 
   useEffect(() => {
-    fetchFacilities();
-  }, [filters.districtId, filters.facilityTypeId]);
-
-  // Debounced search effect
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchFacilities();
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [filters.search]);
+    applyFilters();
+  }, [facilities, filters]);
 
   const fetchData = async () => {
     try {
@@ -104,7 +119,9 @@ export default function FacilitiesPage() {
             facilityTypesRes.json(),
           ]);
 
-        setFacilities(facilitiesData.data || facilitiesData);
+        const facilitiesList = facilitiesData.data || facilitiesData;
+        setFacilities(facilitiesList);
+        setFilteredFacilities(facilitiesList);
         setDistricts(districtsData.districts || districtsData);
         setFacilityTypes(facilityTypesData.facilityTypes || facilityTypesData);
       } else {
@@ -117,22 +134,43 @@ export default function FacilitiesPage() {
     }
   };
 
-  const fetchFacilities = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (filters.districtId) params.append("districtId", filters.districtId);
-      if (filters.facilityTypeId)
-        params.append("facilityTypeId", filters.facilityTypeId);
-      if (filters.search) params.append("search", filters.search);
+  const applyFilters = () => {
+    let filtered = [...facilities];
 
-      const response = await fetch(`/api/facilities?${params}`);
-      if (response.ok) {
-        const data = await response.json();
-        setFacilities(data.data || data);
-      }
-    } catch (error) {
-      console.error("Error fetching facilities:", error);
+    // Filter by facility type
+    if (filters.facilityType && filters.facilityType !== "all") {
+      filtered = filtered.filter(
+        (facility) => facility.facility_type.name === filters.facilityType
+      );
     }
+
+    // Filter by district
+    if (filters.district && filters.district !== "all") {
+      filtered = filtered.filter(
+        (facility) => facility.district.name === filters.district
+      );
+    }
+
+    // Filter by status
+    if (filters.status && filters.status !== "all") {
+      const isActive = filters.status === "active";
+      filtered = filtered.filter((facility) => facility.is_active === isActive);
+    }
+
+    // Filter by search term
+    if (filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (facility) =>
+          facility.name.toLowerCase().includes(searchLower) ||
+          facility.facility_type.name.toLowerCase().includes(searchLower) ||
+          facility.district.name.toLowerCase().includes(searchLower) ||
+          (facility.address &&
+            facility.address.toLowerCase().includes(searchLower))
+      );
+    }
+
+    setFilteredFacilities(filtered);
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -157,7 +195,7 @@ export default function FacilitiesPage() {
         toast.success("Facility created successfully");
         setIsCreateOpen(false);
         resetForm();
-        fetchFacilities();
+        fetchData();
       } else {
         const error = await response.json();
         toast.error(error.error || "Failed to create facility");
@@ -191,7 +229,7 @@ export default function FacilitiesPage() {
         setIsEditOpen(false);
         setEditingFacility(null);
         resetForm();
-        fetchFacilities();
+        fetchData();
       } else {
         const error = await response.json();
         toast.error(error.error || "Failed to update facility");
@@ -209,7 +247,7 @@ export default function FacilitiesPage() {
 
       if (response.ok) {
         toast.success(`Facility "${name}" deleted successfully`);
-        fetchFacilities();
+        fetchData();
       } else {
         const error = await response.json();
         toast.error(error.error || "Failed to delete facility");
@@ -225,6 +263,9 @@ export default function FacilitiesPage() {
       name: facility.name,
       district_id: facility.district_id,
       facility_type_id: facility.facility_type_id,
+      address: facility.address || "",
+      contact_number: facility.contact_number || "",
+      email: facility.email || "",
     });
     setIsEditOpen(true);
   };
@@ -234,7 +275,81 @@ export default function FacilitiesPage() {
       name: "",
       district_id: "",
       facility_type_id: "",
+      address: "",
+      contact_number: "",
+      email: "",
     });
+  };
+
+  const getStatusBadge = (isActive: boolean | undefined) => {
+    if (isActive === undefined) return <Badge variant="secondary">Unknown</Badge>;
+    return isActive ? (
+      <Badge variant="default">Active</Badge>
+    ) : (
+      <Badge variant="secondary">Inactive</Badge>
+    );
+  };
+
+  const downloadCSV = () => {
+    if (filteredFacilities.length === 0) {
+      toast.error("No data to download");
+      return;
+    }
+
+    const headers = [
+      "Facility ID",
+      "Facility Name",
+      "Facility Type",
+      "District",
+      "Address",
+      "Contact Number",
+      "Email",
+      "Status",
+      "Created At",
+      "Updated At",
+    ];
+
+    const csvData = [
+      headers.join(","),
+      ...filteredFacilities.map((facility) =>
+        [
+          facility.id,
+          `"${facility.name}"`,
+          `"${facility.facility_type.name}"`,
+          `"${facility.district.name}"`,
+          `"${facility.address || ""}"`,
+          `"${facility.contact_number || ""}"`,
+          `"${facility.email || ""}"`,
+          facility.is_active ? "Active" : "Inactive",
+          `"${new Date(facility.created_at).toLocaleDateString()}"`,
+          `"${new Date(facility.updated_at).toLocaleDateString()}"`,
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvData], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `facilities-report-${
+      new Date().toISOString().split("T")[0]
+    }.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    toast.success("Facilities report downloaded successfully");
+  };
+
+  const getUniqueFacilityTypes = () => {
+    const types = new Set(facilities.map((f) => f.facility_type.name));
+    return Array.from(types).sort();
+  };
+
+  const getUniqueDistricts = () => {
+    const districts = new Set(facilities.map((f) => f.district.name));
+    return Array.from(districts).sort();
   };
 
   if (loading) {
@@ -255,153 +370,315 @@ export default function FacilitiesPage() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Facilities Management</h1>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Facility
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Create New Facility</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Facility Name *
-                </label>
-                <Input
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="Enter facility name"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Facilities Management</h1>
+          <p className="text-gray-600">
+            Manage healthcare facilities across all districts
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={downloadCSV}
+            className="flex items-center gap-2"
+            disabled={filteredFacilities.length === 0}
+            variant="outline"
+          >
+            <Download className="h-4 w-4" />
+            Download CSV
+          </Button>
+          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Facility
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Create New Facility</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreate} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    District *
+                    Facility Name *
                   </label>
-                  <select
-                    value={formData.district_id}
+                  <Input
+                    value={formData.name}
                     onChange={(e) =>
-                      setFormData({ ...formData, district_id: e.target.value })
+                      setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Enter facility name"
                     required
-                  >
-                    <option value="">Select District</option>
-                    {Array.isArray(districts) &&
-                      districts.map((district) => (
-                        <option key={district.id} value={district.id}>
-                          {district.name}
-                        </option>
-                      ))}
-                  </select>
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      District *
+                    </label>
+                    <select
+                      value={formData.district_id}
+                      onChange={(e) =>
+                        setFormData({ ...formData, district_id: e.target.value })
+                      }
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    >
+                      <option value="">Select District</option>
+                      {Array.isArray(districts) &&
+                        districts.map((district) => (
+                          <option key={district.id} value={district.id}>
+                            {district.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Facility Type *
+                    </label>
+                    <select
+                      value={formData.facility_type_id}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          facility_type_id: e.target.value,
+                        })
+                      }
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    >
+                      <option value="">Select Facility Type</option>
+                      {Array.isArray(facilityTypes) &&
+                        facilityTypes.map((type) => (
+                          <option key={type.id} value={type.id}>
+                            {type.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Address
+                    </label>
+                    <Input
+                      value={formData.address}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
+                      placeholder="Enter facility address"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Contact Number
+                    </label>
+                    <Input
+                      value={formData.contact_number}
+                      onChange={(e) =>
+                        setFormData({ ...formData, contact_number: e.target.value })
+                      }
+                      placeholder="Enter contact number"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Facility Type *
+                    Email
                   </label>
-                  <select
-                    value={formData.facility_type_id}
+                  <Input
+                    type="email"
+                    value={formData.email}
                     onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        facility_type_id: e.target.value,
-                      })
+                      setFormData({ ...formData, email: e.target.value })
                     }
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Facility Type</option>
-                    {Array.isArray(facilityTypes) &&
-                      facilityTypes.map((type) => (
-                        <option key={type.id} value={type.id}>
-                          {type.name}
-                        </option>
-                      ))}
-                  </select>
+                    placeholder="Enter email address"
+                  />
                 </div>
-              </div>
 
-              <div className="flex justify-end space-x-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsCreateOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">Create</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Filters */}
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center gap-4 flex-wrap">
-          <Filter className="w-5 h-5 text-gray-500" />
-          <select
-            value={filters.districtId}
-            onChange={(e) =>
-              setFilters({ ...filters, districtId: e.target.value })
-            }
-            className="p-2 border border-gray-300 rounded-md"
-          >
-            <option value="">All Districts</option>
-            {Array.isArray(districts) &&
-              districts.map((district) => (
-                <option key={district.id} value={district.id}>
-                  {district.name}
-                </option>
-              ))}
-          </select>
-          <select
-            value={filters.facilityTypeId}
-            onChange={(e) =>
-              setFilters({ ...filters, facilityTypeId: e.target.value })
-            }
-            className="p-2 border border-gray-300 rounded-md"
-          >
-            <option value="">All Facility Types</option>
-            {Array.isArray(facilityTypes) &&
-              facilityTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-          </select>
-          <Input
-            type="text"
-            placeholder="Search facilities by name..."
-            value={filters.search}
-            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            className="max-w-xs"
-          />
-          {(filters.districtId || filters.facilityTypeId || filters.search) && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setFilters({ districtId: "", facilityTypeId: "", search: "" })
-              }
-            >
-              Clear Filters
-            </Button>
-          )}
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsCreateOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Create</Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Facilities
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {facilities.length}
+                </p>
+              </div>
+              <Building className="h-8 w-8 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Active</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {facilities.filter((f) => f.is_active).length}
+                </p>
+              </div>
+              <FileText className="h-8 w-8 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Districts</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {new Set(facilities.map((f) => f.district.id)).size}
+                </p>
+              </div>
+              <FileText className="h-8 w-8 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Filtered Results
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {filteredFacilities.length}
+                </p>
+              </div>
+              <Filter className="h-8 w-8 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Filters
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Search
+              </label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search facilities..."
+                  value={filters.searchTerm}
+                  onChange={(e) =>
+                    setFilters({ ...filters, searchTerm: e.target.value })
+                  }
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Facility Type
+              </label>
+              <Select
+                value={filters.facilityType}
+                onValueChange={(value) =>
+                  setFilters({ ...filters, facilityType: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All types" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All types</SelectItem>
+                  {getUniqueFacilityTypes().map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                District
+              </label>
+              <Select
+                value={filters.district}
+                onValueChange={(value) =>
+                  setFilters({ ...filters, district: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All districts" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All districts</SelectItem>
+                  {getUniqueDistricts().map((district) => (
+                    <SelectItem key={district} value={district}>
+                      {district}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Status
+              </label>
+              <Select
+                value={filters.status}
+                onValueChange={(value) =>
+                  setFilters({ ...filters, status: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4">
-        {Array.isArray(facilities) &&
-          facilities.map((facility) => (
+        {Array.isArray(filteredFacilities) &&
+          filteredFacilities.map((facility) => (
             <Card key={facility.id}>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
@@ -411,6 +688,16 @@ export default function FacilitiesPage() {
                       <p>
                         District: {facility.district.name} | Type:{" "}
                         {facility.facility_type.name}
+                      </p>
+                      {facility.address && (
+                        <p>Address: {facility.address}</p>
+                      )}
+                      {facility.contact_number && (
+                        <p>Contact: {facility.contact_number}</p>
+                      )}
+                      {facility.email && <p>Email: {facility.email}</p>}
+                      <p>
+                        Status: {getStatusBadge(facility.is_active)}
                       </p>
                       <p>
                         Created:{" "}
@@ -525,6 +812,45 @@ export default function FacilitiesPage() {
                     ))}
                 </select>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Address
+                </label>
+                <Input
+                  value={formData.address}
+                  onChange={(e) =>
+                    setFormData({ ...formData, address: e.target.value })
+                  }
+                  placeholder="Enter facility address"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Contact Number
+                </label>
+                <Input
+                  value={formData.contact_number}
+                  onChange={(e) =>
+                    setFormData({ ...formData, contact_number: e.target.value })
+                  }
+                  placeholder="Enter contact number"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                placeholder="Enter email address"
+              />
             </div>
 
             <div className="flex justify-end space-x-2">
