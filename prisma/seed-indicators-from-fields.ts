@@ -924,6 +924,13 @@ async function seedFinalCorrectedIndicators() {
       worker_allocation = {}
     } = indicatorData;
 
+    // Debug logging for production
+    console.log(`🔍 Debug: Processing indicator ${code}`);
+    console.log(`🔍 Debug: target_type from data:`, indicatorData.target_type);
+    console.log(`🔍 Debug: target_type after destructuring:`, target_type);
+    console.log(`🔍 Debug: TargetType enum available:`, typeof TargetType);
+    console.log(`🔍 Debug: TargetType.PERCENTAGE_RANGE:`, TargetType?.PERCENTAGE_RANGE);
+
 
 
     // Find the fields by code
@@ -943,8 +950,9 @@ async function seedFinalCorrectedIndicators() {
           name,
           description,
           type: "FIELD_BASED",
-          numerator_field_id: numeratorField?.id,
-          denominator_field_id: denominatorField?.id,
+          // Handle both schema versions - use relation fields if available
+          ...(numeratorField?.id && { numerator_field: { connect: { id: numeratorField.id } } }),
+          ...(denominatorField?.id && { denominator_field: { connect: { id: denominatorField.id } } }),
           numerator_label,
           denominator_label,
           target_type,
@@ -985,8 +993,9 @@ async function seedFinalCorrectedIndicators() {
           name,
           description,
           type: "FIELD_BASED",
-          numerator_field_id: numeratorField?.id,
-          denominator_field_id: denominatorField?.id,
+          // Handle both schema versions - use relation fields if available
+          ...(numeratorField?.id && { numerator_field: { connect: { id: numeratorField.id } } }),
+          ...(denominatorField?.id && { denominator_field: { connect: { id: denominatorField.id } } }),
           numerator_label,
           denominator_label,
           target_type,
