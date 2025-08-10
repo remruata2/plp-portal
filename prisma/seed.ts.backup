@@ -1,0 +1,327 @@
+import { PrismaClient, UserRole } from "../src/generated/prisma";
+import bcrypt from "bcryptjs";
+
+const prisma = new PrismaClient();
+
+async function main() {
+  console.log(`🌱 Starting comprehensive seeding...`);
+
+  // Create sample users
+  const adminPassword = await bcrypt.hash("password123", 10);
+  const staffPassword = await bcrypt.hash("password123", 10);
+
+  const users = [
+    {
+      username: "admin",
+      password_hash: adminPassword,
+      role: UserRole.admin,
+    },
+    {
+      username: "staffuser",
+      password_hash: staffPassword,
+      role: UserRole.staff,
+    },
+  ];
+
+  for (const u of users) {
+    const user = await prisma.user.upsert({
+      where: { username: u.username },
+      update: {},
+      create: u,
+    });
+    console.log(`✅ Created/found user with id: ${user.id} (${user.username})`);
+  }
+
+  // Create facility types
+  const facilityTypes = [
+    { name: "District Hospital" },
+    { name: "Private Hospital" },
+    { name: "Community Health Centre" },
+    { name: "Primary Health Centre" },
+    { name: "Urban Primary Health Centre" },
+  ];
+
+  for (const ft of facilityTypes) {
+    const facilityType = await prisma.facilityType.upsert({
+      where: { name: ft.name },
+      update: {},
+      create: ft,
+    });
+    console.log(`✅ Created/found facility type: ${facilityType.name}`);
+  }
+
+  // Create sample districts (Mizoram districts)
+  const districts = [
+    { name: "Aizawl East" },
+    { name: "Aizawl West" },
+    { name: "Champhai" },
+    { name: "Hnahthial" },
+    { name: "Khawzawl" },
+    { name: "Kolasib" },
+    { name: "Lawngtlai" },
+    { name: "Lunglei" },
+    { name: "Mamit" },
+    { name: "Saitual" },
+    { name: "Serchhip" },
+    { name: "Siaha" },
+  ];
+
+  for (const d of districts) {
+    const district = await prisma.district.upsert({
+      where: { name: d.name },
+      update: {},
+      create: d,
+    });
+    console.log(`✅ Created/found district: ${district.name}`);
+  }
+
+  console.log(`\n🏥 Starting district-specific facility seeding...\n`);
+
+  // Get all districts and facility types for seeding
+  const allDistricts = await prisma.district.findMany();
+  const allFacilityTypes = await prisma.facilityType.findMany();
+
+  const districtMap = allDistricts.reduce((acc, district) => {
+    acc[district.name] = district.id;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const facilityTypeMap = allFacilityTypes.reduce((acc, ft) => {
+    acc[ft.name] = ft.id;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Seed Aizawl East facilities
+  console.log(`📍 Seeding Aizawl East...`);
+  await seedAizawlEast(districtMap, facilityTypeMap);
+  console.log(`✅ Aizawl East completed\n`);
+
+  // Seed Aizawl West facilities
+  console.log(`📍 Seeding Aizawl West...`);
+  await seedAizawlWest(districtMap, facilityTypeMap);
+  console.log(`✅ Aizawl West completed\n`);
+
+  // Add more districts as needed...
+  console.log(`📍 Seeding other districts...`);
+  await seedOtherDistricts(districtMap, facilityTypeMap);
+  console.log(`✅ Other districts completed\n`);
+
+  console.log(`🎉 Comprehensive seeding finished!`);
+  console.log(`📊 Total Summary:`);
+  console.log(`   • Users created: ${users.length}`);
+  console.log(`   • Facility types created: ${facilityTypes.length}`);
+  console.log(`   • Districts created: ${districts.length}`);
+  console.log(`   • All district facilities and sub-centres seeded`);
+}
+
+async function seedAizawlEast(
+  districtMap: Record<string, number>,
+  facilityTypeMap: Record<string, number>
+) {
+  const aizawlEastId = districtMap["Aizawl East"];
+  if (!aizawlEastId) {
+    console.log(`  ⚠️  Aizawl East district not found`);
+    return;
+  }
+  console.log(`  📍 Found Aizawl East district with ID: ${aizawlEastId}`);
+
+  const facilities = [
+    {
+      name: "Aizawl Civil Hospital, Dawrpui",
+      facility_code: null,
+      nin: null,
+      type: "District Hospital",
+      subCentres: [],
+    },
+    {
+      name: "Agape Multispeciality Hospital, Chanmari",
+      facility_code: "2063905",
+      nin: "Notmapped",
+      type: "Private Hospital",
+      subCentres: [],
+    },
+    {
+      name: "Care Hospital, Dawrpui",
+      facility_code: "2063906",
+      nin: "Notmapped",
+      type: "Private Hospital",
+      subCentres: [],
+    },
+    {
+      name: "Sakawrdai CHC",
+      facility_code: "235532",
+      nin: "1513527174",
+      type: "Community Health Centre",
+      subCentres: [
+        {
+          name: "Sakawrdai AHWC - SC",
+          facility_code: "235643",
+          nin: "4127625111",
+        },
+        {
+          name: "Mauchar HWC - SC",
+          facility_code: "235641",
+          nin: "4262374681",
+        },
+        {
+          name: "Palsang HWC - SC",
+          facility_code: "235642",
+          nin: "3823853852",
+        },
+      ],
+    },
+  ];
+
+  for (const facilityData of facilities) {
+    const facilityTypeId = facilityTypeMap[facilityData.type];
+    if (!facilityTypeId) {
+      console.log(`  ⚠️  Facility type '${facilityData.type}' not found`);
+      continue;
+    }
+
+    const existingFacility = await prisma.facility.findFirst({
+      where: { name: facilityData.name },
+    });
+
+    let facility;
+    if (existingFacility) {
+      facility = existingFacility;
+      console.log(`  ⏭️  Facility already exists: ${facilityData.name}`);
+    } else {
+      facility = await prisma.facility.create({
+        data: {
+          name: facilityData.name,
+          facility_code: facilityData.facility_code,
+          nin: facilityData.nin === "Notmapped" ? null : facilityData.nin,
+          district_id: aizawlEastId,
+          facility_type_id: facilityTypeId,
+        },
+      });
+      console.log(`  ✅ Created facility: ${facility.name}`);
+    }
+
+    // Create sub-centres
+    for (const subCentreData of facilityData.subCentres) {
+      const existingSubCentre = await prisma.subCentre.findFirst({
+        where: { name: subCentreData.name },
+      });
+
+      if (!existingSubCentre) {
+        await prisma.subCentre.create({
+          data: {
+            name: subCentreData.name,
+            facility_code: subCentreData.facility_code,
+            nin: subCentreData.nin === "NA" ? null : subCentreData.nin,
+            facility_id: facility.id,
+          },
+        });
+        console.log(`    ➕ Created sub-centre: ${subCentreData.name}`);
+      } else {
+        console.log(`    ⏭️  Sub-centre already exists: ${subCentreData.name}`);
+      }
+    }
+  }
+}
+
+async function seedAizawlWest(
+  districtMap: Record<string, number>,
+  facilityTypeMap: Record<string, number>
+) {
+  const aizawlWestId = districtMap["Aizawl West"];
+  if (!aizawlWestId) return;
+
+  const facilities = [
+    {
+      name: "Aizawl West District Hospital",
+      facility_code: null,
+      nin: null,
+      type: "District Hospital",
+      subCentres: [],
+    },
+    {
+      name: "West Aizawl Private Hospital",
+      facility_code: "2063907",
+      nin: "Notmapped",
+      type: "Private Hospital",
+      subCentres: [],
+    },
+  ];
+
+  for (const facilityData of facilities) {
+    const facilityTypeId = facilityTypeMap[facilityData.type];
+    if (!facilityTypeId) continue;
+
+    const existingFacility = await prisma.facility.findFirst({
+      where: { name: facilityData.name },
+    });
+
+    if (!existingFacility) {
+      const facility = await prisma.facility.create({
+        data: {
+          name: facilityData.name,
+          facility_code: facilityData.facility_code,
+          nin: facilityData.nin === "Notmapped" ? null : facilityData.nin,
+          district_id: aizawlWestId,
+          facility_type_id: facilityTypeId,
+        },
+      });
+      console.log(`  ✅ Created facility: ${facility.name}`);
+    }
+  }
+}
+
+async function seedOtherDistricts(
+  districtMap: Record<string, number>,
+  facilityTypeMap: Record<string, number>
+) {
+  // Add basic facilities for other districts
+  const otherDistricts = [
+    "Champhai",
+    "Hnahthial",
+    "Khawzawl",
+    "Kolasib",
+    "Lawngtlai",
+    "Lunglei",
+    "Mamit",
+    "Saitual",
+    "Serchhip",
+    "Siaha",
+  ];
+
+  for (const districtName of otherDistricts) {
+    const districtId = districtMap[districtName];
+    if (!districtId) continue;
+
+    const districtHospitalTypeId = facilityTypeMap["District Hospital"];
+    if (!districtHospitalTypeId) continue;
+
+    const existingFacility = await prisma.facility.findFirst({
+      where: {
+        name: `${districtName} District Hospital`,
+        district_id: districtId,
+      },
+    });
+
+    if (!existingFacility) {
+      const facility = await prisma.facility.create({
+        data: {
+          name: `${districtName} District Hospital`,
+          facility_code: null,
+          nin: null,
+          district_id: districtId,
+          facility_type_id: districtHospitalTypeId,
+        },
+      });
+      console.log(`  ✅ Created facility: ${facility.name}`);
+    }
+  }
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

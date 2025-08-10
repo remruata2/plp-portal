@@ -1,0 +1,12 @@
+model IndicatorWorkerAllocation {
+  id              String    @id @default(cuid())
+  indicator_id    String
+  worker_type     String    @db.VarChar(50) // hwo, mo, ayush_mo, hw, asha, colocated_sc_hw
+  allocated_amount Int
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
+  indicator       Indicator @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
+
+  @@unique([indicator_id, worker_type])
+  @@map("indicator_worker_allocation")
+}

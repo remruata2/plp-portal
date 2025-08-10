@@ -1,34 +1,36 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
-import { UserRole } from '@/generated/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(context.params.id, 10);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: "Invalid indicator ID" }, { status: 400 });
-    }
+    const { id } = await params;
 
     const indicator = await prisma.indicator.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
+      include: {
+        numerator_field: true,
+        denominator_field: true,
+        target_field: true,
+      },
     });
 
     if (!indicator) {
-      return NextResponse.json({ error: "Indicator not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Indicator not found" },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json({ success: true, data: indicator });
+    return NextResponse.json(indicator);
   } catch (error) {
     console.error("Error fetching indicator:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch indicator" },
+      { error: "Failed to fetch indicator" },
       { status: 500 }
     );
   }
@@ -36,97 +38,51 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (session?.user?.role !== UserRole.admin) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
   try {
-    const id = parseInt(context.params.id, 10);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: "Invalid indicator ID" }, { status: 400 });
-    }
-
-    // First, get the current indicator to check its type
-    const currentIndicator = await prisma.indicator.findUnique({
-      where: { id },
-    });
-
-    if (!currentIndicator) {
-      return NextResponse.json(
-        { success: false, error: "Indicator not found" },
-        { status: 404 }
-      );
-    }
-
+    const { id } = await params;
     const body = await request.json();
-    const { code, name, description, type, structure } = body;
+    const { name, description, type, structure, target_type, formula_config } =
+      body;
 
-    if (!code || !name || !type) {
+    if (!name) {
       return NextResponse.json(
-        { success: false, error: "Code, name and type are required" },
+        { error: "Indicator name is required" },
         { status: 400 }
       );
     }
 
-    // Validate based on indicator type
-    if (type === 'formula') {
-      if (!structure) {
-        return NextResponse.json(
-          { success: false, error: "Structure is required for formula indicators" },
-          { status: 400 }
-        );
-      }
-      
-      // Basic validation for the structure object
-      if (
-        !structure.operands ||
-        !Array.isArray(structure.operands) ||
-        !structure.expression ||
-        typeof structure.expression !== 'string'
-      ) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Invalid structure: must include an "operands" array and an "expression" string.',
-          },
-          { status: 400 }
-        );
-      }
-    }
-
-    const updatedIndicator = await prisma.indicator.update({
-      where: { id },
+    const indicator = await prisma.indicator.update({
+      where: { id: parseInt(id) },
       data: {
-        code,
         name,
-        description: description || null,
+        description,
         type,
-        structure: type === 'formula' ? structure : null,
+        structure,
+        target_type,
+        formula_config,
+      },
+      include: {
+        numerator_field: true,
+        denominator_field: true,
+        target_field: true,
       },
     });
 
-    return NextResponse.json({ success: true, data: updatedIndicator });
+    return NextResponse.json(indicator);
   } catch (error: any) {
     console.error("Error updating indicator:", error);
-    if (error.code === 'P2002' && error.meta?.target?.includes('code')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "An indicator with this code already exists.",
-        },
-        { status: 409 } // 409 Conflict
-      );
-    }
+
     if (error?.code === "P2025") {
       return NextResponse.json(
-        { success: false, error: "Indicator not found" },
+        { error: "Indicator not found" },
         { status: 404 }
       );
     }
+
     return NextResponse.json(
-      { success: false, error: "Failed to update indicator" },
+      { error: "Failed to update indicator" },
       { status: 500 }
     );
   }
@@ -134,33 +90,40 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (session?.user?.role !== UserRole.admin) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
   try {
-    const id = parseInt(context.params.id, 10);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: "Invalid indicator ID" }, { status: 400 });
+    const { id } = await params;
+
+    // Check if indicator is being used
+    const usageCount = await prisma.monthlyHealthData.count({
+      where: { indicator_id: parseInt(id) },
+    });
+
+    if (usageCount > 0) {
+      return NextResponse.json(
+        { error: "Cannot delete indicator that is being used" },
+        { status: 400 }
+      );
     }
 
     await prisma.indicator.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
-    return NextResponse.json({ success: true, message: "Indicator deleted successfully" });
+    return NextResponse.json({ message: "Indicator deleted successfully" });
   } catch (error: any) {
     console.error("Error deleting indicator:", error);
-     if (error?.code === "P2025") {
+
+    if (error?.code === "P2025") {
       return NextResponse.json(
-        { success: false, error: "Indicator not found" },
+        { error: "Indicator not found" },
         { status: 404 }
       );
     }
+
     return NextResponse.json(
-      { success: false, error: "Failed to delete indicator" },
+      { error: "Failed to delete indicator" },
       { status: 500 }
     );
   }

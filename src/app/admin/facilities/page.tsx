@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,22 +26,20 @@ import { Plus, Edit, Trash2, Filter } from "lucide-react";
 import { toast } from "sonner";
 
 interface District {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface FacilityType {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface Facility {
-  id: number;
+  id: string;
   name: string;
-  facility_code?: string;
-  nin?: string;
-  district_id: number;
-  facility_type_id: number;
+  district_id: string;
+  facility_type_id: string;
   created_at: string;
   updated_at: string;
   district: District;
@@ -61,14 +59,13 @@ export default function FacilitiesPage() {
   const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
   const [formData, setFormData] = useState({
     name: "",
-    facility_code: "",
-    nin: "",
     district_id: "",
     facility_type_id: "",
   });
   const [filters, setFilters] = useState({
     districtId: "",
     facilityTypeId: "",
+    search: "",
   });
 
   useEffect(() => {
@@ -77,7 +74,16 @@ export default function FacilitiesPage() {
 
   useEffect(() => {
     fetchFacilities();
-  }, [filters]);
+  }, [filters.districtId, filters.facilityTypeId]);
+
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchFacilities();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [filters.search]);
 
   const fetchData = async () => {
     try {
@@ -98,7 +104,7 @@ export default function FacilitiesPage() {
             facilityTypesRes.json(),
           ]);
 
-        setFacilities(facilitiesData.facilities || facilitiesData);
+        setFacilities(facilitiesData.data || facilitiesData);
         setDistricts(districtsData.districts || districtsData);
         setFacilityTypes(facilityTypesData.facilityTypes || facilityTypesData);
       } else {
@@ -117,11 +123,12 @@ export default function FacilitiesPage() {
       if (filters.districtId) params.append("districtId", filters.districtId);
       if (filters.facilityTypeId)
         params.append("facilityTypeId", filters.facilityTypeId);
+      if (filters.search) params.append("search", filters.search);
 
       const response = await fetch(`/api/facilities?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setFacilities(data.facilities || data);
+        setFacilities(data.data || data);
       }
     } catch (error) {
       console.error("Error fetching facilities:", error);
@@ -172,12 +179,6 @@ export default function FacilitiesPage() {
       return;
     }
 
-    // Validate that sub-centres have a parent facility
-    if (formData.facility_type_id === "6" && !formData.parent_id) {
-      toast.error("Sub-centres must have a parent facility");
-      return;
-    }
-
     try {
       const response = await fetch(`/api/facilities/${editingFacility.id}`, {
         method: "PUT",
@@ -200,7 +201,7 @@ export default function FacilitiesPage() {
     }
   };
 
-  const handleDelete = async (id: number, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     try {
       const response = await fetch(`/api/facilities/${id}`, {
         method: "DELETE",
@@ -222,11 +223,8 @@ export default function FacilitiesPage() {
     setEditingFacility(facility);
     setFormData({
       name: facility.name,
-      facility_code: facility.facility_code || "",
-      nin: facility.nin || "",
-      district_id: facility.district_id.toString(),
-      facility_type_id: facility.facility_type_id.toString(),
-      parent_id: facility.parent_id?.toString() || "",
+      district_id: facility.district_id,
+      facility_type_id: facility.facility_type_id,
     });
     setIsEditOpen(true);
   };
@@ -234,11 +232,8 @@ export default function FacilitiesPage() {
   const resetForm = () => {
     setFormData({
       name: "",
-      facility_code: "",
-      nin: "",
       district_id: "",
       facility_type_id: "",
-      parent_id: "",
     });
   };
 
@@ -273,44 +268,17 @@ export default function FacilitiesPage() {
               <DialogTitle>Create New Facility</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleCreate} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Facility Name *
-                  </label>
-                  <Input
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="Enter facility name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Facility Code
-                  </label>
-                  <Input
-                    value={formData.facility_code}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        facility_code: e.target.value,
-                      })
-                    }
-                    placeholder="Enter facility code"
-                  />
-                </div>
-              </div>
               <div>
-                <label className="block text-sm font-medium mb-2">NIN</label>
+                <label className="block text-sm font-medium mb-2">
+                  Facility Name *
+                </label>
                 <Input
-                  value={formData.nin}
+                  value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, nin: e.target.value })
+                    setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Enter NIN"
+                  placeholder="Enter facility name"
+                  required
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -360,37 +328,7 @@ export default function FacilitiesPage() {
                   </select>
                 </div>
               </div>
-              {formData.facility_type_id === "6" && (
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Parent Facility *
-                  </label>
-                  <select
-                    value={formData.parent_id}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        parent_id: e.target.value,
-                      })
-                    }
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Parent Facility</option>
-                    {Array.isArray(facilities) &&
-                      facilities
-                        .filter((facility) => !facility.parent_id) // Only show parent facilities
-                        .map((facility) => (
-                          <option key={facility.id} value={facility.id}>
-                            {facility.name} ({facility.facility_type.name})
-                          </option>
-                        ))}
-                  </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Sub-centres must have a parent facility
-                  </p>
-                </div>
-              )}
+
               <div className="flex justify-end space-x-2">
                 <Button
                   type="button"
@@ -408,7 +346,7 @@ export default function FacilitiesPage() {
 
       {/* Filters */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-wrap">
           <Filter className="w-5 h-5 text-gray-500" />
           <select
             value={filters.districtId}
@@ -440,11 +378,20 @@ export default function FacilitiesPage() {
                 </option>
               ))}
           </select>
-          {(filters.districtId || filters.facilityTypeId) && (
+          <Input
+            type="text"
+            placeholder="Search facilities by name..."
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            className="max-w-xs"
+          />
+          {(filters.districtId || filters.facilityTypeId || filters.search) && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setFilters({ districtId: "", facilityTypeId: "" })}
+              onClick={() =>
+                setFilters({ districtId: "", facilityTypeId: "", search: "" })
+              }
             >
               Clear Filters
             </Button>
@@ -462,15 +409,10 @@ export default function FacilitiesPage() {
                     <h3 className="text-lg font-semibold">{facility.name}</h3>
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>
-                        Code: {facility.facility_code || "N/A"} | NIN:{" "}
-                        {facility.nin || "N/A"}
-                      </p>
-                      <p>
                         District: {facility.district.name} | Type:{" "}
                         {facility.facility_type.name}
                       </p>
                       <p>
-                        Child Facilities: {facility._count?.children || 0} |
                         Created:{" "}
                         {new Date(facility.created_at).toLocaleDateString()}
                       </p>
@@ -524,41 +466,17 @@ export default function FacilitiesPage() {
             <DialogTitle>Edit Facility</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleEdit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Facility Name *
-                </label>
-                <Input
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="Enter facility name"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Facility Code
-                </label>
-                <Input
-                  value={formData.facility_code}
-                  onChange={(e) =>
-                    setFormData({ ...formData, facility_code: e.target.value })
-                  }
-                  placeholder="Enter facility code"
-                />
-              </div>
-            </div>
             <div>
-              <label className="block text-sm font-medium mb-2">NIN</label>
+              <label className="block text-sm font-medium mb-2">
+                Facility Name *
+              </label>
               <Input
-                value={formData.nin}
+                value={formData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, nin: e.target.value })
+                  setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="Enter NIN"
+                placeholder="Enter facility name"
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -608,41 +526,7 @@ export default function FacilitiesPage() {
                 </select>
               </div>
             </div>
-            {formData.facility_type_id === "6" && (
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Parent Facility *
-                </label>
-                <select
-                  value={formData.parent_id}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      parent_id: e.target.value,
-                    })
-                  }
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  required
-                >
-                  <option value="">Select Parent Facility</option>
-                  {Array.isArray(facilities) &&
-                    facilities
-                      .filter(
-                        (facility) =>
-                          !facility.parent_id &&
-                          facility.id !== editingFacility?.id
-                      ) // Exclude current facility and only show parent facilities
-                      .map((facility) => (
-                        <option key={facility.id} value={facility.id}>
-                          {facility.name} ({facility.facility_type.name})
-                        </option>
-                      ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  Sub-centres must have a parent facility
-                </p>
-              </div>
-            )}
+
             <div className="flex justify-end space-x-2">
               <Button
                 type="button"

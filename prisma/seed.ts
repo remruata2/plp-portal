@@ -1,162 +1,92 @@
-import { PrismaClient, UserRole } from "../src/generated/prisma";
+import { PrismaClient } from "../src/generated/prisma";
 import bcrypt from "bcryptjs";
-import { hmisIndicators } from "./seed-hmis-indicators";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log(`Start seeding ...`);
+  console.log("🌱 Starting basic database seeding...");
 
-  // Create sample users
-  const adminPassword = await bcrypt.hash("password123", 10);
-  const staffPassword = await bcrypt.hash("password123", 10);
+  // Create admin user
+  const hashedPassword = await bcrypt.hash("admin123", 12);
 
-  const users = [
-    {
+  const adminUser = await prisma.user.upsert({
+    where: { username: "admin" },
+    update: {},
+    create: {
       username: "admin",
-      password_hash: adminPassword,
-      role: UserRole.admin,
+      email: "admin@plp-portal.com",
+      password_hash: hashedPassword,
+      role: "admin",
     },
-    {
-      username: "staffuser",
-      password_hash: staffPassword,
-      role: UserRole.staff,
-    },
-  ];
+  });
 
-  for (const u of users) {
-    const user = await prisma.user.upsert({
-      where: { username: u.username },
-      update: {},
-      create: u,
-    });
-    console.log(`Created/found user with id: ${user.id} (${user.username})`);
-  }
+  console.log("✅ Admin user created/updated");
 
-  // Create facility types
+  // Seed facility types
   const facilityTypes = [
-    { name: "District Hospital" },
-    { name: "Private Hospital" },
-    { name: "Community Health Centre" },
-    { name: "Primary Health Centre" },
-    { name: "Urban Primary Health Centre" },
-    { name: "Sub Centre" },
+    { name: "PHC", display_name: "Primary Health Centre" },
+    { name: "UPHC", display_name: "Urban Primary Health Centre" },
+    { name: "SC_HWC", display_name: "Sub Centre Health & Wellness Centre" },
+    { name: "U_HWC", display_name: "Urban Health & Wellness Centre" },
+    { name: "A_HWC", display_name: "AYUSH Health & Wellness Centre" },
   ];
 
-  for (const ft of facilityTypes) {
-    const facilityType = await prisma.facilityType.upsert({
-      where: { name: ft.name },
+  for (const facilityType of facilityTypes) {
+    await prisma.facilityType.upsert({
+      where: { name: facilityType.name },
       update: {},
-      create: ft,
+      create: {
+        name: facilityType.name,
+        display_name: facilityType.display_name,
+      },
     });
-    console.log(`Created facility type: ${facilityType.name}`);
   }
 
-  // Create sample districts (Mizoram districts)
+  console.log("✅ Facility types created/updated");
+
+  // Create districts
   const districts = [
-    { name: "Aizawl East" },
-    { name: "Aizawl West" },
-    { name: "Champhai" },
-    { name: "Hnahthial" },
-    { name: "Khawzawl" },
-    { name: "Kolasib" },
-    { name: "Lawngtlai" },
-    { name: "Lunglei" },
-    { name: "Mamit" },
-    { name: "Saitual" },
-    { name: "Serchhip" },
-    { name: "Siaha" },
+    "Aizawl East",
+    "Aizawl West",
+    "Champhai",
+    "Hnahthial",
+    "Khawzawl",
+    "Kolasib",
+    "Lawngtlai",
+    "Lunglei",
+    "Mamit",
+    "Saiha",
+    "Saitual",
+    "Serchhip",
   ];
 
-  for (const d of districts) {
-    const district = await prisma.district.upsert({
-      where: { name: d.name },
+  for (const districtName of districts) {
+    await prisma.district.upsert({
+      where: { name: districtName },
       update: {},
-      create: d,
-    });
-    console.log(`Created district: ${district.name}`);
-  }
-
-  // Get created districts and facility types to link them
-  const aizawlEast = await prisma.district.findUnique({
-    where: { name: "Aizawl East" },
-  });
-  const aizawlWest = await prisma.district.findUnique({
-    where: { name: "Aizawl West" },
-  });
-  const chcType = await prisma.facilityType.findUnique({
-    where: { name: "Community Health Centre" },
-  });
-  const phcType = await prisma.facilityType.findUnique({
-    where: { name: "Primary Health Centre" },
-  });
-  const subCentreType = await prisma.facilityType.findUnique({
-    where: { name: "Sub Centre" },
-  });
-
-  if (aizawlEast && aizawlWest && chcType && phcType && subCentreType) {
-    // Create sample parent facilities
-    const parentFacilitiesData = [
-      {
-        name: "CHC Sakawrdai",
-        district_id: aizawlEast.id,
-        facility_type_id: chcType.id,
-        facility_code: "AE-CHC-01",
-      },
-      {
-        name: "PHC Sialsuk",
-        district_id: aizawlEast.id,
-        facility_type_id: phcType.id,
-        facility_code: "AE-PHC-01",
-      },
-      {
-        name: "CHC Lengpui",
-        district_id: aizawlWest.id,
-        facility_type_id: chcType.id,
-        facility_code: "AW-CHC-01",
-      },
-    ];
-
-    const createdFacilities: { [key: string]: any } = {};
-
-    for (const f of parentFacilitiesData) {
-      const facility = await prisma.facility.upsert({
-        where: { facility_code: f.facility_code },
-        update: { name: f.name },
-        create: f,
-      });
-      createdFacilities[facility.facility_code!] = facility;
-      console.log(`Created/found facility: ${facility.name}`);
-    }
-
-    console.log("Skipping sub-centre creation due to schema changes.");
-  } else {
-    console.log(
-      "Skipping facility and sub-centre seeding because required districts or types were not found."
-    );
-  }
-
-  // Delete all existing indicators to ensure a clean slate
-  await prisma.indicator.deleteMany({});
-  console.log("Deleted all existing indicators.");
-
-  // Seed all HMIS Indicators
-  for (const indicator of hmisIndicators) {
-    await prisma.indicator.upsert({
-      where: { code: indicator.code },
-      update: { name: indicator.name, type: indicator.type },
-      create: indicator,
+      create: { name: districtName },
     });
   }
 
-  console.log(`Upserted ${hmisIndicators.length} HMIS indicators.`);
+  console.log("✅ Districts created/updated");
 
-  console.log(`Seeding finished.`);
+  console.log("\n🎉 Basic database structure seeded successfully!");
+  console.log("\n📋 Next steps to complete the setup:");
+  console.log("\n   1. Seed fields (required for indicators):");
+  console.log("      npx ts-node prisma/seed-fields-complete.ts");
+  console.log("\n   2. Seed indicators from fields:");
+  console.log("      npx ts-node prisma/seed-indicators-from-fields.ts");
+  console.log("\n   3. Seed facilities:");
+  console.log("      npx ts-node prisma/seed-complete.ts");
+  console.log("\n   Or run all at once:");
+  console.log(
+    "      npx ts-node prisma/seed-fields-complete.ts && npx ts-node prisma/seed-indicators-from-fields.ts && npx ts-node prisma/seed-complete.ts"
+  );
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Error during seeding:", e);
     process.exit(1);
   })
   .finally(async () => {

@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "../../../../src/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const facilityTypes = await prisma.facilityType.findMany({
-      orderBy: { name: "asc" },
-      include: {
-        _count: {
-          select: { facilities: true },
-        },
+      where: { is_active: true },
+      select: {
+        id: true,
+        name: true,
+        display_name: true,
+        description: true,
       },
+      orderBy: { display_name: "asc" },
     });
 
     return NextResponse.json(facilityTypes);
@@ -39,6 +41,7 @@ export async function POST(request: NextRequest) {
     const facilityType = await prisma.facilityType.create({
       data: {
         name,
+        display_name: name, // Use name as display_name
       },
     });
 

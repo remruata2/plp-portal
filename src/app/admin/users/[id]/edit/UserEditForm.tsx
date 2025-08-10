@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { UserRole } from '@/generated/prisma';
-import { Loader2, ArrowLeft, Save } from 'lucide-react';
-import { updateUserAction } from '../../actions'; // Adjusted path to actions.ts
-import { toast } from 'sonner';
+import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { UserRole } from "@/generated/prisma";
+import { Loader2, ArrowLeft, Save } from "lucide-react";
+import { updateUserAction } from "../../actions"; // Adjusted path to actions.ts
+import { toast } from "sonner";
 
 export type UserEditData = {
   id: number;
@@ -23,7 +23,7 @@ interface UserEditFormProps {
 export default function UserEditForm({ user }: UserEditFormProps) {
   const [formData, setFormData] = useState({
     username: user.username,
-    password: '', // Password field is for entering a new password, not displaying the old one
+    password: "", // Password field is for entering a new password, not displaying the old one
     role: user.role,
     is_active: user.is_active,
   });
@@ -34,16 +34,18 @@ export default function UserEditForm({ user }: UserEditFormProps) {
   useEffect(() => {
     // Re-initialize form if user prop changes (e.g., after a save and re-fetch)
     setFormData({
-        username: user.username,
-        password: '',
-        role: user.role,
-        is_active: user.is_active,
+      username: user.username,
+      password: "",
+      role: user.role,
+      is_active: user.is_active,
     });
   }, [user]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target as HTMLInputElement;
-    if (type === 'checkbox') {
+    if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData({ ...formData, [name]: checked });
     } else {
@@ -57,7 +59,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
     setSaving(true);
 
     if (!formData.username) {
-      setError('Username is required.');
+      setError("Username is required.");
       setSaving(false);
       return;
     }
@@ -66,15 +68,15 @@ export default function UserEditForm({ user }: UserEditFormProps) {
     setSaving(false);
 
     if (result.success && result.user) {
-      toast.success('User updated successfully.');
+      toast.success("User updated successfully.");
       // router.push(`/admin/users/${result.user.id}`); // Redirect to user detail page
       // OR, stay on the edit page but show success. For now, let's redirect to details.
       router.push(`/admin/users/${result.user.id}`);
       // Optionally, if staying on the page, you might want to refresh data or clear password field:
       // setFormData(prev => ({ ...prev, password: '' }));
     } else {
-      setError(result.error || 'Failed to update user. Please try again.');
-      toast.error(result.error || 'Failed to update user. Please try again.');
+      setError(result.error || "Failed to update user. Please try again.");
+      toast.error(result.error || "Failed to update user. Please try again.");
     }
   };
 
@@ -82,10 +84,15 @@ export default function UserEditForm({ user }: UserEditFormProps) {
     <div className="px-4 py-6 sm:px-0">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center">
-          <Link href={`/admin/users/${user.id}`} className="mr-4 text-gray-500 hover:text-gray-700">
+          <Link
+            href={`/admin/users/${user.id}`}
+            className="mr-4 text-gray-500 hover:text-gray-700"
+          >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-2xl font-semibold text-gray-900">Edit User: {user.username}</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Edit User: {user.username}
+          </h1>
         </div>
       </div>
 
@@ -99,7 +106,10 @@ export default function UserEditForm({ user }: UserEditFormProps) {
             )}
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               <div className="sm:col-span-4">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Username
                 </label>
                 <div className="mt-1">
@@ -116,7 +126,10 @@ export default function UserEditForm({ user }: UserEditFormProps) {
               </div>
 
               <div className="sm:col-span-4">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Password (leave blank to keep current)
                 </label>
                 <div className="mt-1">
@@ -132,7 +145,10 @@ export default function UserEditForm({ user }: UserEditFormProps) {
               </div>
 
               <div className="sm:col-span-3">
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Role
                 </label>
                 <div className="mt-1">
@@ -143,7 +159,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
                     onChange={handleInputChange}
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   >
-                    <option value={UserRole.staff}>Staff</option>
+                    <option value={UserRole.facility}>Facility</option>
                     <option value={UserRole.admin}>Admin</option>
                   </select>
                 </div>
@@ -159,7 +175,10 @@ export default function UserEditForm({ user }: UserEditFormProps) {
                     onChange={handleInputChange}
                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="is_active" className="ml-2 block text-sm text-gray-900">
+                  <label
+                    htmlFor="is_active"
+                    className="ml-2 block text-sm text-gray-900"
+                  >
                     Active
                   </label>
                 </div>

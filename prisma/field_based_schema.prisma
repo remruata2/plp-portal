@@ -1,0 +1,313 @@
+// Field-Based Indicator Schema
+// This approach uses a centralized 'fields' table for all data points
+// Based on the new indicators document with 24 indicators
+
+enum UserType {
+  ADMIN
+  FACILITY
+}
+
+enum FieldType {
+  CONSTANT           // Same value for all facilities (e.g., target sessions)
+  FACILITY_SPECIFIC  // Different value per facility (e.g., population data)
+  MONTHLY_COUNT      // Facility submits monthly counts
+  BINARY            // Yes/No values
+  PERCENTAGE        // Percentage values
+  CALCULATED        // Derived from other fields
+  INDICATOR_REFERENCE // References another indicator
+  FACILITY_TYPE_SPECIFIC // Different values based on facility type (PHC, UPHC, etc.)
+}
+
+enum ValidationRule {
+  REQUIRED
+  POSITIVE_NUMBER
+  PERCENTAGE_RANGE
+  DATE_RANGE
+  CUSTOM_FORMULA
+  BINARY_ONLY
+  MIN_VALUE
+  MAX_VALUE
+}
+
+// Centralized fields table
+model Field {
+  id                Int            @id @default(autoincrement())
+  code              String         @unique @db.VarChar(50) // e.g., "target_sessions"
+  name              String         @db.VarChar(200) // e.g., "Target Sessions"
+  description       String?        @db.VarChar(500)
+  
+  // Field configuration
+  user_type         UserType       // ADMIN or FACILITY
+  field_type        FieldType      // CONSTANT, FACILITY_SPECIFIC, etc.
+  default_value     String?        @db.VarChar(100) // For constants
+  validation_rules  Json?          // Array of validation rules
+  calculation_formula String?      @db.VarChar(500) // For calculated fields
+  
+  // For facility type specific fields
+  facility_type_targets Json?      // e.g., {"PHC": 50, "UPHC": 100, "SC": 20}
+  
+  // Metadata
+  is_active         Boolean        @default(true)
+  sort_order        Int            @default(0)
+  created_at        DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime       @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  numerator_for_indicators     Indicator[] @relation("NumeratorField")
+  denominator_for_indicators   Indicator[] @relation("DenominatorField")
+  field_values                 FieldValue[]
+  
+  @@map("field")
+}
+
+// Field values for each facility/month
+model FieldValue {
+  id                Int            @id @default(autoincrement())
+  field_id          Int
+  facility_id       Int?
+  report_month      String         @db.VarChar(7) // YYYY-MM
+  
+  // Value storage - flexible for different field types
+  string_value      String?        @db.VarChar(500)
+  numeric_value     Decimal?       @db.Decimal(15, 2)
+  boolean_value     Boolean?
+  json_value        Json?
+  
+  // Audit
+  uploaded_by       Int
+  remarks           String?
+  created_at        DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime       @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  field             Field          @relation(fields: [field_id], references: [id])
+  facility          Facility?      @relation(fields: [facility_id], references: [id])
+  uploader          User           @relation(fields: [uploaded_by], references: [id])
+  
+  @@unique([field_id, facility_id, report_month])
+  @@map("field_value")
+}
+
+// Simplified indicator model
+model Indicator {
+  id                    Int      @id @default(autoincrement())
+  code                  String   @unique @db.VarChar(50)
+  name                  String   @db.VarChar(200)
+  description           String?
+  
+  // Formula configuration using field references
+  numerator_field_id    Int?
+  denominator_field_id  Int?
+  
+  // Display configuration
+  numerator_label       String   @db.VarChar(200)
+  denominator_label     String   @db.VarChar(200)
+  
+  // Target and conditions
+  target_percentage     Decimal? @db.Decimal(5, 2) // e.g., 80%, 100%
+  target_formula        String?  @db.VarChar(500) // e.g., "upto 50% only"
+  conditions            String?  @db.VarChar(1000) // Special conditions
+  
+  // Applicable facility types
+  applicable_facility_types Json? // Array of facility types this applies to
+  
+  // Metadata
+  is_active             Boolean  @default(true)
+  sort_order            Int      @default(0)
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  numerator_field       Field?   @relation("NumeratorField", fields: [numerator_field_id], references: [id])
+  denominator_field     Field?   @relation("DenominatorField", fields: [denominator_field_id], references: [id])
+  monthly_data          MonthlyHealthData[]
+  
+  @@map("indicator")
+}
+
+// Simplified monthly data
+model MonthlyHealthData {
+  id                    Int      @id @default(autoincrement())
+  facility_id           Int?
+  indicator_id          Int
+  report_month          String   @db.VarChar(7)
+  
+  // Calculated values
+  numerator_value       Decimal? @db.Decimal(15, 2)
+  denominator_value     Decimal? @db.Decimal(15, 2)
+  calculated_value      Decimal? @db.Decimal(15, 2)
+  achievement_percentage Decimal? @db.Decimal(5, 2)
+  
+  // Audit
+  uploaded_by           Int
+  remarks               String?
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  facility              Facility? @relation(fields: [facility_id], references: [id])
+  indicator             Indicator @relation(fields: [indicator_id], references: [id])
+  uploader              User      @relation(fields: [uploaded_by], references: [id])
+  
+  @@unique([facility_id, indicator_id, report_month])
+  @@map("monthly_health_data")
+}
+
+// Example field definitions based on new indicators
+/*
+-- ADMIN FIELDS (Pre-filled by admin)
+INSERT INTO field (code, name, description, user_type, field_type, default_value, facility_type_targets) VALUES
+-- Constants
+('target_wellness_sessions', 'Target Wellness Sessions', 'Monthly target for wellness sessions', 'ADMIN', 'CONSTANT', '10', NULL),
+('target_teleconsultation_sc', 'Target Teleconsultation (SC)', 'Monthly target for SC teleconsultation', 'ADMIN', 'CONSTANT', '25', NULL),
+('target_teleconsultation_others', 'Target Teleconsultation (Others)', 'Monthly target for PHC/UPHC teleconsultation', 'ADMIN', 'CONSTANT', '50', NULL),
+('target_elderly_clinic_sc', 'Target Elderly Clinic (SC)', 'Monthly target for SC elderly clinic', 'ADMIN', 'CONSTANT', '1', NULL),
+('target_elderly_clinic_phc', 'Target Elderly Clinic (PHC)', 'Monthly target for PHC elderly clinic', 'ADMIN', 'CONSTANT', '4', NULL),
+('target_jas_meetings', 'Target JAS Meetings', 'Monthly target for JAS meetings', 'ADMIN', 'CONSTANT', '1', NULL),
+('target_dvdms_sc', 'Target DVDMS Issues (SC)', 'Monthly target for SC DVDMS issues', 'ADMIN', 'CONSTANT', '20', NULL),
+('target_dvdms_phc', 'Target DVDMS Issues (PHC)', 'Monthly target for PHC DVDMS issues', 'ADMIN', 'CONSTANT', '50', NULL),
+('target_dvdms_uphc', 'Target DVDMS Issues (UPHC)', 'Monthly target for UPHC DVDMS issues', 'ADMIN', 'CONSTANT', '100', NULL),
+('patient_satisfaction_max', 'Patient Satisfaction Max Score', 'Maximum score for patient satisfaction', 'ADMIN', 'CONSTANT', '5', NULL),
+
+-- Facility-specific population data
+('total_population', 'Total Population', 'Total population of catchment area', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('population_18_plus', 'Population 18+', 'Population aged 18 and above', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('population_30_plus', 'Population 30+', 'Population aged 30 and above', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('population_30_plus_female', 'Population 30+ Female', 'Female population aged 30 and above', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('anc_due_list', 'ANC Due List', 'Number of pregnant women due for ANC', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('ri_sessions_planned', 'RI Sessions Planned', 'Number of RI sessions planned for the month', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('ri_beneficiaries_due', 'RI Beneficiaries Due', 'Total beneficiaries due for RI', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('bedridden_patients', 'Bed-ridden Patients', 'Total bed-ridden patients requiring home care', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('pulmonary_tb_patients', 'Pulmonary TB Patients', 'Total pulmonary TB patients under treatment', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('total_tb_patients', 'Total TB Patients', 'Total TB patients under treatment', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+('ncd_referred_from_sc', 'NCD Referred from SC', 'Total referred from SC as per NCD portal', 'ADMIN', 'FACILITY_SPECIFIC', NULL, NULL),
+
+-- FACILITY FIELDS (Submitted by facilities)
+INSERT INTO field (code, name, description, user_type, field_type) VALUES
+-- Monthly counts
+('total_footfall', 'Total Footfall', 'Total footfall (SC+Clinic) for SC, PHC+colocated SC for PHC', 'FACILITY', 'MONTHLY_COUNT'),
+('wellness_sessions_conducted', 'Wellness Sessions Conducted', 'Total wellness sessions conducted during the month', 'FACILITY', 'MONTHLY_COUNT'),
+('prakriti_parikshan_conducted', 'Prakriti Parikshan Conducted', 'Number of Prakriti Parikshan conducted', 'FACILITY', 'MONTHLY_COUNT'),
+('teleconsultation_conducted', 'Teleconsultation Conducted', 'Total teleconsultation conducted', 'FACILITY', 'MONTHLY_COUNT'),
+('anc_footfall', 'ANC Footfall', 'Total ANC beneficiary irrespective of gestation', 'FACILITY', 'MONTHLY_COUNT'),
+('anc_tested_hb', 'ANC Tested for Hb', 'Total ANC tested for Hb', 'FACILITY', 'MONTHLY_COUNT'),
+('tb_screenings', 'TB Screenings', 'Individuals screened for TB', 'FACILITY', 'MONTHLY_COUNT'),
+('tb_contact_tracing_households', 'TB Contact Tracing Households', 'Households visited for TB contact tracing', 'FACILITY', 'MONTHLY_COUNT'),
+('tb_differentiated_care_visits', 'TB Differentiated Care Visits', 'TB patients visited for differentiated care', 'FACILITY', 'MONTHLY_COUNT'),
+('ri_sessions_held', 'RI Sessions Held', 'RI sessions held', 'FACILITY', 'MONTHLY_COUNT'),
+('ri_footfall', 'RI Footfall', 'Total RI footfall', 'FACILITY', 'MONTHLY_COUNT'),
+('cbac_forms_filled', 'CBAC Forms Filled', 'CBAC filled for the month (including rescreened)', 'FACILITY', 'MONTHLY_COUNT'),
+('htn_screened', 'HTN Screened', 'HTN screened for the month (including rescreened)', 'FACILITY', 'MONTHLY_COUNT'),
+('dm_screened', 'DM Screened', 'DM screened for the month (including rescreened)', 'FACILITY', 'MONTHLY_COUNT'),
+('oral_cancer_screened', 'Oral Cancer Screened', 'Oral cancer screened for the month', 'FACILITY', 'MONTHLY_COUNT'),
+('breast_cervical_cancer_screened', 'Breast & Cervical Cancer Screened', 'Breast & cervical cancer screened for the month', 'FACILITY', 'MONTHLY_COUNT'),
+('ncd_diagnosed_tx_completed', 'NCD Diagnosed & Tx Completed', 'NCD diagnosed and treatment completed', 'FACILITY', 'MONTHLY_COUNT'),
+('patient_satisfaction_score', 'Patient Satisfaction Score', 'Patient satisfaction score for the month', 'FACILITY', 'MONTHLY_COUNT'),
+('elderly_palliative_visits', 'Elderly & Palliative Visits', 'Number of elderly and palliative patients visited', 'FACILITY', 'MONTHLY_COUNT'),
+('elderly_clinic_conducted', 'Elderly Clinic Conducted', 'Number of elderly clinic conducted', 'FACILITY', 'MONTHLY_COUNT'),
+('jas_meetings_conducted', 'JAS Meetings Conducted', 'Number of JAS meetings conducted', 'FACILITY', 'MONTHLY_COUNT'),
+('dvdms_issues_generated', 'DVDMS Issues Generated', 'Number of issues generated in DVDMS', 'FACILITY', 'MONTHLY_COUNT'),
+
+-- Binary fields
+('elderly_support_group_formed', 'Elderly Support Group Formed', 'Whether Elderly Support Group (Sanjivini) is formed', 'FACILITY', 'BINARY'),
+('elderly_support_group_activity', 'Elderly Support Group Activity', 'If Yes, any activity conducted during the month and recorded in register', 'FACILITY', 'BINARY');
+
+-- Example indicator formulas
+INSERT INTO indicator (code, name, numerator_field_id, denominator_field_id, numerator_label, denominator_label, target_percentage, target_formula, conditions, applicable_facility_types) VALUES
+('TF001', 'Total Footfall (M&F)', 
+ (SELECT id FROM field WHERE code = 'total_footfall'),
+ (SELECT id FROM field WHERE code = 'total_population'),
+ 'Total Footfall', 'Total Population', 5.00, 'upto 3%-5%', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('WS001', 'Total Wellness sessions', 
+ (SELECT id FROM field WHERE code = 'wellness_sessions_conducted'),
+ (SELECT id FROM field WHERE code = 'target_wellness_sessions'),
+ 'Wellness Sessions Conducted', 'Target Sessions', 100.00, '5 above to 10, 10 pel kha awmzia awmlo', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('PP001', 'No of Prakriti Parikshan conducted', 
+ (SELECT id FROM field WHERE code = 'prakriti_parikshan_conducted'),
+ (SELECT id FROM field WHERE code = 'population_18_plus'),
+ 'Prakriti Parikshan Conducted', 'Population 18+ / 12', 80.00, '80% above only', NULL, '["A-HWC"]'),
+('TC001', 'Teleconsultation', 
+ (SELECT id FROM field WHERE code = 'teleconsultation_conducted'),
+ (SELECT id FROM field WHERE code = 'target_teleconsultation_sc'),
+ 'Teleconsultation Conducted', 'Target Teleconsultation', 100.00, '25 above, upto 50', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('AF001', 'Total ANC footfall', 
+ (SELECT id FROM field WHERE code = 'anc_footfall'),
+ (SELECT id FROM field WHERE code = 'anc_due_list'),
+ 'ANC Footfall', 'ANC Due List', 100.00, 'upto 50% only', 'If ANC due is 0 then the amount for the indicator may be NA', '["PHC", "SC-HWC", "A-HWC"]'),
+('AH001', 'Pregnant women tested for Hb', 
+ (SELECT id FROM field WHERE code = 'anc_tested_hb'),
+ (SELECT id FROM field WHERE code = 'anc_footfall'),
+ 'ANC Tested for Hb', 'Total ANC Footfall', 100.00, 'upto 50% only', 'Same as Sl.5 denominator', '["PHC", "SC-HWC", "A-HWC"]'),
+('TS001', 'Individuals screened for TB', 
+ (SELECT id FROM field WHERE code = 'tb_screenings'),
+ (SELECT id FROM field WHERE code = 'total_footfall'),
+ 'TB Screenings', 'Total Footfall', 100.00, 'upto 50% only', 'Same as Sl.1 Numerator', '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('TB001', 'Household visited for TB contact tracing', 
+ (SELECT id FROM field WHERE code = 'tb_contact_tracing_households'),
+ (SELECT id FROM field WHERE code = 'pulmonary_tb_patients'),
+ 'TB Contact Tracing Households', 'Pulmonary TB Patients', 100.00, 'upto 50% above', 'If there are no Pulmonary TB patients, then the indicator may be NA', '["PHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('TD001', 'No. of TB patients visited for Differentiated TB Care', 
+ (SELECT id FROM field WHERE code = 'tb_differentiated_care_visits'),
+ (SELECT id FROM field WHERE code = 'total_tb_patients'),
+ 'TB Differentiated Care Visits', 'Total TB Patients', 100.00, 'upto 50% above', 'If there are no TB patients, then the indicator may be NA', '["PHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('RI001', 'RI sessions held', 
+ (SELECT id FROM field WHERE code = 'ri_sessions_held'),
+ (SELECT id FROM field WHERE code = 'ri_sessions_planned'),
+ 'RI Sessions Held', 'RI Sessions Planned', 100.00, '100%', NULL, '["PHC", "SC-HWC", "A-HWC"]'),
+('RF001', 'RI footfall', 
+ (SELECT id FROM field WHERE code = 'ri_footfall'),
+ (SELECT id FROM field WHERE code = 'ri_beneficiaries_due'),
+ 'RI Footfall', 'RI Beneficiaries Due', 100.00, 'upto 50% above', NULL, '["PHC", "SC-HWC", "A-HWC"]'),
+('CB001', 'CBAC filled for the month', 
+ (SELECT id FROM field WHERE code = 'cbac_forms_filled'),
+ (SELECT id FROM field WHERE code = 'population_30_plus'),
+ 'CBAC Forms Filled', 'Population 30+ / 12', 100.00, '100% only', NULL, '["SC-HWC", "A-HWC"]'),
+('HT001', 'HTN screened for the month', 
+ (SELECT id FROM field WHERE code = 'htn_screened'),
+ (SELECT id FROM field WHERE code = 'population_30_plus'),
+ 'HTN Screened', 'Population 30+ / 12', 100.00, '100% only', NULL, '["SC-HWC", "A-HWC"]'),
+('DM001', 'DM screened for the month', 
+ (SELECT id FROM field WHERE code = 'dm_screened'),
+ (SELECT id FROM field WHERE code = 'population_30_plus'),
+ 'DM Screened', 'Population 30+ / 12', 100.00, '100% only', NULL, '["SC-HWC", "A-HWC"]'),
+('OC001', 'Oral Ca. Screened for the month', 
+ (SELECT id FROM field WHERE code = 'oral_cancer_screened'),
+ (SELECT id FROM field WHERE code = 'population_30_plus'),
+ 'Oral Cancer Screened', 'Population 30+ / 60', 100.00, '100% only', NULL, '["SC-HWC", "A-HWC"]'),
+('BC001', 'Breast & Cervical Ca. screened for the month', 
+ (SELECT id FROM field WHERE code = 'breast_cervical_cancer_screened'),
+ (SELECT id FROM field WHERE code = 'population_30_plus_female'),
+ 'Breast & Cervical Cancer Screened', 'Female Population 30+ / 60', 100.00, '100% only', NULL, '["SC-HWC", "A-HWC"]'),
+('NC001', 'NCD Diagnosed & Tx completed', 
+ (SELECT id FROM field WHERE code = 'ncd_diagnosed_tx_completed'),
+ (SELECT id FROM field WHERE code = 'ncd_referred_from_sc'),
+ 'NCD Diagnosed & Tx Completed', 'NCD Referred from SC', 100.00, '100% only', NULL, '["PHC", "UPHC"]'),
+('PS001', 'Patient satisfaction score for the month', 
+ (SELECT id FROM field WHERE code = 'patient_satisfaction_score'),
+ (SELECT id FROM field WHERE code = 'patient_satisfaction_max'),
+ 'Patient Satisfaction Score', 'Max Score (5)', 70.00, '70% above only', NULL, '["PHC", "UPHC", "SC-HWC", "A-HWC"]'),
+('EP001', 'No of Elderly & Palliative patients visited', 
+ (SELECT id FROM field WHERE code = 'elderly_palliative_visits'),
+ (SELECT id FROM field WHERE code = 'bedridden_patients'),
+ 'Elderly & Palliative Visits', 'Bed-ridden Patients', 80.00, '80% above only', NULL, '["PHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('EC001', 'No of Elderly clinic conducted', 
+ (SELECT id FROM field WHERE code = 'elderly_clinic_conducted'),
+ (SELECT id FROM field WHERE code = 'target_elderly_clinic_sc'),
+ 'Elderly Clinic Conducted', 'Target Elderly Clinic', 100.00, '100%', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('ES001', 'Whether Elderly Support Group (Sanjivini) is formed', 
+ (SELECT id FROM field WHERE code = 'elderly_support_group_formed'),
+ NULL,
+ 'Elderly Support Group Formed', 'Yes/No', 100.00, 'Yes', NULL, '["SC-HWC", "A-HWC"]'),
+('EA001', 'If Yes, any activity conducted during the month and recorded in register', 
+ (SELECT id FROM field WHERE code = 'elderly_support_group_activity'),
+ NULL,
+ 'Elderly Support Group Activity', 'Yes/No', 100.00, 'Yes', NULL, '["SC-HWC", "A-HWC"]'),
+('JM001', 'No of JAS meeting conducted', 
+ (SELECT id FROM field WHERE code = 'jas_meetings_conducted'),
+ (SELECT id FROM field WHERE code = 'target_jas_meetings'),
+ 'JAS Meetings Conducted', 'Target JAS Meetings', 100.00, '100%', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]'),
+('DI001', 'No. of issues generated in DVDMS', 
+ (SELECT id FROM field WHERE code = 'dvdms_issues_generated'),
+ (SELECT id FROM field WHERE code = 'target_dvdms_sc'),
+ 'DVDMS Issues Generated', 'Target DVDMS Issues', 100.00, '100%', NULL, '["PHC", "UPHC", "U-HWC", "SC-HWC", "A-HWC"]');
+*/ 

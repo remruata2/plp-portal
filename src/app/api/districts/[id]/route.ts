@@ -5,17 +5,10 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid district ID" },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     const district = await prisma.district.findUnique({
       where: { id },
@@ -45,19 +38,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
     const body = await request.json();
     const { name } = body;
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid district ID" },
-        { status: 400 }
-      );
-    }
 
     if (!name) {
       return NextResponse.json(
@@ -96,28 +82,19 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid district ID" },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     // Check if district has facilities
-    const facilityCount = await prisma.facility.count({
+    const facilities = await prisma.facility.findMany({
       where: { district_id: id },
     });
 
-    if (facilityCount > 0) {
+    if (facilities.length > 0) {
       return NextResponse.json(
-        {
-          error: `Cannot delete district. It has ${facilityCount} facilities associated with it.`,
-        },
+        { error: "Cannot delete district with existing facilities" },
         { status: 400 }
       );
     }

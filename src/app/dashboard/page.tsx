@@ -11,13 +11,25 @@ import {
 import { Button } from "@/components/ui/button";
 import TemplateGenerator from "@/components/dashboard/template-generator";
 import DataUploader from "@/components/dashboard/data-uploader";
+import EnhancedIndicators from "@/components/dashboard/enhanced-indicators";
 import {
   DistrictPerformanceChart,
   IndicatorComparisonChart,
 } from "@/components/charts/indicator-bar-chart";
-import { Download, Upload, BarChart3, FileSpreadsheet } from "lucide-react";
+import {
+  Download,
+  Upload,
+  BarChart3,
+  FileSpreadsheet,
+  Target,
+} from "lucide-react";
 
-type ActiveTab = "overview" | "template" | "upload" | "analytics";
+type ActiveTab =
+  | "overview"
+  | "template"
+  | "upload"
+  | "analytics"
+  | "enhanced-indicators";
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("overview");
@@ -55,6 +67,13 @@ export default function DashboardPage() {
       description: "Interactive bar charts and visualizations",
       badge: "Charts",
     },
+    {
+      id: "enhanced-indicators" as const,
+      label: "Enhanced Indicators",
+      icon: Target,
+      description: "Complex healthcare indicators with configurations",
+      badge: "New",
+    },
   ];
 
   const renderTabContent = () => {
@@ -67,6 +86,8 @@ export default function DashboardPage() {
         return <DataUploader />;
       case "analytics":
         return <AnalyticsView />;
+      case "enhanced-indicators":
+        return <EnhancedIndicators />;
       default:
         return <DashboardOverview />;
     }
@@ -190,13 +211,15 @@ function DashboardOverview() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Active Indicators
+              Enhanced Indicators
             </CardTitle>
-            <Upload className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">RCH indicators</p>
+            <div className="text-2xl font-bold">24</div>
+            <p className="text-xs text-muted-foreground">
+              Complex healthcare indicators
+            </p>
           </CardContent>
         </Card>
       </div>

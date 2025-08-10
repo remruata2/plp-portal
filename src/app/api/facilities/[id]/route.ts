@@ -5,26 +5,16 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility ID" },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     const facility = await prisma.facility.findUnique({
       where: { id },
       include: {
         district: true,
         facility_type: true,
-        _count: {
-          select: { children: true },
-        },
       },
     });
 
@@ -47,26 +37,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
     const body = await request.json();
-    const {
-      name,
-      facility_code,
-      nin,
-      district_id,
-      facility_type_id,
-      parent_id,
-    } = body;
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility ID" },
-        { status: 400 }
-      );
-    }
+    const { name, district_id, facility_type_id } = body;
 
     if (!name || !district_id || !facility_type_id) {
       return NextResponse.json(
@@ -77,13 +53,9 @@ export async function PUT(
 
     const updateData: any = {
       name,
-      district_id: parseInt(district_id),
-      facility_type_id: parseInt(facility_type_id),
-      parent_id: parent_id ? parseInt(parent_id) : null,
+      district_id,
+      facility_type_id,
     };
-
-    if (facility_code) updateData.facility_code = facility_code;
-    if (nin) updateData.nin = nin;
 
     const facility = await prisma.facility.update({
       where: { id },
@@ -91,9 +63,6 @@ export async function PUT(
       include: {
         district: true,
         facility_type: true,
-        _count: {
-          select: { children: true },
-        },
       },
     });
 
@@ -110,7 +79,7 @@ export async function PUT(
 
     if (error?.code === "P2002") {
       return NextResponse.json(
-        { error: "Facility code or NIN already exists" },
+        { error: "Facility with this name already exists in this district" },
         { status: 400 }
       );
     }
@@ -124,31 +93,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility ID" },
-        { status: 400 }
-      );
-    }
-
-    // Check if facility has children
-    const childrenCount = await prisma.facility.count({
-      where: { parent_id: id },
-    });
-
-    if (childrenCount > 0) {
-      return NextResponse.json(
-        {
-          error: `Cannot delete facility. It has ${childrenCount} child facilities associated with it.`,
-        },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     await prisma.facility.delete({
       where: { id },

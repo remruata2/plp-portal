@@ -7,34 +7,34 @@ import AdminSidebar from "@/components/layout/AdminSidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function AdminLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const { data: session, status } = useSession();
-	const router = useRouter();
-	const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile off-canvas
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile off-canvas
 
-	useEffect(() => {
-		if (status === "loading") return;
-		if (!session) {
-			router.push("/login");
-		}
-	}, [session, status, router]);
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
 
-	if (status === "loading") {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-			</div>
-		);
-	}
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
 
-	if (!session) {
-		return null;
-	}
+  if (!session) {
+    return null;
+  }
 
-	return (
+  return (
     <div className="min-h-screen bg-gray-100 flex">
       <Toaster richColors position="top-right" />
       {/* Static sidebar for desktop */}
@@ -51,7 +51,10 @@ export default function AdminLayout({
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
           {/* Overlay */}
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
+            onClick={() => setSidebarOpen(false)}
+          ></div>
           {/* Sidebar */}
           <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
@@ -60,8 +63,18 @@ export default function AdminLayout({
                 className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               >
                 <span className="sr-only">Close sidebar</span>
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -82,8 +95,18 @@ export default function AdminLayout({
             className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden"
           >
             <span className="sr-only">Open sidebar</span>
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
           <div className="flex-1 px-4 flex justify-between">
@@ -96,12 +119,12 @@ export default function AdminLayout({
           </div>
         </div>
 
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none py-6">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none py-4">
+          <div className="max-w-full mx-auto px-2 sm:px-4 md:px-6">
             {children}
           </div>
         </main>
       </div>
     </div>
-	);
+  );
 }

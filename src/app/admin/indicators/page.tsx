@@ -1,434 +1,529 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PlusCircle, Trash2, Edit } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Calculator,
+  Target,
+  TrendingUp,
+  DollarSign,
+  Info,
+  Filter,
+  Edit,
+  Trash2,
+  Plus,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import Link from "next/link";
+import EnhancedIndicatorForm from "@/components/admin/EnhancedIndicatorForm";
+import { sortIndicatorsBySourceOrder, getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
 
-// Types
-interface Operand {
-  alias: string;
-  type: 'indicator' | 'constant';
-  indicatorId?: number;
-  value?: string | number;
-}
-
-interface FormulaStructure {
-  operands: Operand[];
-  expression: string;
+interface Field {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  user_type: "ADMIN" | "FACILITY";
+  field_type: string;
+  default_value?: string;
+  field_category?: string;
 }
 
 interface Indicator {
   id: number;
   code: string;
   name: string;
-  description: string | null;
-  type: 'simple' | 'formula';
-  structure: FormulaStructure | null;
-  created_at: string;
+  description?: string;
+  target_type: string;
+  target_formula: string;
+  target_value?: string;
+  numerator_field_id?: number;
+  denominator_field_id?: number;
+  target_field_id?: number;
+  conditions?: string;
+  formula_config?: {
+    type: string;
+    calculationFormula?: string;
+    facilitySpecificTargets?: any;
+  };
+  numerator_field?: Field;
+  denominator_field?: Field;
+  target_field?: Field;
 }
-
-type IndicatorFormData = Omit<Indicator, 'id' | 'created_at'>;
 
 export default function IndicatorsPage() {
   const [indicators, setIndicators] = useState<Indicator[]>([]);
+  const [fields, setFields] = useState<Field[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-
-  const initialFormData: IndicatorFormData = {
-    code: "",
-    name: "",
-    description: "",
-    type: "simple",
-    structure: null,
-  };
-  const [formData, setFormData] = useState<IndicatorFormData>(initialFormData);
+  const [selectedIndicator, setSelectedIndicator] = useState<Indicator | null>(
+    null
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [filterText, setFilterText] = useState("");
+  const filterInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchData();
+    loadIndicators();
+    loadFields();
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const indicatorsRes = await fetch("/api/indicators");
-      const indicatorsResult = await indicatorsRes.json();
-      if (indicatorsResult.success) {
-        setIndicators(indicatorsResult.data);
-      } else {
-        throw new Error(indicatorsResult.error || 'Failed to fetch indicators');
+  // Keyboard shortcut to focus filter input
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        filterInputRef.current?.focus();
       }
+    };
 
-    } catch (err: any) {
-      console.error("Error fetching data:", err);
-      setError(err.message);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Filter indicators based on search text
+  const filteredIndicators = useMemo(() => {
+    if (!filterText.trim()) {
+      return indicators;
+    }
+
+    const searchText = filterText.toLowerCase().trim();
+    return indicators.filter((indicator) => {
+      return (
+        indicator.code.toLowerCase().includes(searchText) ||
+        indicator.name.toLowerCase().includes(searchText) ||
+        (indicator.description &&
+          indicator.description.toLowerCase().includes(searchText)) ||
+        indicator.target_type.toLowerCase().includes(searchText) ||
+        indicator.target_formula.toLowerCase().includes(searchText)
+      );
+    });
+  }, [indicators, filterText]);
+
+  const loadIndicators = async () => {
+    try {
+      const response = await fetch("/api/indicators");
+      if (response.ok) {
+        const data = await response.json();
+        // Sort indicators by source file order
+        const sortedIndicators = sortIndicatorsBySourceOrder(data || []);
+        setIndicators(sortedIndicators);
+      } else {
+        console.error("Failed to load indicators:", response.status);
+        toast.error("Failed to load indicators");
+      }
+    } catch (error) {
+      console.error("Error loading indicators:", error);
+      toast.error("Error loading indicators");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOperandChange = (index: number, field: keyof Operand, value: string | number) => {
-    if (!formData.structure) return;
-
-    const newOperands = [...formData.structure.operands];
-    const currentOperand = { ...newOperands[index], [field]: value };
-
-    if (field === 'type') {
-      currentOperand.value = undefined;
-      currentOperand.indicatorId = undefined;
+  const loadFields = async () => {
+    try {
+      const response = await fetch("/api/fields");
+      if (response.ok) {
+        const data = await response.json();
+        setFields(data || []);
+      } else {
+        console.error("Failed to load fields:", response.status);
+        toast.error("Failed to load fields");
+      }
+    } catch (error) {
+      console.error("Error loading fields:", error);
+      toast.error("Error loading fields");
     }
-    newOperands[index] = currentOperand;
-
-    setFormData({
-      ...formData,
-      structure: {
-        ...formData.structure,
-        operands: newOperands,
-      },
-    });
   };
 
-  const addOperand = () => {
-    const currentOperands = formData.structure?.operands || [];
-    const lastAlias = currentOperands[currentOperands.length - 1]?.alias || '@';
-    const nextAlias = String.fromCharCode(lastAlias.charCodeAt(0) + 1);
-    const newOperands = [...currentOperands, { alias: nextAlias, type: 'indicator' as const }];
-
-    setFormData({
-      ...formData,
-      structure: {
-        ...formData.structure!,
-        operands: newOperands,
-      },
-    });
+  const handleEditIndicator = (indicator: Indicator) => {
+    setSelectedIndicator(indicator);
+    setIsEditModalOpen(true);
   };
 
-  const removeOperand = (index: number) => {
-    if (!formData.structure) return;
+  const handleSubmitEdit = async (formData: any) => {
+    try {
+      const response = await fetch(`/api/indicators/${selectedIndicator?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          formula_config: JSON.stringify({
+            type: formData.target_type,
+            calculationFormula: formData.calculation_formula,
+            ...(formData.has_facility_specific_targets && {
+              facilitySpecificTargets: formData.facility_specific_targets,
+            }),
+          }),
+        }),
+      });
 
-    const newOperands = formData.structure.operands.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      structure: {
-        ...formData.structure,
-        operands: newOperands,
-      },
-    });
+      if (response.ok) {
+        toast.success("Indicator updated successfully");
+        loadIndicators();
+        setIsEditModalOpen(false);
+        setSelectedIndicator(null);
+      } else {
+        toast.error("Failed to update indicator");
+      }
+    } catch (error) {
+      console.error("Error updating indicator:", error);
+      toast.error("Error updating indicator");
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.code || !formData.name) {
-      alert('Indicator code and name are required.');
+  const handleDeleteIndicator = async (indicator: Indicator) => {
+    if (!confirm("Are you sure you want to delete this indicator?")) {
       return;
     }
 
-    if (formData.type === 'formula') {
-      if (!formData.structure || !formData.structure.expression) {
-        alert('Formula expression is required.');
-        return;
-      }
-      for (const op of formData.structure.operands) {
-        if (op.type === 'indicator' && !op.indicatorId) {
-          alert(`Operand ${op.alias} is missing an indicator selection.`);
-          return;
-        }
-        if (op.type === 'constant' && (op.value === '' || op.value === undefined)) {
-          alert(`Operand ${op.alias} is missing a constant value.`);
-          return;
-        }
-      }
-    }
-
-    const url = isEditing ? `/api/indicators/${isEditing}` : '/api/indicators';
-    const method = isEditing ? 'PUT' : 'POST';
-
     try {
-      const response = await fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const response = await fetch(`/api/indicators/${indicator.id}`, {
+        method: "DELETE",
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        fetchData();
-        handleCancel();
+      if (response.ok) {
+        toast.success("Indicator deleted successfully");
+        loadIndicators();
       } else {
-        throw new Error(result.error || 'Failed to save indicator');
+        toast.error("Failed to delete indicator");
       }
-    } catch (err: any) {
-      console.error("Error saving indicator:", err);
-      setError(err.message);
+    } catch (error) {
+      console.error("Error deleting indicator:", error);
+      toast.error("Error deleting indicator");
     }
   };
 
-  const handleEdit = (indicator: Indicator) => {
-    setIsEditing(indicator.id);
-    setFormData({
-      ...indicator,
-      description: indicator.description || "",
-    });
-    setShowForm(true);
+  const handleAddIndicator = () => {
+    setIsAddModalOpen(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this indicator?')) return;
-
+  const handleSubmitAdd = async (formData: any) => {
     try {
-      const response = await fetch(`/api/indicators/${id}`, {
-        method: 'DELETE',
+      const response = await fetch("/api/indicators", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          formula_config: JSON.stringify({
+            type: formData.target_type,
+            calculationFormula: formData.calculation_formula,
+            ...(formData.has_facility_specific_targets && {
+              facilitySpecificTargets: formData.facility_specific_targets,
+            }),
+          }),
+        }),
       });
-      const result = await response.json();
-      if (result.success) {
-        fetchData();
+
+      if (response.ok) {
+        toast.success("Indicator added successfully");
+        loadIndicators();
+        setIsAddModalOpen(false);
       } else {
-        throw new Error(result.error || 'Failed to delete indicator');
+        toast.error("Failed to add indicator");
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error) {
+      console.error("Error adding indicator:", error);
+      toast.error("Error adding indicator");
     }
   };
 
-  const handleCancel = () => {
-    setShowForm(false);
-    setIsEditing(null);
-    setFormData(initialFormData);
+  const getTargetTypeColor = (type: string) => {
+    switch (type) {
+      case "PERCENTAGE_RANGE":
+        return "bg-blue-100 text-blue-800";
+      case "RANGE":
+        return "bg-green-100 text-green-800";
+      case "BINARY":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
-  const handleTypeChange = (type: 'simple' | 'formula') => {
-    setFormData(prev => {
-      const newFormData = { ...prev, type };
-      if (type === 'formula' && !newFormData.structure) {
-        newFormData.structure = { operands: [], expression: '' };
-      } else if (type === 'simple') {
-        newFormData.structure = null;
-      }
-      return newFormData;
-    });
+  // Helper function to highlight search terms
+  const highlightText = (text: string, searchTerm: string) => {
+    if (!searchTerm.trim()) return text;
+
+    const regex = new RegExp(`(${searchTerm})`, "gi");
+    return text.replace(
+      regex,
+      '<mark class="bg-yellow-200 px-1 rounded">$1</mark>'
+    );
   };
 
-  const readableIndicators: (Indicator & { readableExpression: string | null })[] = useMemo(() => {
-    return indicators.map(indicator => {
-      if (indicator.type === 'formula' && indicator.structure) {
-        const readableExpression = indicator.structure.operands.reduce((expr, operand) => {
-          let valueName = '';
-          if (operand.type === 'indicator') {
-            const referencedIndicator = indicators.find(i => i.id === operand.indicatorId);
-            valueName = referencedIndicator ? referencedIndicator.name : 'Unknown Indicator';
-          } else {
-            valueName = operand.value?.toString() || 'Constant';
-          }
-          return expr.replace(new RegExp(`\\b${operand.alias}\\b`, 'g'), `(${valueName})`);
-        }, indicator.structure.expression);
-
-        return { ...indicator, readableExpression };
-      }
-      return { ...indicator, readableExpression: null };
-    });
-  }, [indicators]);
-
-  if (loading) return <div className="p-8">Loading...</div>;
-  if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8">
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Indicators Management</h1>
-          {!showForm && (
-            <Button onClick={() => setShowForm(true)}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add New Indicator
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="w-full">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold">Indicators</h1>
+            <p className="text-gray-600 text-sm">
+              Manage health indicators and their enhanced configurations
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleAddIndicator}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Indicator
             </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/admin/fields">Manage Fields</Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Filter */}
+        <div className="mb-4">
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search indicators by code, name, description, or formula type... (Ctrl+K)"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className="pl-10"
+              ref={filterInputRef}
+            />
+            {filterText && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setFilterText("")}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
+          {filterText && (
+            <p className="text-xs text-gray-500 mt-1">
+              Showing {filteredIndicators.length} of {indicators.length}{" "}
+              indicators
+            </p>
           )}
         </div>
 
-        {showForm && (
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Edit Indicator' : 'Add New Indicator'}</h2>
+        {/* Indicators List */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">All Indicators</h2>
+            <Badge variant="outline" className="text-xs">
+              {filteredIndicators.length} indicators
+            </Badge>
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  value={formData.code}
-                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                  placeholder="Indicator Code (e.g., H1.1)"
-                  required
-                />
-                <Input
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Indicator Name"
-                  required
-                />
-              </div>
-
-              <Textarea
-                value={formData.description || ''}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Description (optional)"
-              />
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Indicator Type</label>
-                <Select value={formData.type} onValueChange={handleTypeChange}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="simple">Simple</SelectItem>
-                    <SelectItem value="formula">Formula</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {formData.type === 'formula' && (
-                <>
-                  <div className="space-y-4 p-4 border rounded-md">
-                    <h3 className="font-medium">Formula Builder</h3>
-                    {formData.structure?.operands.map((operand, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <Input
-                          value={operand.alias}
-                          onChange={(e) => handleOperandChange(index, 'alias', e.target.value)}
-                          placeholder="Alias (e.g., A)"
-                          className="w-24 font-mono"
-                          required
-                        />
-                        <div className="flex-grow">
-                          <Select
-                            value={operand.type}
-                            onValueChange={(value) => handleOperandChange(index, 'type', value as 'indicator' | 'constant')}
+          <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+            {filteredIndicators.length === 0 ? (
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="text-gray-500">
+                    <Calculator className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                    <h3 className="text-sm font-medium mb-1">
+                      {filterText
+                        ? "No indicators match your search"
+                        : "No indicators found"}
+                    </h3>
+                    <p className="text-xs">
+                      {filterText
+                        ? "Try adjusting your search terms or clear the filter."
+                        : "No indicators are currently available."}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredIndicators.map((indicator) => (
+                <Card
+                  key={indicator.id}
+                  className="cursor-pointer transition-all hover:shadow-md"
+                  onClick={() => handleEditIndicator(indicator)}
+                >
+                  <CardContent className="p-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-medium text-blue-700 bg-blue-50 rounded-full border border-blue-200 mr-1">
+                            {getIndicatorNumber(indicator)}
+                          </span>
+                          <span className="font-semibold text-sm">
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: highlightText(
+                                  indicator.code,
+                                  filterText
+                                ),
+                              }}
+                            />
+                          </span>
+                          <Badge
+                            className={`text-xs ${getTargetTypeColor(
+                              indicator.target_type
+                            )}`}
                           >
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="indicator">Indicator</SelectItem>
-                              <SelectItem value="constant">Constant</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            {indicator.target_type.replace(/_/g, " ")}
+                          </Badge>
                         </div>
-                        <div className="flex-grow">
-                          {operand.type === 'indicator' ? (
-                            <Select
-                              value={String(operand.indicatorId || '')}
-                              onValueChange={(value) => handleOperandChange(index, 'indicatorId', Number(value))}
-                            >
-                              <SelectTrigger><SelectValue placeholder="Select an indicator..." /></SelectTrigger>
-                              <SelectContent>
-                                {indicators.filter(i => i.id !== (isEditing || 0)).map(indicator => (
-                                  <SelectItem key={indicator.id} value={String(indicator.id)}>{indicator.name}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <Input
-                              type="number"
-                              value={operand.value || ''}
-                              onChange={(e) => handleOperandChange(index, 'value', e.target.value)}
-                              placeholder="Enter a numeric value"
+                        <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-1">
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: highlightText(indicator.name, filterText),
+                            }}
+                          />
+                        </h3>
+                        <p className="text-xs text-gray-600 line-clamp-2 mb-1">
+                          {indicator.description && (
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: highlightText(
+                                  indicator.description,
+                                  filterText
+                                ),
+                              }}
                             />
                           )}
+                        </p>
+                        <div className="flex items-center space-x-3 text-xs text-gray-500">
+                          <span>
+                            Num:{" "}
+                            {indicator.numerator_field?.name ||
+                              indicator.numerator_field_id?.toString() ||
+                              "Not set"}
+                          </span>
+                          <span>
+                            Denom:{" "}
+                            {indicator.denominator_field?.name ||
+                              indicator.denominator_field_id?.toString() ||
+                              "Not set"}
+                          </span>
                         </div>
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeOperand(index)} className="text-red-500 hover:text-red-700">
-                          <Trash2 className="h-4 w-4" />
+                        {indicator.formula_config && (
+                          <div className="mt-2">
+                            <Badge variant="outline" className="text-xs">
+                              Enhanced Config
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex space-x-1 ml-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditIndicator(indicator);
+                          }}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteIndicator(indicator);
+                          }}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
-                    ))}
-                    <Button type="button" variant="outline" size="sm" onClick={addOperand}>
-                      <PlusCircle className="mr-2 h-4 w-4" /> Add Operand
-                    </Button>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Expression</label>
-                    <Input
-                      value={formData.structure?.expression || ''}
-                      onChange={(e) =>
-                        formData.structure && setFormData({
-                          ...formData,
-                          structure: {
-                            ...formData.structure,
-                            expression: e.target.value
-                          }
-                        })
-                      }
-                      placeholder="e.g., (A / B) * 100"
-                      required={formData.type === 'formula'}
-                      className="font-mono"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Use the aliases you defined above to build the formula.</p>
-                  </div>
-                </>
-              )}
-
-              <div className="flex justify-end space-x-3">
-                <Button type="button" variant="outline" onClick={handleCancel}>Cancel</Button>
-                <Button type="submit">{isEditing ? 'Update Indicator' : 'Save Indicator'}</Button>
-              </div>
-            </form>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
-        )}
+        </div>
 
-        {!showForm && (
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">Existing Indicators</h2>
-              <p className="text-sm text-gray-600">List of all configured indicators</p>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b bg-gray-50">
-                    <th className="text-left p-4 font-medium">Code</th>
-                    <th className="text-left p-4 font-medium">Indicator Name</th>
-                    <th className="text-left p-4 font-medium">Type</th>
-                    <th className="text-left p-4 font-medium">Expression/Details</th>
-                    <th className="text-left p-4 font-medium">Created</th>
-                    <th className="text-left p-4 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {readableIndicators.map((indicator) => (
-                    <tr key={indicator.id} className="border-b hover:bg-gray-50">
-                      <td className="p-4 font-mono text-sm">{indicator.code}</td>
-                      <td className="p-4">
-                        <div className="font-medium">{indicator.name}</div>
-                        {indicator.description && <div className="text-sm text-gray-500">{indicator.description}</div>}
-                      </td>
-                      <td className="p-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${indicator.type === 'formula' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
-                          {indicator.type === 'formula' ? 'Formula' : 'Simple'}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        {indicator.type === 'formula' && indicator.structure ? (
-                          <>
-                            <div className="font-mono text-sm text-gray-700">{indicator.structure.expression}</div>
-                            {indicator.readableExpression && <div className="text-xs text-gray-500 mt-1">{indicator.readableExpression}</div>}
-                          </>
-                        ) : (
-                          <div className="text-sm text-gray-500">Simple indicator (no formula)</div>
-                        )}
-                      </td>
-                      <td className="p-4 text-sm text-gray-500">
-                        {new Date(indicator.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="p-4">
-                        <div className="flex space-x-2">
-                          <Button variant="outline" size="icon" onClick={() => handleEdit(indicator)}><Edit className="h-4 w-4" /></Button>
-                          <Button variant="destructive" size="icon" onClick={() => handleDelete(indicator.id)}><Trash2 className="h-4 w-4" /></Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+        {/* Edit Indicator Modal */}
+        <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                Edit Indicator: {selectedIndicator?.name}
+              </DialogTitle>
+            </DialogHeader>
+            {selectedIndicator && (
+              <EnhancedIndicatorForm
+                fields={fields}
+                initialData={{
+                  code: selectedIndicator.code,
+                  name: selectedIndicator.name,
+                  description: selectedIndicator.description || "",
+                  numerator_field_id:
+                    selectedIndicator.numerator_field_id?.toString() || "",
+                  denominator_field_id:
+                    selectedIndicator.denominator_field_id?.toString() || "",
+                  target_type: selectedIndicator.target_type as any,
+                  calculation_formula:
+                    selectedIndicator.formula_config?.calculationFormula ||
+                    "(A/B)*100",
+                  has_facility_specific_targets:
+                    !!selectedIndicator.formula_config?.facilitySpecificTargets,
+                  facility_specific_targets:
+                    selectedIndicator.formula_config?.facilitySpecificTargets ||
+                    {},
+                  conditions: selectedIndicator.conditions || "",
+                }}
+                onSubmit={handleSubmitEdit}
+                onCancel={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedIndicator(null);
+                }}
+                isEditing={true}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Indicator Modal */}
+        <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Add New Indicator</DialogTitle>
+            </DialogHeader>
+            <EnhancedIndicatorForm
+              fields={fields}
+              onSubmit={handleSubmitAdd}
+              onCancel={() => setIsAddModalOpen(false)}
+              isEditing={false}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

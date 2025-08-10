@@ -1,42 +1,83 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
+import { PrismaClient, UserRole } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const districtId = searchParams.get("districtId");
+    console.log("Facilities API: Request received");
+    const session = await getServerSession(authOptions);
 
-    const whereClause: any = {};
-    if (districtId) {
-      whereClause.district_id = parseInt(districtId);
+    console.log("Facilities API: Session:", session);
+    console.log("Facilities API: Session user:", session?.user);
+
+    if (!session) {
+      console.log("Facilities API: No session, returning 401");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const facilities = await prisma.facility.findMany({
-      where: whereClause,
-      include: {
-        district: {
-          select: { name: true },
-        },
-        facility_type: {
-          select: { name: true },
-        },
-        _count: {
-          select: { sub_centre: true },
-        },
-      },
-      orderBy: [{ district: { name: "asc" } }, { name: "asc" }],
+    // Allow admin and facility users to access facilities
+    if (
+      session.user.role !== UserRole.admin &&
+      session.user.role !== UserRole.facility
+    ) {
+      console.log("Facilities API: User role not allowed:", session.user.role);
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    // Get query parameters for filtering
+    const { searchParams } = new URL(request.url);
+    const districtId = searchParams.get("districtId");
+    const facilityTypeId = searchParams.get("facilityTypeId");
+    const searchQuery = searchParams.get("search");
+
+    console.log("Facilities API: Filter params:", {
+      districtId,
+      facilityTypeId,
+      searchQuery,
     });
 
+    // Build where clause for filtering
+    const where: any = {};
+
+    if (districtId) {
+      where.district_id = districtId;
+    }
+
+    if (facilityTypeId) {
+      where.facility_type_id = facilityTypeId;
+    }
+
+    if (searchQuery) {
+      where.name = {
+        contains: searchQuery,
+        mode: "insensitive" as any,
+      };
+    }
+
+    console.log("Facilities API: User authorized, fetching facilities");
+    const facilities = await prisma.facility.findMany({
+      where,
+      include: {
+        facility_type: true,
+        district: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+
+    console.log("Facilities API: Found facilities:", facilities.length);
     return NextResponse.json({
       success: true,
-      facilities,
+      data: facilities,
     });
-  } catch (error) {
-    console.error("Facilities fetch error:", error);
+  } catch (error: any) {
+    console.error("Error fetching facilities:", error);
     return NextResponse.json(
-      { error: "Failed to fetch facilities" },
+      { error: "Failed to fetch facilities", details: error.message },
       { status: 500 }
     );
   }
@@ -45,7 +86,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, facility_code, nin, district_id, facility_type_id } = body;
+    const { name, district_id, facility_type_id } = body;
 
     if (!name || !district_id || !facility_type_id) {
       return NextResponse.json(
@@ -57,10 +98,9 @@ export async function POST(request: NextRequest) {
     const facility = await prisma.facility.create({
       data: {
         name,
-        facility_code: facility_code || null,
-        nin: nin || null,
-        district_id: parseInt(district_id),
-        facility_type_id: parseInt(facility_type_id),
+        display_name: name, // Use name as display_name
+        district_id,
+        facility_type_id,
       },
       include: {
         district: true,

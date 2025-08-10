@@ -3,8 +3,8 @@ import { UserRole } from "@/generated/prisma";
 
 // Define the role hierarchy
 const ROLE_HIERARCHY = {
-	staff: 1,
-	admin: 2,
+  facility: 1,
+  admin: 2,
 } as const;
 
 /**
@@ -14,10 +14,10 @@ const ROLE_HIERARCHY = {
  * @returns boolean indicating if the user has the required role or higher
  */
 export const hasRequiredRole = (
-	userRole: UserRole,
-	requiredRole: UserRole
+  userRole: UserRole,
+  requiredRole: UserRole
 ): boolean => {
-	return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[requiredRole];
+  return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[requiredRole];
 };
 
 /**
@@ -26,7 +26,7 @@ export const hasRequiredRole = (
  * @returns boolean indicating if the user is an admin
  */
 export const isAdmin = (userRole: UserRole): boolean => {
-	return userRole === "admin";
+  return userRole === "admin";
 };
 
 /**
@@ -35,7 +35,7 @@ export const isAdmin = (userRole: UserRole): boolean => {
  * @returns boolean indicating if the role is valid
  */
 export const isValidRole = (role: string): role is UserRole => {
-	return role === "admin" || role === "staff";
+  return role === "admin" || role === "facility";
 };
 
 /**
@@ -44,17 +44,17 @@ export const isValidRole = (role: string): role is UserRole => {
  * @returns The user's role or null if not available
  */
 export const getUserRole = (
-	session: DefaultSession | null
+  session: DefaultSession | null
 ): UserRole | null => {
-	if (!session?.user) return null;
-	const role = (session.user as any).role;
-	return isValidRole(role) ? role : null;
+  if (!session?.user) return null;
+  const role = (session.user as any).role;
+  return isValidRole(role) ? role : null;
 };
 
 // Export the role constants
 export const ROLES = {
-  ADMIN: 'admin' as UserRole,
-  STAFF: 'staff' as UserRole,
+  ADMIN: "admin" as UserRole,
+  FACILITY: "facility" as UserRole,
 } as const;
 
 // Type for the role values

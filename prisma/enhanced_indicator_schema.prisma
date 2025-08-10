@@ -1,0 +1,279 @@
+// Enhanced Indicator Schema for Complex Healthcare Monitoring
+// This schema handles different types of numerators and denominators
+
+// Enum for different types of formula components
+enum FormulaComponentType {
+  CONSTANT           // Fixed value like "10", "25"
+  POPULATION_BASED   // Based on population data
+  INDICATOR_REFERENCE // References another indicator
+  DYNAMIC_MONTHLY    // Changes each month
+  FACILITY_SPECIFIC  // Different values per facility type
+  CALCULATED         // Derived from other components
+}
+
+// Enum for facility types
+enum FacilityType {
+  PHC
+  UPHC
+  U_HWC
+  SC_HWC
+  A_HWC
+}
+
+// Enhanced Indicator model
+model Indicator {
+  id                    Int      @id @default(autoincrement())
+  code                  String   @unique @db.VarChar(50)
+  name                  String   @db.VarChar(200)
+  description           String?
+  source_of_verification String  @db.VarChar(100) // e.g., "AAM Portal", "HMIS"
+  target_description    String?  @db.VarChar(500) // e.g., "5% of Total Population"
+  formula_type          FormulaType @default(RANGE_BASED)
+  is_active             Boolean  @default(true)
+  sort_order            Int      @default(0)
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  numerator_config      FormulaComponent? @relation("NumeratorConfig", fields: [numerator_config_id], references: [id])
+  denominator_config    FormulaComponent? @relation("DenominatorConfig", fields: [denominator_config_id], references: [id])
+  numerator_config_id   Int?
+  denominator_config_id Int?
+  
+  // Target configurations for different facility types
+  facility_targets      FacilityTarget[]
+  monthly_data          MonthlyHealthData[]
+  performance_calculations PerformanceCalculation[]
+  
+  @@map("indicator")
+}
+
+// Formula Component - handles different types of numerators/denominators
+model FormulaComponent {
+  id                    Int      @id @default(autoincrement())
+  name                  String   @db.VarChar(200)
+  description           String?
+  component_type        FormulaComponentType
+  value_type            String   @db.VarChar(50) // "number", "percentage", "ratio"
+  
+  // For CONSTANT type
+  constant_value        Decimal? @db.Decimal(15, 2)
+  
+  // For POPULATION_BASED type
+  population_formula    String?  @db.VarChar(500) // e.g., "Total 30+ population/12"
+  
+  // For INDICATOR_REFERENCE type
+  referenced_indicator_id Int?
+  referenced_indicator   Indicator? @relation("IndicatorReference", fields: [referenced_indicator_id], references: [id])
+  
+  // For FACILITY_SPECIFIC type
+  facility_specific_values Json? // {"PHC": 50, "SC": 20, "UPHC": 100}
+  
+  // For CALCULATED type
+  calculation_formula   String?  @db.VarChar(1000) // e.g., "numerator * 100 / denominator"
+  depends_on_components Json?    // Array of component IDs this depends on
+  
+  // For DYNAMIC_MONTHLY type
+  data_source          String?  @db.VarChar(100) // e.g., "ANC_DUE_LIST", "TB_PATIENTS"
+  aggregation_method   String?  @db.VarChar(50) // "sum", "count", "average"
+  
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  numerator_for_indicators Indicator[] @relation("NumeratorConfig")
+  denominator_for_indicators Indicator[] @relation("DenominatorConfig")
+  
+  @@map("formula_component")
+}
+
+// Enhanced Facility Target model
+model FacilityTarget {
+  id                    Int      @id @default(autoincrement())
+  facility_id           Int
+  indicator_id          Int
+  facility_type         FacilityType
+  report_month          String   @db.VarChar(7) // YYYY-MM format
+  
+  // Target values
+  target_value          Decimal? @db.Decimal(15, 2)
+  target_percentage     Decimal? @db.Decimal(5, 2) // For percentage-based targets
+  
+  // Achievement thresholds
+  min_achievement       Decimal? @db.Decimal(5, 2) // e.g., 50% minimum
+  max_achievement       Decimal? @db.Decimal(5, 2) // e.g., 100% maximum
+  
+  // Conditions for NA (Not Applicable)
+  na_condition          String?  @db.VarChar(500) // e.g., "If ANC due is '0'"
+  
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  facility              Facility @relation(fields: [facility_id], references: [id])
+  indicator             Indicator @relation(fields: [indicator_id], references: [id])
+  
+  @@unique([facility_id, indicator_id, report_month])
+  @@map("facility_target")
+}
+
+// Enhanced Monthly Health Data
+model MonthlyHealthData {
+  id                    Int      @id @default(autoincrement())
+  facility_id           Int?
+  sub_centre_id         Int?
+  district_id           Int
+  indicator_id          Int
+  report_month          String   @db.VarChar(7)
+  
+  // Raw data values
+  numerator_value       Decimal? @db.Decimal(15, 2)
+  denominator_value     Decimal? @db.Decimal(15, 2)
+  calculated_value      Decimal? @db.Decimal(15, 2)
+  
+  // Achievement calculation
+  target_value          Decimal? @db.Decimal(15, 2)
+  achievement_percentage Decimal? @db.Decimal(5, 2)
+  
+  // Data quality
+  data_quality          DataQuality @default(PENDING)
+  remarks               String?
+  
+  // Audit trail
+  uploaded_by           Int
+  approved_by           Int?
+  approved_at           DateTime? @db.Timestamptz(6)
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  facility              Facility? @relation(fields: [facility_id], references: [id])
+  sub_centre            sub_centre? @relation(fields: [sub_centre_id], references: [id])
+  district              District @relation(fields: [district_id], references: [id])
+  indicator             Indicator @relation(fields: [indicator_id], references: [id])
+  uploader              User @relation("DataUploader", fields: [uploaded_by], references: [id])
+  approver              User? @relation("DataApprover", fields: [approved_by], references: [id])
+  
+  @@unique([facility_id, sub_centre_id, indicator_id, report_month])
+  @@index([report_month])
+  @@index([district_id])
+  @@index([indicator_id])
+  @@map("monthly_health_data")
+}
+
+// Population Data for catchment areas
+model PopulationData {
+  id                    Int      @id @default(autoincrement())
+  facility_id           Int?
+  district_id           Int
+  report_month          String   @db.VarChar(7)
+  
+  // Population categories
+  total_population      Int?
+  population_18_plus    Int?
+  population_30_plus    Int?
+  female_population_30_plus Int?
+  
+  // Specific population groups
+  anc_due_list         Int?
+  tb_patients          Int?
+  bed_ridden_patients  Int?
+  
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime @updatedAt @db.Timestamptz(6)
+  
+  // Relationships
+  facility              Facility? @relation(fields: [facility_id], references: [id])
+  district              District @relation(fields: [district_id], references: [id])
+  
+  @@unique([facility_id, district_id, report_month])
+  @@map("population_data")
+}
+
+// Performance Calculation for remuneration
+model PerformanceCalculation {
+  id                    Int      @id @default(autoincrement())
+  facility_id           Int?
+  sub_centre_id         Int?
+  indicator_id          Int
+  report_month          String   @db.VarChar(7)
+  
+  // Calculation results
+  numerator             Decimal? @db.Decimal(15, 2)
+  denominator           Decimal? @db.Decimal(15, 2)
+  achievement           Decimal? @db.Decimal(5, 2)
+  target_value          Decimal? @db.Decimal(10, 2)
+  remuneration_amount   Decimal? @db.Decimal(10, 2)
+  
+  // Calculation metadata
+  calculation_formula   String?  @db.VarChar(1000)
+  calculation_notes     String?
+  calculated_at         DateTime @default(now()) @db.Timestamptz(6)
+  
+  // Relationships
+  facility              Facility? @relation(fields: [facility_id], references: [id])
+  sub_centre            sub_centre? @relation(fields: [sub_centre_id], references: [id])
+  indicator             Indicator @relation(fields: [indicator_id], references: [id])
+  
+  @@unique([facility_id, sub_centre_id, indicator_id, report_month])
+  @@map("performance_calculation")
+}
+
+// Existing models (assuming they exist)
+model Facility {
+  id                    Int      @id @default(autoincrement())
+  name                  String   @db.VarChar(200)
+  facility_type         FacilityType
+  district_id           Int
+  // ... other fields
+  
+  // Relationships
+  district              District @relation(fields: [district_id], references: [id])
+  monthly_data          MonthlyHealthData[]
+  performance_calculations PerformanceCalculation[]
+  population_data       PopulationData[]
+  facility_targets      FacilityTarget[]
+  
+  @@map("facility")
+}
+
+model District {
+  id                    Int      @id @default(autoincrement())
+  name                  String   @db.VarChar(200)
+  // ... other fields
+  
+  // Relationships
+  facilities            Facility[]
+  monthly_data          MonthlyHealthData[]
+  performance_calculations PerformanceCalculation[]
+  population_data       PopulationData[]
+  
+  @@map("district")
+}
+
+model User {
+  id                    Int      @id @default(autoincrement())
+  name                  String   @db.VarChar(200)
+  // ... other fields
+  
+  // Relationships
+  uploaded_data         MonthlyHealthData[] @relation("DataUploader")
+  approved_data         MonthlyHealthData[] @relation("DataApprover")
+  
+  @@map("user")
+}
+
+// Enums
+enum DataQuality {
+  PENDING
+  VALIDATED
+  APPROVED
+  REJECTED
+}
+
+enum FormulaType {
+  RANGE_BASED
+  PERCENTAGE_BASED
+  RATIO_BASED
+  THRESHOLD_BASED
+} 

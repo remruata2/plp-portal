@@ -1,6 +1,6 @@
-import { db } from '@/lib/db';
-import { UserRole } from '@/generated/prisma';
-import { hash } from 'bcryptjs';
+import { db } from "@/lib/db";
+import { UserRole } from "@/generated/prisma";
+import { hash } from "bcryptjs";
 
 /**
  * Get all users from the database
@@ -12,11 +12,11 @@ export async function getAllUsers() {
       username: true,
       role: true,
       is_active: true,
-      last_login: true,
+      email: true,
       created_at: true,
     },
     orderBy: {
-      created_at: 'desc',
+      created_at: "desc",
     },
   });
 }
@@ -48,10 +48,10 @@ export async function createUser(data: {
   is_active?: boolean;
 }) {
   const { username, password, role, is_active = true } = data;
-  
+
   // Hash the password
   const password_hash = await hash(password, 10);
-  
+
   return await db.user.create({
     data: {
       username,
@@ -82,26 +82,26 @@ export async function updateUser(
   }
 ) {
   const { username, password, role, is_active } = data;
-  
+
   // Prepare update data
   const updateData: any = {};
-  
+
   if (username !== undefined) {
     updateData.username = username;
   }
-  
+
   if (password !== undefined) {
     updateData.password_hash = await hash(password, 10);
   }
-  
+
   if (role !== undefined) {
     updateData.role = role;
   }
-  
+
   if (is_active !== undefined) {
     updateData.is_active = is_active;
   }
-  
+
   return await db.user.update({
     where: { id },
     data: updateData,

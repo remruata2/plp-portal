@@ -5,17 +5,10 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility type ID" },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     const facilityType = await prisma.facilityType.findUnique({
       where: { id },
@@ -45,19 +38,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
     const body = await request.json();
     const { name } = body;
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility type ID" },
-        { status: 400 }
-      );
-    }
 
     if (!name) {
       return NextResponse.json(
@@ -96,17 +82,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid facility type ID" },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
 
     // Check if facility type has facilities
     const facilityCount = await prisma.facility.count({

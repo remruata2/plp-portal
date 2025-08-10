@@ -1,0 +1,884 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
+import WorkerSelectionForm from "./WorkerSelectionForm";
+import ConditionalIndicatorDisplay from "@/components/indicators/ConditionalIndicatorDisplay";
+
+interface FieldMapping {
+  formFieldName: string;
+  databaseFieldId: number;
+  fieldType: string;
+  description: string;
+}
+
+interface IndicatorGroup {
+  indicatorCode: string;
+  indicatorName: string;
+  fields: FieldMapping[];
+  conditions?: string;
+  source_of_verification?: string;
+  target_formula?: string;
+  target_value?: string;
+}
+
+interface DynamicHealthDataFormProps {
+  facilityType: string;
+  userRole: string;
+  facilityId?: string;
+  onSubmissionSuccess?: () => void;
+}
+
+export default function DynamicHealthDataForm({
+  facilityType,
+  userRole,
+  facilityId = "1", // Default facility ID
+  onSubmissionSuccess,
+}: DynamicHealthDataFormProps) {
+  const { data: session, status } = useSession();
+  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
+  const [indicatorGroups, setIndicatorGroups] = useState<IndicatorGroup[]>([]);
+  const [selectedWorkers, setSelectedWorkers] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  
+  // Month and year selection state
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>("");
+
+  // Debug logging for props
+  console.log("DynamicHealthDataForm props:", {
+    facilityType,
+    userRole,
+    facilityId,
+    sessionStatus: status,
+    sessionFacilityId: session?.user?.facility_id,
+  });
+
+  useEffect(() => {
+    console.log(
+      "[DEBUG] Full session object in DynamicHealthDataForm:",
+      session
+    );
+  }, [session]);
+
+  // Initialize month and year with current values
+  useEffect(() => {
+    const now = new Date();
+    const currentMonth = String(now.getMonth() + 1).padStart(2, "0");
+    const currentYear = String(now.getFullYear());
+    
+    setSelectedMonth(currentMonth);
+    setSelectedYear(currentYear);
+  }, []);
+
+  // Fetch field mappings for this facility type
+  useEffect(() => {
+    const fetchFieldMappings = async () => {
+      try {
+        setLoading(true);
+        console.log("=== Starting field mapping fetch ===");
+        console.log("Facility type:", facilityType);
+
+        console.log(
+          "Making API request to:",
+          `/api/health-data/field-mappings/${facilityType}`
+        );
+
+        const response = await fetch(
+          `/api/health-data/field-mappings/${facilityType}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("API response status:", response.status);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("API error response:", errorText);
+          throw new Error(
+            `Failed to fetch field mappings: ${response.status} - ${errorText}`
+          );
+        }
+
+        const data = await response.json();
+        console.log("API response data:", data);
+
+        const mappings = data.mappings || [];
+        console.log("Retrieved mappings:", mappings.length, "fields");
+        console.log("Mappings details:", mappings);
+
+        setFieldMappings(mappings);
+
+        // Group fields by indicators
+        const grouped = groupFieldsByIndicators(mappings);
+        setIndicatorGroups(grouped);
+
+        // Initialize form data with empty values for all fields
+        const initialData: Record<string, any> = {};
+        mappings.forEach((mapping: any) => {
+          initialData[mapping.formFieldName] = "";
+        });
+        
+        // Add Yes/No question fields for conditional indicators - using correct field names from source files
+        initialData.pulmonary_tb_patients = ""; // For CT001 - "Are there any patients with Pulmonary TB in your catchment area?"
+        initialData.total_tb_patients = ""; // For DC001 - "Are there any patients with any type of TB?"
+        
+        setFormData(initialData);
+
+        console.log("=== Field mapping fetch completed ===");
+        setLoading(false);
+      } catch (error: any) {
+        console.error("Error fetching field mappings:", error);
+        toast.error("Failed to load form fields");
+        setLoading(false);
+      }
+    };
+
+    fetchFieldMappings();
+  }, [facilityType]);
+
+  // Function to group fields by indicators
+  const groupFieldsByIndicators = (mappings: FieldMapping[]): IndicatorGroup[] => {
+    // Define indicator mapping based on field codes - updated to match source files exactly
+    const indicatorMapping: Record<string, { code: string; name: string }> = {
+      // Population data (foundational demographic information)
+      'total_population': { code: 'POP001', name: 'Population Data' },
+      'population_30_plus': { code: 'POP001', name: 'Population Data' },
+      'population_30_plus_female': { code: 'POP001', name: 'Population Data' },
+      'population_18_plus': { code: 'POP001', name: 'Population Data' },
+      
+      // ANC indicators
+      'anc_due_list': { code: 'AF001', name: 'Total ANC footfall' },
+      'anc_footfall': { code: 'AF001', name: 'Total ANC footfall' },
+      'anc_tested_hb': { code: 'HT001', name: 'Pregnant women tested for Hb' },
+      
+      // RI indicators
+      'ri_sessions_planned': { code: 'RS001', name: 'RI sessions held' },
+      'ri_sessions_held': { code: 'RS001', name: 'RI sessions held' },
+      'ri_beneficiaries_due': { code: 'RF001', name: 'RI footfall' },
+      'ri_footfall': { code: 'RF001', name: 'RI footfall' },
+      
+      // TB indicators - updated to match source files exactly
+      'pulmonary_tb_patients': { code: 'CT001', name: 'Household visited for TB contact tracing' },
+      'total_tb_patients': { code: 'DC001', name: 'No. of TB patients visited for Differentiated TB Care' },
+      'tb_screenings': { code: 'TS001', name: 'Individuals screened for TB' },
+      'tb_contact_tracing_households': { code: 'CT001', name: 'Household visited for TB contact tracing' },
+      'tb_differentiated_care_visits': { code: 'DC001', name: 'No. of TB patients visited for Differentiated TB Care' },
+      
+      // NCD indicators
+      'cbac_forms_filled': { code: 'CB001', name: 'CBAC filled for the month (including rescreened)' },
+      'htn_screened': { code: 'HS001', name: 'HTN screened (including rescreened) for the month' },
+      'dm_screened': { code: 'DS001', name: 'DM screened (including rescreened) for the month' },
+      'oral_cancer_screened': { code: 'OC001', name: 'Oral Ca. Screened for the month' },
+      'breast_cervical_cancer_screened': { code: 'BC001', name: 'Breast & Cervical Ca. screened for the month' },
+      'ncd_diagnosed_tx_completed': { code: 'ND001', name: 'NCD Diagnosed & Tx completed' },
+      'ncd_referred_from_sc': { code: 'ND001', name: 'NCD Diagnosed & Tx completed' },
+      
+      // Service indicators
+      'total_footfall': { code: 'TF001', name: 'Total Footfall (M&F)' },
+      'total_footfall_phc_colocated_sc': { code: 'TF001_PHC', name: 'Total Footfall (M&F) - PHC' },
+      'total_footfall_sc_clinic': { code: 'TF001_SC', name: 'Total Footfall (M&F) - SC-HWC' },
+      'total_footfall_uhwc': { code: 'TF001_UHWC', name: 'Total Footfall (M&F) - U-HWC' },
+      'wellness_sessions_conducted': { code: 'WS001', name: 'Total Wellness sessions' },
+      'teleconsultation_conducted': { code: 'TC001', name: 'Teleconsultation' },
+      'prakriti_parikshan_conducted': { code: 'PP001', name: 'Prakriti Parikshan conducted' },
+      'patient_satisfaction_score': { code: 'PS001', name: 'Patient satisfaction score for the month' },
+      
+      // Elderly care indicators
+      'bedridden_patients': { code: 'EP001', name: 'No of Elderly & Palliative patients visited' },
+      'elderly_palliative_visits': { code: 'EP001', name: 'No of Elderly & Palliative patients visited' },
+      'elderly_clinic_conducted': { code: 'EC001', name: 'No of Elderly clinic conducted' },
+      'elderly_support_group_formed': { code: 'ES001', name: 'Whether Elderly Support Group (Sanjivini) is formed' },
+      'elderly_support_group_activity': { code: 'EA001', name: 'If Yes, any activity conducted during the month' },
+      
+      // Administrative indicators
+      'jas_meetings_conducted': { code: 'JM001', name: 'No of JAS meeting conducted' },
+      'dvdms_issues_generated': { code: 'DI001', name: 'No. of issues generated in DVDMS' },
+    };
+
+    // Group fields by indicator
+    const groups: Record<string, IndicatorGroup> = {};
+    
+    mappings.forEach((mapping) => {
+      const indicator = indicatorMapping[mapping.formFieldName] || {
+        code: 'OTHER',
+        name: 'Other Fields'
+      };
+      
+      if (!groups[indicator.code]) {
+        groups[indicator.code] = {
+          indicatorCode: indicator.code,
+          indicatorName: indicator.name,
+          fields: []
+        };
+      }
+      
+      groups[indicator.code].fields.push(mapping);
+    });
+    
+    // Convert to array and sort by proper indicator order (as per source files)
+    const indicatorOrder = [
+      'POP001', // Population Data (foundational)
+      'TF001',  // 1. Total Footfall (M&F) - Generic
+      'TF001_PHC',  // 1. Total Footfall (M&F) - PHC
+      'TF001_SC',  // 1. Total Footfall (M&F) - SC-HWC
+      'TF001_UHWC',  // 1. Total Footfall (M&F) - U-HWC
+      'TF001_AHWC',  // 1. Total Footfall (M&F) - A-HWC
+      'TF001_UPHC',  // 1. Total Footfall (M&F) - UPHC
+      'WS001',  // 2. Total Wellness sessions
+      'TC001',  // 3. Teleconsultation
+      'AF001',  // 4. Total ANC footfall
+      'HT001',  // 5. Pregnant women tested for Hb
+      'TS001',  // 6. Individuals screened for TB - Generic
+      'TS001_PHC',  // 6. Individuals screened for TB - PHC
+      'TS001_SC',  // 6. Individuals screened for TB - SC-HWC
+      'TS001_UHWC',  // 6. Individuals screened for TB - U-HWC
+      'TS001_AHWC',  // 6. Individuals screened for TB - A-HWC
+      'TS001_UPHC',  // 6. Individuals screened for TB - UPHC
+      'CT001',  // 7. Household visited for TB contact tracing
+      'DC001',  // 8. TB patients visited for Differentiated TB Care
+      'RS001',  // 9. RI sessions held
+      'RF001',  // 10. RI footfall
+      'CB001',  // 11. CBAC filled for the month
+      'HS001',  // 12. HTN screened for the month
+      'DS001',  // 13. DM screened for the month
+      'OC001',  // 14. Oral Ca. Screened for the month
+      'BC001',  // 15. Breast & Cervical Ca. Screened for the month
+      'ND001',  // 16. NCD Diagnosed & Tx completed
+      'PS001',  // 17. Patient satisfaction score
+      'EP001',  // 18. Elderly & Palliative patients visited
+      'EC001',  // 19. Elderly clinic conducted
+      'JM001',  // 20. JAS meetings conducted
+      'DI001',  // 21. Issues generated in DVDMS
+      'PP001',  // 22. Prakriti Parikshan conducted (A_HWC specific)
+      'ES001',  // 23. Elderly Support Group formed
+      'EA001',  // 24. Elderly Support Group activity conducted
+      'OTHER'   // Other fields (at the end)
+    ];
+    
+    return Object.values(groups).sort((a, b) => {
+      const indexA = indicatorOrder.indexOf(a.indicatorCode);
+      const indexB = indicatorOrder.indexOf(b.indicatorCode);
+      
+      // If both indicators are in the order list, sort by their position
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+      
+      // If only one is in the order list, prioritize it
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+      
+      // If neither is in the order list, sort alphabetically
+      return a.indicatorCode.localeCompare(b.indicatorCode);
+    });
+  };
+
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        [fieldName]: value,
+      };
+
+      // Special handling for elderly support group fields dependency
+      if (fieldName === 'elderly_support_group_formed') {
+        // If group is not formed (false/"0"), clear the activity count
+        if (value === "0" || value === false) {
+          newData.elderly_support_group_activity = "";
+        }
+      }
+
+      return newData;
+    });
+  };
+
+  // Utility function to render the appropriate input based on field type
+  const renderFieldInput = (mapping: FieldMapping, groupIndex: number, fieldIndex: number) => {
+    const fieldId = mapping.formFieldName;
+    const fieldValue = formData[fieldId] || "";
+    
+    // Check if this is the elderly support group activity field and if it should be disabled
+    const isElderlyActivityField = fieldId === 'elderly_support_group_activity';
+    const elderlyGroupFormed = formData.elderly_support_group_formed === "1" || formData.elderly_support_group_formed === true;
+    const shouldDisableElderlyActivity = isElderlyActivityField && !elderlyGroupFormed;
+    
+    // Handle BINARY fields with Switch component
+    if (mapping.fieldType === "BINARY") {
+      const isChecked = fieldValue === "1" || fieldValue === true;
+      
+      return (
+        <div className="flex items-center space-x-3">
+          <Switch
+            id={fieldId}
+            checked={isChecked}
+            onCheckedChange={(checked) => {
+              handleInputChange(fieldId, checked ? "1" : "0");
+            }}
+            disabled={submitting}
+          />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-gray-700">
+              {isChecked ? "Yes" : "No"}
+            </span>
+            <span className="text-xs text-gray-500">
+              Toggle for Yes/No
+            </span>
+          </div>
+        </div>
+      );
+    }
+    
+    // Special handling for Field 21 (elderly_support_group_activity) - Numeric Counter
+    if (isElderlyActivityField && mapping.fieldType === "numeric") {
+      const currentValue = parseInt(fieldValue) || 0;
+      const canDecrement = currentValue > 0;
+      const canIncrement = currentValue < 999; // Set reasonable upper limit
+      
+      return (
+        <div className="space-y-1">
+          <div className="flex items-center border rounded-md bg-white">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-10 px-3 rounded-l-md rounded-r-none border-r text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              onClick={() => {
+                if (canDecrement && !shouldDisableElderlyActivity && !submitting) {
+                  handleInputChange(fieldId, String(currentValue - 1));
+                }
+              }}
+              disabled={!canDecrement || shouldDisableElderlyActivity || submitting}
+            >
+              −
+            </Button>
+            <Input
+              id={fieldId}
+              type="number"
+              value={shouldDisableElderlyActivity ? "" : fieldValue}
+              onChange={(e) => {
+                const newValue = parseInt(e.target.value) || 0;
+                if (newValue >= 0 && newValue <= 999) {
+                  handleInputChange(fieldId, e.target.value);
+                }
+              }}
+              placeholder={shouldDisableElderlyActivity ? "N/A" : "0"}
+              disabled={submitting || shouldDisableElderlyActivity}
+              className={`text-center border-0 rounded-none focus:ring-0 text-sm font-medium min-w-[80px] ${shouldDisableElderlyActivity ? 'bg-gray-100 text-gray-500' : ''}`}
+              min="0"
+              max="999"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-10 px-3 rounded-r-md rounded-l-none border-l text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              onClick={() => {
+                if (canIncrement && !shouldDisableElderlyActivity && !submitting) {
+                  handleInputChange(fieldId, String(currentValue + 1));
+                }
+              }}
+              disabled={!canIncrement || shouldDisableElderlyActivity || submitting}
+            >
+              +
+            </Button>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-gray-500">
+              {shouldDisableElderlyActivity ? "Disabled - Group not formed" : "Number of activities"}
+            </span>
+            <span className="text-xs text-gray-400">
+              {shouldDisableElderlyActivity ? "" : `Range: 0-999`}
+            </span>
+          </div>
+          {shouldDisableElderlyActivity && (
+            <p className="text-xs text-orange-600">
+              This field is disabled because the Elderly Support Group is not formed.
+            </p>
+          )}
+        </div>
+      );
+    }
+    
+    // Handle other numeric and text fields with standard Input component
+    return (
+      <div className="space-y-1">
+        <Input
+          id={fieldId}
+          type={mapping.fieldType === "numeric" ? "number" : "text"}
+          value={shouldDisableElderlyActivity ? "" : fieldValue}
+          onChange={(e) => handleInputChange(fieldId, e.target.value)}
+          placeholder={shouldDisableElderlyActivity ? "N/A - Group not formed" : `Enter ${mapping.description.toLowerCase()}`}
+          disabled={submitting || shouldDisableElderlyActivity}
+          className={`text-sm ${shouldDisableElderlyActivity ? 'bg-gray-100 text-gray-500' : ''}`}
+        />
+        {shouldDisableElderlyActivity && (
+          <p className="text-xs text-orange-600">
+            This field is disabled because the Elderly Support Group is not formed.
+          </p>
+        )}
+      </div>
+    );
+  };
+
+  const handleYesNoAnswer = (indicatorCode: string, answer: "yes" | "no") => {
+    if (indicatorCode === "CT001") {
+      // For TB contact tracing - use pulmonary_tb_patients field
+      setFormData((prev) => ({
+        ...prev,
+        pulmonary_tb_patients: answer === "yes" ? "1" : "0",
+      }));
+    } else if (indicatorCode === "DC001") {
+      // For TB differentiated care - use total_tb_patients field
+      setFormData((prev) => ({
+        ...prev,
+        total_tb_patients: answer === "yes" ? "1" : "0",
+      }));
+    }
+  };
+
+  const handleFillAllFields = () => {
+    const dummyData: Record<string, any> = {};
+    
+    // Define realistic data ranges for different field types and contexts
+    const realisticRanges: Record<string, { min: number; max: number; description: string }> = {
+      // Population data - realistic for health facilities
+      'total_population': { min: 5000, max: 15000, description: 'Catchment population' },
+      'population_30_plus': { min: 1500, max: 4500, description: 'Adults 30+ years' },
+      'population_30_plus_female': { min: 800, max: 2400, description: 'Females 30+ years' },
+      'population_18_plus': { min: 2500, max: 7500, description: 'Adults 18+ years' },
+      
+      // ANC indicators - realistic monthly numbers
+      'anc_due_list': { min: 15, max: 45, description: 'Monthly ANC due list' },
+      'anc_footfall': { min: 12, max: 38, description: 'Monthly ANC visits' },
+      'anc_tested_hb': { min: 10, max: 35, description: 'Hb tests conducted' },
+      
+      // RI indicators - realistic immunization numbers
+      'ri_sessions_planned': { min: 8, max: 12, description: 'Monthly RI sessions planned' },
+      'ri_sessions_held': { min: 6, max: 10, description: 'Monthly RI sessions held' },
+      'ri_beneficiaries_due': { min: 25, max: 80, description: 'Children due for immunization' },
+      'ri_footfall': { min: 20, max: 65, description: 'Children immunized' },
+      
+      // TB indicators - realistic screening numbers
+      'tb_screenings': { min: 50, max: 200, description: 'Monthly TB screenings' },
+      'tb_contact_tracing_households': { min: 5, max: 25, description: 'Households visited' },
+      'tb_differentiated_care_visits': { min: 3, max: 15, description: 'TB patient visits' },
+      
+      // NCD indicators - realistic screening numbers
+      'cbac_forms_filled': { min: 30, max: 120, description: 'CBAC forms completed' },
+      'htn_screened': { min: 40, max: 150, description: 'HTN screenings' },
+      'dm_screened': { min: 35, max: 130, description: 'DM screenings' },
+      'oral_cancer_screened': { min: 20, max: 80, description: 'Oral cancer screenings' },
+      'breast_cervical_cancer_screened': { min: 15, max: 60, description: 'Cancer screenings' },
+      'ncd_diagnosed_tx_completed': { min: 8, max: 25, description: 'NCD patients treated' },
+      'ncd_referred_from_sc': { min: 5, max: 20, description: 'NCD referrals' },
+      
+      // Service indicators - realistic facility numbers
+      'total_footfall': { min: 200, max: 800, description: 'Total monthly patients' },
+      'total_footfall_phc_colocated_sc': { min: 150, max: 600, description: 'PHC patient visits' },
+      'total_footfall_sc_clinic': { min: 100, max: 400, description: 'SC clinic visits' },
+      'total_footfall_uhwc': { min: 80, max: 300, description: 'UHWC visits' },
+      'wellness_sessions_conducted': { min: 4, max: 12, description: 'Wellness sessions' },
+      'teleconsultation_conducted': { min: 20, max: 80, description: 'Teleconsultations' },
+      'prakriti_parikshan_conducted': { min: 10, max: 40, description: 'Prakriti Parikshan' },
+      'patient_satisfaction_score': { min: 70, max: 95, description: 'Satisfaction score' },
+      
+      // Elderly care indicators - realistic numbers
+      'bedridden_patients': { min: 2, max: 12, description: 'Bedridden patients' },
+      'elderly_palliative_visits': { min: 5, max: 25, description: 'Elderly care visits' },
+      'elderly_clinic_conducted': { min: 2, max: 8, description: 'Elderly clinics' },
+      
+      // Administrative indicators - realistic numbers
+      'jas_meetings_conducted': { min: 1, max: 4, description: 'JAS meetings' },
+      'dvdms_issues_generated': { min: 3, max: 15, description: 'DVDMS issues' },
+    };
+    
+    fieldMappings.forEach((mapping) => {
+      const fieldName = mapping.formFieldName;
+      
+      // Generate dummy data based on field type
+      switch (mapping.fieldType) {
+        case "numeric":
+          if (fieldName === 'elderly_support_group_activity') {
+            // Elderly support group activity - smaller realistic numbers
+            dummyData[fieldName] = Math.floor(Math.random() * 8) + 1; // 1-8 activities
+          } else if (realisticRanges[fieldName]) {
+            // Use predefined realistic ranges
+            const range = realisticRanges[fieldName];
+            dummyData[fieldName] = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+          } else {
+            // Default realistic range for unknown numeric fields
+            dummyData[fieldName] = Math.floor(Math.random() * 100) + 10; // 10-109
+          }
+          break;
+          
+        case "BINARY":
+          // Generate more realistic Yes/No distribution based on field context
+          if (fieldName === 'elderly_support_group_formed') {
+            // 70% chance of having support group formed (more realistic)
+            dummyData[fieldName] = Math.random() < 0.7 ? "1" : "0";
+          } else if (fieldName === 'pulmonary_tb_patients' || fieldName === 'total_tb_patients') {
+            // 30% chance of having TB patients (realistic for most facilities)
+            dummyData[fieldName] = Math.random() < 0.3 ? "1" : "0";
+          } else {
+            // Default 50/50 for other binary fields
+            dummyData[fieldName] = Math.random() > 0.5 ? "1" : "0";
+          }
+          break;
+          
+        case "boolean":
+          // Similar logic for boolean fields
+          if (fieldName === 'elderly_support_group_formed') {
+            dummyData[fieldName] = Math.random() < 0.7;
+          } else {
+            dummyData[fieldName] = Math.random() > 0.5;
+          }
+          break;
+          
+        case "text":
+        default:
+          // Generate more contextual text data
+          if (fieldName.includes('description') || fieldName.includes('notes')) {
+            dummyData[fieldName] = `Sample description for ${mapping.description.toLowerCase()}`;
+          } else if (fieldName.includes('name')) {
+            dummyData[fieldName] = `Sample ${mapping.description.toLowerCase()}`;
+          } else {
+            dummyData[fieldName] = `Sample ${mapping.description.toLowerCase()}`;
+          }
+      }
+    });
+    
+    // Ensure conditional logic is applied for dummy data too
+    // If elderly support group is not formed, clear the activity count
+    if (dummyData.elderly_support_group_formed === "0" || dummyData.elderly_support_group_formed === false) {
+      dummyData.elderly_support_group_activity = "";
+    }
+    
+    // Ensure TB-related conditional fields are properly set
+    if (dummyData.pulmonary_tb_patients === "0" || dummyData.pulmonary_tb_patients === false) {
+      // If no pulmonary TB patients, set related fields to 0
+      dummyData.tb_contact_tracing_households = 0;
+    }
+    
+    if (dummyData.total_tb_patients === "0" || dummyData.total_tb_patients === false) {
+      // If no TB patients, set related fields to 0
+      dummyData.total_tb_patients = 0;
+    }
+    
+    setFormData(dummyData);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (loading) return;
+
+    try {
+      setSubmitting(true);
+
+      // Validate month and year selection
+      if (!selectedMonth || !selectedYear) {
+        toast.error("Please select both month and year");
+        return;
+      }
+
+      // Format report month as YYYY-MM
+      const reportMonth = `${selectedYear}-${selectedMonth}`;
+
+      // Check if session is loaded
+      if (status === "loading") {
+        toast.error("Session is still loading. Please wait and try again.");
+        return;
+      }
+
+      // Use facility ID from props or fallback to session
+      const effectiveFacilityId = facilityId || session?.user?.facility_id;
+
+      console.log("Submitting form with facilityId:", effectiveFacilityId);
+      console.log("Form data keys:", Object.keys(formData));
+      console.log("Selected month/year:", { selectedMonth, selectedYear, reportMonth });
+      console.log("Session facility_id:", session?.user?.facility_id);
+      console.log("Session status:", status);
+      console.log("Session data:", session);
+
+      if (!effectiveFacilityId) {
+        toast.error("No facility ID available. Please contact administrator.");
+        return;
+      }
+
+      // Submit raw form data to API - let server handle field mapping conversion
+      const response = await fetch("/api/health-data/temporary-submission", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          formData,
+          facilityId: effectiveFacilityId, // Send as string, let server parse
+          reportMonth: reportMonth,
+          facilityType,
+          userRole,
+          selectedWorkers, // Include selected workers
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit data");
+      }
+
+      const result = await response.json();
+      console.log("Submission result:", result);
+
+      toast.success("Data submitted successfully!");
+
+      // Reset form
+      const initialData: Record<string, any> = {};
+      fieldMappings.forEach((mapping) => {
+        initialData[mapping.formFieldName] = "";
+      });
+      setFormData(initialData);
+
+      // Notify parent component of successful submission
+      if (onSubmissionSuccess) {
+        onSubmissionSuccess();
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      toast.error("Failed to submit data");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading || status === "loading") {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            {loading ? "Loading form fields..." : "Loading session..."}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle>{facilityType} Health Data Form</CardTitle>
+          <FillAllFieldsButton
+            onFill={handleFillAllFields}
+            disabled={submitting}
+          />
+        </div>
+      </CardHeader>
+      <CardContent>
+        {fieldMappings.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500 mb-4">
+              No fields found for {facilityType}
+            </p>
+            <p className="text-sm text-gray-400">
+              Please check the field mappings configuration for this facility
+              type.
+            </p>
+            <div className="mt-4 p-4 bg-gray-50 rounded">
+              <p className="text-xs text-gray-600">
+                Debug info: facilityType="{facilityType}", mappings=
+                {fieldMappings.length}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Month and Year Selection */}
+            <div className="bg-gray-50 p-4 rounded-lg border">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Select Reporting Period
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="month-select">Month</Label>
+                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="01">January</SelectItem>
+                      <SelectItem value="02">February</SelectItem>
+                      <SelectItem value="03">March</SelectItem>
+                      <SelectItem value="04">April</SelectItem>
+                      <SelectItem value="05">May</SelectItem>
+                      <SelectItem value="06">June</SelectItem>
+                      <SelectItem value="07">July</SelectItem>
+                      <SelectItem value="08">August</SelectItem>
+                      <SelectItem value="09">September</SelectItem>
+                      <SelectItem value="10">October</SelectItem>
+                      <SelectItem value="11">November</SelectItem>
+                      <SelectItem value="12">December</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="year-select">Year</Label>
+                  <Select value={selectedYear} onValueChange={setSelectedYear}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 10 }, (_, i) => {
+                        const year = new Date().getFullYear() - i;
+                        return (
+                          <SelectItem key={year} value={year.toString()}>
+                            {year}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                Select the month and year for which you are submitting data. You can submit data for past months.
+              </p>
+            </div>
+
+            {indicatorGroups.map((group, groupIndex) => {
+              // Check if this indicator has conditional logic
+              const isConditionalIndicator = group.indicatorCode === "CT001" || group.indicatorCode === "DC001";
+              
+              // Build fieldValues object for conditional checking
+              const fieldValues: { [key: string]: number } = {};
+              
+              // Add only non-empty form data to fieldValues
+              Object.keys(formData).forEach((key) => {
+                const value = formData[key];
+                // Only add to fieldValues if the user has actually entered a value
+                if (value !== undefined && value !== "" && value !== null) {
+                  const numericValue = parseFloat(value);
+                  if (!isNaN(numericValue)) {
+                    fieldValues[key] = numericValue;
+                  }
+                }
+              });
+
+              // Add specific conditional fields only if they exist in formData
+              if (group.indicatorCode === "CT001") {
+                // For TB contact tracing, check pulmonary TB patients
+                // Field name: pulmonary_tb_patients (from source files)
+                if (formData.pulmonary_tb_patients !== undefined && formData.pulmonary_tb_patients !== "") {
+                  fieldValues.pulmonary_tb_patients_present = parseFloat(formData.pulmonary_tb_patients) || 0;
+                }
+              } else if (group.indicatorCode === "DC001") {
+                // For TB differentiated care, check total TB patients
+                // Field name: total_tb_patients (from source files)
+                if (formData.total_tb_patients !== undefined && formData.total_tb_patients !== "") {
+                  fieldValues.tb_patients_present = parseFloat(formData.total_tb_patients) || 0;
+                }
+              }
+
+              return (
+                <div key={group.indicatorCode} className="space-y-4">
+                  {isConditionalIndicator ? (
+                    <ConditionalIndicatorDisplay
+                      indicator={{
+                        id: groupIndex,
+                        code: group.indicatorCode,
+                        name: group.indicatorName,
+                        conditions: group.conditions,
+                        source_of_verification: group.source_of_verification,
+                        target_formula: group.target_formula,
+                        target_value: group.target_value,
+                      }}
+                      fieldValues={fieldValues}
+                      onConditionChange={(conditionMet) => {
+                        // Handle condition change if needed
+                        console.log(`Condition for ${group.indicatorCode}:`, conditionMet);
+                      }}
+                      onYesNoChange={(answer) => {
+                        // Handle Yes/No answer change
+                        if (answer !== null) {
+                          handleYesNoAnswer(group.indicatorCode, answer);
+                        }
+                      }}
+                    >
+                      {/* Render fields inside conditional component - only shown when "Yes" is selected */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-4 mt-4">
+                        {group.fields.map((mapping, fieldIndex) => (
+                          <div key={mapping.databaseFieldId} className="space-y-2">
+                            <Label htmlFor={mapping.formFieldName} className="text-sm font-medium">
+                              {groupIndex + 1}{String.fromCharCode(97 + fieldIndex)}. {mapping.description}
+                            </Label>
+                            {renderFieldInput(mapping, groupIndex, fieldIndex)}
+                          </div>
+                        ))}
+                      </div>
+                    </ConditionalIndicatorDisplay>
+                  ) : (
+                    <>
+                      {/* Regular indicator display */}
+                      <div className="border-b border-gray-200 pb-2">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {groupIndex + 1}. {group.indicatorName}
+                          <span className="ml-2 text-sm font-normal text-gray-500">
+                            ({group.indicatorCode})
+                          </span>
+                        </h3>
+                      </div>
+                      
+                      {/* Fields for this indicator */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-4">
+                        {group.fields.map((mapping, fieldIndex) => (
+                          <div key={mapping.databaseFieldId} className="space-y-2">
+                            <Label htmlFor={mapping.formFieldName} className="text-sm font-medium">
+                              {groupIndex + 1}{String.fromCharCode(97 + fieldIndex)}. {mapping.description}
+                            </Label>
+                            {renderFieldInput(mapping, groupIndex, fieldIndex)}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Worker Selection */}
+            <div className="border-t pt-6">
+              <WorkerSelectionForm
+                facilityId={facilityId}
+                selectedWorkers={selectedWorkers}
+                onWorkersChange={setSelectedWorkers}
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit Data"}
+              </Button>
+            </div>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
+}

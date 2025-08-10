@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HFW Dashboard",
-  description: "Health and Family Welfare Dashboard - Administrative Portal",
+  title: "PLP Portal",
+  description: "PLP Portal",
 };
 
 export default function RootLayout({

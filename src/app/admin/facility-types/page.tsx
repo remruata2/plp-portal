@@ -53,7 +53,7 @@ export default function FacilityTypesPage() {
       const response = await fetch("/api/facility-types");
       if (response.ok) {
         const data = await response.json();
-        setFacilityTypes(data);
+        setFacilityTypes(data.facilityTypes || data);
       } else {
         toast.error("Failed to fetch facility types");
       }
