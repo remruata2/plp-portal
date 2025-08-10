@@ -229,6 +229,7 @@ exports.Prisma.IndicatorScalarFieldEnum = {
   denominator_field_id: 'denominator_field_id',
   denominator_label: 'denominator_label',
   formula_config: 'formula_config',
+  formula_type: 'formula_type',
   numerator_field_id: 'numerator_field_id',
   numerator_label: 'numerator_label',
   target_formula: 'target_formula',
@@ -421,14 +422,6 @@ exports.Prisma.IndicatorWorkerAllocationScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.SystemSettingScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  value: 'value',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -477,10 +470,23 @@ exports.UploadStatus = exports.$Enums.UploadStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.formula_type = exports.$Enums.formula_type = {
+  RANGE_BASED: 'RANGE_BASED',
+  PERCENTAGE_CAP: 'PERCENTAGE_CAP',
+  BINARY: 'BINARY',
+  THRESHOLD_BONUS: 'THRESHOLD_BONUS',
+  MINIMUM_THRESHOLD: 'MINIMUM_THRESHOLD',
+  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE'
+};
+
 exports.TargetType = exports.$Enums.TargetType = {
+  PERCENTAGE: 'PERCENTAGE',
+  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE',
+  CONSTANT_VALUE: 'CONSTANT_VALUE',
   BINARY: 'BINARY',
   RANGE: 'RANGE',
-  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE'
+  MINIMUM_THRESHOLD: 'MINIMUM_THRESHOLD',
+  MAXIMUM_THRESHOLD: 'MAXIMUM_THRESHOLD'
 };
 
 exports.FieldType = exports.$Enums.FieldType = {
@@ -528,8 +534,7 @@ exports.Prisma.ModelName = {
   IndicatorRemuneration: 'IndicatorRemuneration',
   PerformanceCalculation: 'PerformanceCalculation',
   FacilityTarget: 'FacilityTarget',
-  IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
-  SystemSetting: 'SystemSetting'
+  IndicatorWorkerAllocation: 'IndicatorWorkerAllocation'
 };
 
 /**

@@ -133,11 +133,6 @@ export type FacilityTarget = $Result.DefaultSelection<Prisma.$FacilityTargetPayl
  * 
  */
 export type IndicatorWorkerAllocation = $Result.DefaultSelection<Prisma.$IndicatorWorkerAllocationPayload>
-/**
- * Model SystemSetting
- * 
- */
-export type SystemSetting = $Result.DefaultSelection<Prisma.$SystemSettingPayload>
 
 /**
  * Enums
@@ -218,9 +213,13 @@ export type UploadStatus = (typeof UploadStatus)[keyof typeof UploadStatus]
 
 
 export const TargetType: {
+  PERCENTAGE: 'PERCENTAGE',
+  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE',
+  CONSTANT_VALUE: 'CONSTANT_VALUE',
   BINARY: 'BINARY',
   RANGE: 'RANGE',
-  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE'
+  MINIMUM_THRESHOLD: 'MINIMUM_THRESHOLD',
+  MAXIMUM_THRESHOLD: 'MAXIMUM_THRESHOLD'
 };
 
 export type TargetType = (typeof TargetType)[keyof typeof TargetType]
@@ -232,6 +231,18 @@ export const FieldCategory: {
 };
 
 export type FieldCategory = (typeof FieldCategory)[keyof typeof FieldCategory]
+
+
+export const formula_type: {
+  RANGE_BASED: 'RANGE_BASED',
+  PERCENTAGE_CAP: 'PERCENTAGE_CAP',
+  BINARY: 'BINARY',
+  THRESHOLD_BONUS: 'THRESHOLD_BONUS',
+  MINIMUM_THRESHOLD: 'MINIMUM_THRESHOLD',
+  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE'
+};
+
+export type formula_type = (typeof formula_type)[keyof typeof formula_type]
 
 }
 
@@ -270,6 +281,10 @@ export const TargetType: typeof $Enums.TargetType
 export type FieldCategory = $Enums.FieldCategory
 
 export const FieldCategory: typeof $Enums.FieldCategory
+
+export type formula_type = $Enums.formula_type
+
+export const formula_type: typeof $Enums.formula_type
 
 /**
  * ##  Prisma Client ʲˢ
@@ -635,16 +650,6 @@ export class PrismaClient<
     * ```
     */
   get indicatorWorkerAllocation(): Prisma.IndicatorWorkerAllocationDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.systemSetting`: Exposes CRUD operations for the **SystemSetting** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more SystemSettings
-    * const systemSettings = await prisma.systemSetting.findMany()
-    * ```
-    */
-  get systemSetting(): Prisma.SystemSettingDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1108,8 +1113,7 @@ export namespace Prisma {
     IndicatorRemuneration: 'IndicatorRemuneration',
     PerformanceCalculation: 'PerformanceCalculation',
     FacilityTarget: 'FacilityTarget',
-    IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
-    SystemSetting: 'SystemSetting'
+    IndicatorWorkerAllocation: 'IndicatorWorkerAllocation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1128,7 +1132,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "district" | "remunerationSystem" | "facilityType" | "facility" | "monthlyHealthData" | "dataUploadSession" | "formula" | "indicator" | "field" | "fieldValue" | "facilityFieldDefaults" | "facilityFieldMapping" | "sub_centre" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityWorkerAllocation" | "facilityTypeRemuneration" | "indicatorRemuneration" | "performanceCalculation" | "facilityTarget" | "indicatorWorkerAllocation" | "systemSetting"
+      modelProps: "user" | "district" | "remunerationSystem" | "facilityType" | "facility" | "monthlyHealthData" | "dataUploadSession" | "formula" | "indicator" | "field" | "fieldValue" | "facilityFieldDefaults" | "facilityFieldMapping" | "sub_centre" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityWorkerAllocation" | "facilityTypeRemuneration" | "indicatorRemuneration" | "performanceCalculation" | "facilityTarget" | "indicatorWorkerAllocation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2908,80 +2912,6 @@ export namespace Prisma {
           }
         }
       }
-      SystemSetting: {
-        payload: Prisma.$SystemSettingPayload<ExtArgs>
-        fields: Prisma.SystemSettingFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.SystemSettingFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.SystemSettingFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          findFirst: {
-            args: Prisma.SystemSettingFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.SystemSettingFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          findMany: {
-            args: Prisma.SystemSettingFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
-          }
-          create: {
-            args: Prisma.SystemSettingCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          createMany: {
-            args: Prisma.SystemSettingCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.SystemSettingCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
-          }
-          delete: {
-            args: Prisma.SystemSettingDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          update: {
-            args: Prisma.SystemSettingUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          deleteMany: {
-            args: Prisma.SystemSettingDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.SystemSettingUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.SystemSettingUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
-          }
-          upsert: {
-            args: Prisma.SystemSettingUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
-          }
-          aggregate: {
-            args: Prisma.SystemSettingAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSystemSetting>
-          }
-          groupBy: {
-            args: Prisma.SystemSettingGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SystemSettingGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.SystemSettingCountArgs<ExtArgs>
-            result: $Utils.Optional<SystemSettingCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -3090,7 +3020,6 @@ export namespace Prisma {
     performanceCalculation?: PerformanceCalculationOmit
     facilityTarget?: FacilityTargetOmit
     indicatorWorkerAllocation?: IndicatorWorkerAllocationOmit
-    systemSetting?: SystemSettingOmit
   }
 
   /* Types for Logging */
@@ -13453,6 +13382,7 @@ export namespace Prisma {
     conditions: string | null
     denominator_field_id: number | null
     denominator_label: string | null
+    formula_type: $Enums.formula_type | null
     numerator_field_id: number | null
     numerator_label: string | null
     target_formula: string | null
@@ -13473,6 +13403,7 @@ export namespace Prisma {
     conditions: string | null
     denominator_field_id: number | null
     denominator_label: string | null
+    formula_type: $Enums.formula_type | null
     numerator_field_id: number | null
     numerator_label: string | null
     target_formula: string | null
@@ -13496,6 +13427,7 @@ export namespace Prisma {
     denominator_field_id: number
     denominator_label: number
     formula_config: number
+    formula_type: number
     numerator_field_id: number
     numerator_label: number
     target_formula: number
@@ -13532,6 +13464,7 @@ export namespace Prisma {
     conditions?: true
     denominator_field_id?: true
     denominator_label?: true
+    formula_type?: true
     numerator_field_id?: true
     numerator_label?: true
     target_formula?: true
@@ -13552,6 +13485,7 @@ export namespace Prisma {
     conditions?: true
     denominator_field_id?: true
     denominator_label?: true
+    formula_type?: true
     numerator_field_id?: true
     numerator_label?: true
     target_formula?: true
@@ -13575,6 +13509,7 @@ export namespace Prisma {
     denominator_field_id?: true
     denominator_label?: true
     formula_config?: true
+    formula_type?: true
     numerator_field_id?: true
     numerator_label?: true
     target_formula?: true
@@ -13685,6 +13620,7 @@ export namespace Prisma {
     denominator_field_id: number | null
     denominator_label: string | null
     formula_config: JsonValue | null
+    formula_type: $Enums.formula_type
     numerator_field_id: number | null
     numerator_label: string | null
     target_formula: string | null
@@ -13727,6 +13663,7 @@ export namespace Prisma {
     denominator_field_id?: boolean
     denominator_label?: boolean
     formula_config?: boolean
+    formula_type?: boolean
     numerator_field_id?: boolean
     numerator_label?: boolean
     target_formula?: boolean
@@ -13759,6 +13696,7 @@ export namespace Prisma {
     denominator_field_id?: boolean
     denominator_label?: boolean
     formula_config?: boolean
+    formula_type?: boolean
     numerator_field_id?: boolean
     numerator_label?: boolean
     target_formula?: boolean
@@ -13785,6 +13723,7 @@ export namespace Prisma {
     denominator_field_id?: boolean
     denominator_label?: boolean
     formula_config?: boolean
+    formula_type?: boolean
     numerator_field_id?: boolean
     numerator_label?: boolean
     target_formula?: boolean
@@ -13811,6 +13750,7 @@ export namespace Prisma {
     denominator_field_id?: boolean
     denominator_label?: boolean
     formula_config?: boolean
+    formula_type?: boolean
     numerator_field_id?: boolean
     numerator_label?: boolean
     target_formula?: boolean
@@ -13820,7 +13760,7 @@ export namespace Prisma {
     source_of_verification?: boolean
   }
 
-  export type IndicatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "type" | "structure" | "created_at" | "updated_at" | "code" | "applicable_facility_types" | "conditions" | "denominator_field_id" | "denominator_label" | "formula_config" | "numerator_field_id" | "numerator_label" | "target_formula" | "target_type" | "target_value" | "target_field_id" | "source_of_verification", ExtArgs["result"]["indicator"]>
+  export type IndicatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "type" | "structure" | "created_at" | "updated_at" | "code" | "applicable_facility_types" | "conditions" | "denominator_field_id" | "denominator_label" | "formula_config" | "formula_type" | "numerator_field_id" | "numerator_label" | "target_formula" | "target_type" | "target_value" | "target_field_id" | "source_of_verification", ExtArgs["result"]["indicator"]>
   export type IndicatorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_targets?: boolean | Indicator$facility_targetsArgs<ExtArgs>
     denominator_field?: boolean | Indicator$denominator_fieldArgs<ExtArgs>
@@ -13869,6 +13809,7 @@ export namespace Prisma {
       denominator_field_id: number | null
       denominator_label: string | null
       formula_config: Prisma.JsonValue | null
+      formula_type: $Enums.formula_type
       numerator_field_id: number | null
       numerator_label: string | null
       target_formula: string | null
@@ -14320,6 +14261,7 @@ export namespace Prisma {
     readonly denominator_field_id: FieldRef<"Indicator", 'Int'>
     readonly denominator_label: FieldRef<"Indicator", 'String'>
     readonly formula_config: FieldRef<"Indicator", 'Json'>
+    readonly formula_type: FieldRef<"Indicator", 'formula_type'>
     readonly numerator_field_id: FieldRef<"Indicator", 'Int'>
     readonly numerator_label: FieldRef<"Indicator", 'String'>
     readonly target_formula: FieldRef<"Indicator", 'String'>
@@ -32714,1001 +32656,6 @@ export namespace Prisma {
 
 
   /**
-   * Model SystemSetting
-   */
-
-  export type AggregateSystemSetting = {
-    _count: SystemSettingCountAggregateOutputType | null
-    _min: SystemSettingMinAggregateOutputType | null
-    _max: SystemSettingMaxAggregateOutputType | null
-  }
-
-  export type SystemSettingMinAggregateOutputType = {
-    id: string | null
-    key: string | null
-    value: string | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type SystemSettingMaxAggregateOutputType = {
-    id: string | null
-    key: string | null
-    value: string | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type SystemSettingCountAggregateOutputType = {
-    id: number
-    key: number
-    value: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type SystemSettingMinAggregateInputType = {
-    id?: true
-    key?: true
-    value?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type SystemSettingMaxAggregateInputType = {
-    id?: true
-    key?: true
-    value?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type SystemSettingCountAggregateInputType = {
-    id?: true
-    key?: true
-    value?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type SystemSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SystemSetting to aggregate.
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SystemSettings to fetch.
-     */
-    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: SystemSettingWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SystemSettings from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SystemSettings.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned SystemSettings
-    **/
-    _count?: true | SystemSettingCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: SystemSettingMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: SystemSettingMaxAggregateInputType
-  }
-
-  export type GetSystemSettingAggregateType<T extends SystemSettingAggregateArgs> = {
-        [P in keyof T & keyof AggregateSystemSetting]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSystemSetting[P]>
-      : GetScalarType<T[P], AggregateSystemSetting[P]>
-  }
-
-
-
-
-  export type SystemSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SystemSettingWhereInput
-    orderBy?: SystemSettingOrderByWithAggregationInput | SystemSettingOrderByWithAggregationInput[]
-    by: SystemSettingScalarFieldEnum[] | SystemSettingScalarFieldEnum
-    having?: SystemSettingScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SystemSettingCountAggregateInputType | true
-    _min?: SystemSettingMinAggregateInputType
-    _max?: SystemSettingMaxAggregateInputType
-  }
-
-  export type SystemSettingGroupByOutputType = {
-    id: string
-    key: string
-    value: string
-    created_at: Date
-    updated_at: Date
-    _count: SystemSettingCountAggregateOutputType | null
-    _min: SystemSettingMinAggregateOutputType | null
-    _max: SystemSettingMaxAggregateOutputType | null
-  }
-
-  type GetSystemSettingGroupByPayload<T extends SystemSettingGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<SystemSettingGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof SystemSettingGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
-            : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type SystemSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    key?: boolean
-    value?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["systemSetting"]>
-
-  export type SystemSettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    key?: boolean
-    value?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["systemSetting"]>
-
-  export type SystemSettingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    key?: boolean
-    value?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["systemSetting"]>
-
-  export type SystemSettingSelectScalar = {
-    id?: boolean
-    key?: boolean
-    value?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type SystemSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "value" | "created_at" | "updated_at", ExtArgs["result"]["systemSetting"]>
-
-  export type $SystemSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SystemSetting"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      key: string
-      value: string
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["systemSetting"]>
-    composites: {}
-  }
-
-  type SystemSettingGetPayload<S extends boolean | null | undefined | SystemSettingDefaultArgs> = $Result.GetResult<Prisma.$SystemSettingPayload, S>
-
-  type SystemSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SystemSettingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: SystemSettingCountAggregateInputType | true
-    }
-
-  export interface SystemSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SystemSetting'], meta: { name: 'SystemSetting' } }
-    /**
-     * Find zero or one SystemSetting that matches the filter.
-     * @param {SystemSettingFindUniqueArgs} args - Arguments to find a SystemSetting
-     * @example
-     * // Get one SystemSetting
-     * const systemSetting = await prisma.systemSetting.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends SystemSettingFindUniqueArgs>(args: SelectSubset<T, SystemSettingFindUniqueArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one SystemSetting that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {SystemSettingFindUniqueOrThrowArgs} args - Arguments to find a SystemSetting
-     * @example
-     * // Get one SystemSetting
-     * const systemSetting = await prisma.systemSetting.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends SystemSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, SystemSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first SystemSetting that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingFindFirstArgs} args - Arguments to find a SystemSetting
-     * @example
-     * // Get one SystemSetting
-     * const systemSetting = await prisma.systemSetting.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends SystemSettingFindFirstArgs>(args?: SelectSubset<T, SystemSettingFindFirstArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first SystemSetting that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingFindFirstOrThrowArgs} args - Arguments to find a SystemSetting
-     * @example
-     * // Get one SystemSetting
-     * const systemSetting = await prisma.systemSetting.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends SystemSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, SystemSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more SystemSettings that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all SystemSettings
-     * const systemSettings = await prisma.systemSetting.findMany()
-     * 
-     * // Get first 10 SystemSettings
-     * const systemSettings = await prisma.systemSetting.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const systemSettingWithIdOnly = await prisma.systemSetting.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends SystemSettingFindManyArgs>(args?: SelectSubset<T, SystemSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a SystemSetting.
-     * @param {SystemSettingCreateArgs} args - Arguments to create a SystemSetting.
-     * @example
-     * // Create one SystemSetting
-     * const SystemSetting = await prisma.systemSetting.create({
-     *   data: {
-     *     // ... data to create a SystemSetting
-     *   }
-     * })
-     * 
-     */
-    create<T extends SystemSettingCreateArgs>(args: SelectSubset<T, SystemSettingCreateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many SystemSettings.
-     * @param {SystemSettingCreateManyArgs} args - Arguments to create many SystemSettings.
-     * @example
-     * // Create many SystemSettings
-     * const systemSetting = await prisma.systemSetting.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends SystemSettingCreateManyArgs>(args?: SelectSubset<T, SystemSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many SystemSettings and returns the data saved in the database.
-     * @param {SystemSettingCreateManyAndReturnArgs} args - Arguments to create many SystemSettings.
-     * @example
-     * // Create many SystemSettings
-     * const systemSetting = await prisma.systemSetting.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many SystemSettings and only return the `id`
-     * const systemSettingWithIdOnly = await prisma.systemSetting.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends SystemSettingCreateManyAndReturnArgs>(args?: SelectSubset<T, SystemSettingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a SystemSetting.
-     * @param {SystemSettingDeleteArgs} args - Arguments to delete one SystemSetting.
-     * @example
-     * // Delete one SystemSetting
-     * const SystemSetting = await prisma.systemSetting.delete({
-     *   where: {
-     *     // ... filter to delete one SystemSetting
-     *   }
-     * })
-     * 
-     */
-    delete<T extends SystemSettingDeleteArgs>(args: SelectSubset<T, SystemSettingDeleteArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one SystemSetting.
-     * @param {SystemSettingUpdateArgs} args - Arguments to update one SystemSetting.
-     * @example
-     * // Update one SystemSetting
-     * const systemSetting = await prisma.systemSetting.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends SystemSettingUpdateArgs>(args: SelectSubset<T, SystemSettingUpdateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more SystemSettings.
-     * @param {SystemSettingDeleteManyArgs} args - Arguments to filter SystemSettings to delete.
-     * @example
-     * // Delete a few SystemSettings
-     * const { count } = await prisma.systemSetting.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends SystemSettingDeleteManyArgs>(args?: SelectSubset<T, SystemSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SystemSettings.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many SystemSettings
-     * const systemSetting = await prisma.systemSetting.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends SystemSettingUpdateManyArgs>(args: SelectSubset<T, SystemSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SystemSettings and returns the data updated in the database.
-     * @param {SystemSettingUpdateManyAndReturnArgs} args - Arguments to update many SystemSettings.
-     * @example
-     * // Update many SystemSettings
-     * const systemSetting = await prisma.systemSetting.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more SystemSettings and only return the `id`
-     * const systemSettingWithIdOnly = await prisma.systemSetting.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SystemSettingUpdateManyAndReturnArgs>(args: SelectSubset<T, SystemSettingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one SystemSetting.
-     * @param {SystemSettingUpsertArgs} args - Arguments to update or create a SystemSetting.
-     * @example
-     * // Update or create a SystemSetting
-     * const systemSetting = await prisma.systemSetting.upsert({
-     *   create: {
-     *     // ... data to create a SystemSetting
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the SystemSetting we want to update
-     *   }
-     * })
-     */
-    upsert<T extends SystemSettingUpsertArgs>(args: SelectSubset<T, SystemSettingUpsertArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of SystemSettings.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingCountArgs} args - Arguments to filter SystemSettings to count.
-     * @example
-     * // Count the number of SystemSettings
-     * const count = await prisma.systemSetting.count({
-     *   where: {
-     *     // ... the filter for the SystemSettings we want to count
-     *   }
-     * })
-    **/
-    count<T extends SystemSettingCountArgs>(
-      args?: Subset<T, SystemSettingCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], SystemSettingCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a SystemSetting.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends SystemSettingAggregateArgs>(args: Subset<T, SystemSettingAggregateArgs>): Prisma.PrismaPromise<GetSystemSettingAggregateType<T>>
-
-    /**
-     * Group by SystemSetting.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SystemSettingGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends SystemSettingGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SystemSettingGroupByArgs['orderBy'] }
-        : { orderBy?: SystemSettingGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, SystemSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystemSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the SystemSetting model
-   */
-  readonly fields: SystemSettingFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for SystemSetting.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__SystemSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the SystemSetting model
-   */
-  interface SystemSettingFieldRefs {
-    readonly id: FieldRef<"SystemSetting", 'String'>
-    readonly key: FieldRef<"SystemSetting", 'String'>
-    readonly value: FieldRef<"SystemSetting", 'String'>
-    readonly created_at: FieldRef<"SystemSetting", 'DateTime'>
-    readonly updated_at: FieldRef<"SystemSetting", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * SystemSetting findUnique
-   */
-  export type SystemSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter, which SystemSetting to fetch.
-     */
-    where: SystemSettingWhereUniqueInput
-  }
-
-  /**
-   * SystemSetting findUniqueOrThrow
-   */
-  export type SystemSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter, which SystemSetting to fetch.
-     */
-    where: SystemSettingWhereUniqueInput
-  }
-
-  /**
-   * SystemSetting findFirst
-   */
-  export type SystemSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter, which SystemSetting to fetch.
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SystemSettings to fetch.
-     */
-    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SystemSettings.
-     */
-    cursor?: SystemSettingWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SystemSettings from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SystemSettings.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SystemSettings.
-     */
-    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
-  }
-
-  /**
-   * SystemSetting findFirstOrThrow
-   */
-  export type SystemSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter, which SystemSetting to fetch.
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SystemSettings to fetch.
-     */
-    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SystemSettings.
-     */
-    cursor?: SystemSettingWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SystemSettings from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SystemSettings.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SystemSettings.
-     */
-    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
-  }
-
-  /**
-   * SystemSetting findMany
-   */
-  export type SystemSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter, which SystemSettings to fetch.
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SystemSettings to fetch.
-     */
-    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing SystemSettings.
-     */
-    cursor?: SystemSettingWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SystemSettings from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SystemSettings.
-     */
-    skip?: number
-    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
-  }
-
-  /**
-   * SystemSetting create
-   */
-  export type SystemSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * The data needed to create a SystemSetting.
-     */
-    data: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
-  }
-
-  /**
-   * SystemSetting createMany
-   */
-  export type SystemSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many SystemSettings.
-     */
-    data: SystemSettingCreateManyInput | SystemSettingCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * SystemSetting createManyAndReturn
-   */
-  export type SystemSettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * The data used to create many SystemSettings.
-     */
-    data: SystemSettingCreateManyInput | SystemSettingCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * SystemSetting update
-   */
-  export type SystemSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * The data needed to update a SystemSetting.
-     */
-    data: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
-    /**
-     * Choose, which SystemSetting to update.
-     */
-    where: SystemSettingWhereUniqueInput
-  }
-
-  /**
-   * SystemSetting updateMany
-   */
-  export type SystemSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update SystemSettings.
-     */
-    data: XOR<SystemSettingUpdateManyMutationInput, SystemSettingUncheckedUpdateManyInput>
-    /**
-     * Filter which SystemSettings to update
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * Limit how many SystemSettings to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SystemSetting updateManyAndReturn
-   */
-  export type SystemSettingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * The data used to update SystemSettings.
-     */
-    data: XOR<SystemSettingUpdateManyMutationInput, SystemSettingUncheckedUpdateManyInput>
-    /**
-     * Filter which SystemSettings to update
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * Limit how many SystemSettings to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SystemSetting upsert
-   */
-  export type SystemSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * The filter to search for the SystemSetting to update in case it exists.
-     */
-    where: SystemSettingWhereUniqueInput
-    /**
-     * In case the SystemSetting found by the `where` argument doesn't exist, create a new SystemSetting with this data.
-     */
-    create: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
-    /**
-     * In case the SystemSetting was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
-  }
-
-  /**
-   * SystemSetting delete
-   */
-  export type SystemSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-    /**
-     * Filter which SystemSetting to delete.
-     */
-    where: SystemSettingWhereUniqueInput
-  }
-
-  /**
-   * SystemSetting deleteMany
-   */
-  export type SystemSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SystemSettings to delete
-     */
-    where?: SystemSettingWhereInput
-    /**
-     * Limit how many SystemSettings to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * SystemSetting without action
-   */
-  export type SystemSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SystemSetting
-     */
-    select?: SystemSettingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SystemSetting
-     */
-    omit?: SystemSettingOmit<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -33855,6 +32802,7 @@ export namespace Prisma {
     denominator_field_id: 'denominator_field_id',
     denominator_label: 'denominator_label',
     formula_config: 'formula_config',
+    formula_type: 'formula_type',
     numerator_field_id: 'numerator_field_id',
     numerator_label: 'numerator_label',
     target_formula: 'target_formula',
@@ -34095,17 +33043,6 @@ export namespace Prisma {
   export type IndicatorWorkerAllocationScalarFieldEnum = (typeof IndicatorWorkerAllocationScalarFieldEnum)[keyof typeof IndicatorWorkerAllocationScalarFieldEnum]
 
 
-  export const SystemSettingScalarFieldEnum: {
-    id: 'id',
-    key: 'key',
-    value: 'value',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -34275,6 +33212,20 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'formula_type'
+   */
+  export type Enumformula_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'formula_type'>
+    
+
+
+  /**
+   * Reference to a field of type 'formula_type[]'
+   */
+  export type ListEnumformula_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'formula_type[]'>
     
 
 
@@ -35042,6 +33993,7 @@ export namespace Prisma {
     denominator_field_id?: IntNullableFilter<"Indicator"> | number | null
     denominator_label?: StringNullableFilter<"Indicator"> | string | null
     formula_config?: JsonNullableFilter<"Indicator">
+    formula_type?: Enumformula_typeFilter<"Indicator"> | $Enums.formula_type
     numerator_field_id?: IntNullableFilter<"Indicator"> | number | null
     numerator_label?: StringNullableFilter<"Indicator"> | string | null
     target_formula?: StringNullableFilter<"Indicator"> | string | null
@@ -35073,6 +34025,7 @@ export namespace Prisma {
     denominator_field_id?: SortOrderInput | SortOrder
     denominator_label?: SortOrderInput | SortOrder
     formula_config?: SortOrderInput | SortOrder
+    formula_type?: SortOrder
     numerator_field_id?: SortOrderInput | SortOrder
     numerator_label?: SortOrderInput | SortOrder
     target_formula?: SortOrderInput | SortOrder
@@ -35107,6 +34060,7 @@ export namespace Prisma {
     denominator_field_id?: IntNullableFilter<"Indicator"> | number | null
     denominator_label?: StringNullableFilter<"Indicator"> | string | null
     formula_config?: JsonNullableFilter<"Indicator">
+    formula_type?: Enumformula_typeFilter<"Indicator"> | $Enums.formula_type
     numerator_field_id?: IntNullableFilter<"Indicator"> | number | null
     numerator_label?: StringNullableFilter<"Indicator"> | string | null
     target_formula?: StringNullableFilter<"Indicator"> | string | null
@@ -35138,6 +34092,7 @@ export namespace Prisma {
     denominator_field_id?: SortOrderInput | SortOrder
     denominator_label?: SortOrderInput | SortOrder
     formula_config?: SortOrderInput | SortOrder
+    formula_type?: SortOrder
     numerator_field_id?: SortOrderInput | SortOrder
     numerator_label?: SortOrderInput | SortOrder
     target_formula?: SortOrderInput | SortOrder
@@ -35169,6 +34124,7 @@ export namespace Prisma {
     denominator_field_id?: IntNullableWithAggregatesFilter<"Indicator"> | number | null
     denominator_label?: StringNullableWithAggregatesFilter<"Indicator"> | string | null
     formula_config?: JsonNullableWithAggregatesFilter<"Indicator">
+    formula_type?: Enumformula_typeWithAggregatesFilter<"Indicator"> | $Enums.formula_type
     numerator_field_id?: IntNullableWithAggregatesFilter<"Indicator"> | number | null
     numerator_label?: StringNullableWithAggregatesFilter<"Indicator"> | string | null
     target_formula?: StringNullableWithAggregatesFilter<"Indicator"> | string | null
@@ -36419,58 +35375,6 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"IndicatorWorkerAllocation"> | Date | string
   }
 
-  export type SystemSettingWhereInput = {
-    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
-    OR?: SystemSettingWhereInput[]
-    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
-    id?: StringFilter<"SystemSetting"> | string
-    key?: StringFilter<"SystemSetting"> | string
-    value?: StringFilter<"SystemSetting"> | string
-    created_at?: DateTimeFilter<"SystemSetting"> | Date | string
-    updated_at?: DateTimeFilter<"SystemSetting"> | Date | string
-  }
-
-  export type SystemSettingOrderByWithRelationInput = {
-    id?: SortOrder
-    key?: SortOrder
-    value?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type SystemSettingWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    key?: string
-    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
-    OR?: SystemSettingWhereInput[]
-    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
-    value?: StringFilter<"SystemSetting"> | string
-    created_at?: DateTimeFilter<"SystemSetting"> | Date | string
-    updated_at?: DateTimeFilter<"SystemSetting"> | Date | string
-  }, "id" | "key">
-
-  export type SystemSettingOrderByWithAggregationInput = {
-    id?: SortOrder
-    key?: SortOrder
-    value?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: SystemSettingCountOrderByAggregateInput
-    _max?: SystemSettingMaxOrderByAggregateInput
-    _min?: SystemSettingMinOrderByAggregateInput
-  }
-
-  export type SystemSettingScalarWhereWithAggregatesInput = {
-    AND?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
-    OR?: SystemSettingScalarWhereWithAggregatesInput[]
-    NOT?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SystemSetting"> | string
-    key?: StringWithAggregatesFilter<"SystemSetting"> | string
-    value?: StringWithAggregatesFilter<"SystemSetting"> | string
-    created_at?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
-  }
-
   export type UserCreateInput = {
     username: string
     password_hash: string
@@ -37210,6 +36114,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -37239,6 +36144,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -37265,6 +36171,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -37294,6 +36201,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37322,6 +36230,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -37343,6 +36252,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -37364,6 +36274,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38632,62 +37543,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SystemSettingCreateInput = {
-    id?: string
-    key: string
-    value: string
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type SystemSettingUncheckedCreateInput = {
-    id?: string
-    key: string
-    value: string
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type SystemSettingUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SystemSettingUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SystemSettingCreateManyInput = {
-    id?: string
-    key: string
-    value: string
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type SystemSettingUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SystemSettingUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -39606,6 +38461,13 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type Enumformula_typeFilter<$PrismaModel = never> = {
+    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    not?: NestedEnumformula_typeFilter<$PrismaModel> | $Enums.formula_type
+  }
+
   export type EnumTargetTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TargetType | EnumTargetTypeFieldRefInput<$PrismaModel>
     in?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
@@ -39642,6 +38504,7 @@ export namespace Prisma {
     denominator_field_id?: SortOrder
     denominator_label?: SortOrder
     formula_config?: SortOrder
+    formula_type?: SortOrder
     numerator_field_id?: SortOrder
     numerator_label?: SortOrder
     target_formula?: SortOrder
@@ -39669,6 +38532,7 @@ export namespace Prisma {
     conditions?: SortOrder
     denominator_field_id?: SortOrder
     denominator_label?: SortOrder
+    formula_type?: SortOrder
     numerator_field_id?: SortOrder
     numerator_label?: SortOrder
     target_formula?: SortOrder
@@ -39689,6 +38553,7 @@ export namespace Prisma {
     conditions?: SortOrder
     denominator_field_id?: SortOrder
     denominator_label?: SortOrder
+    formula_type?: SortOrder
     numerator_field_id?: SortOrder
     numerator_label?: SortOrder
     target_formula?: SortOrder
@@ -39703,6 +38568,16 @@ export namespace Prisma {
     denominator_field_id?: SortOrder
     numerator_field_id?: SortOrder
     target_field_id?: SortOrder
+  }
+
+  export type Enumformula_typeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    not?: NestedEnumformula_typeWithAggregatesFilter<$PrismaModel> | $Enums.formula_type
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumformula_typeFilter<$PrismaModel>
+    _max?: NestedEnumformula_typeFilter<$PrismaModel>
   }
 
   export type EnumTargetTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -40645,30 +39520,6 @@ export namespace Prisma {
   export type IndicatorWorkerAllocationSumOrderByAggregateInput = {
     indicator_id?: SortOrder
     allocated_amount?: SortOrder
-  }
-
-  export type SystemSettingCountOrderByAggregateInput = {
-    id?: SortOrder
-    key?: SortOrder
-    value?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type SystemSettingMaxOrderByAggregateInput = {
-    id?: SortOrder
-    key?: SortOrder
-    value?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type SystemSettingMinOrderByAggregateInput = {
-    id?: SortOrder
-    key?: SortOrder
-    value?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type DataUploadSessionCreateNestedManyWithoutUploaderInput = {
@@ -41839,6 +40690,10 @@ export namespace Prisma {
     connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutIndicatorInput | PerformanceCalculationCreateOrConnectWithoutIndicatorInput[]
     createMany?: PerformanceCalculationCreateManyIndicatorInputEnvelope
     connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
+  }
+
+  export type Enumformula_typeFieldUpdateOperationsInput = {
+    set?: $Enums.formula_type
   }
 
   export type EnumTargetTypeFieldUpdateOperationsInput = {
@@ -43179,11 +42034,28 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumformula_typeFilter<$PrismaModel = never> = {
+    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    not?: NestedEnumformula_typeFilter<$PrismaModel> | $Enums.formula_type
+  }
+
   export type NestedEnumTargetTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TargetType | EnumTargetTypeFieldRefInput<$PrismaModel>
     in?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTargetTypeFilter<$PrismaModel> | $Enums.TargetType
+  }
+
+  export type NestedEnumformula_typeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    not?: NestedEnumformula_typeWithAggregatesFilter<$PrismaModel> | $Enums.formula_type
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumformula_typeFilter<$PrismaModel>
+    _max?: NestedEnumformula_typeFilter<$PrismaModel>
   }
 
   export type NestedEnumTargetTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -44993,6 +43865,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -45021,6 +43894,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -45238,6 +44112,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -45266,6 +44141,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46116,6 +44992,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -46143,6 +45020,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -46179,6 +45057,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -46207,6 +45086,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -46242,6 +45122,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -46270,6 +45151,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -46374,6 +45256,7 @@ export namespace Prisma {
     denominator_field_id?: IntNullableFilter<"Indicator"> | number | null
     denominator_label?: StringNullableFilter<"Indicator"> | string | null
     formula_config?: JsonNullableFilter<"Indicator">
+    formula_type?: Enumformula_typeFilter<"Indicator"> | $Enums.formula_type
     numerator_field_id?: IntNullableFilter<"Indicator"> | number | null
     numerator_label?: StringNullableFilter<"Indicator"> | string | null
     target_formula?: StringNullableFilter<"Indicator"> | string | null
@@ -48043,6 +46926,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -48071,6 +46955,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -48165,6 +47050,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -48193,6 +47079,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48294,6 +47181,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -48322,6 +47210,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -48438,6 +47327,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -48466,6 +47356,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48566,6 +47457,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -48594,6 +47486,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -48688,6 +47581,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -48716,6 +47610,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48741,6 +47636,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -48769,6 +47665,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -48810,6 +47707,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -48838,6 +47736,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50259,6 +49158,7 @@ export namespace Prisma {
     conditions?: string | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -50282,6 +49182,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_label?: string | null
     target_formula?: string | null
     target_type?: $Enums.TargetType
@@ -50304,6 +49205,7 @@ export namespace Prisma {
     denominator_field_id?: number | null
     denominator_label?: string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: $Enums.formula_type
     numerator_field_id?: number | null
     numerator_label?: string | null
     target_formula?: string | null
@@ -50432,6 +49334,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -50459,6 +49362,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50486,6 +49390,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50507,6 +49412,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -50535,6 +49441,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -50562,6 +49469,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -50582,6 +49490,7 @@ export namespace Prisma {
     conditions?: NullableStringFieldUpdateOperationsInput | string | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
@@ -50610,6 +49519,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50637,6 +49547,7 @@ export namespace Prisma {
     denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
     formula_config?: NullableJsonNullValueInput | InputJsonValue
+    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
     numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
     numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
     target_formula?: NullableStringFieldUpdateOperationsInput | string | null
