@@ -924,6 +924,8 @@ async function seedFinalCorrectedIndicators() {
       worker_allocation = {}
     } = indicatorData;
 
+
+
     // Find the fields by code
     const numeratorField = numerator_field_code ? fieldMap.get(numerator_field_code) : null;
     const denominatorField = denominator_field_code ? fieldMap.get(denominator_field_code) : null;
