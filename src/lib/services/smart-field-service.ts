@@ -241,4 +241,93 @@ export class SmartFieldService {
       };
     }
   }
+
+  /**
+   * Set field value for a specific facility and month
+   */
+  static async setFieldValue(
+    fieldId: number,
+    facilityId: string,
+    reportMonth: string,
+    value: any,
+    uploadedBy: number,
+    isOverride: boolean = false,
+    overrideReason?: string,
+    remarks?: string
+  ): Promise<void> {
+    try {
+      // Prepare value data
+      const valueData: any = {
+        field_id: fieldId,
+        facility_id: facilityId,
+        report_month: reportMonth,
+        uploaded_by: uploadedBy,
+        remarks: remarks || null,
+        is_override: isOverride,
+        override_reason: overrideReason || null,
+      };
+
+      // Set the appropriate value field based on type
+      if (typeof value === "string") {
+        valueData.string_value = value;
+      } else if (typeof value === "number") {
+        valueData.numeric_value = value;
+      } else if (typeof value === "boolean") {
+        valueData.boolean_value = value;
+      } else if (value instanceof Date) {
+        valueData.string_value = value.toISOString().split("T")[0];
+      } else {
+        valueData.string_value = String(value);
+      }
+
+      // Upsert the field value
+      await prisma.fieldValue.upsert({
+        where: {
+          field_id_facility_id_report_month: {
+            field_id: fieldId,
+            facility_id: facilityId,
+            report_month: reportMonth,
+          },
+        },
+        update: valueData,
+        create: valueData,
+      });
+
+      console.log(`Successfully set field value for field ${fieldId}, facility ${facilityId}, month ${reportMonth}`);
+    } catch (error) {
+      console.error("Error setting field value:", error);
+      throw new Error(`Failed to set field value: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+  }
+
+  /**
+   * Set facility default value for a field
+   */
+  static async setFacilityDefault(
+    fieldId: number,
+    facilityId: number,
+    value: any
+  ): Promise<void> {
+    try {
+      // This method is a placeholder for facility defaults
+      // Currently not implemented as FacilityFieldDefaults model was removed
+      console.warn("Facility defaults not implemented - using monthly values instead");
+      
+      // For now, we'll set this as a monthly value with a special month indicator
+      // This can be enhanced later if needed
+      await this.setFieldValue(
+        fieldId,
+        facilityId.toString(),
+        "facility_default",
+        value,
+        0, // System user ID for defaults
+        false,
+        undefined,
+        "Facility default value"
+      );
+    } catch (error) {
+      console.error("Error setting facility default:", error);
+      throw new Error(`Failed to set facility default: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+  }
 }
