@@ -95,17 +95,17 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
         const femalePop = Number(value);
         
         if (pop30Plus > 0) {
-          // Check if female population is too low (should be at least 40% of 30+ population)
-          if (femalePop < pop30Plus * 0.4) {
+          // Check if female population is too low (should be at least 35% of 30+ population)
+          if (femalePop < pop30Plus * 0.35) {
             return {
               field: 'population_30_plus_female',
-              message: 'Female 30+ population seems too low. Should be at least 40% of total 30+ population',
+              message: 'Female 30+ population seems too low. Should be at least 35% of total 30+ population',
               type: 'logic_error' as const
             };
           }
           
-          // Check if female population is too high (should not exceed 60% of 30+ population)
-          if (femalePop > pop30Plus * 0.6) {
+          // Check if female population is too high (should not exceed 70% of 30+ population)
+          if (femalePop > pop30Plus * 0.7) {
             return {
               field: 'population_30_plus_female',
               message: 'Female 30+ population seems too high compared to total 30+ population',
