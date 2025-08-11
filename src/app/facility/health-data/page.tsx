@@ -194,7 +194,7 @@ export default function FacilityHealthDataPage() {
 
   if (!facility) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6">
         <Card>
           <CardContent className="p-6">
             <p className="text-center text-gray-500">
@@ -207,7 +207,7 @@ export default function FacilityHealthDataPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6">
       {/* Page Header */}
       <div className="flex justify-between items-start mb-6">
         <div>

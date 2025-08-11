@@ -81,7 +81,7 @@ export default function ViewFacilitySubmissionPage({ params }: { params: Promise
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6">
         <Card>
           <CardContent className="p-6">
             <div className="text-center">
@@ -99,7 +99,7 @@ export default function ViewFacilitySubmissionPage({ params }: { params: Promise
 
   if (!submission) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6">
         <Card>
           <CardContent className="p-6">
             <div className="text-center">
@@ -116,7 +116,7 @@ export default function ViewFacilitySubmissionPage({ params }: { params: Promise
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
