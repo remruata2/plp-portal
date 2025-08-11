@@ -4,317 +4,273 @@ import { FormulaCalculator } from "./formula-calculator";
 const prisma = new PrismaClient();
 
 export interface IndicatorRemunerationCalculation {
-  facilityId: string;
-  facilityName: string;
-  facilityType: string;
-  districtName: string;
-  reportMonth: string;
-  totalRemuneration: number;
-  performancePercentage: number;
-  indicators: IndicatorRemunerationDetail[];
-  healthWorkers: HealthWorkerRemuneration[];
-  ashaWorkers: ASHAWorkerRemuneration[];
-  totalPersonalIncentives: number;
-}
-
-export interface IndicatorRemunerationDetail {
-  indicatorId: number;
-  indicatorCode: string;
-  indicatorName: string;
-  achievement: number;
-  targetValue: number;
-  baseAmount: number;
-  calculatedAmount: number;
-  status: string;
-  message: string;
-}
-
-export interface HealthWorkerRemuneration {
-  id: number;
-  name: string;
-  allocatedAmount: number;
-  performancePercentage: number;
-  calculatedAmount: number;
-}
-
-export interface ASHAWorkerRemuneration {
-  id: number;
-  name: string;
-  allocatedAmount: number;
-  performancePercentage: number;
-  calculatedAmount: number;
+  facility_id: string;
+  indicator_id: number;
+  report_month: string;
+  numerator: number;
+  denominator: number;
+  achievement_percentage: number;
+  target_value: number;
+  incentive_amount: number;
+  calculation_date: Date;
+  formula_config: any;
 }
 
 export class IndicatorBasedRemunerationCalculator {
   /**
-   * Calculate remuneration for a facility based on indicator performance
+   * Calculate remuneration for a specific indicator in a facility
+   */
+  static async calculateIndicatorRemuneration(
+    facilityId: string,
+    indicatorId: number,
+    reportMonth: string
+  ): Promise<IndicatorRemunerationCalculation | null> {
+    try {
+      // Get indicator details
+      const indicator = await prisma.indicator.findUnique({
+        where: { id: indicatorId },
+      });
+
+      if (!indicator) {
+        console.error(`Indicator not found: ${indicatorId}`);
+        return null;
+      }
+
+      // Get field values for this indicator
+      const numeratorValue = await this.getFieldValue(
+        indicator.numerator_field_id,
+        facilityId,
+        reportMonth
+      );
+
+      const denominatorValue = await this.getFieldValue(
+        indicator.denominator_field_id,
+        facilityId,
+        reportMonth
+      );
+
+      if (numeratorValue === null || denominatorValue === null) {
+        console.log(`Missing field values for indicator ${indicatorId} in ${reportMonth}`);
+        return null;
+      }
+
+      // Calculate achievement percentage
+      let achievementPercentage = 0;
+      if (denominatorValue > 0) {
+        achievementPercentage = (numeratorValue / denominatorValue) * 100;
+      }
+
+      // Get target value
+      const targetValue = await this.getTargetValue(indicatorId, facilityId, reportMonth);
+
+      // Calculate remuneration using formula calculator
+      const formulaConfig = {
+        type: "PERCENTAGE" as const,
+        targetValue: targetValue,
+        range: (indicator.formula_config as any)?.range,
+        percentageCap: (indicator.formula_config as any)?.percentageCap,
+        calculationFormula:
+          (indicator.formula_config as any)?.calculationFormula || "(A/B)*100",
+      };
+
+      const calculationResult = FormulaCalculator.calculateRemuneration(
+        numeratorValue,
+        targetValue,
+        0, // maxRemuneration - using 0 as default
+        formulaConfig
+      );
+
+      return {
+        facility_id: facilityId,
+        indicator_id: indicatorId,
+        report_month: reportMonth,
+        numerator: numeratorValue,
+        denominator: denominatorValue,
+        achievement_percentage: achievementPercentage,
+        target_value: targetValue,
+        incentive_amount: calculationResult.remuneration || 0,
+        calculation_date: new Date(),
+        formula_config: indicator.formula_config,
+      };
+    } catch (error) {
+      console.error("Error calculating indicator remuneration:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Calculate remuneration for all indicators in a facility
    */
   static async calculateFacilityRemuneration(
     facilityId: string,
     reportMonth: string
-  ): Promise<IndicatorRemunerationCalculation> {
+  ): Promise<IndicatorRemunerationCalculation[]> {
     try {
-      // Get facility information
+      // Get all indicators for this facility type
       const facility = await prisma.facility.findUnique({
         where: { id: facilityId },
-        include: {
-          facility_type: true,
-          district: true,
-        },
+        include: { facility_type: true },
       });
 
       if (!facility) {
         throw new Error("Facility not found");
       }
 
-      // Get health workers and ASHA workers for the facility
-      const healthWorkers = await prisma.healthWorker.findMany({
+      // Get indicators applicable to this facility type
+      const indicators = await prisma.indicator.findMany({
         where: {
-          facility_id: facilityId,
-          is_active: true,
-        },
-      });
-
-      // Get calculated indicators for the facility
-      const monthlyHealthData = await prisma.monthlyHealthData.findMany({
-        where: {
-          facility_id: facilityId,
-          report_month: reportMonth,
-        },
-        include: {
-          indicator: {
-            include: {
-              numerator_field: true,
-              denominator_field: true,
-              target_field: true,
-            },
+          applicable_facility_types: {
+            path: ["$"],
+            array_contains: [facility.facility_type.name],
           },
         },
       });
 
-      // Get indicator remuneration configuration
-      const indicatorRemunerations =
-        await prisma.indicatorRemuneration.findMany({
-          include: {
-            facility_type_remuneration: true,
-            indicator: true,
-          },
-        });
+      const results: IndicatorRemunerationCalculation[] = [];
 
-      // Calculate remuneration for each indicator
-      const indicatorDetails: IndicatorRemunerationDetail[] = [];
-      let totalRemuneration = 0;
-
-      for (const healthData of monthlyHealthData) {
-        const indicator = healthData.indicator;
-        const facilityType = facility.facility_type.name;
-
-        // Find remuneration configuration for this indicator and facility type
-        const remunerationConfig = indicatorRemunerations.find(
-          (ir) =>
-            ir.indicator_id === indicator.id &&
-            ir.facility_type_remuneration.facility_type === facilityType
-        );
-
-        if (remunerationConfig) {
-          const baseAmount = Number(remunerationConfig.base_amount);
-          const achievement = Number(healthData.achievement || 0);
-          const targetValue = Number(healthData.target_value || 0);
-
-          // Calculate remuneration using formula calculator
-          const formulaConfig = {
-            type: indicator.target_type,
-            range: { min: 0, max: 100 },
-            calculationFormula:
-              indicator.formula_config?.calculationFormula || "(A/B)*100",
-          };
-
-          const calculationResult = FormulaCalculator.calculateRemuneration(
-            achievement,
-            targetValue,
-            baseAmount,
-            formulaConfig,
-            facilityType
+      for (const indicator of indicators) {
+        try {
+          const result = await this.calculateIndicatorRemuneration(
+            facilityId,
+            indicator.id,
+            reportMonth
           );
 
-          const indicatorDetail: IndicatorRemunerationDetail = {
-            indicatorId: indicator.id,
-            indicatorCode: indicator.code,
-            indicatorName: indicator.name,
-            achievement,
-            targetValue,
-            baseAmount,
-            calculatedAmount: calculationResult.remuneration,
-            status: calculationResult.status,
-            message: calculationResult.message,
-          };
-
-          indicatorDetails.push(indicatorDetail);
-          totalRemuneration += calculationResult.remuneration;
+          if (result) {
+            results.push(result);
+          }
+        } catch (error) {
+          console.error(`Error calculating remuneration for indicator ${indicator.code}:`, error);
+          // Continue with other indicators
         }
       }
 
-      // Calculate performance percentage based on indicator achievements
-      const performancePercentage =
-        this.calculateOverallPerformance(indicatorDetails);
-
-      // Calculate health workers remuneration
-      const healthWorkersRemuneration: HealthWorkerRemuneration[] =
-        healthWorkers
-          .filter((worker) => worker.worker_type === "health_worker")
-          .map((worker) => ({
-            id: worker.id,
-            name: worker.name,
-            allocatedAmount: Number(worker.allocated_amount),
-            performancePercentage,
-            calculatedAmount:
-              (Number(worker.allocated_amount) * performancePercentage) / 100,
-          }));
-
-      // Calculate ASHA workers remuneration
-      const ashaWorkersRemuneration: ASHAWorkerRemuneration[] = healthWorkers
-        .filter((worker) => worker.worker_type === "asha")
-        .map((worker) => ({
-          id: worker.id,
-          name: worker.name,
-          allocatedAmount: Number(worker.allocated_amount),
-          performancePercentage,
-          calculatedAmount:
-            (Number(worker.allocated_amount) * performancePercentage) / 100,
-        }));
-
-      const totalPersonalIncentives =
-        healthWorkersRemuneration.reduce(
-          (sum, worker) => sum + worker.calculatedAmount,
-          0
-        ) +
-        ashaWorkersRemuneration.reduce(
-          (sum, worker) => sum + worker.calculatedAmount,
-          0
-        );
-
-      return {
-        facilityId: facility.id,
-        facilityName: facility.name,
-        facilityType: facility.facility_type.name,
-        districtName: facility.district.name,
-        reportMonth,
-        totalRemuneration,
-        performancePercentage,
-        indicators: indicatorDetails,
-        healthWorkers: healthWorkersRemuneration,
-        ashaWorkers: ashaWorkersRemuneration,
-        totalPersonalIncentives,
-      };
+      return results;
     } catch (error) {
-      console.error("Error calculating indicator-based remuneration:", error);
+      console.error("Error calculating facility remuneration:", error);
       throw error;
     }
   }
 
   /**
-   * Calculate overall performance percentage based on indicator achievements
+   * Get field value for a specific month
    */
-  private static calculateOverallPerformance(
-    indicators: IndicatorRemunerationDetail[]
-  ): number {
-    if (indicators.length === 0) {
-      return 0;
-    }
-
-    // Calculate weighted average based on base amounts
-    const totalBaseAmount = indicators.reduce(
-      (sum, indicator) => sum + indicator.baseAmount,
-      0
-    );
-
-    if (totalBaseAmount === 0) {
-      return 0;
-    }
-
-    const weightedAchievement = indicators.reduce(
-      (sum, indicator) =>
-        sum + (indicator.achievement * indicator.baseAmount) / totalBaseAmount,
-      0
-    );
-
-    return Math.max(0, Math.min(100, weightedAchievement));
-  }
-
-  /**
-   * Get stored remuneration calculation for a facility
-   */
-  static async getStoredRemunerationCalculation(
+  private static async getFieldValue(
+    fieldId: number | null,
     facilityId: string,
     reportMonth: string
-  ): Promise<IndicatorRemunerationCalculation | null> {
+  ): Promise<number | null> {
+    if (!fieldId) return null;
+
     try {
-      const stored = await prisma.remunerationCalculation.findUnique({
+      const fieldValue = await prisma.fieldValue.findFirst({
         where: {
-          facility_id_report_month: {
-            facility_id: facilityId,
-            report_month: reportMonth,
-          },
-        },
-        include: {
-          facility: {
-            include: {
-              facility_type: true,
-              district: true,
-            },
-          },
+          field_id: fieldId,
+          facility_id: facilityId,
+          report_month: reportMonth,
         },
       });
 
-      if (!stored) {
-        return null;
-      }
-
-      // Recalculate to get detailed breakdown
-      return await this.calculateFacilityRemuneration(facilityId, reportMonth);
+      return fieldValue?.numeric_value ? Number(fieldValue.numeric_value) : null;
     } catch (error) {
-      console.error("Error getting stored remuneration calculation:", error);
+      console.error("Error getting field value:", error);
       return null;
     }
   }
 
   /**
-   * Store remuneration calculation
+   * Get target value for an indicator
+   */
+  private static async getTargetValue(
+    indicatorId: number,
+    facilityId: string,
+    reportMonth: string
+  ): Promise<number> {
+    try {
+      // First try to get facility-specific target
+      const facilityTarget = await prisma.facilityTarget.findFirst({
+        where: {
+          indicator_id: indicatorId,
+          facility_id: facilityId,
+          report_month: reportMonth,
+        },
+      });
+
+      if (facilityTarget) {
+        return Number(facilityTarget.target_value);
+      }
+
+      // Fallback to indicator default target
+      const indicator = await prisma.indicator.findUnique({
+        where: { id: indicatorId },
+      });
+
+      return indicator?.target_value ? parseFloat(indicator.target_value) : 0;
+    } catch (error) {
+      console.error("Error getting target value:", error);
+      return 0;
+    }
+  }
+
+  /**
+   * Get stored remuneration calculation from database
+   * Note: This method is no longer functional since RemunerationCalculation model was removed
+   */
+  static async getStoredRemunerationCalculation(
+    facilityId: string,
+    indicatorId: number,
+    reportMonth: string
+  ): Promise<IndicatorRemunerationCalculation | null> {
+    console.warn("Stored remuneration calculations cannot be retrieved - RemunerationCalculation model removed");
+    return null;
+  }
+
+  /**
+   * Store remuneration calculation in database
+   * Note: This method is no longer functional since RemunerationCalculation model was removed
    */
   static async storeRemunerationCalculation(
     calculation: IndicatorRemunerationCalculation
   ): Promise<void> {
+    console.warn("Remuneration calculations cannot be stored - RemunerationCalculation model removed");
+    // This functionality can be reimplemented using FacilityRemunerationRecord if needed
+  }
+
+  /**
+   * Get remuneration summary for a facility
+   */
+  static async getRemunerationSummary(
+    facilityId: string,
+    reportMonth: string
+  ): Promise<{
+    total_indicators: number;
+    indicators_with_data: number;
+    total_incentive: number;
+    average_achievement: number;
+  }> {
     try {
-      await prisma.remunerationCalculation.upsert({
-        where: {
-          facility_id_report_month: {
-            facility_id: calculation.facilityId,
-            report_month: calculation.reportMonth,
-          },
-        },
-        update: {
-          performance_percentage: calculation.performancePercentage,
-          facility_remuneration: calculation.totalRemuneration,
-          total_worker_remuneration: calculation.totalPersonalIncentives,
-          total_remuneration:
-            calculation.totalRemuneration + calculation.totalPersonalIncentives,
-          health_workers_count: calculation.healthWorkers.length,
-          asha_workers_count: calculation.ashaWorkers.length,
-        },
-        create: {
-          facility_id: calculation.facilityId,
-          report_month: calculation.reportMonth,
-          performance_percentage: calculation.performancePercentage,
-          facility_remuneration: calculation.totalRemuneration,
-          total_worker_remuneration: calculation.totalPersonalIncentives,
-          total_remuneration:
-            calculation.totalRemuneration + calculation.totalPersonalIncentives,
-          health_workers_count: calculation.healthWorkers.length,
-          asha_workers_count: calculation.ashaWorkers.length,
-        },
-      });
+      const calculations = await this.calculateFacilityRemuneration(facilityId, reportMonth);
+
+      const totalIndicators = calculations.length;
+      const indicatorsWithData = calculations.filter(c => c.numerator > 0).length;
+      const totalIncentive = calculations.reduce((sum, c) => sum + c.incentive_amount, 0);
+      
+      const achievements = calculations
+        .map(c => c.achievement_percentage)
+        .filter(a => a > 0);
+      
+      const averageAchievement = achievements.length > 0 
+        ? achievements.reduce((sum, a) => sum + a, 0) / achievements.length 
+        : 0;
+
+      return {
+        total_indicators: totalIndicators,
+        indicators_with_data: indicatorsWithData,
+        total_incentive: totalIncentive,
+        average_achievement: averageAchievement,
+      };
     } catch (error) {
-      console.error("Error storing remuneration calculation:", error);
+      console.error("Error getting remuneration summary:", error);
       throw error;
     }
   }

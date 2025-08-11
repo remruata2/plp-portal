@@ -1,601 +1,539 @@
 import { PrismaClient } from "@/generated/prisma";
 import * as XLSX from "xlsx";
 
+
 const prisma = new PrismaClient();
 
-export interface IndicatorFormula {
-  type: "percentage" | "sum" | "count" | "direct";
-  numerator?: string; // Reference to other indicators
-  denominator?: string;
-  formula?: string; // Custom formula
+export interface ExcelUploadConfig {
+  includeSubCentres?: boolean;
+  includeHistoricalData?: boolean;
+  includeCalculatedFields?: boolean;
+  includeTargets?: boolean;
+  includeRemuneration?: boolean;
 }
 
-export interface ExcelTemplateConfig {
-  reportMonth: string;
-  districtId?: number;
-  facilityIds?: number[];
-  includeSubCentres: boolean;
+export interface ExcelUploadResult {
+  success: boolean;
+  message: string;
+  totalRecords?: number;
+  successCount?: number;
+  errorCount?: number;
+  errors?: string[];
 }
 
-export class ExcelTemplateGenerator {
-  async generateTemplate(config: ExcelTemplateConfig) {
-    // Get all active indicators grouped by category
-    const categories = await prisma.indicatorCategory.findMany({
-      where: { is_active: true },
-      include: {
-        indicators: {
-          where: { is_active: true },
-          orderBy: { sort_order: "asc" },
+export class ExcelTemplateService {
+  /**
+   * Generate Excel template for data upload
+   */
+  static async generateTemplate(
+    facilityId: string,
+    reportMonth: string,
+    config: ExcelUploadConfig = {}
+  ): Promise<Buffer> {
+    try {
+      // Get facility information
+      const facility = await prisma.facility.findUnique({
+        where: { id: facilityId },
+        include: {
+          facility_type: true,
+          district: true,
         },
-      },
-      orderBy: { sort_order: "asc" },
-    });
+      });
 
-    // Get facilities and sub-centres based on config
-    const facilities = await this.getFacilitiesForTemplate(config);
-
-    // Create workbook with multiple sheets
-    const workbook = XLSX.utils.book_new();
-
-    // Main data sheet
-    const dataSheet = this.createDataSheet(categories, facilities, config);
-    XLSX.utils.book_append_sheet(workbook, dataSheet, "Monthly Data");
-
-    // Metadata sheet for validation
-    const metadataSheet = this.createMetadataSheet(categories, facilities);
-    XLSX.utils.book_append_sheet(workbook, metadataSheet, "Metadata");
-
-    // Validation rules sheet
-    const validationSheet = this.createValidationSheet(categories);
-    XLSX.utils.book_append_sheet(workbook, validationSheet, "Validation Rules");
-
-    return workbook;
-  }
-
-  private async getFacilitiesForTemplate(config: ExcelTemplateConfig) {
-    const whereClause: any = {};
-
-    if (config.districtId) {
-      whereClause.district_id = config.districtId;
-    }
-
-    if (config.facilityIds?.length) {
-      whereClause.id = { in: config.facilityIds };
-    }
-
-    return await prisma.facility.findMany({
-      where: whereClause,
-      include: {
-        district: true,
-        facility_type: true,
-        children: config.includeSubCentres ? true : false,
-      },
-      orderBy: [{ district: { name: "asc" } }, { name: "asc" }],
-    });
-  }
-
-  private createDataSheet(
-    categories: any[],
-    facilities: any[],
-    config: ExcelTemplateConfig
-  ) {
-    const headers = [
-      "District",
-      "Facility Type",
-      "Facility Name",
-      "Sub Centre",
-      "Indicator Category",
-      "Indicator Code",
-      "Indicator Name",
-      "Unit",
-      "Target Value",
-      "Numerator",
-      "Denominator",
-      "Value",
-      "Achievement %",
-      "Remarks",
-    ];
-
-    const data: any[][] = [headers];
-
-    // Add instruction row
-    data.push([
-      "Instructions:",
-      "1. Fill Numerator/Denominator for percentage indicators",
-      "2. Fill Value directly for number indicators",
-      "3. Achievement % will be calculated automatically",
-      "4. Do not modify gray columns",
-      "5. Report Month: " + config.reportMonth,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ]);
-
-    // Generate rows for each facility-indicator combination
-    for (const facility of facilities) {
-      for (const category of categories) {
-        for (const indicator of category.indicators) {
-          // Facility-level row
-          data.push([
-            facility.district.name,
-            facility.facility_type.name,
-            facility.name,
-            "", // No sub centre for facility level
-            category.name,
-            indicator.code,
-            indicator.name,
-            indicator.unit,
-            indicator.target_value || "",
-            "", // Numerator - to be filled
-            "", // Denominator - to be filled
-            "", // Value - to be filled
-            "", // Achievement % - calculated
-            "", // Remarks
-          ]);
-
-          // Child facility rows if included
-          if (config.includeSubCentres && facility.children) {
-            for (const child of facility.children) {
-              data.push([
-                facility.district.name,
-                facility.facility_type.name,
-                facility.name,
-                child.name,
-                category.name,
-                indicator.code,
-                indicator.name,
-                indicator.unit,
-                indicator.target_value || "",
-                "", // Numerator
-                "", // Denominator
-                "", // Value
-                "", // Achievement %
-                "", // Remarks
-              ]);
-            }
-          }
-        }
+      if (!facility) {
+        throw new Error("Facility not found");
       }
-    }
 
-    return XLSX.utils.aoa_to_sheet(data);
+      // Get fields for this facility type
+      const fields = await prisma.facilityFieldMapping.findMany({
+        where: {
+          facility_type_id: facility.facility_type_id,
+          is_required: true,
+        },
+        include: {
+          field: true,
+        },
+        orderBy: {
+          display_order: "asc",
+        },
+      });
+
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+
+      // Create data sheet
+      const dataSheet = this.createDataSheet(fields, facility, reportMonth, config);
+      XLSX.utils.book_append_sheet(workbook, dataSheet, "Data Upload");
+
+      // Create instructions sheet
+      const instructionsSheet = this.createInstructionsSheet(facility, reportMonth);
+      XLSX.utils.book_append_sheet(workbook, instructionsSheet, "Instructions");
+
+      // Create validation sheet
+      const validationSheet = this.createValidationSheet(fields);
+      XLSX.utils.book_append_sheet(workbook, validationSheet, "Field Validation");
+
+      // Convert to buffer
+      const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+      return buffer;
+    } catch (error) {
+      console.error("Error generating template:", error);
+      throw error;
+    }
   }
 
-  private createMetadataSheet(categories: any[], facilities: any[]) {
-    const data = [
-      ["Template Metadata"],
-      ["Generated Date", new Date().toISOString()],
-      ["Total Categories", categories.length],
-      [
-        "Total Indicators",
-        categories.reduce((sum, cat) => sum + cat.indicators.length, 0),
-      ],
-      ["Total Facilities", facilities.length],
-      [""],
-      ["Indicator Details"],
-      ["Code", "Name", "Category", "Unit", "Calculation Type", "Data Source"],
-    ];
-
-    for (const category of categories) {
-      for (const indicator of category.indicators) {
-        data.push([
-          indicator.code,
-          indicator.name,
-          category.name,
-          indicator.unit,
-          indicator.calculation_type,
-          indicator.data_source,
-        ]);
-      }
-    }
-
-    return XLSX.utils.aoa_to_sheet(data);
-  }
-
-  private createValidationSheet(categories: any[]) {
-    const data = [
-      ["Validation Rules"],
-      ["Indicator Code", "Validation Rule", "Error Message"],
-    ];
-
-    for (const category of categories) {
-      for (const indicator of category.indicators) {
-        let rule = "";
-        let message = "";
-
-        switch (indicator.unit.toLowerCase()) {
-          case "percentage":
-            rule = "Value must be between 0 and 100";
-            message = "Percentage values cannot exceed 100%";
-            break;
-          case "number":
-            rule = "Value must be a positive number";
-            message = "Only positive numbers allowed";
-            break;
-          default:
-            rule = "Value must be numeric";
-            message = "Enter valid numeric value";
-        }
-
-        data.push([indicator.code, rule, message]);
-      }
-    }
-
-    return XLSX.utils.aoa_to_sheet(data);
-  }
-}
-
-// Helper function to suggest valid indicator codes
-function getIndicatorCodeSuggestions(invalidCode: string): string {
-  const suggestions: Record<string, string> = {
-    "1": 'Try "1.1" (Total number of NEW Pregnant Women registered for ANC)',
-    "2": 'Try "1.1.1" (ANC registered within 1st trimester) or "2.1.1.a" (Home Deliveries by SBA)',
-    "3": 'Try "1.2.1" (PW given Td1) or "3.1.1" (C-Section deliveries)',
-    "4": 'Try "1.2.2" (PW given Td2) or "4.2" (Abortion spontaneous)',
-    "5": 'Try "1.2.3" (PW given Td Booster)',
-    "10": 'Try "1.2.8" (PW given ANC Corticosteroids)',
-  };
-
-  return (
-    suggestions[invalidCode] ||
-    "Please check the indicator codes list for valid codes."
-  );
-}
-
-export class DataUploadProcessor {
-  async processUploadedFile(
-    file: Buffer,
+  /**
+   * Process uploaded Excel file
+   */
+  static async processUpload(
+    fileBuffer: Buffer,
+    facilityId: string,
     reportMonth: string,
     uploadedBy: number,
-    fileName?: string
-  ) {
-    // Create upload session
-    const session = await prisma.dataUploadSession.create({
-      data: {
-        file_name: fileName || `monthly_data_${reportMonth}.xlsx`,
-        file_path: null, // We don't store the file path in this processor
-        report_month: reportMonth,
-        total_records: 0,
-        uploaded_by: uploadedBy,
-        status: "PROCESSING",
-      },
-    });
-
+    config: ExcelUploadConfig = {}
+  ): Promise<ExcelUploadResult> {
     try {
-      let dataRows: any[][];
+      // Read Excel file
+      const workbook = XLSX.read(fileBuffer, { type: "buffer" });
+      const dataSheet = workbook.Sheets["Data Upload"];
 
-      // Check if it's a CSV file
-      if (fileName && fileName.endsWith(".csv")) {
-        // Handle CSV file
-        const csvContent = file.toString("utf-8");
-        const workbook = XLSX.read(csvContent, { type: "string" });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        dataRows = data.slice(1) as any[][]; // Skip header row for CSV
-      } else {
-        // Handle Excel file
-        const workbook = XLSX.read(file, { type: "buffer" });
-        const worksheet = workbook.Sheets["Monthly Data"];
-        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        dataRows = data.slice(2) as any[][]; // Skip header and instruction rows
+      if (!dataSheet) {
+        return {
+          success: false,
+          message: "Data Upload sheet not found in Excel file",
+        };
       }
 
-      await prisma.dataUploadSession.update({
-        where: { id: session.id },
-        data: { total_records: dataRows.length },
-      });
+      // Convert to JSON
+      const data = XLSX.utils.sheet_to_json(dataSheet, { header: 1 });
 
+      if (data.length < 2) {
+        return {
+          success: false,
+          message: "Excel file must contain at least header row and one data row",
+        };
+      }
+
+      // Extract headers and data
+      const headers = data[0] as string[];
+      const rows = data.slice(1) as any[][];
+
+      // Validate headers
+      const validationResult = this.validateHeaders(headers);
+      if (!validationResult.valid) {
+        return {
+          success: false,
+          message: `Invalid headers: ${validationResult.errors.join(", ")}`,
+        };
+      }
+
+      // Process data rows
       const results = await this.processDataRows(
-        dataRows,
+        rows,
+        headers,
+        facilityId,
         reportMonth,
-        uploadedBy
+        uploadedBy,
+        config
       );
 
-      // Update session with results
-      await prisma.dataUploadSession.update({
-        where: { id: session.id },
-        data: {
-          success_count: results.successCount,
-          error_count: results.errorCount,
-          status: results.errorCount > 0 ? "COMPLETED" : "COMPLETED",
-          completed_at: new Date(),
-          upload_summary: results.summary,
-        },
-      });
-
       return {
-        sessionId: session.id,
-        totalRecords: dataRows.length,
+        success: true,
+        message: `Successfully processed ${results.successCount} out of ${results.totalRecords} records`,
+        totalRecords: results.totalRecords,
         successCount: results.successCount,
         errorCount: results.errorCount,
         errors: results.errors,
       };
     } catch (error) {
-      await prisma.dataUploadSession.update({
-        where: { id: session.id },
-        data: {
-          status: "FAILED",
-          completed_at: new Date(),
-          upload_summary: { error: error.message },
-        },
-      });
-      throw error;
+      console.error("Error processing upload:", error);
+      return {
+        success: false,
+        message: `Error processing upload: ${error instanceof Error ? error.message : "Unknown error"}`,
+      };
     }
   }
 
-  private async processDataRows(
-    rows: any[][],
+  /**
+   * Create data sheet
+   */
+  private static createDataSheet(
+    fields: any[],
+    facility: any,
     reportMonth: string,
-    uploadedBy: number
-  ) {
-    let successCount = 0;
-    let errorCount = 0;
-    const errors: string[] = [];
-    const summary: any = {};
+    config: ExcelUploadConfig
+  ): XLSX.WorkSheet {
+    // Create headers
+    const headers = [
+      "Field Code",
+      "Field Name",
+      "Value",
+      "Remarks",
+      "Is Override",
+      "Override Reason",
+    ];
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
+    // Create sample data rows
+    const sampleRows = fields.map((fieldMapping) => [
+      fieldMapping.field.code,
+      fieldMapping.field.name,
+      "", // Value column - empty for template
+      "", // Remarks column
+      "No", // Is Override column
+      "", // Override Reason column
+    ]);
 
-      try {
-        // Skip completely empty rows
-        if (
-          !row ||
-          row.length === 0 ||
-          row.every((cell) => !cell || cell.toString().trim() === "")
-        ) {
-          continue; // Skip empty rows silently
-        }
+    // Combine headers and data
+    const sheetData = [headers, ...sampleRows];
 
-        if (row.length < 14) {
-          errorCount++;
-          errors.push(
-            `Row ${i + 3}: Insufficient columns (expected 14, got ${
-              row?.length || 0
-            }) - Row appears to be incomplete`
-          );
-          continue; // Skip incomplete rows
-        }
+    // Create worksheet
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
 
-        const [
-          districtName,
-          facilityTypeName,
-          facilityName,
-          subCentreName,
-          categoryName,
-          indicatorCode,
-          indicatorName,
-          unit,
-          targetValue,
-          numerator,
-          denominator,
-          value,
-          achievementPercent,
-          remarks,
-        ] = row;
+    // Set column widths
+    const columnWidths = [
+      { wch: 20 }, // Field Code
+      { wch: 30 }, // Field Name
+      { wch: 25 }, // Value
+      { wch: 30 }, // Remarks
+      { wch: 15 }, // Is Override
+      { wch: 25 }, // Override Reason
+    ];
 
-        // Skip rows without indicator code
-        if (!indicatorCode) continue;
+    worksheet["!cols"] = columnWidths;
 
-        // Ensure all string fields are properly converted to strings
-        const districtNameStr = String(districtName || "");
-        const facilityNameStr = String(facilityName || "");
-        const subCentreNameStr = subCentreName
-          ? String(subCentreName)
-          : undefined;
-        const indicatorCodeStr = String(indicatorCode);
+    // Add data validation
+    this.addDataValidation(worksheet, fields);
 
-        // Validate and process the row
-        await this.processDataRow({
-          districtName: districtNameStr,
-          facilityName: facilityNameStr,
-          subCentreName: subCentreNameStr,
-          indicatorCode: indicatorCodeStr,
-          reportMonth,
-          numerator: numerator ? parseFloat(numerator) : null,
-          denominator: denominator ? parseFloat(denominator) : null,
-          value: value ? parseFloat(value) : null,
-          targetValue: targetValue ? parseFloat(targetValue) : null,
-          remarks: remarks || null,
-          uploadedBy,
-        });
-
-        successCount++;
-      } catch (error: any) {
-        errorCount++;
-        const errorMessage = error?.message || "Unknown error";
-        errors.push(`Row ${i + 3}: ${errorMessage}`);
-      }
-    }
-
-    return {
-      successCount,
-      errorCount,
-      errors,
-      summary: {
-        errors: errors.slice(0, 50), // Limit to first 50 errors to avoid huge JSON
-        totalErrors: errors.length,
-      },
-    };
+    return worksheet;
   }
 
-  private async processDataRow(data: {
-    districtName: string;
-    facilityName: string;
-    subCentreName?: string;
-    indicatorCode: string;
-    reportMonth: string;
-    numerator?: number;
-    denominator?: number;
-    value?: number;
-    targetValue?: number;
-    remarks?: string;
-    uploadedBy: number;
-  }) {
-    // Common invalid to valid indicator code mappings
-    const INDICATOR_CODE_MAPPINGS: Record<string, string> = {
-      "1": "1.1",
-      "2": "1.1.1",
-      "3": "1.2.1",
-      "4": "1.2.2",
-      "5": "1.2.3",
-      "6": "1.2.4",
-      "7": "1.2.5",
-      "8": "1.2.6",
-      "9": "1.2.7",
-      "10": "1.2.8",
-      "11": "2.1.1.a",
-      "12": "2.1.1.b",
-      "13": "2.2",
-      "14": "2.3",
-      "15": "3.1.1",
-      "16": "4.1.1.a",
-      "17": "4.1.1.b",
-      "18": "4.1.2",
-      "19": "9.1.1",
-      "20": "9.1.2",
-      "21": "9.1.3",
-      "22": "9.1.4",
-      "23": "9.1.5",
-      "24": "14.1.1",
-      "25": "14.1.2",
-      "26": "14.2.1",
-      "27": "14.2.2",
-      "28": "14.3.1.a",
-      "29": "14.3.1.b",
-      "30": "14.3.1.c",
-    };
+  /**
+   * Create instructions sheet
+   */
+  private static createInstructionsSheet(facility: any, reportMonth: string): XLSX.WorkSheet {
+    const instructions = [
+      ["Instructions for Data Upload"],
+      [""],
+      ["Facility:", facility.name],
+      ["District:", facility.district.name],
+      ["Facility Type:", facility.facility_type.name],
+      ["Report Month:", reportMonth],
+      [""],
+      ["Instructions:"],
+      ["1. Fill in the 'Value' column with the actual data for each field"],
+      ["2. Use 'Remarks' column to add any notes or explanations"],
+      ["3. Set 'Is Override' to 'Yes' if this value overrides a default"],
+      ["4. Provide 'Override Reason' if overriding a default value"],
+      ["5. Do not modify the 'Field Code' or 'Field Name' columns"],
+      ["6. Save the file and upload it back to the system"],
+      [""],
+      ["Data Types:"],
+      ["- Text: Enter text directly"],
+      ["- Number: Enter numeric values only"],
+      ["- Boolean: Enter 'Yes' or 'No'"],
+      ["- Date: Use YYYY-MM-DD format"],
+      ["- Percentage: Enter as decimal (e.g., 0.85 for 85%)"],
+    ];
 
-    // Try to find indicator with original code first
-    let indicator = await prisma.indicator.findUnique({
-      where: { code: data.indicatorCode },
+    const worksheet = XLSX.utils.aoa_to_sheet(instructions);
+
+    // Set column width
+    worksheet["!cols"] = [{ wch: 60 }];
+
+    return worksheet;
+  }
+
+  /**
+   * Create validation sheet
+   */
+  private static createValidationSheet(fields: any[]): XLSX.WorkSheet {
+    const validationData = [
+      ["Field Validation Rules"],
+      [""],
+      ["Field Code", "Field Name", "Data Type", "Required", "Validation Rules"],
+      ...fields.map((fieldMapping) => [
+        fieldMapping.field.code,
+        fieldMapping.field.name,
+        fieldMapping.field.field_type,
+        fieldMapping.is_required ? "Yes" : "No",
+        fieldMapping.field.validation_rules ? JSON.stringify(fieldMapping.field.validation_rules) : "None",
+      ]),
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(validationData);
+
+    // Set column widths
+    worksheet["!cols"] = [
+      { wch: 20 }, // Field Code
+      { wch: 30 }, // Field Name
+      { wch: 15 }, // Data Type
+      { wch: 15 }, // Required
+      { wch: 40 }, // Validation Rules
+    ];
+
+    return worksheet;
+  }
+
+  /**
+   * Validate headers
+   */
+  private static validateHeaders(headers: string[]): { valid: boolean; errors: string[] } {
+    const requiredHeaders = ["Field Code", "Field Name", "Value"];
+    const errors: string[] = [];
+
+    requiredHeaders.forEach((header) => {
+      if (!headers.includes(header)) {
+        errors.push(`Missing required header: ${header}`);
+      }
     });
 
-    // If not found, try with mapped code
-    if (!indicator && INDICATOR_CODE_MAPPINGS[data.indicatorCode]) {
-      const mappedCode = INDICATOR_CODE_MAPPINGS[data.indicatorCode];
-      indicator = await prisma.indicator.findUnique({
-        where: { code: mappedCode },
-      });
+    return {
+      valid: errors.length === 0,
+      errors,
+    };
+  }
 
-      if (indicator) {
-        console.log(
-          `Auto-fixed indicator code: ${data.indicatorCode} → ${mappedCode}`
-        );
-      }
-    }
+  /**
+   * Process data rows
+   */
+  private static async processDataRows(
+    rows: any[][],
+    headers: string[],
+    facilityId: string,
+    reportMonth: string,
+    uploadedBy: number,
+    config: ExcelUploadConfig
+  ): Promise<{
+    totalRecords: number;
+    successCount: number;
+    errorCount: number;
+    errors: string[];
+  }> {
+    const results = {
+      totalRecords: rows.length,
+      successCount: 0,
+      errorCount: 0,
+      errors: [] as string[],
+    };
 
-    if (!indicator) {
-      // Provide helpful error message with suggestions
-      const suggestions = getIndicatorCodeSuggestions(data.indicatorCode);
-      throw new Error(
-        `Indicator not found: "${data.indicatorCode}". ${suggestions}`
-      );
-    }
-
-    // Find facility
-    const facility = await prisma.facility.findFirst({
-      where: {
-        name: data.facilityName,
-        district: { name: data.districtName },
-      },
-      include: { district: true },
+    // Get field mappings for validation
+    const facility = await prisma.facility.findUnique({
+      where: { id: facilityId },
+      include: { facility_type: true },
     });
 
     if (!facility) {
-      throw new Error(
-        `Facility not found: ${data.facilityName} in ${data.districtName}`
-      );
+      throw new Error("Facility not found");
     }
 
-    // Find sub-centre if specified
-    let subCentre = null;
-    if (data.subCentreName) {
-      subCentre = await prisma.sub_centre.findFirst({
-        where: {
-          name: data.subCentreName,
-          facility_id: facility.id,
-        },
-      });
-
-      if (!subCentre) {
-        throw new Error(
-          `Sub-centre not found: ${data.subCentreName} under ${data.facilityName}`
-        );
-      }
-    }
-
-    // Calculate final value based on indicator type
-    let finalValue = data.value;
-    let achievement = null;
-
-    // For percentage calculations, use numerator and denominator if available
-    if (data.numerator && data.denominator) {
-      if (data.denominator === 0) {
-        throw new Error(
-          "Denominator cannot be zero for percentage calculation"
-        );
-      }
-      finalValue = (data.numerator / data.denominator) * 100;
-    }
-
-    // Calculate achievement percentage
-    if (finalValue && data.targetValue) {
-      achievement = (finalValue / data.targetValue) * 100;
-    }
-
-    // Check if record already exists
-    const existingRecord = await prisma.monthlyHealthData.findFirst({
+    const fieldMappings = await prisma.facilityFieldMapping.findMany({
       where: {
-        facility_id: facility.id,
-        sub_centre_id: subCentre?.id || null,
-        indicator_id: indicator.id,
-        report_month: data.reportMonth,
+        facility_type_id: facility.facility_type_id,
+      },
+      include: {
+        field: true,
       },
     });
 
-    if (existingRecord) {
-      // Update existing record
-      await prisma.monthlyHealthData.update({
-        where: { id: existingRecord.id },
-        data: {
-          value: finalValue,
-          numerator: data.numerator,
-          denominator: data.denominator,
-          target_value: data.targetValue,
-          achievement: achievement,
-          remarks: data.remarks,
-          data_quality: "VALIDATED",
-          uploaded_by: data.uploadedBy,
-          updated_at: new Date(),
-        },
-      });
-    } else {
-      // Create new record
-      await prisma.monthlyHealthData.create({
-        data: {
-          indicator_id: indicator.id,
-          facility_id: facility.id,
-          sub_centre_id: subCentre?.id || null,
-          district_id: facility.district_id,
-          report_month: data.reportMonth,
-          value: finalValue,
-          numerator: data.numerator,
-          denominator: data.denominator,
-          target_value: data.targetValue,
-          achievement: achievement,
-          remarks: data.remarks,
-          data_quality: "VALIDATED",
-          uploaded_by: data.uploadedBy,
-        },
-      });
+    const fieldMap = new Map(fieldMappings.map((fm) => [fm.field.code, fm.field]));
+
+    // Process each row
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const rowNumber = i + 2; // +2 because Excel is 1-indexed and we have headers
+
+      try {
+        // Skip empty rows
+        if (row.every((cell: any) => cell === null || cell === undefined || cell === "")) {
+          continue;
+        }
+
+        // Extract field code and value
+        const fieldCodeIndex = headers.indexOf("Field Code");
+        const valueIndex = headers.indexOf("Value");
+        const remarksIndex = headers.indexOf("Remarks");
+        const isOverrideIndex = headers.indexOf("Is Override");
+        const overrideReasonIndex = headers.indexOf("Override Reason");
+
+        if (fieldCodeIndex === -1 || valueIndex === -1) {
+          results.errors.push(`Row ${rowNumber}: Missing required columns`);
+          results.errorCount++;
+          continue;
+        }
+
+        const fieldCode = row[fieldCodeIndex];
+        const value = row[valueIndex];
+        const remarks = remarksIndex !== -1 ? row[remarksIndex] || "" : "";
+        const isOverride = isOverrideIndex !== -1 ? row[isOverrideIndex]?.toString().toLowerCase() === "yes" : false;
+        const overrideReason = overrideReasonIndex !== -1 ? row[overrideReasonIndex] || "" : "";
+
+        // Validate field code
+        if (!fieldCode || !fieldMap.has(fieldCode)) {
+          results.errors.push(`Row ${rowNumber}: Invalid field code: ${fieldCode}`);
+          results.errorCount++;
+          continue;
+        }
+
+        const field = fieldMap.get(fieldCode)!;
+
+        // Validate value based on field type
+        const validationResult = this.validateFieldValue(value, field, rowNumber);
+        if (!validationResult.valid) {
+          results.errors.push(validationResult.error);
+          results.errorCount++;
+          continue;
+        }
+
+        // Save field value
+        await this.saveFieldValue(
+          field.id,
+          facilityId,
+          reportMonth,
+          value,
+          uploadedBy,
+          remarks,
+          isOverride,
+          overrideReason
+        );
+
+        results.successCount++;
+      } catch (error) {
+        const errorMessage = `Row ${rowNumber}: ${error instanceof Error ? error.message : "Unknown error"}`;
+        results.errors.push(errorMessage);
+        results.errorCount++;
+      }
     }
+
+    return results;
+  }
+
+  /**
+   * Validate field value
+   */
+  private static validateFieldValue(
+    value: any,
+    field: any,
+    rowNumber: number
+  ): { valid: boolean; error?: string } {
+    // Check if required field has value
+    if (field.validation_rules?.required && (value === null || value === undefined || value === "")) {
+      return {
+        valid: false,
+        error: `Row ${rowNumber}: Field ${field.code} is required but has no value`,
+      };
+    }
+
+    // Skip validation for empty values
+    if (value === null || value === undefined || value === "") {
+      return { valid: true };
+    }
+
+    // Validate based on field type
+    switch (field.field_type) {
+      case "number":
+        if (isNaN(Number(value))) {
+          return {
+            valid: false,
+            error: `Row ${rowNumber}: Field ${field.code} must be a number`,
+          };
+        }
+        break;
+
+      case "boolean":
+        const boolValue = value.toString().toLowerCase();
+        if (!["yes", "no", "true", "false", "1", "0"].includes(boolValue)) {
+          return {
+            valid: false,
+            error: `Row ${rowNumber}: Field ${field.code} must be Yes/No, True/False, or 1/0`,
+          };
+        }
+        break;
+
+      case "date":
+        const dateValue = new Date(value);
+        if (isNaN(dateValue.getTime())) {
+          return {
+            valid: false,
+            error: `Row ${rowNumber}: Field ${field.code} must be a valid date`,
+          };
+        }
+        break;
+
+      case "percentage":
+        const percentValue = Number(value);
+        if (isNaN(percentValue) || percentValue < 0 || percentValue > 1) {
+          return {
+            valid: false,
+            error: `Row ${rowNumber}: Field ${field.code} must be a decimal between 0 and 1`,
+          };
+        }
+        break;
+    }
+
+    return { valid: true };
+  }
+
+  /**
+   * Save field value
+   */
+  private static async saveFieldValue(
+    fieldId: number,
+    facilityId: string,
+    reportMonth: string,
+    value: any,
+    uploadedBy: number,
+    remarks: string | undefined,
+    isOverride: boolean,
+    overrideReason: string | undefined
+  ): Promise<void> {
+    // Prepare value data
+    const valueData: any = {
+      field_id: fieldId,
+      facility_id: facilityId,
+      report_month: reportMonth,
+      uploaded_by: uploadedBy,
+      remarks: remarks || null,
+      is_override: isOverride,
+      override_reason: overrideReason || null,
+    };
+
+    // Set the appropriate value field based on type
+    if (typeof value === "string") {
+      valueData.string_value = value;
+    } else if (typeof value === "number") {
+      valueData.numeric_value = value;
+    } else if (typeof value === "boolean") {
+      valueData.boolean_value = value;
+    } else if (value instanceof Date) {
+      valueData.string_value = value.toISOString().split("T")[0];
+    } else {
+      valueData.string_value = String(value);
+    }
+
+    // Note: sub_centre functionality has been removed from the schema
+    // All data is now stored at the facility level
+
+    // Upsert the field value
+    await prisma.fieldValue.upsert({
+      where: {
+        field_id_facility_id_report_month: {
+          field_id: fieldId,
+          facility_id: facilityId,
+          report_month: reportMonth,
+        },
+      },
+      update: valueData,
+      create: valueData,
+    });
+  }
+
+  /**
+   * Add data validation to worksheet
+   */
+  private static addDataValidation(worksheet: XLSX.WorkSheet, fields: any[]): void {
+    // This is a placeholder for data validation
+    // In a real implementation, you would add Excel data validation rules
+    // For now, we'll just add some basic formatting
+    console.log("Adding data validation for", fields.length, "fields");
   }
 }
-
-export const excelTemplateGenerator = new ExcelTemplateGenerator();
-export const dataUploadProcessor = new DataUploadProcessor();

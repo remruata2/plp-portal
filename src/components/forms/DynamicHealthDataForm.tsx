@@ -969,7 +969,7 @@ export default function DynamicHealthDataForm({
                 <div className="space-y-2">
                   <Label htmlFor="month-select">Month</Label>
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                       <SelectValue placeholder="Select month" />
                     </SelectTrigger>
                     <SelectContent>
@@ -991,7 +991,7 @@ export default function DynamicHealthDataForm({
                 <div className="space-y-2">
                   <Label htmlFor="year-select">Year</Label>
                   <Select value={selectedYear} onValueChange={setSelectedYear}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                       <SelectValue placeholder="Select year" />
                     </SelectTrigger>
                     <SelectContent>

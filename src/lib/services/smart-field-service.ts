@@ -1,256 +1,244 @@
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export interface FieldValueResult {
-  value: string | number | boolean | null;
-  source: "override" | "facility_default" | "field_default" | "not_found";
-  isOverride: boolean;
+export interface SmartFieldConfig {
+  field_id: number;
+  facility_id: string;
+  string_value?: string;
+  numeric_value?: number;
+  boolean_value?: boolean;
+  json_value?: any;
+  is_active: boolean;
+}
+
+export interface SmartFieldValue {
+  field_id: number;
+  facility_id: string;
+  report_month: string;
+  string_value?: string;
+  numeric_value?: number;
+  boolean_value?: boolean;
+  json_value?: any;
+  is_override: boolean;
+  override_reason?: string;
 }
 
 export class SmartFieldService {
   /**
-   * Get field value with smart inheritance logic
+   * Get smart field configuration for a facility
    */
-  static async getFieldValue(
+  static async getSmartFieldConfig(
     fieldId: number,
-    facilityId: string | null,
-    reportMonth: string
-  ): Promise<FieldValueResult> {
+    facilityId: string
+  ): Promise<SmartFieldConfig | null> {
     try {
-      // 1. Check for monthly override first
-      if (facilityId) {
-        const override = await prisma.fieldValue.findUnique({
-          where: {
-            field_id_facility_id_report_month: {
-              field_id: fieldId,
-              facility_id: facilityId,
-              report_month: reportMonth,
-            },
-          },
-        });
-
-        if (override) {
-          const value = this.extractValue(override);
-          return {
-            value,
-            source: "override",
-            isOverride: override.is_override,
-          };
-        }
-      }
-
-      // 2. Check for facility-specific default
-      if (facilityId) {
-        const facilityDefault = await prisma.facilityFieldDefaults.findUnique({
-          where: {
-            field_id_facility_id: {
-              field_id: fieldId,
-              facility_id: facilityId,
-            },
-          },
-        });
-
-        if (facilityDefault && facilityDefault.is_active) {
-          const value = this.extractValue(facilityDefault);
-          return {
-            value,
-            source: "facility_default",
-            isOverride: false,
-          };
-        }
-      }
-
-      // 3. Fall back to field default
-      const field = await prisma.field.findUnique({
-        where: { id: fieldId },
-      });
-
-      if (field?.default_value) {
-        return {
-          value: field.default_value,
-          source: "field_default",
-          isOverride: false,
-        };
-      }
-
-      // 4. No value found
-      return {
-        value: null,
-        source: "not_found",
-        isOverride: false,
-      };
+      // Since FacilityFieldDefaults is removed, we'll return null
+      // This functionality can be reimplemented using FieldValue if needed
+      return null;
     } catch (error) {
-      console.error("Error getting field value:", error);
-      return {
-        value: null,
-        source: "not_found",
-        isOverride: false,
-      };
+      console.error("Error getting smart field config:", error);
+      return null;
     }
   }
 
   /**
-   * Set field value with smart override logic
+   * Get smart field value for a specific month
    */
-  static async setFieldValue(
+  static async getSmartFieldValue(
     fieldId: number,
-    facilityId: string | null,
-    reportMonth: string,
-    value: string | number | boolean,
-    uploadedBy: number,
-    isOverride: boolean = false,
-    overrideReason?: string,
-    remarks?: string
-  ): Promise<void> {
+    facilityId: string,
+    reportMonth: string
+  ): Promise<SmartFieldValue | null> {
     try {
-      // Get the current default value to compare
-      const currentValue = await this.getFieldValue(
-        fieldId,
-        facilityId,
-        reportMonth
-      );
-
-      // If the new value is the same as the default, delete any existing override
-      if (value === currentValue.value && !isOverride) {
-        if (facilityId) {
-          await prisma.fieldValue.deleteMany({
-            where: {
-              field_id: fieldId,
-              facility_id: facilityId,
-              report_month: reportMonth,
-            },
-          });
-        }
-        return;
-      }
-
-      // Create or update the field value
-      if (facilityId) {
-        // Determine the correct value field based on the value type
-        const valueData: any = {
-          is_override: isOverride,
-          override_reason: overrideReason,
-          remarks,
-          uploaded_by: uploadedBy,
-        };
-
-        // Set the appropriate value field based on type
-        if (typeof value === "string") {
-          valueData.string_value = value;
-        } else if (typeof value === "number") {
-          valueData.numeric_value = value;
-        } else if (typeof value === "boolean") {
-          valueData.boolean_value = value;
-        } else {
-          valueData.string_value = String(value);
-        }
-
-        await prisma.fieldValue.upsert({
-          where: {
-            field_id_facility_id_report_month: {
-              field_id: fieldId,
-              facility_id: facilityId,
-              report_month: reportMonth,
-            },
-          },
-          update: valueData,
-          create: {
+      const fieldValue = await prisma.fieldValue.findUnique({
+        where: {
+          field_id_facility_id_report_month: {
             field_id: fieldId,
             facility_id: facilityId,
             report_month: reportMonth,
-            ...valueData,
           },
-        });
-      }
-    } catch (error) {
-      console.error("Error setting field value:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Set facility-specific default value
-   */
-  static async setFacilityDefault(
-    fieldId: number,
-    facilityId: string,
-    value: string | number | boolean
-  ): Promise<void> {
-    try {
-      // Determine the correct value field based on the value type
-      const valueData: any = {
-        is_active: true,
-      };
-
-      // Set the appropriate value field based on type
-      if (typeof value === "string") {
-        valueData.string_value = value;
-      } else if (typeof value === "number") {
-        valueData.numeric_value = value;
-      } else if (typeof value === "boolean") {
-        valueData.boolean_value = value;
-      } else {
-        valueData.string_value = String(value);
-      }
-
-      await prisma.facilityFieldDefaults.upsert({
-        where: {
-          field_id_facility_id: {
-            field_id: fieldId,
-            facility_id: facilityId,
-          },
-        },
-        update: valueData,
-        create: {
-          field_id: fieldId,
-          facility_id: facilityId,
-          ...valueData,
         },
       });
+
+      if (!fieldValue) {
+        return null;
+      }
+
+      return {
+        field_id: fieldValue.field_id,
+        facility_id: fieldValue.facility_id!,
+        report_month: fieldValue.report_month,
+        string_value: fieldValue.string_value || undefined,
+        numeric_value: fieldValue.numeric_value ? Number(fieldValue.numeric_value) : undefined,
+        boolean_value: fieldValue.boolean_value || undefined,
+        json_value: fieldValue.json_value || undefined,
+        is_override: fieldValue.is_override,
+        override_reason: fieldValue.override_reason || undefined,
+      };
     } catch (error) {
-      console.error("Error setting facility default:", error);
-      throw error;
+      console.error("Error getting smart field value:", error);
+      return null;
     }
   }
 
   /**
-   * Get all field values for a facility in a specific month
+   * Get all smart field values for a facility in a month
    */
-  static async getFacilityFieldValues(
+  static async getFacilitySmartFieldValues(
     facilityId: string,
     reportMonth: string
-  ): Promise<Array<{ fieldId: number; value: any; source: string }>> {
+  ): Promise<SmartFieldValue[]> {
     try {
       const fieldValues = await prisma.fieldValue.findMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,
         },
-        include: {
-          field: true,
-        },
       });
 
       return fieldValues.map((fv) => ({
-        fieldId: fv.field_id,
-        value: this.extractValue(fv),
-        source: fv.is_override ? "override" : "monthly_value",
+        field_id: fv.field_id,
+        facility_id: fv.facility_id!,
+        report_month: fv.report_month,
+        string_value: fv.string_value || undefined,
+        numeric_value: fv.numeric_value ? Number(fv.numeric_value) : undefined,
+        boolean_value: fv.boolean_value || undefined,
+        json_value: fv.json_value || undefined,
+        is_override: fv.is_override,
+        override_reason: fv.override_reason || undefined,
       }));
     } catch (error) {
-      console.error("Error getting facility field values:", error);
+      console.error("Error getting facility smart field values:", error);
       return [];
     }
   }
 
   /**
-   * Extract value from field value or facility default record
+   * Update or create smart field configuration
    */
-  private static extractValue(record: any): string | number | boolean | null {
-    if (record.string_value !== null) return record.string_value;
-    if (record.numeric_value !== null) return record.numeric_value;
-    if (record.boolean_value !== null) return record.boolean_value;
-    if (record.json_value !== null) return record.json_value;
-    return null;
+  static async updateSmartFieldConfig(
+    fieldId: number,
+    facilityId: string,
+    config: Partial<SmartFieldConfig>
+  ): Promise<boolean> {
+    try {
+      // Since FacilityFieldDefaults is removed, we'll return false
+      // This functionality can be reimplemented using FieldValue if needed
+      console.warn("Smart field config update not implemented - FacilityFieldDefaults model removed");
+      return false;
+    } catch (error) {
+      console.error("Error updating smart field config:", error);
+      return false;
+    }
+  }
+
+  /**
+   * Get smart field values for multiple facilities
+   */
+  static async getMultiFacilitySmartFieldValues(
+    fieldId: number,
+    facilityIds: string[],
+    reportMonth: string
+  ): Promise<Record<string, SmartFieldValue | null>> {
+    try {
+      const fieldValues = await prisma.fieldValue.findMany({
+        where: {
+          field_id: fieldId,
+          facility_id: { in: facilityIds },
+          report_month: reportMonth,
+        },
+      });
+
+      const result: Record<string, SmartFieldValue | null> = {};
+      
+      // Initialize all facilities with null
+      facilityIds.forEach(id => {
+        result[id] = null;
+      });
+
+      // Fill in existing values
+      fieldValues.forEach((fv) => {
+        if (fv.facility_id) {
+          result[fv.facility_id] = {
+            field_id: fv.field_id,
+            facility_id: fv.facility_id,
+            report_month: fv.report_month,
+            string_value: fv.string_value || undefined,
+            numeric_value: fv.numeric_value ? Number(fv.numeric_value) : undefined,
+            boolean_value: fv.boolean_value || undefined,
+            json_value: fv.json_value || undefined,
+            is_override: fv.is_override,
+            override_reason: fv.override_reason || undefined,
+          };
+        }
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Error getting multi-facility smart field values:", error);
+      return {};
+    }
+  }
+
+  /**
+   * Get smart field statistics across facilities
+   */
+  static async getSmartFieldStatistics(
+    fieldId: number,
+    reportMonth: string,
+    facilityIds?: string[]
+  ): Promise<{
+    total_facilities: number;
+    facilities_with_values: number;
+    average_value?: number;
+    min_value?: number;
+    max_value?: number;
+  }> {
+    try {
+      const whereClause: any = {
+        field_id: fieldId,
+        report_month: reportMonth,
+        numeric_value: { not: null },
+      };
+
+      if (facilityIds && facilityIds.length > 0) {
+        whereClause.facility_id = { in: facilityIds };
+      }
+
+      const [totalCount, valueCount, stats] = await Promise.all([
+        facilityIds && facilityIds.length > 0
+          ? facilityIds.length
+          : prisma.facility.count({ where: { is_active: true } }),
+        prisma.fieldValue.count({
+          where: {
+            field_id: fieldId,
+            report_month: reportMonth,
+            numeric_value: { not: null },
+            ...(facilityIds && facilityIds.length > 0 && { facility_id: { in: facilityIds } }),
+          },
+        }),
+        prisma.fieldValue.aggregate({
+          where: whereClause,
+          _avg: { numeric_value: true },
+          _min: { numeric_value: true },
+          _max: { numeric_value: true },
+        }),
+      ]);
+
+      return {
+        total_facilities: totalCount,
+        facilities_with_values: valueCount,
+        average_value: stats._avg.numeric_value ? Number(stats._avg.numeric_value) : undefined,
+        min_value: stats._min.numeric_value ? Number(stats._min.numeric_value) : undefined,
+        max_value: stats._max.numeric_value ? Number(stats._max.numeric_value) : undefined,
+      };
+    } catch (error) {
+      console.error("Error getting smart field statistics:", error);
+      return {
+        total_facilities: 0,
+        facilities_with_values: 0,
+      };
+    }
   }
 }
