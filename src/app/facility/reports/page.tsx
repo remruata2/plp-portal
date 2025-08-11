@@ -102,15 +102,15 @@ interface MonthlyReport {
 export default function FacilityReportsPage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState<string>("");
-  const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [report, setReport] = useState<MonthlyReport | null>(null);
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
 
   // Get latest available month and year from the available months list
   const getLatestAvailableMonthAndYear = (months: string[]) => {
-    if (months.length === 0) return { month: "", year: "" };
+    if (months.length === 0) return { month: null, year: null };
     // Sort months in descending order and return the latest
     const sortedMonths = months.sort((a, b) => b.localeCompare(a));
     const latestMonth = sortedMonths[0];
@@ -137,7 +137,7 @@ export default function FacilityReportsPage() {
     if (selectedYear && selectedMonth) {
       return `${selectedYear}-${selectedMonth.padStart(2, '0')}`;
     }
-    return "";
+    return null;
   };
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function FacilityReportsPage() {
 
     const combinedMonthYear = getCombinedMonthYear();
     if (
-      combinedMonthYear &&
+      combinedMonthYear !== null &&
       session?.user?.facility_id &&
       availableMonths.length > 0
     ) {
@@ -311,10 +311,10 @@ export default function FacilityReportsPage() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-gray-500" />
-                         <Select value={selectedYear} onValueChange={(year) => {
-               setSelectedYear(year);
-               setSelectedMonth(""); // Reset month when year changes
-             }}>
+                                     <Select value={selectedYear || undefined} onValueChange={(year) => {
+              setSelectedYear(year);
+              setSelectedMonth(null); // Reset month when year changes
+            }}>
               <SelectTrigger className="w-24">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
@@ -326,7 +326,7 @@ export default function FacilityReportsPage() {
                 ))}
               </SelectContent>
             </Select>
-                          <Select value={selectedMonth} onValueChange={setSelectedMonth} disabled={!selectedYear}>
+                          <Select value={selectedMonth || undefined} onValueChange={setSelectedMonth} disabled={!selectedYear}>
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder={selectedYear ? "Month" : "Select year first"} />
                 </SelectTrigger>
