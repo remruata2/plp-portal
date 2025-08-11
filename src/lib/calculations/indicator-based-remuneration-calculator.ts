@@ -14,7 +14,7 @@ export interface IndicatorRemunerationCalculation {
   indicators: IndicatorRemunerationDetail[];
   healthWorkers: HealthWorkerRemuneration[];
   ashaWorkers: ASHAWorkerRemuneration[];
-  totalWorkerRemuneration: number;
+  totalPersonalIncentives: number;
 }
 
 export interface IndicatorRemunerationDetail {
@@ -183,7 +183,7 @@ export class IndicatorBasedRemunerationCalculator {
             (Number(worker.allocated_amount) * performancePercentage) / 100,
         }));
 
-      const totalWorkerRemuneration =
+      const totalPersonalIncentives =
         healthWorkersRemuneration.reduce(
           (sum, worker) => sum + worker.calculatedAmount,
           0
@@ -204,7 +204,7 @@ export class IndicatorBasedRemunerationCalculator {
         indicators: indicatorDetails,
         healthWorkers: healthWorkersRemuneration,
         ashaWorkers: ashaWorkersRemuneration,
-        totalWorkerRemuneration,
+        totalPersonalIncentives,
       };
     } catch (error) {
       console.error("Error calculating indicator-based remuneration:", error);
@@ -295,9 +295,9 @@ export class IndicatorBasedRemunerationCalculator {
         update: {
           performance_percentage: calculation.performancePercentage,
           facility_remuneration: calculation.totalRemuneration,
-          total_worker_remuneration: calculation.totalWorkerRemuneration,
+          total_worker_remuneration: calculation.totalPersonalIncentives,
           total_remuneration:
-            calculation.totalRemuneration + calculation.totalWorkerRemuneration,
+            calculation.totalRemuneration + calculation.totalPersonalIncentives,
           health_workers_count: calculation.healthWorkers.length,
           asha_workers_count: calculation.ashaWorkers.length,
         },
@@ -306,9 +306,9 @@ export class IndicatorBasedRemunerationCalculator {
           report_month: calculation.reportMonth,
           performance_percentage: calculation.performancePercentage,
           facility_remuneration: calculation.totalRemuneration,
-          total_worker_remuneration: calculation.totalWorkerRemuneration,
+          total_worker_remuneration: calculation.totalPersonalIncentives,
           total_remuneration:
-            calculation.totalRemuneration + calculation.totalWorkerRemuneration,
+            calculation.totalRemuneration + calculation.totalPersonalIncentives,
           health_workers_count: calculation.healthWorkers.length,
           asha_workers_count: calculation.ashaWorkers.length,
         },

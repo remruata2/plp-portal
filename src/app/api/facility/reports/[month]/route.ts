@@ -64,7 +64,7 @@ export async function GET(
           type_display_name: facility.facility_type.display_name,
         },
         totalIncentive: remunerationData.totals.totalIncentive,
-        totalWorkerRemuneration: remunerationData.totals.totalWorkerRemuneration,
+        totalPersonalIncentives: remunerationData.totals.totalPersonalIncentives,
         totalRemuneration: remunerationData.totals.totalRemuneration,
         performancePercentage,
         indicators: remunerationData.indicators,
