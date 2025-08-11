@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Users, TrendingUp, Calendar, Loader2 } from "lucide-react";
+import { FileText, Users, TrendingUp, Calendar, Loader2, DollarSign, UserCheck } from "lucide-react";
 
 interface DashboardStats {
   totalSubmissions: number;
-  thisMonthSubmissions: number;
   totalFootfall: number;
   performance: number;
+  totalIncentives: number;
+  totalWorkers: number;
   lastMonthSubmissions: number;
   lastMonthFootfall: number;
   lastMonthPerformance: number;
@@ -37,9 +38,10 @@ export default function FacilityDashboardPage() {
         console.error("No facility ID found in session");
         setStats({
           totalSubmissions: 0,
-          thisMonthSubmissions: 0,
           totalFootfall: 0,
           performance: 0,
+          totalIncentives: 0,
+          totalWorkers: 0,
           lastMonthSubmissions: 0,
           lastMonthFootfall: 0,
           lastMonthPerformance: 0,
@@ -60,15 +62,17 @@ export default function FacilityDashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Dashboard API response:", data);
         setStats(data);
       } else {
         console.error("Failed to load dashboard stats");
         // Set default values if API fails
         setStats({
           totalSubmissions: 0,
-          thisMonthSubmissions: 0,
           totalFootfall: 0,
           performance: 0,
+          totalIncentives: 0,
+          totalWorkers: 0,
           lastMonthSubmissions: 0,
           lastMonthFootfall: 0,
           lastMonthPerformance: 0,
@@ -79,9 +83,10 @@ export default function FacilityDashboardPage() {
       // Set default values on error
       setStats({
         totalSubmissions: 0,
-        thisMonthSubmissions: 0,
         totalFootfall: 0,
         performance: 0,
+        totalIncentives: 0,
+        totalWorkers: 0,
         lastMonthSubmissions: 0,
         lastMonthFootfall: 0,
         lastMonthPerformance: 0,
@@ -105,6 +110,10 @@ export default function FacilityDashboardPage() {
         return current > 0 ? "First visitors" : "No visitors yet";
       } else if (label === "performance") {
         return current > 0 ? "First performance data" : "No performance data";
+      } else if (label === "incentive") {
+        return current > 0 ? "First incentives earned" : "No incentives yet";
+      } else if (label === "worker") {
+        return current > 0 ? "First worker" : "No workers yet";
       }
       return current > 0 ? `First ${label}` : `No ${label}`;
     }
@@ -117,6 +126,10 @@ export default function FacilityDashboardPage() {
         return `+${change.toLocaleString()} more visitors`;
       } else if (label === "performance") {
         return `+${change}% improvement`;
+      } else if (label === "incentive") {
+        return `+₹${change.toLocaleString()} more incentives`;
+      } else if (label === "worker") {
+        return `+${change} more workers`;
       }
       return `+${change} from last month`;
     }
@@ -127,11 +140,22 @@ export default function FacilityDashboardPage() {
         return `${change.toLocaleString()} fewer visitors`;
       } else if (label === "performance") {
         return `${change}% decrease`;
+      } else if (label === "incentive") {
+        return `₹${change.toLocaleString()} fewer incentives`;
+      } else if (label === "worker") {
+        return `${change} fewer workers`;
       }
       return `${change} from last month`;
     }
     return "Same as last month";
   };
+
+  // Debug stats state changes
+  useEffect(() => {
+    if (stats) {
+      console.log("Current stats state:", stats);
+    }
+  }, [stats]);
 
   if (loading) {
     return (
@@ -155,7 +179,7 @@ export default function FacilityDashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -184,29 +208,7 @@ export default function FacilityDashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Month</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {stats?.thisMonthSubmissions || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {stats?.thisMonthSubmissions === 0
-                ? "No submissions yet"
-                : "Submissions this month"}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Current month data status
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Footfall
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Footfall</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -245,7 +247,55 @@ export default function FacilityDashboardPage() {
                 : "Loading..."}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Composite activity score
+              Based on worker performance
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Incentives</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              ₹{stats?.totalIncentives?.toLocaleString() || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {stats
+                ? getChangeText(
+                    stats.totalIncentives,
+                    0, // No previous month data for incentives
+                    "incentive"
+                  )
+                : "Loading..."}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Total incentives distributed
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Workers</CardTitle>
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats?.totalWorkers || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {stats
+                ? getChangeText(
+                    stats.totalWorkers,
+                    0, // No previous month data for workers
+                    "worker"
+                  )
+                : "Loading..."}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Total workers in the facility
             </p>
           </CardContent>
         </Card>

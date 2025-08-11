@@ -660,55 +660,55 @@ export default function DynamicHealthDataForm({
     
     // Define realistic data ranges for different field types and contexts
     const realisticRanges: Record<string, { min: number; max: number; description: string }> = {
-      // Population data - no hard limits
-      'total_population': { min: 0, max: 0, description: 'Catchment population (no hard limits)' },
-      'population_30_plus': { min: 0, max: 0, description: 'Adults 30+ years (20-80% of total population)' },
-      'population_30_plus_female': { min: 0, max: 0, description: 'Females 30+ years (40-60% of 30+ population)' },
-      'population_18_plus': { min: 0, max: 0, description: 'Adults 18+ years (no hard limits)' },
+      // Population data - realistic for health facilities
+      'total_population': { min: 5000, max: 15000, description: 'Catchment population' },
+      'population_30_plus': { min: 1500, max: 4500, description: 'Adults 30+ years' },
+      'population_30_plus_female': { min: 800, max: 2400, description: 'Females 30+ years' },
+      'population_18_plus': { min: 2500, max: 7500, description: 'Adults 18+ years' },
       
-      // ANC indicators - no hard limits
-      'anc_due_list': { min: 0, max: 0, description: 'Monthly ANC due list (no hard limits)' },
-      'anc_footfall': { min: 0, max: 0, description: 'Monthly ANC visits (no hard limits)' },
-      'anc_tested_hb': { min: 0, max: 0, description: 'Hb tests conducted (no hard limits)' },
+      // ANC indicators - realistic monthly numbers
+      'anc_due_list': { min: 15, max: 45, description: 'Monthly ANC due list' },
+      'anc_footfall': { min: 12, max: 38, description: 'Monthly ANC visits' },
+      'anc_tested_hb': { min: 10, max: 35, description: 'Hb tests conducted' },
       
-      // RI indicators - no hard limits
-      'ri_sessions_planned': { min: 0, max: 0, description: 'Monthly RI sessions planned (no hard limits)' },
-      'ri_sessions_held': { min: 0, max: 0, description: 'Monthly RI sessions held (no hard limits)' },
-      'ri_beneficiaries_due': { min: 0, max: 0, description: 'Children due for immunization (no hard limits)' },
-      'ri_footfall': { min: 0, max: 0, description: 'Children immunized (no hard limits)' },
+      // RI indicators - realistic immunization numbers
+      'ri_sessions_planned': { min: 8, max: 12, description: 'Monthly RI sessions planned' },
+      'ri_sessions_held': { min: 6, max: 10, description: 'Monthly RI sessions held' },
+      'ri_beneficiaries_due': { min: 25, max: 80, description: 'Children due for immunization' },
+      'ri_footfall': { min: 20, max: 65, description: 'Children immunized' },
       
-      // TB indicators - no hard limits
-      'tb_screenings': { min: 0, max: 0, description: 'Monthly TB screenings (no hard limits)' },
-      'tb_contact_tracing_households': { min: 0, max: 0, description: 'Households visited (no hard limits)' },
-      'tb_differentiated_care_visits': { min: 0, max: 0, description: 'TB patient visits (no hard limits)' },
+      // TB indicators - realistic screening numbers
+      'tb_screenings': { min: 50, max: 200, description: 'Monthly TB screenings' },
+      'tb_contact_tracing_households': { min: 5, max: 25, description: 'Households visited' },
+      'tb_differentiated_care_visits': { min: 3, max: 15, description: 'TB patient visits' },
       
-      // NCD indicators - no hard limits
-      'cbac_forms_filled': { min: 0, max: 0, description: 'CBAC forms completed (no hard limits)' },
-      'htn_screened': { min: 0, max: 0, description: 'HTN screenings (no hard limits)' },
-      'dm_screened': { min: 0, max: 0, description: 'DM screenings (no hard limits)' },
-      'oral_cancer_screened': { min: 0, max: 0, description: 'Oral cancer screenings (no hard limits)' },
-      'breast_cervical_cancer_screened': { min: 0, max: 0, description: 'Cancer screenings (no hard limits)' },
-      'ncd_diagnosed_tx_completed': { min: 0, max: 0, description: 'NCD patients treated (no hard limits)' },
-      'ncd_referred_from_sc': { min: 0, max: 0, description: 'NCD referrals (no hard limits)' },
+      // NCD indicators - realistic screening numbers
+      'cbac_forms_filled': { min: 30, max: 120, description: 'CBAC forms completed' },
+      'htn_screened': { min: 40, max: 150, description: 'HTN screenings' },
+      'dm_screened': { min: 35, max: 130, description: 'DM screenings' },
+      'oral_cancer_screened': { min: 20, max: 80, description: 'Oral cancer screenings' },
+      'breast_cervical_cancer_screened': { min: 15, max: 60, description: 'Cancer screenings' },
+      'ncd_diagnosed_tx_completed': { min: 8, max: 25, description: 'NCD patients treated' },
+      'ncd_referred_from_sc': { min: 5, max: 20, description: 'NCD referrals' },
       
-      // Service indicators - no hard limits
-      'total_footfall': { min: 0, max: 0, description: 'Total monthly patients (no hard limits)' },
-      'total_footfall_phc_colocated_sc': { min: 0, max: 0, description: 'PHC patient visits (no hard limits)' },
-      'total_footfall_sc_clinic': { min: 0, max: 0, description: 'SC clinic visits (no hard limits)' },
-      'total_footfall_uhwc': { min: 0, max: 0, description: 'UHWC visits (no hard limits)' },
-      'wellness_sessions_conducted': { min: 0, max: 0, description: 'Wellness sessions (no hard limits)' },
-      'teleconsultation_conducted': { min: 0, max: 0, description: 'Teleconsultations (no hard limits)' },
-      'prakriti_parikshan_conducted': { min: 0, max: 0, description: 'Prakriti Parikshan (no hard limits)' },
-      'patient_satisfaction_score': { min: 0, max: 0, description: 'Satisfaction score (no hard limits)' },
+      // Service indicators - realistic facility numbers
+      'total_footfall': { min: 200, max: 800, description: 'Total monthly patients' },
+      'total_footfall_phc_colocated_sc': { min: 150, max: 600, description: 'PHC patient visits' },
+      'total_footfall_sc_clinic': { min: 100, max: 400, description: 'SC clinic visits' },
+      'total_footfall_uhwc': { min: 80, max: 300, description: 'UHWC visits' },
+      'wellness_sessions_conducted': { min: 4, max: 12, description: 'Wellness sessions' },
+      'teleconsultation_conducted': { min: 20, max: 60, description: 'Teleconsultations' },
+      'prakriti_parikshan_conducted': { min: 10, max: 40, description: 'Prakriti Parikshan' },
+      'patient_satisfaction_score': { min: 1, max: 5, description: 'Satisfaction score' },
       
-      // Elderly care indicators - no hard limits
-      'bedridden_patients': { min: 0, max: 0, description: 'Bedridden patients (no hard limits)' },
-      'elderly_palliative_visits': { min: 0, max: 0, description: 'Elderly care visits (no hard limits)' },
-      'elderly_clinic_conducted': { min: 0, max: 0, description: 'Elderly clinics (no hard limits)' },
+      // Elderly care indicators - realistic numbers
+      'bedridden_patients': { min: 2, max: 12, description: 'Bedridden patients' },
+      'elderly_palliative_visits': { min: 5, max: 25, description: 'Elderly care visits' },
+      'elderly_clinic_conducted': { min: 2, max: 8, description: 'Elderly clinics' },
       
-      // Administrative indicators - no hard limits
-      'jas_meetings_conducted': { min: 0, max: 0, description: 'JAS meetings (no hard limits)' },
-      'dvdms_issues_generated': { min: 0, max: 0, description: 'DVDMS issues (no hard limits)' },
+      // Administrative indicators - realistic numbers
+      'jas_meetings_conducted': { min: 1, max: 4, description: 'JAS meetings' },
+      'dvdms_issues_generated': { min: 3, max: 15, description: 'DVDMS issues' },
     };
     
     fieldMappings.forEach((mapping) => {
@@ -718,14 +718,15 @@ export default function DynamicHealthDataForm({
       switch (mapping.fieldType) {
         case "numeric":
           if (fieldName === 'elderly_support_group_activity') {
-            // Elderly support group activity - allow 0
-            dummyData[fieldName] = Math.floor(Math.random() * 9); // 0-8 activities
+            // Elderly support group activity - smaller realistic numbers
+            dummyData[fieldName] = Math.floor(Math.random() * 8) + 1; // 1-8 activities
           } else if (realisticRanges[fieldName]) {
-            // Generate realistic data without hard limits
-            dummyData[fieldName] = Math.floor(Math.random() * 100); // 0-99 for most fields
+            // Use predefined realistic ranges
+            const range = realisticRanges[fieldName];
+            dummyData[fieldName] = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
           } else {
-            // Default range for unknown numeric fields
-            dummyData[fieldName] = Math.floor(Math.random() * 100); // 0-99
+            // Default realistic range for unknown numeric fields
+            dummyData[fieldName] = Math.floor(Math.random() * 100) + 10; // 10-109
           }
           break;
           

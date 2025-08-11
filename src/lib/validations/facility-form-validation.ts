@@ -154,15 +154,13 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
     // Administrative validation
     jas_meetings_conducted: {
       required: true,
-      minValue: 0,
-      maxValue: 4,
       customValidator: (value, formData) => {
         const meetings = Number(value);
         if (meetings === 0) {
           return {
             field: 'jas_meetings_conducted',
             message: 'No JAS meetings conducted this month - is this correct?',
-            type: 'suspicious_value' as const
+            type: 'logic_error' as const
           };
         }
         return null;
@@ -174,8 +172,6 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
   PHC: {
     total_footfall_phc_colocated_sc: {
       required: true,
-      minValue: 50,
-      maxValue: 1000,
       customValidator: (value, formData) => {
         const footfall = Number(value);
         const population = Number(formData.total_population || 0);
@@ -201,8 +197,6 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
     },
     anc_footfall: {
       required: true,
-      minValue: 0,
-      maxValue: 100,
       customValidator: (value, formData) => {
         const ancFootfall = Number(value);
         const ancDue = Number(formData.anc_due_list || 0);
@@ -217,13 +211,10 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
       }
     },
     anc_due_list: {
-      required: true,
-      minValue: 0,
-      maxValue: 100
+      required: true
     },
     ncd_diagnosed_tx_completed: {
       required: true,
-      minValue: 0,
       customValidator: (value, formData) => {
         const completed = Number(value);
         const referred = Number(formData.ncd_referred_from_sc || 0);
@@ -243,8 +234,6 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
   SC_HWC: {
     total_footfall_sc_clinic: {
       required: true,
-      minValue: 30,
-      maxValue: 500,
       customValidator: (value, formData) => {
         const footfall = Number(value);
         const population = Number(formData.total_population || 0);
@@ -254,7 +243,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             return {
               field: 'total_footfall_sc_clinic',
               message: 'Monthly footfall seems low for SC-HWC',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
         }
@@ -277,9 +266,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
       }
     },
     elderly_support_group_activity: {
-      required: false, // Conditional based on group formation
-      minValue: 0,
-      maxValue: 20
+      required: true // All fields are now required, 0 is valid for no activities
     }
   },
 
@@ -287,8 +274,6 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
   U_HWC: {
     total_footfall_uhwc: {
       required: true,
-      minValue: 40,
-      maxValue: 400,
       customValidator: (value, formData) => {
         const footfall = Number(value);
         const population = Number(formData.total_population || 0);
@@ -298,7 +283,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             return {
               field: 'total_footfall_uhwc',
               message: 'Monthly footfall seems low for urban setting',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
         }
@@ -311,8 +296,6 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
   UPHC: {
     total_footfall_phc_colocated_sc: {
       required: true,
-      minValue: 80,
-      maxValue: 800,
       customValidator: (value, formData) => {
         const footfall = Number(value);
         const population = Number(formData.total_population || 0);
@@ -322,7 +305,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             return {
               field: 'total_footfall_phc_colocated_sc',
               message: 'Monthly footfall seems low for urban PHC',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
         }
@@ -334,14 +317,10 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
   // A_HWC-specific validation
   A_HWC: {
     total_footfall_sc_clinic: {
-      required: true,
-      minValue: 20,
-      maxValue: 300
+      required: true
     },
     prakriti_parikshan_conducted: {
       required: true,
-      minValue: 0,
-      maxValue: 100,
       customValidator: (value, formData) => {
         const conducted = Number(value);
         const pop18Plus = Number(formData.population_18_plus || 0);
@@ -351,7 +330,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             return {
               field: 'prakriti_parikshan_conducted',
               message: 'Prakriti Parikshan count seems high for monthly target',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
         }
@@ -440,10 +419,11 @@ export function validateField(
   const facilityRules = FACILITY_VALIDATION_RULES[facilityType]?.[fieldName];
   const rules = { ...commonRules, ...facilityRules };
   
-  if (!rules) return errors;
+  // All fields are required by default (including 0 as valid value)
+  const isRequired = rules?.required !== false; // Default to true unless explicitly set to false
   
   // Required field validation
-  if (rules.required && (value === undefined || value === null || value === "")) {
+  if (isRequired && (value === undefined || value === null || value === "")) {
     errors.push({
       field: fieldName,
       message: `${fieldMapping?.description || fieldName} is required`,
@@ -453,7 +433,7 @@ export function validateField(
   }
   
   // Skip validation if value is empty and not required
-  if (!rules.required && (value === undefined || value === null || value === "")) {
+  if (!isRequired && (value === undefined || value === null || value === "")) {
     return errors;
   }
   
@@ -470,21 +450,23 @@ export function validateField(
       return errors;
     }
     
-    // Range validation
-    if (rules.minValue !== undefined && numValue < rules.minValue) {
-      errors.push({
-        field: fieldName,
-        message: `${fieldMapping.description} must be at least ${rules.minValue}`,
-        type: 'range_error'
-      });
-    }
-    
-    if (rules.maxValue !== undefined && numValue > rules.maxValue) {
-      errors.push({
-        field: fieldName,
-        message: `${fieldMapping.description} cannot exceed ${rules.maxValue}`,
-        type: 'range_error'
-      });
+    // Range validation - only for Patient satisfaction score
+    if (fieldName === 'patient_satisfaction_score') {
+      if (rules?.minValue !== undefined && numValue < rules.minValue) {
+        errors.push({
+          field: fieldName,
+          message: `${fieldMapping.description} must be at least ${rules.minValue}`,
+          type: 'range_error'
+        });
+      }
+      
+      if (rules?.maxValue !== undefined && numValue > rules.maxValue) {
+        errors.push({
+          field: fieldName,
+          message: `${fieldMapping.description} cannot exceed ${rules.maxValue}`,
+          type: 'range_error'
+        });
+      }
     }
   }
   
@@ -501,7 +483,7 @@ export function validateField(
   }
   
   // Pattern validation
-  if (rules.pattern && typeof value === 'string' && !rules.pattern.test(value)) {
+  if (rules?.pattern && typeof value === 'string' && !rules.pattern.test(value)) {
     errors.push({
       field: fieldName,
       message: `${fieldMapping?.description || fieldName} format is invalid`,
@@ -510,7 +492,7 @@ export function validateField(
   }
   
   // Custom validation
-  if (rules.customValidator) {
+  if (rules?.customValidator) {
     const customError = rules.customValidator(value, formData);
     if (customError) {
       errors.push(customError);
@@ -743,16 +725,21 @@ export function getFieldValidationMessage(
   const facilityRules = FACILITY_VALIDATION_RULES[facilityType]?.[fieldName];
   const rules = { ...commonRules, ...facilityRules };
   
-  if (!rules) return '';
-  
   let message = '';
-  if (rules.required) message += 'Required. ';
-  if (rules.minValue !== undefined && rules.maxValue !== undefined) {
-    message += `Range: ${rules.minValue}-${rules.maxValue}. `;
-  } else if (rules.minValue !== undefined) {
-    message += `Minimum: ${rules.minValue}. `;
-  } else if (rules.maxValue !== undefined) {
-    message += `Maximum: ${rules.maxValue}. `;
+  
+  // All fields are required by default (including 0 as valid value)
+  const isRequired = rules?.required !== false; // Default to true unless explicitly set to false
+  if (isRequired) message += 'Required. ';
+  
+  // Only show range information for Patient satisfaction score
+  if (fieldName === 'patient_satisfaction_score') {
+    if (rules?.minValue !== undefined && rules?.maxValue !== undefined) {
+      message += `Range: ${rules.minValue}-${rules.maxValue}. `;
+    } else if (rules?.minValue !== undefined) {
+      message += `Minimum: ${rules.minValue}. `;
+    } else if (rules?.maxValue !== undefined) {
+      message += `Maximum: ${rules.maxValue}. `;
+    }
   }
   
   return message.trim();
