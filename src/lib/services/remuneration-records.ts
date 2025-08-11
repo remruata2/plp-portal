@@ -7,19 +7,24 @@ export interface RemunerationRecordData {
   facility_id: string;
   report_month: string;
   indicator_id?: number;
-  worker_id?: string;
   actual_value?: number;
-  target_value?: number;
+  target_value?: any; // JSON for min/max ranges
   percentage_achieved?: number;
   status: string;
   incentive_amount: number;
   max_remuneration?: number;
   raw_percentage?: number;
-  worker_type?: string;
-  worker_role?: string;
-  allocated_amount?: number;
-  performance_percentage?: number;
-  calculated_amount?: number;
+}
+
+export interface WorkerRemunerationData {
+  health_worker_id: number;
+  facility_id: string;
+  report_month: string;
+  worker_type: string;
+  worker_role: string;
+  allocated_amount: number;
+  performance_percentage: number;
+  calculated_amount: number;
 }
 
 export class RemunerationRecordsService {
@@ -41,44 +46,53 @@ export class RemunerationRecordsService {
         },
       });
 
-      // Prepare indicator records
-      const indicatorRecords: RemunerationRecordData[] = indicators.map((indicator) => ({
-        facility_id: facilityId,
-        report_month: month,
-        indicator_id: indicator.id,
-        actual_value: indicator.actual,
-        target_value: indicator.target_value_for_calculation,
-        percentage_achieved: indicator.percentage,
-        status: indicator.status,
-        incentive_amount: indicator.incentive_amount,
-        max_remuneration: indicator.max_remuneration,
-        raw_percentage: indicator.raw_percentage,
-      }));
+      // Delete existing worker remuneration records
+      await prisma.workerRemuneration.deleteMany({
+        where: {
+          facility_id: facilityId,
+          report_month: month,
+        },
+      });
 
-      // Prepare worker records
-      const workerRecords: RemunerationRecordData[] = workers.map((worker) => ({
-        facility_id: facilityId,
-        report_month: month,
-        worker_id: worker.id,
-        worker_type: worker.worker_type,
-        worker_role: worker.worker_role,
-        allocated_amount: worker.allocated_amount,
-        performance_percentage: worker.performance_percentage,
-        calculated_amount: worker.calculated_amount,
-        status: "worker_remuneration", // Special status for worker records
-        incentive_amount: 0, // Workers don't have direct incentives
-      }));
+      // Store indicator records in FacilityRemunerationRecord
+      if (indicators.length > 0) {
+        const indicatorRecords: RemunerationRecordData[] = indicators.map((indicator) => ({
+          facility_id: facilityId,
+          report_month: month,
+          indicator_id: indicator.id,
+          actual_value: indicator.actual,
+          target_value: indicator.target_value_for_calculation, // This should be JSON for min/max ranges
+          percentage_achieved: indicator.percentage,
+          status: indicator.status,
+          incentive_amount: indicator.incentive_amount,
+          max_remuneration: indicator.max_remuneration,
+          raw_percentage: indicator.raw_percentage,
+        }));
 
-      // Insert all records
-      const allRecords = [...indicatorRecords, ...workerRecords];
-      
-      if (allRecords.length > 0) {
         await prisma.facilityRemunerationRecord.createMany({
-          data: allRecords,
+          data: indicatorRecords,
         });
       }
 
-      console.log(`✅ Stored ${allRecords.length} remuneration records for facility ${facilityId}, month ${month}`);
+      // Store worker records in WorkerRemuneration
+      if (workers.length > 0) {
+        const workerRecords: WorkerRemunerationData[] = workers.map((worker) => ({
+          health_worker_id: Number(worker.id),
+          facility_id: facilityId,
+          report_month: month,
+          worker_type: worker.worker_type,
+          worker_role: worker.worker_role,
+          allocated_amount: worker.allocated_amount,
+          performance_percentage: worker.performance_percentage,
+          calculated_amount: worker.calculated_amount,
+        }));
+
+        await prisma.workerRemuneration.createMany({
+          data: workerRecords,
+        });
+      }
+
+      console.log(`✅ Stored ${indicators.length} indicator records and ${workers.length} worker records for facility ${facilityId}, month ${month}`);
     } catch (error) {
       console.error("❌ Error storing remuneration records:", error);
       throw error;
@@ -101,100 +115,107 @@ export class RemunerationRecordsService {
     };
   }> {
     try {
-      const records = await prisma.facilityRemunerationRecord.findMany({
+      // Get indicator records from FacilityRemunerationRecord
+      const indicatorRecords = await prisma.facilityRemunerationRecord.findMany({
+        where: {
+          facility_id: facilityId,
+          report_month: month,
+          indicator_id: { not: null },
+        },
+        include: {
+          indicator: true,
+        },
+        orderBy: [
+          { indicator_id: "asc" },
+        ],
+      });
+
+      // Get worker records from WorkerRemuneration
+      const workerRecords = await prisma.workerRemuneration.findMany({
         where: {
           facility_id: facilityId,
           report_month: month,
         },
         include: {
-          indicator: true,
-          worker: true,
+          health_worker: true,
         },
         orderBy: [
-          { indicator_id: "asc" },
-          { worker_id: "asc" },
+          { health_worker_id: "asc" },
         ],
       });
 
-      // Separate indicator and worker records
-      const indicators = records
-        .filter((record) => record.indicator_id)
-        .map((record) => {
-          // Reconstruct target description from indicator data since target_description field doesn't exist
-          let targetDescription = record.indicator?.target_formula || "Standard target";
-          
-          if (record.indicator?.target_value) {
-            const targetValueStr = record.indicator.target_value.toString();
-            
-            // Handle JSON range format
-            if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
-              try {
-                const parsedRange = JSON.parse(targetValueStr);
-                if (parsedRange.min !== undefined && parsedRange.max !== undefined) {
-                  if (!record.indicator.target_formula) {
-                    targetDescription = `Target: ${parsedRange.min}-${parsedRange.max}`;
-                  }
-                }
-              } catch (error) {
-                // Ignore parsing errors, use target_formula
+      // Process indicator records
+      const indicators = indicatorRecords.map((record) => {
+        // Reconstruct target description from stored target_value (JSON)
+        let targetDescription = record.indicator?.target_formula || "Standard target";
+        
+        if (record.target_value) {
+          try {
+            const targetValue = record.target_value as any;
+            if (targetValue.min !== undefined && targetValue.max !== undefined) {
+              if (!record.indicator?.target_formula) {
+                targetDescription = `Target: ${targetValue.min}-${targetValue.max}`;
               }
-            } else if (targetValueStr.includes('-')) {
-              // Handle range format (e.g., "3-5", "50-100")
-              const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
-              if (rangeMatch && !record.indicator.target_formula) {
-                targetDescription = `Target: ${rangeMatch[1]}-${rangeMatch[2]}`;
-              }
-            } else if (!record.indicator.target_formula) {
-              targetDescription = `${record.indicator.target_value}`;
+            } else if (targetValue.value !== undefined) {
+              targetDescription = `${targetValue.value}`;
             }
+          } catch (error) {
+            // Ignore parsing errors, use target_formula
           }
-          
-          return {
-            id: record.indicator_id,
-            name: record.indicator?.name || "",
-            target: targetDescription, // Use reconstructed target description
-            actual: record.actual_value || 0,
-            percentage: record.percentage_achieved || 0,
-            status: record.status as "achieved" | "partial" | "not_achieved",
-            incentive_amount: record.incentive_amount,
-            indicator_code: record.indicator?.code,
-            target_type: record.indicator?.target_type,
-            target_description: targetDescription, // Use reconstructed target description
-            target_value_for_calculation: record.target_value,
-            numerator_value: record.actual_value,
-            denominator_value: record.target_value,
-            max_remuneration: record.max_remuneration,
-            raw_percentage: record.raw_percentage,
-            numerator_field: record.indicator?.numerator_field,
-            denominator_field: record.indicator?.denominator_field,
-            target_field: record.indicator?.target_field,
-          };
-        });
+        }
+        
+        return {
+          id: record.indicator_id,
+          name: record.indicator?.name || "",
+          target: targetDescription,
+          actual: record.actual_value || 0,
+          percentage: record.percentage_achieved || 0,
+          status: record.status as "achieved" | "partial" | "not_achieved",
+          incentive_amount: record.incentive_amount,
+          indicator_code: record.indicator?.code,
+          target_type: record.indicator?.target_type,
+          target_description: targetDescription,
+          target_value_for_calculation: record.target_value,
+          numerator_value: record.actual_value,
+          denominator_value: record.target_value,
+          max_remuneration: record.max_remuneration,
+          raw_percentage: record.raw_percentage,
+          numerator_field: record.indicator?.numerator_field_id,
+          denominator_field: record.indicator?.denominator_field_id,
+          target_field: record.indicator?.target_field_id,
+        };
+      });
 
-      const workers = records
-        .filter((record) => record.worker_id)
-        .map((record) => ({
-          id: record.worker_id,
-          name: record.worker?.name || "",
-          worker_type: record.worker_type || "",
-          worker_role: record.worker_role || "",
-          allocated_amount: record.allocated_amount || 0,
-          performance_percentage: record.performance_percentage || 0,
-          calculated_amount: record.calculated_amount || 0,
-        }));
+      // Process worker records
+      const workers = workerRecords.map((record) => ({
+        id: record.health_worker_id,
+        name: record.health_worker?.name || "",
+        worker_type: record.worker_type || "",
+        worker_role: record.worker_role || "",
+        allocated_amount: Number(record.allocated_amount) || 0,
+        performance_percentage: Number(record.performance_percentage) || 0,
+        calculated_amount: Number(record.calculated_amount) || 0,
+      }));
 
       // Calculate totals
-      const totalIncentive = indicators.reduce((sum, ind) => sum + ind.incentive_amount, 0);
-      const totalPersonalIncentives = workers.reduce((sum, worker) => sum + worker.calculated_amount, 0);
+      const totalIncentive = indicators.reduce((sum, indicator) => sum + indicator.incentive_amount, 0);
+      
+      // Only include performance-based workers in personal incentives total
+      // HWO and AYUSH MO are individual-based and get facility incentive directly
+      const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw'];
+      const totalPersonalIncentives = workers
+        .filter(worker => performanceBasedWorkerTypes.includes(worker.worker_type.toLowerCase()))
+        .reduce((sum, worker) => sum + worker.calculated_amount, 0);
+      
       const totalRemuneration = totalIncentive + totalPersonalIncentives;
 
       return {
         indicators,
         workers,
         totals: {
-                  totalIncentive,
-        totalPersonalIncentives,
-        totalRemuneration,
+          totalIncentive,
+          totalPersonalIncentives,
+          totalRemuneration,
         },
       };
     } catch (error) {
@@ -211,13 +232,23 @@ export class RemunerationRecordsService {
     month: string
   ): Promise<boolean> {
     try {
-      const count = await prisma.facilityRemunerationRecord.count({
-        where: {
-          facility_id: facilityId,
-          report_month: month,
-        },
-      });
-      return count > 0;
+      // Check both indicator and worker records
+      const [indicatorCount, workerCount] = await Promise.all([
+        prisma.facilityRemunerationRecord.count({
+          where: {
+            facility_id: facilityId,
+            report_month: month,
+          },
+        }),
+        prisma.workerRemuneration.count({
+          where: {
+            facility_id: facilityId,
+            report_month: month,
+          },
+        }),
+      ]);
+
+      return (indicatorCount + workerCount) > 0;
     } catch (error) {
       console.error("❌ Error checking remuneration records:", error);
       return false;
@@ -232,12 +263,22 @@ export class RemunerationRecordsService {
     month: string
   ): Promise<void> {
     try {
+      // Delete indicator records
       await prisma.facilityRemunerationRecord.deleteMany({
         where: {
           facility_id: facilityId,
           report_month: month,
         },
       });
+
+      // Delete worker records
+      await prisma.workerRemuneration.deleteMany({
+        where: {
+          facility_id: facilityId,
+          report_month: month,
+        },
+      });
+
       console.log(`✅ Deleted remuneration records for facility ${facilityId}, month ${month}`);
     } catch (error) {
       console.error("❌ Error deleting remuneration records:", error);

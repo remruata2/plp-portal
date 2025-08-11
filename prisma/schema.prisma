@@ -78,6 +78,7 @@ model Facility {
   is_active                 Boolean                      @default(true)
   updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
   remuneration_records      FacilityRemunerationRecord[]
+  worker_remunerations      WorkerRemuneration[]
   district                  District                     @relation(fields: [district_id], references: [id])
   facility_type             FacilityType                 @relation(fields: [facility_type_id], references: [id])
   facility_field_defaults   FacilityFieldDefaults[]
@@ -300,7 +301,6 @@ model HealthWorker {
   is_active                 Boolean                      @default(true)
   created_at                DateTime                     @default(now()) @db.Timestamptz(6)
   updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
-  remuneration_records      FacilityRemunerationRecord[]
   facility                  Facility                     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   remuneration_calculations WorkerRemuneration[]
 
@@ -327,14 +327,22 @@ model RemunerationCalculation {
 model WorkerRemuneration {
   id                     Int          @id @default(autoincrement())
   health_worker_id       Int
+  facility_id            String       // Add facility_id for better querying
   report_month           String       @db.VarChar(7)
+  worker_type            String       // Add worker type (hw, asha, hwo, etc.)
+  worker_role            String       // Add worker role (HW, ASHA, HWO, etc.)
   allocated_amount       Decimal      @db.Decimal(10, 2)
   performance_percentage Decimal      @db.Decimal(5, 2)
   calculated_amount      Decimal      @db.Decimal(10, 2)
   calculated_at          DateTime     @default(now()) @db.Timestamptz(6)
+  
+  // Relations
   health_worker          HealthWorker @relation(fields: [health_worker_id], references: [id], onDelete: Cascade)
+  facility               Facility     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 
   @@unique([health_worker_id, report_month])
+  @@index([facility_id, report_month])
+  @@index([worker_type])
   @@map("worker_remunerations")
 }
 
@@ -459,30 +467,36 @@ model FacilityRemunerationRecord {
   facility_id            String
   report_month           String
   indicator_id           Int?
-  worker_id              Int?
+  
+  // Performance data (for indicators)
   actual_value           Float?
-  target_value           Float?
+  target_value           Json?         // JSON to store min/max ranges like indicators table
   percentage_achieved    Float?
-  status                 String
+  status                 String        // "achieved", "partial", "not_achieved"
+  
+  // Remuneration data (for indicators)
   incentive_amount       Float         @default(0)
   max_remuneration       Float?
   raw_percentage         Float?
-  worker_type            String?
-  worker_role            String?
-  allocated_amount       Float?
-  performance_percentage Float?
-  calculated_amount      Float?
+  
+  // Metadata
   calculation_date       DateTime      @default(now())
   calculation_version    String        @default("1.0")
+  
+  // Historical accuracy fields
+  kpi_config_snapshot    Json?
+  remuneration_formula_snapshot Json?
+  worker_allocation_snapshot Json?
+  calculation_metadata   Json?
+  
   facility               Facility      @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   indicator              Indicator?    @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
-  worker                 HealthWorker? @relation(fields: [worker_id], references: [id], onDelete: Cascade)
 
-  @@unique([facility_id, report_month, indicator_id, worker_id])
+  @@unique([facility_id, report_month, indicator_id])
   @@index([facility_id, report_month])
   @@index([report_month])
   @@index([indicator_id])
-  @@index([worker_id])
+  @@index([calculation_version])
 }
 
 enum UserRole {

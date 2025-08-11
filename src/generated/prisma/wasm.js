@@ -334,7 +334,10 @@ exports.Prisma.RemunerationCalculationScalarFieldEnum = {
 exports.Prisma.WorkerRemunerationScalarFieldEnum = {
   id: 'id',
   health_worker_id: 'health_worker_id',
+  facility_id: 'facility_id',
   report_month: 'report_month',
+  worker_type: 'worker_type',
+  worker_role: 'worker_role',
   allocated_amount: 'allocated_amount',
   performance_percentage: 'performance_percentage',
   calculated_amount: 'calculated_amount',
@@ -427,7 +430,6 @@ exports.Prisma.FacilityRemunerationRecordScalarFieldEnum = {
   facility_id: 'facility_id',
   report_month: 'report_month',
   indicator_id: 'indicator_id',
-  worker_id: 'worker_id',
   actual_value: 'actual_value',
   target_value: 'target_value',
   percentage_achieved: 'percentage_achieved',
@@ -435,13 +437,12 @@ exports.Prisma.FacilityRemunerationRecordScalarFieldEnum = {
   incentive_amount: 'incentive_amount',
   max_remuneration: 'max_remuneration',
   raw_percentage: 'raw_percentage',
-  worker_type: 'worker_type',
-  worker_role: 'worker_role',
-  allocated_amount: 'allocated_amount',
-  performance_percentage: 'performance_percentage',
-  calculated_amount: 'calculated_amount',
   calculation_date: 'calculation_date',
-  calculation_version: 'calculation_version'
+  calculation_version: 'calculation_version',
+  kpi_config_snapshot: 'kpi_config_snapshot',
+  remuneration_formula_snapshot: 'remuneration_formula_snapshot',
+  worker_allocation_snapshot: 'worker_allocation_snapshot',
+  calculation_metadata: 'calculation_metadata'
 };
 
 exports.Prisma.SortOrder = {

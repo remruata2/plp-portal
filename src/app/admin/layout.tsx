@@ -37,11 +37,10 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <Toaster richColors position="top-right" />
-      {/* Static sidebar for desktop */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <div className="flex flex-col w-64">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
+      {/* Fixed sidebar for desktop - doesn't scroll with main content */}
+      <div className="hidden lg:block lg:flex-shrink-0 lg:fixed lg:inset-y-0 lg:z-50">
+        <div className="flex flex-col w-64 h-full">
+          <div className="flex flex-col h-full border-r border-gray-200 bg-white">
             <AdminSidebar />
           </div>
         </div>
@@ -86,8 +85,8 @@ export default function AdminLayout({
         </div>
       )}
 
-      {/* Main content area */}
-      <div className="flex flex-col w-0 flex-1 overflow-hidden">
+      {/* Main content area with left margin to account for fixed sidebar */}
+      <div className="lg:pl-64 flex flex-col w-0 flex-1 overflow-hidden">
         {/* Top bar for mobile (hamburger button) */}
         <div className="lg:hidden sticky top-0 z-30 flex-shrink-0 flex h-16 bg-white shadow">
           <button

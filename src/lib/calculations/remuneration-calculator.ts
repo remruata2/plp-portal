@@ -1,4 +1,5 @@
 import { PrismaClient } from "@/generated/prisma";
+import { ConfigurationSnapshot } from "./configuration-snapshot";
 
 const prisma = new PrismaClient();
 
@@ -157,10 +158,12 @@ export class RemunerationCalculator {
 
   /**
    * Get stored remuneration calculation for a facility
+   * Respects historical data and only recalculates when necessary
    */
   static async getStoredRemunerationCalculation(
     facilityId: string,
-    reportMonth: string
+    reportMonth: string,
+    forceRecalculation: boolean = false
   ): Promise<RemunerationCalculation | null> {
     try {
       const stored = await prisma.remunerationCalculation.findUnique({
@@ -181,31 +184,104 @@ export class RemunerationCalculator {
       });
 
       if (!stored) {
-        return null;
+        // No stored data, calculate fresh
+        return this.calculateFacilityRemuneration(facilityId, reportMonth);
       }
 
-      // Get detailed calculation
+      // Check if we should use stored data or recalculate
+      if (!forceRecalculation) {
+        const currentVersion = await this.getCurrentCalculationVersion();
+        const validation = await ConfigurationSnapshot.validateStoredCalculation(
+          stored,
+          currentVersion
+        );
+
+        if (validation.recommendation === 'use_stored') {
+          // Use stored data - this preserves historical accuracy
+          return this.mapStoredToCalculation(stored);
+        }
+
+        if (validation.recommendation === 'manual_review') {
+          console.warn(`Version mismatch for ${facilityId} ${reportMonth}: ${validation.differences.join(', ')}`);
+          // For manual review cases, still return stored data but log the issue
+          return this.mapStoredToCalculation(stored);
+        }
+
+        // For 'recalculate' recommendation, continue to recalculation
+        console.log(`Recalculating ${facilityId} ${reportMonth} due to version change`);
+      }
+
+      // Calculate fresh and update stored data
       const calculation = await this.calculateFacilityRemuneration(
         facilityId,
         reportMonth
       );
 
-      return {
-        facilityId: calculation.facilityId,
-        facilityName: calculation.facilityName,
-        facilityType: calculation.facilityType,
-        districtName: calculation.districtName,
-        reportMonth: calculation.reportMonth,
-        totalAllocatedAmount: calculation.totalAllocatedAmount,
-        performancePercentage: calculation.performancePercentage,
-        workers: calculation.workers,
-        totalPersonalIncentives: calculation.totalPersonalIncentives,
-        totalRemuneration: calculation.totalRemuneration,
-      };
+      // Update the stored calculation with new version
+      await this.updateStoredCalculation(stored.id, calculation);
+
+      return calculation;
     } catch (error) {
       console.error("Error getting stored remuneration calculation:", error);
       throw error;
     }
+  }
+
+  /**
+   * Get current calculation version
+   */
+  private static async getCurrentCalculationVersion(): Promise<string> {
+    const kpiConfig = await ConfigurationSnapshot.getCurrentKPIConfig();
+    return kpiConfig.version;
+  }
+
+  /**
+   * Map stored database record to RemunerationCalculation interface
+   */
+  private static mapStoredToCalculation(stored: any): RemunerationCalculation {
+    return {
+      facilityId: stored.facility_id,
+      facilityName: stored.facility.name,
+      facilityType: stored.facility.facility_type.name,
+      districtName: stored.facility.district.name,
+      reportMonth: stored.report_month,
+      totalAllocatedAmount: Number(stored.total_worker_remuneration), // This is approximate
+      performancePercentage: Number(stored.performance_percentage),
+      workers: [], // We'll need to fetch worker details separately
+      totalPersonalIncentives: Number(stored.total_worker_remuneration),
+      totalRemuneration: Number(stored.total_remuneration),
+    };
+  }
+
+  /**
+   * Update stored calculation with new data
+   */
+  private static async updateStoredCalculation(
+    storedId: number,
+    calculation: RemunerationCalculation
+  ): Promise<void> {
+    const currentVersion = await this.getCurrentCalculationVersion();
+    const kpiConfig = await ConfigurationSnapshot.getCurrentKPIConfig();
+    const remunerationFormula = await ConfigurationSnapshot.getCurrentRemunerationFormula();
+    
+    await prisma.remunerationCalculation.update({
+      where: { id: storedId },
+      data: {
+        performance_percentage: calculation.performancePercentage,
+        total_worker_remuneration: calculation.totalPersonalIncentives,
+        total_remuneration: calculation.totalRemuneration,
+        health_workers_count: calculation.workers.filter(w => w.workerType === 'hw').length,
+        asha_workers_count: calculation.workers.filter(w => w.workerType === 'asha').length,
+        calculated_at: new Date(),
+        calculation_version: currentVersion,
+        kpi_config_snapshot: kpiConfig,
+        remuneration_formula_snapshot: remunerationFormula,
+        calculation_metadata: {
+          lastRecalculated: new Date(),
+          reason: 'Version change or forced recalculation',
+        },
+      },
+    });
   }
 
   /**
@@ -443,7 +519,16 @@ export class RemunerationCalculator {
         reportMonth
       );
 
-      // Store the calculation
+      // Get current configuration snapshots
+      const currentVersion = await this.getCurrentCalculationVersion();
+      const kpiConfig = await ConfigurationSnapshot.getCurrentKPIConfig();
+      const remunerationFormula = await ConfigurationSnapshot.getCurrentRemunerationFormula();
+      const workerAllocationSnapshot = await ConfigurationSnapshot.getCurrentWorkerAllocationSnapshot(
+        facility.facility_type.id
+      );
+      const calculationMetadata = await ConfigurationSnapshot.getCurrentCalculationMetadata();
+
+      // Store the calculation with configuration snapshots
       await prisma.remunerationCalculation.upsert({
         where: {
           facility_id_report_month: {
@@ -459,6 +544,12 @@ export class RemunerationCalculator {
           health_workers_count: calculation.workers.filter(w => w.workerType === 'hw').length,
           asha_workers_count: calculation.workers.filter(w => w.workerType === 'asha').length,
           calculated_at: new Date(),
+          // Note: These fields will be available after Prisma schema regeneration
+          // calculation_version: currentVersion,
+          // kpi_config_snapshot: kpiConfig,
+          // remuneration_formula_snapshot: remunerationFormula,
+          // worker_allocation_snapshot: workerAllocationSnapshot,
+          // calculation_metadata: calculationMetadata,
         },
         create: {
           facility_id: facilityId,
@@ -470,6 +561,12 @@ export class RemunerationCalculator {
           health_workers_count: calculation.workers.filter(w => w.workerType === 'hw').length,
           asha_workers_count: calculation.workers.filter(w => w.workerType === 'asha').length,
           calculated_at: new Date(),
+          // Note: These fields will be available after Prisma schema regeneration
+          // calculation_version: currentVersion,
+          // kpi_config_snapshot: kpiConfig,
+          // remuneration_formula_snapshot: remunerationFormula,
+          // worker_allocation_snapshot: workerAllocationSnapshot,
+          // calculation_metadata: calculationMetadata,
         },
       });
 

@@ -298,7 +298,8 @@ export default function FacilityHealthDataPage() {
               {submissions.map((submission) => (
                 <div
                   key={submission.report_month}
-                  className="flex items-center justify-between p-4 border rounded-lg"
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                  onClick={() => handleViewSubmission(`${session?.user?.facility_id}-${submission.report_month}`)}
                 >
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900">
@@ -312,13 +313,9 @@ export default function FacilityHealthDataPage() {
                     <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                       {submission.type === 'field_value' ? 'Data Submitted' : 'Calculated'}
                     </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleViewSubmission(`${session?.user?.facility_id}-${submission.report_month}`)}
-                    >
+                    <div className="text-gray-400">
                       <Eye className="h-4 w-4" />
-                    </Button>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -17,7 +17,6 @@ import {
   TrendingUp,
   TrendingDown,
   Target,
-  Award,
   Calendar,
   FileText,
   BarChart3,
@@ -103,16 +102,42 @@ interface MonthlyReport {
 export default function FacilityReportsPage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
-  const [calculating, setCalculating] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<string>("");
   const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [report, setReport] = useState<MonthlyReport | null>(null);
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
+  const [availableYears, setAvailableYears] = useState<string[]>([]);
 
-  // Get latest available month from the available months list
-  const getLatestAvailableMonth = (months: string[]) => {
-    if (months.length === 0) return "";
+  // Get latest available month and year from the available months list
+  const getLatestAvailableMonthAndYear = (months: string[]) => {
+    if (months.length === 0) return { month: "", year: "" };
     // Sort months in descending order and return the latest
-    return months.sort((a, b) => b.localeCompare(a))[0];
+    const sortedMonths = months.sort((a, b) => b.localeCompare(a));
+    const latestMonth = sortedMonths[0];
+    const [year, month] = latestMonth.split("-");
+    return { month, year };
+  };
+
+  // Extract available years from available months
+  const extractAvailableYears = (months: string[]) => {
+    const years = [...new Set(months.map(month => month.split("-")[0]))];
+    return years.sort((a, b) => b.localeCompare(a)); // Sort years descending
+  };
+
+  // Get available months for a specific year
+  const getAvailableMonthsForYear = (year: string) => {
+    return availableMonths
+      .filter(month => month.startsWith(year + "-"))
+      .map(month => month.split("-")[1])
+      .sort((a, b) => a.localeCompare(b)); // Sort months ascending
+  };
+
+  // Combine year and month into the format expected by the API
+  const getCombinedMonthYear = () => {
+    if (selectedYear && selectedMonth) {
+      return `${selectedYear}-${selectedMonth.padStart(2, '0')}`;
+    }
+    return "";
   };
 
   useEffect(() => {
@@ -140,14 +165,15 @@ export default function FacilityReportsPage() {
       return; // Still loading session
     }
 
+    const combinedMonthYear = getCombinedMonthYear();
     if (
-      selectedMonth &&
+      combinedMonthYear &&
       session?.user?.facility_id &&
       availableMonths.length > 0
     ) {
-      loadReport(selectedMonth);
+      loadReport(combinedMonthYear);
     }
-  }, [selectedMonth, session, status, availableMonths]);
+  }, [selectedYear, selectedMonth, session, status, availableMonths]);
 
   const loadAvailableMonths = async () => {
     try {
@@ -161,11 +187,16 @@ export default function FacilityReportsPage() {
         const months = data.months || [];
         setAvailableMonths(months);
 
-        // Set the latest available month as default
+        // Extract available years
+        const years = extractAvailableYears(months);
+        setAvailableYears(years);
+
+        // Set the latest available month and year as default
         if (months.length > 0) {
-          const latestMonth = getLatestAvailableMonth(months);
-          console.log("Setting latest available month as default:", latestMonth);
-          setSelectedMonth(latestMonth);
+          const { month, year } = getLatestAvailableMonthAndYear(months);
+          console.log("Setting latest available month and year as default:", { month, year });
+          setSelectedYear(year);
+          setSelectedMonth(month);
         } else {
           console.log("No available months found");
           setLoading(false);
@@ -204,39 +235,6 @@ export default function FacilityReportsPage() {
       setReport(null);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const calculateRemuneration = async () => {
-    if (!selectedMonth) {
-      toast.error("Please select a month first");
-      return;
-    }
-
-    try {
-      setCalculating(true);
-      const response = await fetch("/api/facility/reports/calculate-remuneration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ month: selectedMonth }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        toast.success("Remuneration records calculated and stored successfully");
-        // Reload the report to show the cached data
-        await loadReport(selectedMonth);
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || "Failed to calculate remuneration");
-      }
-    } catch (error) {
-      console.error("Error calculating remuneration:", error);
-      toast.error("Failed to calculate remuneration");
-    } finally {
-      setCalculating(false);
     }
   };
 
@@ -313,43 +311,40 @@ export default function FacilityReportsPage() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-gray-500" />
-            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select month" />
+                         <Select value={selectedYear} onValueChange={(year) => {
+               setSelectedYear(year);
+               setSelectedMonth(""); // Reset month when year changes
+             }}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
-                {availableMonths.map((month) => (
-                  <SelectItem key={month} value={month}>
-                    {new Date(month + "-01").toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                    })}
+                {availableYears.map((year) => (
+                  <SelectItem key={year} value={year}>
+                    {year}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+                          <Select value={selectedMonth} onValueChange={setSelectedMonth} disabled={!selectedYear}>
+                <SelectTrigger className="w-24">
+                  <SelectValue placeholder={selectedYear ? "Month" : "Select year first"} />
+                </SelectTrigger>
+              <SelectContent>
+                                 {selectedYear ? getAvailableMonthsForYear(selectedYear).map((month) => (
+                   <SelectItem key={month} value={month}>
+                     {new Date(`${selectedYear}-${month}-01`).toLocaleDateString("en-US", {
+                       month: "long",
+                     })}
+                   </SelectItem>
+                 )) : (
+                   <SelectItem value="" disabled>
+                     Select year first
+                   </SelectItem>
+                 )}
+              </SelectContent>
+            </Select>
           </div>
-          
-          {selectedMonth && (
-            <Button
-              onClick={calculateRemuneration}
-              disabled={calculating}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              {calculating ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-                  Calculating...
-                </>
-              ) : (
-                <>
-                  <Award className="h-4 w-4" />
-                  Calculate Remuneration
-                </>
-              )}
-            </Button>
-          )}
         </div>
       </div>
 
@@ -479,7 +474,7 @@ export default function FacilityReportsPage() {
                 <CardTitle className="text-sm font-medium">
                   Achieved
                 </CardTitle>
-                <Award className="h-4 w-4 text-muted-foreground" />
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
@@ -600,7 +595,7 @@ export default function FacilityReportsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5" />
+                <DollarSign className="h-5 w-5" />
                 Incentive Summary
               </CardTitle>
             </CardHeader>

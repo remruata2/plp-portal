@@ -98,10 +98,38 @@ export default function FacilityDashboardPage() {
   };
 
   const getChangeText = (current: number, previous: number, label: string) => {
-    if (previous === 0) return current > 0 ? `First ${label}` : `No ${label}`;
+    if (previous === 0) {
+      if (label === "submission") {
+        return current > 0 ? "First submission" : "No submissions yet";
+      } else if (label === "visitor") {
+        return current > 0 ? "First visitors" : "No visitors yet";
+      } else if (label === "performance") {
+        return current > 0 ? "First performance data" : "No performance data";
+      }
+      return current > 0 ? `First ${label}` : `No ${label}`;
+    }
+    
     const change = current - previous;
-    if (change > 0) return `+${change} from last month`;
-    if (change < 0) return `${change} from last month`;
+    if (change > 0) {
+      if (label === "submission") {
+        return `+${change} more than last month`;
+      } else if (label === "visitor") {
+        return `+${change.toLocaleString()} more visitors`;
+      } else if (label === "performance") {
+        return `+${change}% improvement`;
+      }
+      return `+${change} from last month`;
+    }
+    if (change < 0) {
+      if (label === "submission") {
+        return `${change} fewer than last month`;
+      } else if (label === "visitor") {
+        return `${change.toLocaleString()} fewer visitors`;
+      } else if (label === "performance") {
+        return `${change}% decrease`;
+      }
+      return `${change} from last month`;
+    }
     return "Same as last month";
   };
 
@@ -148,6 +176,9 @@ export default function FacilityDashboardPage() {
                   )
                 : "Loading..."}
             </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Months with data submitted
+            </p>
           </CardContent>
         </Card>
 
@@ -164,6 +195,9 @@ export default function FacilityDashboardPage() {
               {stats?.thisMonthSubmissions === 0
                 ? "No submissions yet"
                 : "Submissions this month"}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Current month data status
             </p>
           </CardContent>
         </Card>
@@ -188,6 +222,9 @@ export default function FacilityDashboardPage() {
                   )
                 : "Loading..."}
             </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Total visitors across all months
+            </p>
           </CardContent>
         </Card>
 
@@ -206,6 +243,9 @@ export default function FacilityDashboardPage() {
                     "performance"
                   )
                 : "Loading..."}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Composite activity score
             </p>
           </CardContent>
         </Card>

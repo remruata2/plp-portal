@@ -3384,6 +3384,7 @@ export namespace Prisma {
 
   export type FacilityCountOutputType = {
     remuneration_records: number
+    worker_remunerations: number
     facility_field_defaults: number
     facility_targets: number
     worker_allocations: number
@@ -3398,6 +3399,7 @@ export namespace Prisma {
 
   export type FacilityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     remuneration_records?: boolean | FacilityCountOutputTypeCountRemuneration_recordsArgs
+    worker_remunerations?: boolean | FacilityCountOutputTypeCountWorker_remunerationsArgs
     facility_field_defaults?: boolean | FacilityCountOutputTypeCountFacility_field_defaultsArgs
     facility_targets?: boolean | FacilityCountOutputTypeCountFacility_targetsArgs
     worker_allocations?: boolean | FacilityCountOutputTypeCountWorker_allocationsArgs
@@ -3426,6 +3428,13 @@ export namespace Prisma {
    */
   export type FacilityCountOutputTypeCountRemuneration_recordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FacilityRemunerationRecordWhereInput
+  }
+
+  /**
+   * FacilityCountOutputType without action
+   */
+  export type FacilityCountOutputTypeCountWorker_remunerationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerRemunerationWhereInput
   }
 
   /**
@@ -3696,12 +3705,10 @@ export namespace Prisma {
    */
 
   export type HealthWorkerCountOutputType = {
-    remuneration_records: number
     remuneration_calculations: number
   }
 
   export type HealthWorkerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    remuneration_records?: boolean | HealthWorkerCountOutputTypeCountRemuneration_recordsArgs
     remuneration_calculations?: boolean | HealthWorkerCountOutputTypeCountRemuneration_calculationsArgs
   }
 
@@ -3714,13 +3721,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the HealthWorkerCountOutputType
      */
     select?: HealthWorkerCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * HealthWorkerCountOutputType without action
-   */
-  export type HealthWorkerCountOutputTypeCountRemuneration_recordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityRemunerationRecordWhereInput
   }
 
   /**
@@ -8614,6 +8614,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: boolean
     remuneration_records?: boolean | Facility$remuneration_recordsArgs<ExtArgs>
+    worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
     facility_field_defaults?: boolean | Facility$facility_field_defaultsArgs<ExtArgs>
@@ -8672,6 +8673,7 @@ export namespace Prisma {
   export type FacilityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "created_at" | "description" | "display_name" | "district_id" | "facility_type_id" | "is_active" | "updated_at", ExtArgs["result"]["facility"]>
   export type FacilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     remuneration_records?: boolean | Facility$remuneration_recordsArgs<ExtArgs>
+    worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
     facility_field_defaults?: boolean | Facility$facility_field_defaultsArgs<ExtArgs>
@@ -8699,6 +8701,7 @@ export namespace Prisma {
     name: "Facility"
     objects: {
       remuneration_records: Prisma.$FacilityRemunerationRecordPayload<ExtArgs>[]
+      worker_remunerations: Prisma.$WorkerRemunerationPayload<ExtArgs>[]
       district: Prisma.$DistrictPayload<ExtArgs>
       facility_type: Prisma.$FacilityTypePayload<ExtArgs>
       facility_field_defaults: Prisma.$FacilityFieldDefaultsPayload<ExtArgs>[]
@@ -9117,6 +9120,7 @@ export namespace Prisma {
   export interface Prisma__FacilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     remuneration_records<T extends Facility$remuneration_recordsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$remuneration_recordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityRemunerationRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    worker_remunerations<T extends Facility$worker_remunerationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$worker_remunerationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerRemunerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     district<T extends DistrictDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DistrictDefaultArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     facility_type<T extends FacilityTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityTypeDefaultArgs<ExtArgs>>): Prisma__FacilityTypeClient<$Result.GetResult<Prisma.$FacilityTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     facility_field_defaults<T extends Facility$facility_field_defaultsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$facility_field_defaultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9584,6 +9588,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FacilityRemunerationRecordScalarFieldEnum | FacilityRemunerationRecordScalarFieldEnum[]
+  }
+
+  /**
+   * Facility.worker_remunerations
+   */
+  export type Facility$worker_remunerationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerRemuneration
+     */
+    select?: WorkerRemunerationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerRemuneration
+     */
+    omit?: WorkerRemunerationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerRemunerationInclude<ExtArgs> | null
+    where?: WorkerRemunerationWhereInput
+    orderBy?: WorkerRemunerationOrderByWithRelationInput | WorkerRemunerationOrderByWithRelationInput[]
+    cursor?: WorkerRemunerationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerRemunerationScalarFieldEnum | WorkerRemunerationScalarFieldEnum[]
   }
 
   /**
@@ -21351,7 +21379,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
-    remuneration_records?: boolean | HealthWorker$remuneration_recordsArgs<ExtArgs>
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     remuneration_calculations?: boolean | HealthWorker$remuneration_calculationsArgs<ExtArgs>
     _count?: boolean | HealthWorkerCountOutputTypeDefaultArgs<ExtArgs>
@@ -21400,7 +21427,6 @@ export namespace Prisma {
 
   export type HealthWorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_id" | "name" | "worker_type" | "allocated_amount" | "contact_number" | "email" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["healthWorker"]>
   export type HealthWorkerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    remuneration_records?: boolean | HealthWorker$remuneration_recordsArgs<ExtArgs>
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     remuneration_calculations?: boolean | HealthWorker$remuneration_calculationsArgs<ExtArgs>
     _count?: boolean | HealthWorkerCountOutputTypeDefaultArgs<ExtArgs>
@@ -21415,7 +21441,6 @@ export namespace Prisma {
   export type $HealthWorkerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "HealthWorker"
     objects: {
-      remuneration_records: Prisma.$FacilityRemunerationRecordPayload<ExtArgs>[]
       facility: Prisma.$FacilityPayload<ExtArgs>
       remuneration_calculations: Prisma.$WorkerRemunerationPayload<ExtArgs>[]
     }
@@ -21824,7 +21849,6 @@ export namespace Prisma {
    */
   export interface Prisma__HealthWorkerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    remuneration_records<T extends HealthWorker$remuneration_recordsArgs<ExtArgs> = {}>(args?: Subset<T, HealthWorker$remuneration_recordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityRemunerationRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     remuneration_calculations<T extends HealthWorker$remuneration_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, HealthWorker$remuneration_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerRemunerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -22259,30 +22283,6 @@ export namespace Prisma {
      * Limit how many HealthWorkers to delete.
      */
     limit?: number
-  }
-
-  /**
-   * HealthWorker.remuneration_records
-   */
-  export type HealthWorker$remuneration_recordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityRemunerationRecord
-     */
-    select?: FacilityRemunerationRecordSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityRemunerationRecord
-     */
-    omit?: FacilityRemunerationRecordOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityRemunerationRecordInclude<ExtArgs> | null
-    where?: FacilityRemunerationRecordWhereInput
-    orderBy?: FacilityRemunerationRecordOrderByWithRelationInput | FacilityRemunerationRecordOrderByWithRelationInput[]
-    cursor?: FacilityRemunerationRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FacilityRemunerationRecordScalarFieldEnum | FacilityRemunerationRecordScalarFieldEnum[]
   }
 
   /**
@@ -23540,7 +23540,10 @@ export namespace Prisma {
   export type WorkerRemunerationMinAggregateOutputType = {
     id: number | null
     health_worker_id: number | null
+    facility_id: string | null
     report_month: string | null
+    worker_type: string | null
+    worker_role: string | null
     allocated_amount: Decimal | null
     performance_percentage: Decimal | null
     calculated_amount: Decimal | null
@@ -23550,7 +23553,10 @@ export namespace Prisma {
   export type WorkerRemunerationMaxAggregateOutputType = {
     id: number | null
     health_worker_id: number | null
+    facility_id: string | null
     report_month: string | null
+    worker_type: string | null
+    worker_role: string | null
     allocated_amount: Decimal | null
     performance_percentage: Decimal | null
     calculated_amount: Decimal | null
@@ -23560,7 +23566,10 @@ export namespace Prisma {
   export type WorkerRemunerationCountAggregateOutputType = {
     id: number
     health_worker_id: number
+    facility_id: number
     report_month: number
+    worker_type: number
+    worker_role: number
     allocated_amount: number
     performance_percentage: number
     calculated_amount: number
@@ -23588,7 +23597,10 @@ export namespace Prisma {
   export type WorkerRemunerationMinAggregateInputType = {
     id?: true
     health_worker_id?: true
+    facility_id?: true
     report_month?: true
+    worker_type?: true
+    worker_role?: true
     allocated_amount?: true
     performance_percentage?: true
     calculated_amount?: true
@@ -23598,7 +23610,10 @@ export namespace Prisma {
   export type WorkerRemunerationMaxAggregateInputType = {
     id?: true
     health_worker_id?: true
+    facility_id?: true
     report_month?: true
+    worker_type?: true
+    worker_role?: true
     allocated_amount?: true
     performance_percentage?: true
     calculated_amount?: true
@@ -23608,7 +23623,10 @@ export namespace Prisma {
   export type WorkerRemunerationCountAggregateInputType = {
     id?: true
     health_worker_id?: true
+    facility_id?: true
     report_month?: true
+    worker_type?: true
+    worker_role?: true
     allocated_amount?: true
     performance_percentage?: true
     calculated_amount?: true
@@ -23705,7 +23723,10 @@ export namespace Prisma {
   export type WorkerRemunerationGroupByOutputType = {
     id: number
     health_worker_id: number
+    facility_id: string
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal
     performance_percentage: Decimal
     calculated_amount: Decimal
@@ -23734,66 +23755,88 @@ export namespace Prisma {
   export type WorkerRemunerationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     health_worker_id?: boolean
+    facility_id?: boolean
     report_month?: boolean
+    worker_type?: boolean
+    worker_role?: boolean
     allocated_amount?: boolean
     performance_percentage?: boolean
     calculated_amount?: boolean
     calculated_at?: boolean
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workerRemuneration"]>
 
   export type WorkerRemunerationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     health_worker_id?: boolean
+    facility_id?: boolean
     report_month?: boolean
+    worker_type?: boolean
+    worker_role?: boolean
     allocated_amount?: boolean
     performance_percentage?: boolean
     calculated_amount?: boolean
     calculated_at?: boolean
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workerRemuneration"]>
 
   export type WorkerRemunerationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     health_worker_id?: boolean
+    facility_id?: boolean
     report_month?: boolean
+    worker_type?: boolean
+    worker_role?: boolean
     allocated_amount?: boolean
     performance_percentage?: boolean
     calculated_amount?: boolean
     calculated_at?: boolean
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workerRemuneration"]>
 
   export type WorkerRemunerationSelectScalar = {
     id?: boolean
     health_worker_id?: boolean
+    facility_id?: boolean
     report_month?: boolean
+    worker_type?: boolean
+    worker_role?: boolean
     allocated_amount?: boolean
     performance_percentage?: boolean
     calculated_amount?: boolean
     calculated_at?: boolean
   }
 
-  export type WorkerRemunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "health_worker_id" | "report_month" | "allocated_amount" | "performance_percentage" | "calculated_amount" | "calculated_at", ExtArgs["result"]["workerRemuneration"]>
+  export type WorkerRemunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "health_worker_id" | "facility_id" | "report_month" | "worker_type" | "worker_role" | "allocated_amount" | "performance_percentage" | "calculated_amount" | "calculated_at", ExtArgs["result"]["workerRemuneration"]>
   export type WorkerRemunerationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }
   export type WorkerRemunerationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }
   export type WorkerRemunerationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     health_worker?: boolean | HealthWorkerDefaultArgs<ExtArgs>
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
   }
 
   export type $WorkerRemunerationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WorkerRemuneration"
     objects: {
       health_worker: Prisma.$HealthWorkerPayload<ExtArgs>
+      facility: Prisma.$FacilityPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       health_worker_id: number
+      facility_id: string
       report_month: string
+      worker_type: string
+      worker_role: string
       allocated_amount: Prisma.Decimal
       performance_percentage: Prisma.Decimal
       calculated_amount: Prisma.Decimal
@@ -24193,6 +24236,7 @@ export namespace Prisma {
   export interface Prisma__WorkerRemunerationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     health_worker<T extends HealthWorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, HealthWorkerDefaultArgs<ExtArgs>>): Prisma__HealthWorkerClient<$Result.GetResult<Prisma.$HealthWorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24224,7 +24268,10 @@ export namespace Prisma {
   interface WorkerRemunerationFieldRefs {
     readonly id: FieldRef<"WorkerRemuneration", 'Int'>
     readonly health_worker_id: FieldRef<"WorkerRemuneration", 'Int'>
+    readonly facility_id: FieldRef<"WorkerRemuneration", 'String'>
     readonly report_month: FieldRef<"WorkerRemuneration", 'String'>
+    readonly worker_type: FieldRef<"WorkerRemuneration", 'String'>
+    readonly worker_role: FieldRef<"WorkerRemuneration", 'String'>
     readonly allocated_amount: FieldRef<"WorkerRemuneration", 'Decimal'>
     readonly performance_percentage: FieldRef<"WorkerRemuneration", 'Decimal'>
     readonly calculated_amount: FieldRef<"WorkerRemuneration", 'Decimal'>
@@ -32871,30 +32918,20 @@ export namespace Prisma {
 
   export type FacilityRemunerationRecordAvgAggregateOutputType = {
     indicator_id: number | null
-    worker_id: number | null
     actual_value: number | null
-    target_value: number | null
     percentage_achieved: number | null
     incentive_amount: number | null
     max_remuneration: number | null
     raw_percentage: number | null
-    allocated_amount: number | null
-    performance_percentage: number | null
-    calculated_amount: number | null
   }
 
   export type FacilityRemunerationRecordSumAggregateOutputType = {
     indicator_id: number | null
-    worker_id: number | null
     actual_value: number | null
-    target_value: number | null
     percentage_achieved: number | null
     incentive_amount: number | null
     max_remuneration: number | null
     raw_percentage: number | null
-    allocated_amount: number | null
-    performance_percentage: number | null
-    calculated_amount: number | null
   }
 
   export type FacilityRemunerationRecordMinAggregateOutputType = {
@@ -32902,19 +32939,12 @@ export namespace Prisma {
     facility_id: string | null
     report_month: string | null
     indicator_id: number | null
-    worker_id: number | null
     actual_value: number | null
-    target_value: number | null
     percentage_achieved: number | null
     status: string | null
     incentive_amount: number | null
     max_remuneration: number | null
     raw_percentage: number | null
-    worker_type: string | null
-    worker_role: string | null
-    allocated_amount: number | null
-    performance_percentage: number | null
-    calculated_amount: number | null
     calculation_date: Date | null
     calculation_version: string | null
   }
@@ -32924,19 +32954,12 @@ export namespace Prisma {
     facility_id: string | null
     report_month: string | null
     indicator_id: number | null
-    worker_id: number | null
     actual_value: number | null
-    target_value: number | null
     percentage_achieved: number | null
     status: string | null
     incentive_amount: number | null
     max_remuneration: number | null
     raw_percentage: number | null
-    worker_type: string | null
-    worker_role: string | null
-    allocated_amount: number | null
-    performance_percentage: number | null
-    calculated_amount: number | null
     calculation_date: Date | null
     calculation_version: string | null
   }
@@ -32946,7 +32969,6 @@ export namespace Prisma {
     facility_id: number
     report_month: number
     indicator_id: number
-    worker_id: number
     actual_value: number
     target_value: number
     percentage_achieved: number
@@ -32954,43 +32976,32 @@ export namespace Prisma {
     incentive_amount: number
     max_remuneration: number
     raw_percentage: number
-    worker_type: number
-    worker_role: number
-    allocated_amount: number
-    performance_percentage: number
-    calculated_amount: number
     calculation_date: number
     calculation_version: number
+    kpi_config_snapshot: number
+    remuneration_formula_snapshot: number
+    worker_allocation_snapshot: number
+    calculation_metadata: number
     _all: number
   }
 
 
   export type FacilityRemunerationRecordAvgAggregateInputType = {
     indicator_id?: true
-    worker_id?: true
     actual_value?: true
-    target_value?: true
     percentage_achieved?: true
     incentive_amount?: true
     max_remuneration?: true
     raw_percentage?: true
-    allocated_amount?: true
-    performance_percentage?: true
-    calculated_amount?: true
   }
 
   export type FacilityRemunerationRecordSumAggregateInputType = {
     indicator_id?: true
-    worker_id?: true
     actual_value?: true
-    target_value?: true
     percentage_achieved?: true
     incentive_amount?: true
     max_remuneration?: true
     raw_percentage?: true
-    allocated_amount?: true
-    performance_percentage?: true
-    calculated_amount?: true
   }
 
   export type FacilityRemunerationRecordMinAggregateInputType = {
@@ -32998,19 +33009,12 @@ export namespace Prisma {
     facility_id?: true
     report_month?: true
     indicator_id?: true
-    worker_id?: true
     actual_value?: true
-    target_value?: true
     percentage_achieved?: true
     status?: true
     incentive_amount?: true
     max_remuneration?: true
     raw_percentage?: true
-    worker_type?: true
-    worker_role?: true
-    allocated_amount?: true
-    performance_percentage?: true
-    calculated_amount?: true
     calculation_date?: true
     calculation_version?: true
   }
@@ -33020,19 +33024,12 @@ export namespace Prisma {
     facility_id?: true
     report_month?: true
     indicator_id?: true
-    worker_id?: true
     actual_value?: true
-    target_value?: true
     percentage_achieved?: true
     status?: true
     incentive_amount?: true
     max_remuneration?: true
     raw_percentage?: true
-    worker_type?: true
-    worker_role?: true
-    allocated_amount?: true
-    performance_percentage?: true
-    calculated_amount?: true
     calculation_date?: true
     calculation_version?: true
   }
@@ -33042,7 +33039,6 @@ export namespace Prisma {
     facility_id?: true
     report_month?: true
     indicator_id?: true
-    worker_id?: true
     actual_value?: true
     target_value?: true
     percentage_achieved?: true
@@ -33050,13 +33046,12 @@ export namespace Prisma {
     incentive_amount?: true
     max_remuneration?: true
     raw_percentage?: true
-    worker_type?: true
-    worker_role?: true
-    allocated_amount?: true
-    performance_percentage?: true
-    calculated_amount?: true
     calculation_date?: true
     calculation_version?: true
+    kpi_config_snapshot?: true
+    remuneration_formula_snapshot?: true
+    worker_allocation_snapshot?: true
+    calculation_metadata?: true
     _all?: true
   }
 
@@ -33151,21 +33146,19 @@ export namespace Prisma {
     facility_id: string
     report_month: string
     indicator_id: number | null
-    worker_id: number | null
     actual_value: number | null
-    target_value: number | null
+    target_value: JsonValue | null
     percentage_achieved: number | null
     status: string
     incentive_amount: number
     max_remuneration: number | null
     raw_percentage: number | null
-    worker_type: string | null
-    worker_role: string | null
-    allocated_amount: number | null
-    performance_percentage: number | null
-    calculated_amount: number | null
     calculation_date: Date
     calculation_version: string
+    kpi_config_snapshot: JsonValue | null
+    remuneration_formula_snapshot: JsonValue | null
+    worker_allocation_snapshot: JsonValue | null
+    calculation_metadata: JsonValue | null
     _count: FacilityRemunerationRecordCountAggregateOutputType | null
     _avg: FacilityRemunerationRecordAvgAggregateOutputType | null
     _sum: FacilityRemunerationRecordSumAggregateOutputType | null
@@ -33192,7 +33185,6 @@ export namespace Prisma {
     facility_id?: boolean
     report_month?: boolean
     indicator_id?: boolean
-    worker_id?: boolean
     actual_value?: boolean
     target_value?: boolean
     percentage_achieved?: boolean
@@ -33200,16 +33192,14 @@ export namespace Prisma {
     incentive_amount?: boolean
     max_remuneration?: boolean
     raw_percentage?: boolean
-    worker_type?: boolean
-    worker_role?: boolean
-    allocated_amount?: boolean
-    performance_percentage?: boolean
-    calculated_amount?: boolean
     calculation_date?: boolean
     calculation_version?: boolean
+    kpi_config_snapshot?: boolean
+    remuneration_formula_snapshot?: boolean
+    worker_allocation_snapshot?: boolean
+    calculation_metadata?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }, ExtArgs["result"]["facilityRemunerationRecord"]>
 
   export type FacilityRemunerationRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33217,7 +33207,6 @@ export namespace Prisma {
     facility_id?: boolean
     report_month?: boolean
     indicator_id?: boolean
-    worker_id?: boolean
     actual_value?: boolean
     target_value?: boolean
     percentage_achieved?: boolean
@@ -33225,16 +33214,14 @@ export namespace Prisma {
     incentive_amount?: boolean
     max_remuneration?: boolean
     raw_percentage?: boolean
-    worker_type?: boolean
-    worker_role?: boolean
-    allocated_amount?: boolean
-    performance_percentage?: boolean
-    calculated_amount?: boolean
     calculation_date?: boolean
     calculation_version?: boolean
+    kpi_config_snapshot?: boolean
+    remuneration_formula_snapshot?: boolean
+    worker_allocation_snapshot?: boolean
+    calculation_metadata?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }, ExtArgs["result"]["facilityRemunerationRecord"]>
 
   export type FacilityRemunerationRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33242,7 +33229,6 @@ export namespace Prisma {
     facility_id?: boolean
     report_month?: boolean
     indicator_id?: boolean
-    worker_id?: boolean
     actual_value?: boolean
     target_value?: boolean
     percentage_achieved?: boolean
@@ -33250,16 +33236,14 @@ export namespace Prisma {
     incentive_amount?: boolean
     max_remuneration?: boolean
     raw_percentage?: boolean
-    worker_type?: boolean
-    worker_role?: boolean
-    allocated_amount?: boolean
-    performance_percentage?: boolean
-    calculated_amount?: boolean
     calculation_date?: boolean
     calculation_version?: boolean
+    kpi_config_snapshot?: boolean
+    remuneration_formula_snapshot?: boolean
+    worker_allocation_snapshot?: boolean
+    calculation_metadata?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }, ExtArgs["result"]["facilityRemunerationRecord"]>
 
   export type FacilityRemunerationRecordSelectScalar = {
@@ -33267,7 +33251,6 @@ export namespace Prisma {
     facility_id?: boolean
     report_month?: boolean
     indicator_id?: boolean
-    worker_id?: boolean
     actual_value?: boolean
     target_value?: boolean
     percentage_achieved?: boolean
@@ -33275,30 +33258,26 @@ export namespace Prisma {
     incentive_amount?: boolean
     max_remuneration?: boolean
     raw_percentage?: boolean
-    worker_type?: boolean
-    worker_role?: boolean
-    allocated_amount?: boolean
-    performance_percentage?: boolean
-    calculated_amount?: boolean
     calculation_date?: boolean
     calculation_version?: boolean
+    kpi_config_snapshot?: boolean
+    remuneration_formula_snapshot?: boolean
+    worker_allocation_snapshot?: boolean
+    calculation_metadata?: boolean
   }
 
-  export type FacilityRemunerationRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_id" | "report_month" | "indicator_id" | "worker_id" | "actual_value" | "target_value" | "percentage_achieved" | "status" | "incentive_amount" | "max_remuneration" | "raw_percentage" | "worker_type" | "worker_role" | "allocated_amount" | "performance_percentage" | "calculated_amount" | "calculation_date" | "calculation_version", ExtArgs["result"]["facilityRemunerationRecord"]>
+  export type FacilityRemunerationRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_id" | "report_month" | "indicator_id" | "actual_value" | "target_value" | "percentage_achieved" | "status" | "incentive_amount" | "max_remuneration" | "raw_percentage" | "calculation_date" | "calculation_version" | "kpi_config_snapshot" | "remuneration_formula_snapshot" | "worker_allocation_snapshot" | "calculation_metadata", ExtArgs["result"]["facilityRemunerationRecord"]>
   export type FacilityRemunerationRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }
   export type FacilityRemunerationRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }
   export type FacilityRemunerationRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
     indicator?: boolean | FacilityRemunerationRecord$indicatorArgs<ExtArgs>
-    worker?: boolean | FacilityRemunerationRecord$workerArgs<ExtArgs>
   }
 
   export type $FacilityRemunerationRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33306,28 +33285,25 @@ export namespace Prisma {
     objects: {
       facility: Prisma.$FacilityPayload<ExtArgs>
       indicator: Prisma.$IndicatorPayload<ExtArgs> | null
-      worker: Prisma.$HealthWorkerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       facility_id: string
       report_month: string
       indicator_id: number | null
-      worker_id: number | null
       actual_value: number | null
-      target_value: number | null
+      target_value: Prisma.JsonValue | null
       percentage_achieved: number | null
       status: string
       incentive_amount: number
       max_remuneration: number | null
       raw_percentage: number | null
-      worker_type: string | null
-      worker_role: string | null
-      allocated_amount: number | null
-      performance_percentage: number | null
-      calculated_amount: number | null
       calculation_date: Date
       calculation_version: string
+      kpi_config_snapshot: Prisma.JsonValue | null
+      remuneration_formula_snapshot: Prisma.JsonValue | null
+      worker_allocation_snapshot: Prisma.JsonValue | null
+      calculation_metadata: Prisma.JsonValue | null
     }, ExtArgs["result"]["facilityRemunerationRecord"]>
     composites: {}
   }
@@ -33724,7 +33700,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     indicator<T extends FacilityRemunerationRecord$indicatorArgs<ExtArgs> = {}>(args?: Subset<T, FacilityRemunerationRecord$indicatorArgs<ExtArgs>>): Prisma__IndicatorClient<$Result.GetResult<Prisma.$IndicatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    worker<T extends FacilityRemunerationRecord$workerArgs<ExtArgs> = {}>(args?: Subset<T, FacilityRemunerationRecord$workerArgs<ExtArgs>>): Prisma__HealthWorkerClient<$Result.GetResult<Prisma.$HealthWorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33758,21 +33733,19 @@ export namespace Prisma {
     readonly facility_id: FieldRef<"FacilityRemunerationRecord", 'String'>
     readonly report_month: FieldRef<"FacilityRemunerationRecord", 'String'>
     readonly indicator_id: FieldRef<"FacilityRemunerationRecord", 'Int'>
-    readonly worker_id: FieldRef<"FacilityRemunerationRecord", 'Int'>
     readonly actual_value: FieldRef<"FacilityRemunerationRecord", 'Float'>
-    readonly target_value: FieldRef<"FacilityRemunerationRecord", 'Float'>
+    readonly target_value: FieldRef<"FacilityRemunerationRecord", 'Json'>
     readonly percentage_achieved: FieldRef<"FacilityRemunerationRecord", 'Float'>
     readonly status: FieldRef<"FacilityRemunerationRecord", 'String'>
     readonly incentive_amount: FieldRef<"FacilityRemunerationRecord", 'Float'>
     readonly max_remuneration: FieldRef<"FacilityRemunerationRecord", 'Float'>
     readonly raw_percentage: FieldRef<"FacilityRemunerationRecord", 'Float'>
-    readonly worker_type: FieldRef<"FacilityRemunerationRecord", 'String'>
-    readonly worker_role: FieldRef<"FacilityRemunerationRecord", 'String'>
-    readonly allocated_amount: FieldRef<"FacilityRemunerationRecord", 'Float'>
-    readonly performance_percentage: FieldRef<"FacilityRemunerationRecord", 'Float'>
-    readonly calculated_amount: FieldRef<"FacilityRemunerationRecord", 'Float'>
     readonly calculation_date: FieldRef<"FacilityRemunerationRecord", 'DateTime'>
     readonly calculation_version: FieldRef<"FacilityRemunerationRecord", 'String'>
+    readonly kpi_config_snapshot: FieldRef<"FacilityRemunerationRecord", 'Json'>
+    readonly remuneration_formula_snapshot: FieldRef<"FacilityRemunerationRecord", 'Json'>
+    readonly worker_allocation_snapshot: FieldRef<"FacilityRemunerationRecord", 'Json'>
+    readonly calculation_metadata: FieldRef<"FacilityRemunerationRecord", 'Json'>
   }
     
 
@@ -34188,25 +34161,6 @@ export namespace Prisma {
   }
 
   /**
-   * FacilityRemunerationRecord.worker
-   */
-  export type FacilityRemunerationRecord$workerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the HealthWorker
-     */
-    select?: HealthWorkerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the HealthWorker
-     */
-    omit?: HealthWorkerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: HealthWorkerInclude<ExtArgs> | null
-    where?: HealthWorkerWhereInput
-  }
-
-  /**
    * FacilityRemunerationRecord without action
    */
   export type FacilityRemunerationRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -34501,7 +34455,10 @@ export namespace Prisma {
   export const WorkerRemunerationScalarFieldEnum: {
     id: 'id',
     health_worker_id: 'health_worker_id',
+    facility_id: 'facility_id',
     report_month: 'report_month',
+    worker_type: 'worker_type',
+    worker_role: 'worker_role',
     allocated_amount: 'allocated_amount',
     performance_percentage: 'performance_percentage',
     calculated_amount: 'calculated_amount',
@@ -34618,7 +34575,6 @@ export namespace Prisma {
     facility_id: 'facility_id',
     report_month: 'report_month',
     indicator_id: 'indicator_id',
-    worker_id: 'worker_id',
     actual_value: 'actual_value',
     target_value: 'target_value',
     percentage_achieved: 'percentage_achieved',
@@ -34626,13 +34582,12 @@ export namespace Prisma {
     incentive_amount: 'incentive_amount',
     max_remuneration: 'max_remuneration',
     raw_percentage: 'raw_percentage',
-    worker_type: 'worker_type',
-    worker_role: 'worker_role',
-    allocated_amount: 'allocated_amount',
-    performance_percentage: 'performance_percentage',
-    calculated_amount: 'calculated_amount',
     calculation_date: 'calculation_date',
-    calculation_version: 'calculation_version'
+    calculation_version: 'calculation_version',
+    kpi_config_snapshot: 'kpi_config_snapshot',
+    remuneration_formula_snapshot: 'remuneration_formula_snapshot',
+    worker_allocation_snapshot: 'worker_allocation_snapshot',
+    calculation_metadata: 'calculation_metadata'
   };
 
   export type FacilityRemunerationRecordScalarFieldEnum = (typeof FacilityRemunerationRecordScalarFieldEnum)[keyof typeof FacilityRemunerationRecordScalarFieldEnum]
@@ -35187,6 +35142,7 @@ export namespace Prisma {
     is_active?: BoolFilter<"Facility"> | boolean
     updated_at?: DateTimeFilter<"Facility"> | Date | string
     remuneration_records?: FacilityRemunerationRecordListRelationFilter
+    worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
     facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
@@ -35212,6 +35168,7 @@ export namespace Prisma {
     is_active?: SortOrder
     updated_at?: SortOrder
     remuneration_records?: FacilityRemunerationRecordOrderByRelationAggregateInput
+    worker_remunerations?: WorkerRemunerationOrderByRelationAggregateInput
     district?: DistrictOrderByWithRelationInput
     facility_type?: FacilityTypeOrderByWithRelationInput
     facility_field_defaults?: FacilityFieldDefaultsOrderByRelationAggregateInput
@@ -35241,6 +35198,7 @@ export namespace Prisma {
     is_active?: BoolFilter<"Facility"> | boolean
     updated_at?: DateTimeFilter<"Facility"> | Date | string
     remuneration_records?: FacilityRemunerationRecordListRelationFilter
+    worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
     facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
@@ -36200,7 +36158,6 @@ export namespace Prisma {
     is_active?: BoolFilter<"HealthWorker"> | boolean
     created_at?: DateTimeFilter<"HealthWorker"> | Date | string
     updated_at?: DateTimeFilter<"HealthWorker"> | Date | string
-    remuneration_records?: FacilityRemunerationRecordListRelationFilter
     facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
     remuneration_calculations?: WorkerRemunerationListRelationFilter
   }
@@ -36216,7 +36173,6 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_records?: FacilityRemunerationRecordOrderByRelationAggregateInput
     facility?: FacilityOrderByWithRelationInput
     remuneration_calculations?: WorkerRemunerationOrderByRelationAggregateInput
   }
@@ -36235,7 +36191,6 @@ export namespace Prisma {
     is_active?: BoolFilter<"HealthWorker"> | boolean
     created_at?: DateTimeFilter<"HealthWorker"> | Date | string
     updated_at?: DateTimeFilter<"HealthWorker"> | Date | string
-    remuneration_records?: FacilityRemunerationRecordListRelationFilter
     facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
     remuneration_calculations?: WorkerRemunerationListRelationFilter
   }, "id">
@@ -36363,23 +36318,31 @@ export namespace Prisma {
     NOT?: WorkerRemunerationWhereInput | WorkerRemunerationWhereInput[]
     id?: IntFilter<"WorkerRemuneration"> | number
     health_worker_id?: IntFilter<"WorkerRemuneration"> | number
+    facility_id?: StringFilter<"WorkerRemuneration"> | string
     report_month?: StringFilter<"WorkerRemuneration"> | string
+    worker_type?: StringFilter<"WorkerRemuneration"> | string
+    worker_role?: StringFilter<"WorkerRemuneration"> | string
     allocated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     calculated_at?: DateTimeFilter<"WorkerRemuneration"> | Date | string
     health_worker?: XOR<HealthWorkerScalarRelationFilter, HealthWorkerWhereInput>
+    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
   }
 
   export type WorkerRemunerationOrderByWithRelationInput = {
     id?: SortOrder
     health_worker_id?: SortOrder
+    facility_id?: SortOrder
     report_month?: SortOrder
+    worker_type?: SortOrder
+    worker_role?: SortOrder
     allocated_amount?: SortOrder
     performance_percentage?: SortOrder
     calculated_amount?: SortOrder
     calculated_at?: SortOrder
     health_worker?: HealthWorkerOrderByWithRelationInput
+    facility?: FacilityOrderByWithRelationInput
   }
 
   export type WorkerRemunerationWhereUniqueInput = Prisma.AtLeast<{
@@ -36389,18 +36352,25 @@ export namespace Prisma {
     OR?: WorkerRemunerationWhereInput[]
     NOT?: WorkerRemunerationWhereInput | WorkerRemunerationWhereInput[]
     health_worker_id?: IntFilter<"WorkerRemuneration"> | number
+    facility_id?: StringFilter<"WorkerRemuneration"> | string
     report_month?: StringFilter<"WorkerRemuneration"> | string
+    worker_type?: StringFilter<"WorkerRemuneration"> | string
+    worker_role?: StringFilter<"WorkerRemuneration"> | string
     allocated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     calculated_at?: DateTimeFilter<"WorkerRemuneration"> | Date | string
     health_worker?: XOR<HealthWorkerScalarRelationFilter, HealthWorkerWhereInput>
+    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
   }, "id" | "health_worker_id_report_month">
 
   export type WorkerRemunerationOrderByWithAggregationInput = {
     id?: SortOrder
     health_worker_id?: SortOrder
+    facility_id?: SortOrder
     report_month?: SortOrder
+    worker_type?: SortOrder
+    worker_role?: SortOrder
     allocated_amount?: SortOrder
     performance_percentage?: SortOrder
     calculated_amount?: SortOrder
@@ -36418,7 +36388,10 @@ export namespace Prisma {
     NOT?: WorkerRemunerationScalarWhereWithAggregatesInput | WorkerRemunerationScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"WorkerRemuneration"> | number
     health_worker_id?: IntWithAggregatesFilter<"WorkerRemuneration"> | number
+    facility_id?: StringWithAggregatesFilter<"WorkerRemuneration"> | string
     report_month?: StringWithAggregatesFilter<"WorkerRemuneration"> | string
+    worker_type?: StringWithAggregatesFilter<"WorkerRemuneration"> | string
+    worker_role?: StringWithAggregatesFilter<"WorkerRemuneration"> | string
     allocated_amount?: DecimalWithAggregatesFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalWithAggregatesFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalWithAggregatesFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
@@ -36987,24 +36960,21 @@ export namespace Prisma {
     facility_id?: StringFilter<"FacilityRemunerationRecord"> | string
     report_month?: StringFilter<"FacilityRemunerationRecord"> | string
     indicator_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
     actual_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    target_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
+    target_value?: JsonNullableFilter<"FacilityRemunerationRecord">
     percentage_achieved?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     status?: StringFilter<"FacilityRemunerationRecord"> | string
     incentive_amount?: FloatFilter<"FacilityRemunerationRecord"> | number
     max_remuneration?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     raw_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_type?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    worker_role?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    allocated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    performance_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    calculated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     calculation_date?: DateTimeFilter<"FacilityRemunerationRecord"> | Date | string
     calculation_version?: StringFilter<"FacilityRemunerationRecord"> | string
+    kpi_config_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    remuneration_formula_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    worker_allocation_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    calculation_metadata?: JsonNullableFilter<"FacilityRemunerationRecord">
     facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
     indicator?: XOR<IndicatorNullableScalarRelationFilter, IndicatorWhereInput> | null
-    worker?: XOR<HealthWorkerNullableScalarRelationFilter, HealthWorkerWhereInput> | null
   }
 
   export type FacilityRemunerationRecordOrderByWithRelationInput = {
@@ -37012,7 +36982,6 @@ export namespace Prisma {
     facility_id?: SortOrder
     report_month?: SortOrder
     indicator_id?: SortOrderInput | SortOrder
-    worker_id?: SortOrderInput | SortOrder
     actual_value?: SortOrderInput | SortOrder
     target_value?: SortOrderInput | SortOrder
     percentage_achieved?: SortOrderInput | SortOrder
@@ -37020,53 +36989,47 @@ export namespace Prisma {
     incentive_amount?: SortOrder
     max_remuneration?: SortOrderInput | SortOrder
     raw_percentage?: SortOrderInput | SortOrder
-    worker_type?: SortOrderInput | SortOrder
-    worker_role?: SortOrderInput | SortOrder
-    allocated_amount?: SortOrderInput | SortOrder
-    performance_percentage?: SortOrderInput | SortOrder
-    calculated_amount?: SortOrderInput | SortOrder
     calculation_date?: SortOrder
     calculation_version?: SortOrder
+    kpi_config_snapshot?: SortOrderInput | SortOrder
+    remuneration_formula_snapshot?: SortOrderInput | SortOrder
+    worker_allocation_snapshot?: SortOrderInput | SortOrder
+    calculation_metadata?: SortOrderInput | SortOrder
     facility?: FacilityOrderByWithRelationInput
     indicator?: IndicatorOrderByWithRelationInput
-    worker?: HealthWorkerOrderByWithRelationInput
   }
 
   export type FacilityRemunerationRecordWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    facility_id_report_month_indicator_id_worker_id?: FacilityRemunerationRecordFacility_idReport_monthIndicator_idWorker_idCompoundUniqueInput
+    facility_id_report_month_indicator_id?: FacilityRemunerationRecordFacility_idReport_monthIndicator_idCompoundUniqueInput
     AND?: FacilityRemunerationRecordWhereInput | FacilityRemunerationRecordWhereInput[]
     OR?: FacilityRemunerationRecordWhereInput[]
     NOT?: FacilityRemunerationRecordWhereInput | FacilityRemunerationRecordWhereInput[]
     facility_id?: StringFilter<"FacilityRemunerationRecord"> | string
     report_month?: StringFilter<"FacilityRemunerationRecord"> | string
     indicator_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
     actual_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    target_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
+    target_value?: JsonNullableFilter<"FacilityRemunerationRecord">
     percentage_achieved?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     status?: StringFilter<"FacilityRemunerationRecord"> | string
     incentive_amount?: FloatFilter<"FacilityRemunerationRecord"> | number
     max_remuneration?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     raw_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_type?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    worker_role?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    allocated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    performance_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    calculated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     calculation_date?: DateTimeFilter<"FacilityRemunerationRecord"> | Date | string
     calculation_version?: StringFilter<"FacilityRemunerationRecord"> | string
+    kpi_config_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    remuneration_formula_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    worker_allocation_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    calculation_metadata?: JsonNullableFilter<"FacilityRemunerationRecord">
     facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
     indicator?: XOR<IndicatorNullableScalarRelationFilter, IndicatorWhereInput> | null
-    worker?: XOR<HealthWorkerNullableScalarRelationFilter, HealthWorkerWhereInput> | null
-  }, "id" | "facility_id_report_month_indicator_id_worker_id">
+  }, "id" | "facility_id_report_month_indicator_id">
 
   export type FacilityRemunerationRecordOrderByWithAggregationInput = {
     id?: SortOrder
     facility_id?: SortOrder
     report_month?: SortOrder
     indicator_id?: SortOrderInput | SortOrder
-    worker_id?: SortOrderInput | SortOrder
     actual_value?: SortOrderInput | SortOrder
     target_value?: SortOrderInput | SortOrder
     percentage_achieved?: SortOrderInput | SortOrder
@@ -37074,13 +37037,12 @@ export namespace Prisma {
     incentive_amount?: SortOrder
     max_remuneration?: SortOrderInput | SortOrder
     raw_percentage?: SortOrderInput | SortOrder
-    worker_type?: SortOrderInput | SortOrder
-    worker_role?: SortOrderInput | SortOrder
-    allocated_amount?: SortOrderInput | SortOrder
-    performance_percentage?: SortOrderInput | SortOrder
-    calculated_amount?: SortOrderInput | SortOrder
     calculation_date?: SortOrder
     calculation_version?: SortOrder
+    kpi_config_snapshot?: SortOrderInput | SortOrder
+    remuneration_formula_snapshot?: SortOrderInput | SortOrder
+    worker_allocation_snapshot?: SortOrderInput | SortOrder
+    calculation_metadata?: SortOrderInput | SortOrder
     _count?: FacilityRemunerationRecordCountOrderByAggregateInput
     _avg?: FacilityRemunerationRecordAvgOrderByAggregateInput
     _max?: FacilityRemunerationRecordMaxOrderByAggregateInput
@@ -37096,21 +37058,19 @@ export namespace Prisma {
     facility_id?: StringWithAggregatesFilter<"FacilityRemunerationRecord"> | string
     report_month?: StringWithAggregatesFilter<"FacilityRemunerationRecord"> | string
     indicator_id?: IntNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
-    worker_id?: IntNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
     actual_value?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
-    target_value?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
+    target_value?: JsonNullableWithAggregatesFilter<"FacilityRemunerationRecord">
     percentage_achieved?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
     status?: StringWithAggregatesFilter<"FacilityRemunerationRecord"> | string
     incentive_amount?: FloatWithAggregatesFilter<"FacilityRemunerationRecord"> | number
     max_remuneration?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
     raw_percentage?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
-    worker_type?: StringNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | string | null
-    worker_role?: StringNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | string | null
-    allocated_amount?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
-    performance_percentage?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
-    calculated_amount?: FloatNullableWithAggregatesFilter<"FacilityRemunerationRecord"> | number | null
     calculation_date?: DateTimeWithAggregatesFilter<"FacilityRemunerationRecord"> | Date | string
     calculation_version?: StringWithAggregatesFilter<"FacilityRemunerationRecord"> | string
+    kpi_config_snapshot?: JsonNullableWithAggregatesFilter<"FacilityRemunerationRecord">
+    remuneration_formula_snapshot?: JsonNullableWithAggregatesFilter<"FacilityRemunerationRecord">
+    worker_allocation_snapshot?: JsonNullableWithAggregatesFilter<"FacilityRemunerationRecord">
+    calculation_metadata?: JsonNullableWithAggregatesFilter<"FacilityRemunerationRecord">
   }
 
   export type UserCreateInput = {
@@ -37428,6 +37388,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -37453,6 +37414,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -37474,6 +37436,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -37499,6 +37462,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -38510,7 +38474,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutWorkerInput
     facility: FacilityCreateNestedOneWithoutHealth_workersInput
     remuneration_calculations?: WorkerRemunerationCreateNestedManyWithoutHealth_workerInput
   }
@@ -38526,7 +38489,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutWorkerInput
     remuneration_calculations?: WorkerRemunerationUncheckedCreateNestedManyWithoutHealth_workerInput
   }
 
@@ -38539,7 +38501,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutWorkerNestedInput
     facility?: FacilityUpdateOneRequiredWithoutHealth_workersNestedInput
     remuneration_calculations?: WorkerRemunerationUpdateManyWithoutHealth_workerNestedInput
   }
@@ -38555,7 +38516,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerNestedInput
     remuneration_calculations?: WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerNestedInput
   }
 
@@ -38685,17 +38645,23 @@ export namespace Prisma {
 
   export type WorkerRemunerationCreateInput = {
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
     calculated_at?: Date | string
     health_worker: HealthWorkerCreateNestedOneWithoutRemuneration_calculationsInput
+    facility: FacilityCreateNestedOneWithoutWorker_remunerationsInput
   }
 
   export type WorkerRemunerationUncheckedCreateInput = {
     id?: number
     health_worker_id: number
+    facility_id: string
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
@@ -38704,17 +38670,23 @@ export namespace Prisma {
 
   export type WorkerRemunerationUpdateInput = {
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     health_worker?: HealthWorkerUpdateOneRequiredWithoutRemuneration_calculationsNestedInput
+    facility?: FacilityUpdateOneRequiredWithoutWorker_remunerationsNestedInput
   }
 
   export type WorkerRemunerationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     health_worker_id?: IntFieldUpdateOperationsInput | number
+    facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -38724,7 +38696,10 @@ export namespace Prisma {
   export type WorkerRemunerationCreateManyInput = {
     id?: number
     health_worker_id: number
+    facility_id: string
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
@@ -38733,6 +38708,8 @@ export namespace Prisma {
 
   export type WorkerRemunerationUpdateManyMutationInput = {
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -38742,7 +38719,10 @@ export namespace Prisma {
   export type WorkerRemunerationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     health_worker_id?: IntFieldUpdateOperationsInput | number
+    facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -39297,22 +39277,20 @@ export namespace Prisma {
     id?: string
     report_month: string
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     facility: FacilityCreateNestedOneWithoutRemuneration_recordsInput
     indicator?: IndicatorCreateNestedOneWithoutRemuneration_recordsInput
-    worker?: HealthWorkerCreateNestedOneWithoutRemuneration_recordsInput
   }
 
   export type FacilityRemunerationRecordUncheckedCreateInput = {
@@ -39320,43 +39298,39 @@ export namespace Prisma {
     facility_id: string
     report_month: string
     indicator_id?: number | null
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     facility?: FacilityUpdateOneRequiredWithoutRemuneration_recordsNestedInput
     indicator?: IndicatorUpdateOneWithoutRemuneration_recordsNestedInput
-    worker?: HealthWorkerUpdateOneWithoutRemuneration_recordsNestedInput
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateInput = {
@@ -39364,21 +39338,19 @@ export namespace Prisma {
     facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordCreateManyInput = {
@@ -39386,40 +39358,37 @@ export namespace Prisma {
     facility_id: string
     report_month: string
     indicator_id?: number | null
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateManyInput = {
@@ -39427,21 +39396,19 @@ export namespace Prisma {
     facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -39843,6 +39810,12 @@ export namespace Prisma {
     none?: FacilityRemunerationRecordWhereInput
   }
 
+  export type WorkerRemunerationListRelationFilter = {
+    every?: WorkerRemunerationWhereInput
+    some?: WorkerRemunerationWhereInput
+    none?: WorkerRemunerationWhereInput
+  }
+
   export type DistrictScalarRelationFilter = {
     is?: DistrictWhereInput
     isNot?: DistrictWhereInput
@@ -39902,6 +39875,10 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkerRemunerationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40845,16 +40822,6 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type WorkerRemunerationListRelationFilter = {
-    every?: WorkerRemunerationWhereInput
-    some?: WorkerRemunerationWhereInput
-    none?: WorkerRemunerationWhereInput
-  }
-
-  export type WorkerRemunerationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type HealthWorkerCountOrderByAggregateInput = {
     id?: SortOrder
     facility_id?: SortOrder
@@ -40997,7 +40964,10 @@ export namespace Prisma {
   export type WorkerRemunerationCountOrderByAggregateInput = {
     id?: SortOrder
     health_worker_id?: SortOrder
+    facility_id?: SortOrder
     report_month?: SortOrder
+    worker_type?: SortOrder
+    worker_role?: SortOrder
     allocated_amount?: SortOrder
     performance_percentage?: SortOrder
     calculated_amount?: SortOrder
@@ -41015,7 +40985,10 @@ export namespace Prisma {
   export type WorkerRemunerationMaxOrderByAggregateInput = {
     id?: SortOrder
     health_worker_id?: SortOrder
+    facility_id?: SortOrder
     report_month?: SortOrder
+    worker_type?: SortOrder
+    worker_role?: SortOrder
     allocated_amount?: SortOrder
     performance_percentage?: SortOrder
     calculated_amount?: SortOrder
@@ -41025,7 +40998,10 @@ export namespace Prisma {
   export type WorkerRemunerationMinOrderByAggregateInput = {
     id?: SortOrder
     health_worker_id?: SortOrder
+    facility_id?: SortOrder
     report_month?: SortOrder
+    worker_type?: SortOrder
+    worker_role?: SortOrder
     allocated_amount?: SortOrder
     performance_percentage?: SortOrder
     calculated_amount?: SortOrder
@@ -41455,16 +41431,10 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type HealthWorkerNullableScalarRelationFilter = {
-    is?: HealthWorkerWhereInput | null
-    isNot?: HealthWorkerWhereInput | null
-  }
-
-  export type FacilityRemunerationRecordFacility_idReport_monthIndicator_idWorker_idCompoundUniqueInput = {
+  export type FacilityRemunerationRecordFacility_idReport_monthIndicator_idCompoundUniqueInput = {
     facility_id: string
     report_month: string
     indicator_id: number
-    worker_id: number
   }
 
   export type FacilityRemunerationRecordCountOrderByAggregateInput = {
@@ -41472,7 +41442,6 @@ export namespace Prisma {
     facility_id?: SortOrder
     report_month?: SortOrder
     indicator_id?: SortOrder
-    worker_id?: SortOrder
     actual_value?: SortOrder
     target_value?: SortOrder
     percentage_achieved?: SortOrder
@@ -41480,27 +41449,21 @@ export namespace Prisma {
     incentive_amount?: SortOrder
     max_remuneration?: SortOrder
     raw_percentage?: SortOrder
-    worker_type?: SortOrder
-    worker_role?: SortOrder
-    allocated_amount?: SortOrder
-    performance_percentage?: SortOrder
-    calculated_amount?: SortOrder
     calculation_date?: SortOrder
     calculation_version?: SortOrder
+    kpi_config_snapshot?: SortOrder
+    remuneration_formula_snapshot?: SortOrder
+    worker_allocation_snapshot?: SortOrder
+    calculation_metadata?: SortOrder
   }
 
   export type FacilityRemunerationRecordAvgOrderByAggregateInput = {
     indicator_id?: SortOrder
-    worker_id?: SortOrder
     actual_value?: SortOrder
-    target_value?: SortOrder
     percentage_achieved?: SortOrder
     incentive_amount?: SortOrder
     max_remuneration?: SortOrder
     raw_percentage?: SortOrder
-    allocated_amount?: SortOrder
-    performance_percentage?: SortOrder
-    calculated_amount?: SortOrder
   }
 
   export type FacilityRemunerationRecordMaxOrderByAggregateInput = {
@@ -41508,19 +41471,12 @@ export namespace Prisma {
     facility_id?: SortOrder
     report_month?: SortOrder
     indicator_id?: SortOrder
-    worker_id?: SortOrder
     actual_value?: SortOrder
-    target_value?: SortOrder
     percentage_achieved?: SortOrder
     status?: SortOrder
     incentive_amount?: SortOrder
     max_remuneration?: SortOrder
     raw_percentage?: SortOrder
-    worker_type?: SortOrder
-    worker_role?: SortOrder
-    allocated_amount?: SortOrder
-    performance_percentage?: SortOrder
-    calculated_amount?: SortOrder
     calculation_date?: SortOrder
     calculation_version?: SortOrder
   }
@@ -41530,35 +41486,23 @@ export namespace Prisma {
     facility_id?: SortOrder
     report_month?: SortOrder
     indicator_id?: SortOrder
-    worker_id?: SortOrder
     actual_value?: SortOrder
-    target_value?: SortOrder
     percentage_achieved?: SortOrder
     status?: SortOrder
     incentive_amount?: SortOrder
     max_remuneration?: SortOrder
     raw_percentage?: SortOrder
-    worker_type?: SortOrder
-    worker_role?: SortOrder
-    allocated_amount?: SortOrder
-    performance_percentage?: SortOrder
-    calculated_amount?: SortOrder
     calculation_date?: SortOrder
     calculation_version?: SortOrder
   }
 
   export type FacilityRemunerationRecordSumOrderByAggregateInput = {
     indicator_id?: SortOrder
-    worker_id?: SortOrder
     actual_value?: SortOrder
-    target_value?: SortOrder
     percentage_achieved?: SortOrder
     incentive_amount?: SortOrder
     max_remuneration?: SortOrder
     raw_percentage?: SortOrder
-    allocated_amount?: SortOrder
-    performance_percentage?: SortOrder
-    calculated_amount?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -42104,6 +42048,13 @@ export namespace Prisma {
     connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
   }
 
+  export type WorkerRemunerationCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput> | WorkerRemunerationCreateWithoutFacilityInput[] | WorkerRemunerationUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: WorkerRemunerationCreateOrConnectWithoutFacilityInput | WorkerRemunerationCreateOrConnectWithoutFacilityInput[]
+    createMany?: WorkerRemunerationCreateManyFacilityInputEnvelope
+    connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+  }
+
   export type DistrictCreateNestedOneWithoutFacilitiesInput = {
     create?: XOR<DistrictCreateWithoutFacilitiesInput, DistrictUncheckedCreateWithoutFacilitiesInput>
     connectOrCreate?: DistrictCreateOrConnectWithoutFacilitiesInput
@@ -42193,6 +42144,13 @@ export namespace Prisma {
     connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
   }
 
+  export type WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput> | WorkerRemunerationCreateWithoutFacilityInput[] | WorkerRemunerationUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: WorkerRemunerationCreateOrConnectWithoutFacilityInput | WorkerRemunerationCreateOrConnectWithoutFacilityInput[]
+    createMany?: WorkerRemunerationCreateManyFacilityInputEnvelope
+    connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+  }
+
   export type FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput = {
     create?: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput> | FacilityFieldDefaultsCreateWithoutFacilityInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput | FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput[]
@@ -42275,6 +42233,20 @@ export namespace Prisma {
     update?: FacilityRemunerationRecordUpdateWithWhereUniqueWithoutFacilityInput | FacilityRemunerationRecordUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: FacilityRemunerationRecordUpdateManyWithWhereWithoutFacilityInput | FacilityRemunerationRecordUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: FacilityRemunerationRecordScalarWhereInput | FacilityRemunerationRecordScalarWhereInput[]
+  }
+
+  export type WorkerRemunerationUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput> | WorkerRemunerationCreateWithoutFacilityInput[] | WorkerRemunerationUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: WorkerRemunerationCreateOrConnectWithoutFacilityInput | WorkerRemunerationCreateOrConnectWithoutFacilityInput[]
+    upsert?: WorkerRemunerationUpsertWithWhereUniqueWithoutFacilityInput | WorkerRemunerationUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: WorkerRemunerationCreateManyFacilityInputEnvelope
+    set?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    disconnect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    delete?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    update?: WorkerRemunerationUpdateWithWhereUniqueWithoutFacilityInput | WorkerRemunerationUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: WorkerRemunerationUpdateManyWithWhereWithoutFacilityInput | WorkerRemunerationUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
   }
 
   export type DistrictUpdateOneRequiredWithoutFacilitiesNestedInput = {
@@ -42445,6 +42417,20 @@ export namespace Prisma {
     update?: FacilityRemunerationRecordUpdateWithWhereUniqueWithoutFacilityInput | FacilityRemunerationRecordUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: FacilityRemunerationRecordUpdateManyWithWhereWithoutFacilityInput | FacilityRemunerationRecordUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: FacilityRemunerationRecordScalarWhereInput | FacilityRemunerationRecordScalarWhereInput[]
+  }
+
+  export type WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput> | WorkerRemunerationCreateWithoutFacilityInput[] | WorkerRemunerationUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: WorkerRemunerationCreateOrConnectWithoutFacilityInput | WorkerRemunerationCreateOrConnectWithoutFacilityInput[]
+    upsert?: WorkerRemunerationUpsertWithWhereUniqueWithoutFacilityInput | WorkerRemunerationUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: WorkerRemunerationCreateManyFacilityInputEnvelope
+    set?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    disconnect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    delete?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
+    update?: WorkerRemunerationUpdateWithWhereUniqueWithoutFacilityInput | WorkerRemunerationUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: WorkerRemunerationUpdateManyWithWhereWithoutFacilityInput | WorkerRemunerationUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
   }
 
   export type FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput = {
@@ -43487,13 +43473,6 @@ export namespace Prisma {
     deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
   }
 
-  export type FacilityRemunerationRecordCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput> | FacilityRemunerationRecordCreateWithoutWorkerInput[] | FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput | FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput[]
-    createMany?: FacilityRemunerationRecordCreateManyWorkerInputEnvelope
-    connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-  }
-
   export type FacilityCreateNestedOneWithoutHealth_workersInput = {
     create?: XOR<FacilityCreateWithoutHealth_workersInput, FacilityUncheckedCreateWithoutHealth_workersInput>
     connectOrCreate?: FacilityCreateOrConnectWithoutHealth_workersInput
@@ -43505,13 +43484,6 @@ export namespace Prisma {
     connectOrCreate?: WorkerRemunerationCreateOrConnectWithoutHealth_workerInput | WorkerRemunerationCreateOrConnectWithoutHealth_workerInput[]
     createMany?: WorkerRemunerationCreateManyHealth_workerInputEnvelope
     connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
-  }
-
-  export type FacilityRemunerationRecordUncheckedCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput> | FacilityRemunerationRecordCreateWithoutWorkerInput[] | FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput | FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput[]
-    createMany?: FacilityRemunerationRecordCreateManyWorkerInputEnvelope
-    connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
   }
 
   export type WorkerRemunerationUncheckedCreateNestedManyWithoutHealth_workerInput = {
@@ -43527,20 +43499,6 @@ export namespace Prisma {
     decrement?: Decimal | DecimalJsLike | number | string
     multiply?: Decimal | DecimalJsLike | number | string
     divide?: Decimal | DecimalJsLike | number | string
-  }
-
-  export type FacilityRemunerationRecordUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput> | FacilityRemunerationRecordCreateWithoutWorkerInput[] | FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput | FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput[]
-    upsert?: FacilityRemunerationRecordUpsertWithWhereUniqueWithoutWorkerInput | FacilityRemunerationRecordUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: FacilityRemunerationRecordCreateManyWorkerInputEnvelope
-    set?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    disconnect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    delete?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    update?: FacilityRemunerationRecordUpdateWithWhereUniqueWithoutWorkerInput | FacilityRemunerationRecordUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: FacilityRemunerationRecordUpdateManyWithWhereWithoutWorkerInput | FacilityRemunerationRecordUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: FacilityRemunerationRecordScalarWhereInput | FacilityRemunerationRecordScalarWhereInput[]
   }
 
   export type FacilityUpdateOneRequiredWithoutHealth_workersNestedInput = {
@@ -43563,20 +43521,6 @@ export namespace Prisma {
     update?: WorkerRemunerationUpdateWithWhereUniqueWithoutHealth_workerInput | WorkerRemunerationUpdateWithWhereUniqueWithoutHealth_workerInput[]
     updateMany?: WorkerRemunerationUpdateManyWithWhereWithoutHealth_workerInput | WorkerRemunerationUpdateManyWithWhereWithoutHealth_workerInput[]
     deleteMany?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
-  }
-
-  export type FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput> | FacilityRemunerationRecordCreateWithoutWorkerInput[] | FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput | FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput[]
-    upsert?: FacilityRemunerationRecordUpsertWithWhereUniqueWithoutWorkerInput | FacilityRemunerationRecordUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: FacilityRemunerationRecordCreateManyWorkerInputEnvelope
-    set?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    disconnect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    delete?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    connect?: FacilityRemunerationRecordWhereUniqueInput | FacilityRemunerationRecordWhereUniqueInput[]
-    update?: FacilityRemunerationRecordUpdateWithWhereUniqueWithoutWorkerInput | FacilityRemunerationRecordUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: FacilityRemunerationRecordUpdateManyWithWhereWithoutWorkerInput | FacilityRemunerationRecordUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: FacilityRemunerationRecordScalarWhereInput | FacilityRemunerationRecordScalarWhereInput[]
   }
 
   export type WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerNestedInput = {
@@ -43613,12 +43557,26 @@ export namespace Prisma {
     connect?: HealthWorkerWhereUniqueInput
   }
 
+  export type FacilityCreateNestedOneWithoutWorker_remunerationsInput = {
+    create?: XOR<FacilityCreateWithoutWorker_remunerationsInput, FacilityUncheckedCreateWithoutWorker_remunerationsInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutWorker_remunerationsInput
+    connect?: FacilityWhereUniqueInput
+  }
+
   export type HealthWorkerUpdateOneRequiredWithoutRemuneration_calculationsNestedInput = {
     create?: XOR<HealthWorkerCreateWithoutRemuneration_calculationsInput, HealthWorkerUncheckedCreateWithoutRemuneration_calculationsInput>
     connectOrCreate?: HealthWorkerCreateOrConnectWithoutRemuneration_calculationsInput
     upsert?: HealthWorkerUpsertWithoutRemuneration_calculationsInput
     connect?: HealthWorkerWhereUniqueInput
     update?: XOR<XOR<HealthWorkerUpdateToOneWithWhereWithoutRemuneration_calculationsInput, HealthWorkerUpdateWithoutRemuneration_calculationsInput>, HealthWorkerUncheckedUpdateWithoutRemuneration_calculationsInput>
+  }
+
+  export type FacilityUpdateOneRequiredWithoutWorker_remunerationsNestedInput = {
+    create?: XOR<FacilityCreateWithoutWorker_remunerationsInput, FacilityUncheckedCreateWithoutWorker_remunerationsInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutWorker_remunerationsInput
+    upsert?: FacilityUpsertWithoutWorker_remunerationsInput
+    connect?: FacilityWhereUniqueInput
+    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutWorker_remunerationsInput, FacilityUpdateWithoutWorker_remunerationsInput>, FacilityUncheckedUpdateWithoutWorker_remunerationsInput>
   }
 
   export type FacilityWorkerAllocationCreateNestedManyWithoutWorker_allocation_configInput = {
@@ -43905,12 +43863,6 @@ export namespace Prisma {
     connect?: IndicatorWhereUniqueInput
   }
 
-  export type HealthWorkerCreateNestedOneWithoutRemuneration_recordsInput = {
-    create?: XOR<HealthWorkerCreateWithoutRemuneration_recordsInput, HealthWorkerUncheckedCreateWithoutRemuneration_recordsInput>
-    connectOrCreate?: HealthWorkerCreateOrConnectWithoutRemuneration_recordsInput
-    connect?: HealthWorkerWhereUniqueInput
-  }
-
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -43943,16 +43895,6 @@ export namespace Prisma {
     delete?: IndicatorWhereInput | boolean
     connect?: IndicatorWhereUniqueInput
     update?: XOR<XOR<IndicatorUpdateToOneWithWhereWithoutRemuneration_recordsInput, IndicatorUpdateWithoutRemuneration_recordsInput>, IndicatorUncheckedUpdateWithoutRemuneration_recordsInput>
-  }
-
-  export type HealthWorkerUpdateOneWithoutRemuneration_recordsNestedInput = {
-    create?: XOR<HealthWorkerCreateWithoutRemuneration_recordsInput, HealthWorkerUncheckedCreateWithoutRemuneration_recordsInput>
-    connectOrCreate?: HealthWorkerCreateOrConnectWithoutRemuneration_recordsInput
-    upsert?: HealthWorkerUpsertWithoutRemuneration_recordsInput
-    disconnect?: HealthWorkerWhereInput | boolean
-    delete?: HealthWorkerWhereInput | boolean
-    connect?: HealthWorkerWhereUniqueInput
-    update?: XOR<XOR<HealthWorkerUpdateToOneWithWhereWithoutRemuneration_recordsInput, HealthWorkerUpdateWithoutRemuneration_recordsInput>, HealthWorkerUncheckedUpdateWithoutRemuneration_recordsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -44622,6 +44564,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -44646,6 +44589,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -44808,6 +44752,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -44832,6 +44777,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -44852,6 +44798,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
@@ -44875,6 +44822,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -45064,6 +45012,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
@@ -45087,6 +45036,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -45306,42 +45256,38 @@ export namespace Prisma {
     id?: string
     report_month: string
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     indicator?: IndicatorCreateNestedOneWithoutRemuneration_recordsInput
-    worker?: HealthWorkerCreateNestedOneWithoutRemuneration_recordsInput
   }
 
   export type FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput = {
     id?: string
     report_month: string
     indicator_id?: number | null
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordCreateOrConnectWithoutFacilityInput = {
@@ -45351,6 +45297,39 @@ export namespace Prisma {
 
   export type FacilityRemunerationRecordCreateManyFacilityInputEnvelope = {
     data: FacilityRemunerationRecordCreateManyFacilityInput | FacilityRemunerationRecordCreateManyFacilityInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerRemunerationCreateWithoutFacilityInput = {
+    report_month: string
+    worker_type: string
+    worker_role: string
+    allocated_amount: Decimal | DecimalJsLike | number | string
+    performance_percentage: Decimal | DecimalJsLike | number | string
+    calculated_amount: Decimal | DecimalJsLike | number | string
+    calculated_at?: Date | string
+    health_worker: HealthWorkerCreateNestedOneWithoutRemuneration_calculationsInput
+  }
+
+  export type WorkerRemunerationUncheckedCreateWithoutFacilityInput = {
+    id?: number
+    health_worker_id: number
+    report_month: string
+    worker_type: string
+    worker_role: string
+    allocated_amount: Decimal | DecimalJsLike | number | string
+    performance_percentage: Decimal | DecimalJsLike | number | string
+    calculated_amount: Decimal | DecimalJsLike | number | string
+    calculated_at?: Date | string
+  }
+
+  export type WorkerRemunerationCreateOrConnectWithoutFacilityInput = {
+    where: WorkerRemunerationWhereUniqueInput
+    create: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type WorkerRemunerationCreateManyFacilityInputEnvelope = {
+    data: WorkerRemunerationCreateManyFacilityInput | WorkerRemunerationCreateManyFacilityInput[]
     skipDuplicates?: boolean
   }
 
@@ -45549,7 +45528,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutWorkerInput
     remuneration_calculations?: WorkerRemunerationCreateNestedManyWithoutHealth_workerInput
   }
 
@@ -45563,7 +45541,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutWorkerInput
     remuneration_calculations?: WorkerRemunerationUncheckedCreateNestedManyWithoutHealth_workerInput
   }
 
@@ -45784,21 +45761,51 @@ export namespace Prisma {
     facility_id?: StringFilter<"FacilityRemunerationRecord"> | string
     report_month?: StringFilter<"FacilityRemunerationRecord"> | string
     indicator_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_id?: IntNullableFilter<"FacilityRemunerationRecord"> | number | null
     actual_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    target_value?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
+    target_value?: JsonNullableFilter<"FacilityRemunerationRecord">
     percentage_achieved?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     status?: StringFilter<"FacilityRemunerationRecord"> | string
     incentive_amount?: FloatFilter<"FacilityRemunerationRecord"> | number
     max_remuneration?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     raw_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    worker_type?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    worker_role?: StringNullableFilter<"FacilityRemunerationRecord"> | string | null
-    allocated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    performance_percentage?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
-    calculated_amount?: FloatNullableFilter<"FacilityRemunerationRecord"> | number | null
     calculation_date?: DateTimeFilter<"FacilityRemunerationRecord"> | Date | string
     calculation_version?: StringFilter<"FacilityRemunerationRecord"> | string
+    kpi_config_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    remuneration_formula_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    worker_allocation_snapshot?: JsonNullableFilter<"FacilityRemunerationRecord">
+    calculation_metadata?: JsonNullableFilter<"FacilityRemunerationRecord">
+  }
+
+  export type WorkerRemunerationUpsertWithWhereUniqueWithoutFacilityInput = {
+    where: WorkerRemunerationWhereUniqueInput
+    update: XOR<WorkerRemunerationUpdateWithoutFacilityInput, WorkerRemunerationUncheckedUpdateWithoutFacilityInput>
+    create: XOR<WorkerRemunerationCreateWithoutFacilityInput, WorkerRemunerationUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type WorkerRemunerationUpdateWithWhereUniqueWithoutFacilityInput = {
+    where: WorkerRemunerationWhereUniqueInput
+    data: XOR<WorkerRemunerationUpdateWithoutFacilityInput, WorkerRemunerationUncheckedUpdateWithoutFacilityInput>
+  }
+
+  export type WorkerRemunerationUpdateManyWithWhereWithoutFacilityInput = {
+    where: WorkerRemunerationScalarWhereInput
+    data: XOR<WorkerRemunerationUpdateManyMutationInput, WorkerRemunerationUncheckedUpdateManyWithoutFacilityInput>
+  }
+
+  export type WorkerRemunerationScalarWhereInput = {
+    AND?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
+    OR?: WorkerRemunerationScalarWhereInput[]
+    NOT?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
+    id?: IntFilter<"WorkerRemuneration"> | number
+    health_worker_id?: IntFilter<"WorkerRemuneration"> | number
+    facility_id?: StringFilter<"WorkerRemuneration"> | string
+    report_month?: StringFilter<"WorkerRemuneration"> | string
+    worker_type?: StringFilter<"WorkerRemuneration"> | string
+    worker_role?: StringFilter<"WorkerRemuneration"> | string
+    allocated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
+    performance_percentage?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
+    calculated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
+    calculated_at?: DateTimeFilter<"WorkerRemuneration"> | Date | string
   }
 
   export type DistrictUpsertWithoutFacilitiesInput = {
@@ -46209,6 +46216,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -46233,6 +46241,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -46454,6 +46463,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -46478,6 +46488,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -46703,42 +46714,38 @@ export namespace Prisma {
     id?: string
     report_month: string
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     facility: FacilityCreateNestedOneWithoutRemuneration_recordsInput
-    worker?: HealthWorkerCreateNestedOneWithoutRemuneration_recordsInput
   }
 
   export type FacilityRemunerationRecordUncheckedCreateWithoutIndicatorInput = {
     id?: string
     facility_id: string
     report_month: string
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordCreateOrConnectWithoutIndicatorInput = {
@@ -47783,6 +47790,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -47807,6 +47815,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -47927,6 +47936,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -47951,6 +47961,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -48067,6 +48078,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
@@ -48091,6 +48103,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
@@ -48177,6 +48190,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
@@ -48201,6 +48215,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
@@ -48535,6 +48550,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -48559,6 +48575,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -48627,6 +48644,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -48651,6 +48669,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -48662,58 +48681,6 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
-  export type FacilityRemunerationRecordCreateWithoutWorkerInput = {
-    id?: string
-    report_month: string
-    actual_value?: number | null
-    target_value?: number | null
-    percentage_achieved?: number | null
-    status: string
-    incentive_amount?: number
-    max_remuneration?: number | null
-    raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
-    calculation_date?: Date | string
-    calculation_version?: string
-    facility: FacilityCreateNestedOneWithoutRemuneration_recordsInput
-    indicator?: IndicatorCreateNestedOneWithoutRemuneration_recordsInput
-  }
-
-  export type FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput = {
-    id?: string
-    facility_id: string
-    report_month: string
-    indicator_id?: number | null
-    actual_value?: number | null
-    target_value?: number | null
-    percentage_achieved?: number | null
-    status: string
-    incentive_amount?: number
-    max_remuneration?: number | null
-    raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
-    calculation_date?: Date | string
-    calculation_version?: string
-  }
-
-  export type FacilityRemunerationRecordCreateOrConnectWithoutWorkerInput = {
-    where: FacilityRemunerationRecordWhereUniqueInput
-    create: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type FacilityRemunerationRecordCreateManyWorkerInputEnvelope = {
-    data: FacilityRemunerationRecordCreateManyWorkerInput | FacilityRemunerationRecordCreateManyWorkerInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FacilityCreateWithoutHealth_workersInput = {
     id?: string
     name: string
@@ -48723,6 +48690,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -48747,6 +48715,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -48765,15 +48734,21 @@ export namespace Prisma {
 
   export type WorkerRemunerationCreateWithoutHealth_workerInput = {
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
     calculated_at?: Date | string
+    facility: FacilityCreateNestedOneWithoutWorker_remunerationsInput
   }
 
   export type WorkerRemunerationUncheckedCreateWithoutHealth_workerInput = {
     id?: number
+    facility_id: string
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
@@ -48788,22 +48763,6 @@ export namespace Prisma {
   export type WorkerRemunerationCreateManyHealth_workerInputEnvelope = {
     data: WorkerRemunerationCreateManyHealth_workerInput | WorkerRemunerationCreateManyHealth_workerInput[]
     skipDuplicates?: boolean
-  }
-
-  export type FacilityRemunerationRecordUpsertWithWhereUniqueWithoutWorkerInput = {
-    where: FacilityRemunerationRecordWhereUniqueInput
-    update: XOR<FacilityRemunerationRecordUpdateWithoutWorkerInput, FacilityRemunerationRecordUncheckedUpdateWithoutWorkerInput>
-    create: XOR<FacilityRemunerationRecordCreateWithoutWorkerInput, FacilityRemunerationRecordUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type FacilityRemunerationRecordUpdateWithWhereUniqueWithoutWorkerInput = {
-    where: FacilityRemunerationRecordWhereUniqueInput
-    data: XOR<FacilityRemunerationRecordUpdateWithoutWorkerInput, FacilityRemunerationRecordUncheckedUpdateWithoutWorkerInput>
-  }
-
-  export type FacilityRemunerationRecordUpdateManyWithWhereWithoutWorkerInput = {
-    where: FacilityRemunerationRecordScalarWhereInput
-    data: XOR<FacilityRemunerationRecordUpdateManyMutationInput, FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerInput>
   }
 
   export type FacilityUpsertWithoutHealth_workersInput = {
@@ -48826,6 +48785,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -48850,6 +48810,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -48877,19 +48838,6 @@ export namespace Prisma {
     data: XOR<WorkerRemunerationUpdateManyMutationInput, WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerInput>
   }
 
-  export type WorkerRemunerationScalarWhereInput = {
-    AND?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
-    OR?: WorkerRemunerationScalarWhereInput[]
-    NOT?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
-    id?: IntFilter<"WorkerRemuneration"> | number
-    health_worker_id?: IntFilter<"WorkerRemuneration"> | number
-    report_month?: StringFilter<"WorkerRemuneration"> | string
-    allocated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
-    performance_percentage?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
-    calculated_amount?: DecimalFilter<"WorkerRemuneration"> | Decimal | DecimalJsLike | number | string
-    calculated_at?: DateTimeFilter<"WorkerRemuneration"> | Date | string
-  }
-
   export type FacilityCreateWithoutRemuneration_calculationsInput = {
     id?: string
     name: string
@@ -48899,6 +48847,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -48923,6 +48872,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -48959,6 +48909,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -48983,6 +48934,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -49003,7 +48955,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutWorkerInput
     facility: FacilityCreateNestedOneWithoutHealth_workersInput
   }
 
@@ -49018,12 +48969,62 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type HealthWorkerCreateOrConnectWithoutRemuneration_calculationsInput = {
     where: HealthWorkerWhereUniqueInput
     create: XOR<HealthWorkerCreateWithoutRemuneration_calculationsInput, HealthWorkerUncheckedCreateWithoutRemuneration_calculationsInput>
+  }
+
+  export type FacilityCreateWithoutWorker_remunerationsInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at?: Date | string
+    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    district: DistrictCreateNestedOneWithoutFacilitiesInput
+    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
+    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
+    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
+    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
+    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
+    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
+    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
+    users?: UserCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityUncheckedCreateWithoutWorker_remunerationsInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    district_id: string
+    facility_type_id: string
+    is_active?: boolean
+    updated_at?: Date | string
+    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
+    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
+    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
+    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
+    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
+    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityCreateOrConnectWithoutWorker_remunerationsInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutWorker_remunerationsInput, FacilityUncheckedCreateWithoutWorker_remunerationsInput>
   }
 
   export type HealthWorkerUpsertWithoutRemuneration_calculationsInput = {
@@ -49046,7 +49047,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutWorkerNestedInput
     facility?: FacilityUpdateOneRequiredWithoutHealth_workersNestedInput
   }
 
@@ -49061,7 +49061,63 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type FacilityUpsertWithoutWorker_remunerationsInput = {
+    update: XOR<FacilityUpdateWithoutWorker_remunerationsInput, FacilityUncheckedUpdateWithoutWorker_remunerationsInput>
+    create: XOR<FacilityCreateWithoutWorker_remunerationsInput, FacilityUncheckedCreateWithoutWorker_remunerationsInput>
+    where?: FacilityWhereInput
+  }
+
+  export type FacilityUpdateToOneWithWhereWithoutWorker_remunerationsInput = {
+    where?: FacilityWhereInput
+    data: XOR<FacilityUpdateWithoutWorker_remunerationsInput, FacilityUncheckedUpdateWithoutWorker_remunerationsInput>
+  }
+
+  export type FacilityUpdateWithoutWorker_remunerationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
+    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
+    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
+    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
+    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
+    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
+    users?: UserUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateWithoutWorker_remunerationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    district_id?: StringFieldUpdateOperationsInput | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
+    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
+    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
+    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
+    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput = {
@@ -49186,6 +49242,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -49210,6 +49267,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
@@ -49276,6 +49334,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -49300,6 +49359,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
@@ -49707,6 +49767,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -49731,6 +49792,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -49851,6 +49913,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -49875,6 +49938,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -49991,6 +50055,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -50015,6 +50080,7 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
@@ -50113,6 +50179,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -50137,6 +50204,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
@@ -50354,6 +50422,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
     facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
@@ -50378,6 +50447,7 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
@@ -50457,38 +50527,6 @@ export namespace Prisma {
     create: XOR<IndicatorCreateWithoutRemuneration_recordsInput, IndicatorUncheckedCreateWithoutRemuneration_recordsInput>
   }
 
-  export type HealthWorkerCreateWithoutRemuneration_recordsInput = {
-    name: string
-    worker_type: string
-    allocated_amount: Decimal | DecimalJsLike | number | string
-    contact_number?: string | null
-    email?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility: FacilityCreateNestedOneWithoutHealth_workersInput
-    remuneration_calculations?: WorkerRemunerationCreateNestedManyWithoutHealth_workerInput
-  }
-
-  export type HealthWorkerUncheckedCreateWithoutRemuneration_recordsInput = {
-    id?: number
-    facility_id: string
-    name: string
-    worker_type: string
-    allocated_amount: Decimal | DecimalJsLike | number | string
-    contact_number?: string | null
-    email?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    remuneration_calculations?: WorkerRemunerationUncheckedCreateNestedManyWithoutHealth_workerInput
-  }
-
-  export type HealthWorkerCreateOrConnectWithoutRemuneration_recordsInput = {
-    where: HealthWorkerWhereUniqueInput
-    create: XOR<HealthWorkerCreateWithoutRemuneration_recordsInput, HealthWorkerUncheckedCreateWithoutRemuneration_recordsInput>
-  }
-
   export type FacilityUpsertWithoutRemuneration_recordsInput = {
     update: XOR<FacilityUpdateWithoutRemuneration_recordsInput, FacilityUncheckedUpdateWithoutRemuneration_recordsInput>
     create: XOR<FacilityCreateWithoutRemuneration_recordsInput, FacilityUncheckedCreateWithoutRemuneration_recordsInput>
@@ -50508,6 +50546,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
@@ -50532,6 +50571,7 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -50610,44 +50650,6 @@ export namespace Prisma {
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
     monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
     performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type HealthWorkerUpsertWithoutRemuneration_recordsInput = {
-    update: XOR<HealthWorkerUpdateWithoutRemuneration_recordsInput, HealthWorkerUncheckedUpdateWithoutRemuneration_recordsInput>
-    create: XOR<HealthWorkerCreateWithoutRemuneration_recordsInput, HealthWorkerUncheckedCreateWithoutRemuneration_recordsInput>
-    where?: HealthWorkerWhereInput
-  }
-
-  export type HealthWorkerUpdateToOneWithWhereWithoutRemuneration_recordsInput = {
-    where?: HealthWorkerWhereInput
-    data: XOR<HealthWorkerUpdateWithoutRemuneration_recordsInput, HealthWorkerUncheckedUpdateWithoutRemuneration_recordsInput>
-  }
-
-  export type HealthWorkerUpdateWithoutRemuneration_recordsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    worker_type?: StringFieldUpdateOperationsInput | string
-    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    contact_number?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneRequiredWithoutHealth_workersNestedInput
-    remuneration_calculations?: WorkerRemunerationUpdateManyWithoutHealth_workerNestedInput
-  }
-
-  export type HealthWorkerUncheckedUpdateWithoutRemuneration_recordsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    worker_type?: StringFieldUpdateOperationsInput | string
-    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    contact_number?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_calculations?: WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerNestedInput
   }
 
   export type DataUploadSessionCreateManyUploaderInput = {
@@ -50966,6 +50968,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
@@ -50989,6 +50992,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -51155,6 +51159,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
@@ -51178,6 +51183,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
@@ -51268,21 +51274,31 @@ export namespace Prisma {
     id?: string
     report_month: string
     indicator_id?: number | null
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type WorkerRemunerationCreateManyFacilityInput = {
+    id?: number
+    health_worker_id: number
+    report_month: string
+    worker_type: string
+    worker_role: string
+    allocated_amount: Decimal | DecimalJsLike | number | string
+    performance_percentage: Decimal | DecimalJsLike | number | string
+    calculated_amount: Decimal | DecimalJsLike | number | string
+    calculated_at?: Date | string
   }
 
   export type FacilityFieldDefaultsCreateManyFacilityInput = {
@@ -51413,63 +51429,92 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     indicator?: IndicatorUpdateOneWithoutRemuneration_recordsNestedInput
-    worker?: HealthWorkerUpdateOneWithoutRemuneration_recordsNestedInput
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateWithoutFacilityInput = {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityInput = {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type WorkerRemunerationUpdateWithoutFacilityInput = {
+    report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
+    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    health_worker?: HealthWorkerUpdateOneRequiredWithoutRemuneration_calculationsNestedInput
+  }
+
+  export type WorkerRemunerationUncheckedUpdateWithoutFacilityInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    health_worker_id?: IntFieldUpdateOperationsInput | number
+    report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
+    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerRemunerationUncheckedUpdateManyWithoutFacilityInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    health_worker_id?: IntFieldUpdateOperationsInput | number
+    report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
+    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FacilityFieldDefaultsUpdateWithoutFacilityInput = {
@@ -51624,7 +51669,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutWorkerNestedInput
     remuneration_calculations?: WorkerRemunerationUpdateManyWithoutHealth_workerNestedInput
   }
 
@@ -51638,7 +51682,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerNestedInput
     remuneration_calculations?: WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerNestedInput
   }
 
@@ -51854,21 +51897,19 @@ export namespace Prisma {
     id?: string
     facility_id: string
     report_month: string
-    worker_id?: number | null
     actual_value?: number | null
-    target_value?: number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: number | null
     status: string
     incentive_amount?: number
     max_remuneration?: number | null
     raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
     calculation_date?: Date | string
     calculation_version?: string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityTargetCreateManyIndicatorInput = {
@@ -51938,63 +51979,57 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
     facility?: FacilityUpdateOneRequiredWithoutRemuneration_recordsNestedInput
-    worker?: HealthWorkerUpdateOneWithoutRemuneration_recordsNestedInput
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateWithoutIndicatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
-    worker_id?: NullableIntFieldUpdateOperationsInput | number | null
     actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
+    target_value?: NullableJsonNullValueInput | InputJsonValue
     percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     incentive_amount?: FloatFieldUpdateOperationsInput | number
     max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
     raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
     calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
     calculation_version?: StringFieldUpdateOperationsInput | string
+    kpi_config_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    remuneration_formula_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    worker_allocation_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    calculation_metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type FacilityTargetUpdateWithoutIndicatorInput = {
@@ -52766,110 +52801,35 @@ export namespace Prisma {
     facility_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type FacilityRemunerationRecordCreateManyWorkerInput = {
-    id?: string
-    facility_id: string
-    report_month: string
-    indicator_id?: number | null
-    actual_value?: number | null
-    target_value?: number | null
-    percentage_achieved?: number | null
-    status: string
-    incentive_amount?: number
-    max_remuneration?: number | null
-    raw_percentage?: number | null
-    worker_type?: string | null
-    worker_role?: string | null
-    allocated_amount?: number | null
-    performance_percentage?: number | null
-    calculated_amount?: number | null
-    calculation_date?: Date | string
-    calculation_version?: string
-  }
-
   export type WorkerRemunerationCreateManyHealth_workerInput = {
     id?: number
+    facility_id: string
     report_month: string
+    worker_type: string
+    worker_role: string
     allocated_amount: Decimal | DecimalJsLike | number | string
     performance_percentage: Decimal | DecimalJsLike | number | string
     calculated_amount: Decimal | DecimalJsLike | number | string
     calculated_at?: Date | string
   }
 
-  export type FacilityRemunerationRecordUpdateWithoutWorkerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
-    status?: StringFieldUpdateOperationsInput | string
-    incentive_amount?: FloatFieldUpdateOperationsInput | number
-    max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
-    raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    calculation_version?: StringFieldUpdateOperationsInput | string
-    facility?: FacilityUpdateOneRequiredWithoutRemuneration_recordsNestedInput
-    indicator?: IndicatorUpdateOneWithoutRemuneration_recordsNestedInput
-  }
-
-  export type FacilityRemunerationRecordUncheckedUpdateWithoutWorkerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
-    status?: StringFieldUpdateOperationsInput | string
-    incentive_amount?: FloatFieldUpdateOperationsInput | number
-    max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
-    raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    calculation_version?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FacilityRemunerationRecordUncheckedUpdateManyWithoutWorkerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    actual_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    target_value?: NullableFloatFieldUpdateOperationsInput | number | null
-    percentage_achieved?: NullableFloatFieldUpdateOperationsInput | number | null
-    status?: StringFieldUpdateOperationsInput | string
-    incentive_amount?: FloatFieldUpdateOperationsInput | number
-    max_remuneration?: NullableFloatFieldUpdateOperationsInput | number | null
-    raw_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    worker_type?: NullableStringFieldUpdateOperationsInput | string | null
-    worker_role?: NullableStringFieldUpdateOperationsInput | string | null
-    allocated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    performance_percentage?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculated_amount?: NullableFloatFieldUpdateOperationsInput | number | null
-    calculation_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    calculation_version?: StringFieldUpdateOperationsInput | string
-  }
-
   export type WorkerRemunerationUpdateWithoutHealth_workerInput = {
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: FacilityUpdateOneRequiredWithoutWorker_remunerationsNestedInput
   }
 
   export type WorkerRemunerationUncheckedUpdateWithoutHealth_workerInput = {
     id?: IntFieldUpdateOperationsInput | number
+    facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -52878,7 +52838,10 @@ export namespace Prisma {
 
   export type WorkerRemunerationUncheckedUpdateManyWithoutHealth_workerInput = {
     id?: IntFieldUpdateOperationsInput | number
+    facility_id?: StringFieldUpdateOperationsInput | string
     report_month?: StringFieldUpdateOperationsInput | string
+    worker_type?: StringFieldUpdateOperationsInput | string
+    worker_role?: StringFieldUpdateOperationsInput | string
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     calculated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

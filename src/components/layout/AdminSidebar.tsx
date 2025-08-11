@@ -49,8 +49,8 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
   return (
     // This is the actual sidebar panel content
-    <div className="flex flex-col h-full w-full bg-white shadow-xl overflow-y-auto">
-      {/* User info */}
+    <div className="flex flex-col h-full w-full bg-white shadow-xl">
+      {/* User info - fixed at top */}
       <div className="flex-shrink-0 flex items-center px-4 py-4 border-b border-gray-200">
         <div className="flex-shrink-0 group block">
           <div className="flex items-center">
@@ -71,8 +71,8 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 px-2 py-4 space-y-1">
+      {/* Navigation Links - scrollable if content overflows */}
+      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
         {/* Main Dashboard */}
         <Link
           href="/admin"
@@ -493,7 +493,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
         )}
       </nav>
 
-      {/* Sign Out Button */}
+      {/* Sign Out Button - fixed at bottom */}
       <div className="flex-shrink-0 px-4 py-4 border-t border-gray-200">
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
