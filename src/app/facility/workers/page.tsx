@@ -425,7 +425,7 @@ export default function FacilityWorkersPage() {
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -434,18 +434,6 @@ export default function FacilityWorkersPage() {
                 <p className="text-2xl font-bold text-gray-900">{workers.length}</p>
               </div>
               <Users className="h-8 w-8 text-gray-400" />
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Active Employees</p>
-                <p className="text-2xl font-bold text-gray-900">{workers.filter(w => w.is_active).length}</p>
-              </div>
-              <Users className="h-8 w-8 text-green-400" />
             </div>
           </CardContent>
         </Card>
