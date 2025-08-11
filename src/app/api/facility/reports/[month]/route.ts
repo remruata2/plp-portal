@@ -515,12 +515,20 @@ export async function GET(
         
         // Get the proper role from worker allocation config
         const workerConfig = workerConfigs.find(config => config.worker_type === worker.worker_type);
-        const workerRole = workerConfig?.worker_role || worker.worker_type.toUpperCase();
+        let workerRole = workerConfig?.worker_role || worker.worker_type.toUpperCase();
+        
+        // Add "(TEAM)" suffix for team-based workers
+        if (teamBasedWorkerTypes.includes(workerType)) {
+          workerRole = `${workerRole} (TEAM)`;
+        }
         
         // Calculate incentive based on worker type
         let calculatedAmount = 0;
         if (individualBasedWorkerTypes.includes(workerType)) {
           // Individual-based workers get the full facility incentive
+          calculatedAmount = facilityIncentive;
+        } else if (teamBasedWorkerTypes.includes(workerType)) {
+          // Team-based workers (MO) get the full facility incentive
           calculatedAmount = facilityIncentive;
         } else if (performanceBasedWorkerTypes.includes(workerType)) {
           // Performance-based workers get allocated amount × performance percentage
@@ -550,6 +558,7 @@ export async function GET(
       const workerType = worker.worker_type.toLowerCase();
       // Only include performance-based workers in personal incentives
       // HWO and Ayush MO are individual-based and get facility incentive directly
+      // MO is team-based and gets facility incentive directly (not included in personal incentives)
       return performanceBasedWorkerTypes.includes(workerType);
     });
     

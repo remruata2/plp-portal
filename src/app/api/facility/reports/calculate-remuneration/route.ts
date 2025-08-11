@@ -224,6 +224,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Define worker types and their calculation methods
+    const teamBasedWorkerTypes = ['mo']; // Team-based workers get full facility incentive
     const individualBasedWorkerTypes = ['hwo', 'ayush_mo']; // Get full facility incentive
     const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // Performance calculation
     
@@ -239,6 +240,9 @@ export async function POST(request: NextRequest) {
       if (individualBasedWorkerTypes.includes(workerType)) {
         // Individual-based workers get the full facility incentive
         calculatedAmount = totalFacilityIncentive;
+      } else if (teamBasedWorkerTypes.includes(workerType)) {
+        // Team-based workers (MO) get the full facility incentive
+        calculatedAmount = totalFacilityIncentive;
       } else if (performanceBasedWorkerTypes.includes(workerType)) {
         // Performance-based workers get allocated amount × performance percentage
         calculatedAmount = (allocatedAmount * overallPerformance) / 100;
@@ -251,11 +255,17 @@ export async function POST(request: NextRequest) {
       // Debug: Log worker remuneration calculation
       console.log(`Calculate remuneration - Worker ${worker.name} (${workerType}): allocated=${allocatedAmount}, performance=${overallPerformance}%, calculated=${calculatedAmount}`);
       
+      // Get worker role with "(TEAM)" suffix for team-based workers
+      let workerRole = worker.worker_type;
+      if (teamBasedWorkerTypes.includes(workerType)) {
+        workerRole = `${workerRole} (TEAM)`;
+      }
+      
       return {
         id: worker.id,
         name: worker.name,
         worker_type: worker.worker_type,
-        worker_role: worker.worker_type, // Use worker_type as role
+        worker_role: workerRole,
         allocated_amount: allocatedAmount,
         performance_percentage: overallPerformance,
         calculated_amount: calculatedAmount,
