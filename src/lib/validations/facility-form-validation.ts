@@ -227,6 +227,41 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
         }
         return null;
       }
+    },
+    elderly_support_group_formed: {
+      required: true,
+      customValidator: (value, formData) => {
+        const groupFormed = value === "1" || value === true;
+        const activity = formData.elderly_support_group_activity;
+        if (groupFormed && (!activity || activity === "" || activity === "0")) {
+          return {
+            field: 'elderly_support_group_activity',
+            message: 'If support group is formed, some activities should be conducted',
+            type: 'logic_error' as const
+          };
+        }
+        return null;
+      }
+    },
+    elderly_support_group_activity: {
+      required: false, // Only required when elderly support group is formed
+      customValidator: (value, formData) => {
+        const groupFormed = formData.elderly_support_group_formed === "1" || formData.elderly_support_group_formed === true;
+        
+        // Only validate if group is formed
+        if (groupFormed) {
+          // If group is formed, activity count should be provided
+          if (!value || value === "" || value === "0") {
+            return {
+              field: 'elderly_support_group_activity',
+              message: 'If Yes, any activity conducted during the month is required',
+              type: 'logic_error' as const
+            };
+          }
+        }
+        
+        return null;
+      }
     }
   },
 
@@ -266,7 +301,24 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
       }
     },
     elderly_support_group_activity: {
-      required: true // All fields are now required, 0 is valid for no activities
+      required: false, // Only required when elderly support group is formed
+      customValidator: (value, formData) => {
+        const groupFormed = formData.elderly_support_group_formed === "1" || formData.elderly_support_group_formed === true;
+        
+        // Only validate if group is formed
+        if (groupFormed) {
+          // If group is formed, activity count should be provided
+          if (!value || value === "" || value === "0") {
+            return {
+              field: 'elderly_support_group_activity',
+              message: 'If Yes, any activity conducted during the month is required',
+              type: 'logic_error' as const
+            };
+          }
+        }
+        
+        return null;
+      }
     }
   },
 
@@ -349,6 +401,26 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             type: 'logic_error' as const
           };
         }
+        return null;
+      }
+    },
+    elderly_support_group_activity: {
+      required: false, // Only required when elderly support group is formed
+      customValidator: (value, formData) => {
+        const groupFormed = formData.elderly_support_group_formed === "1" || formData.elderly_support_group_formed === true;
+        
+        // Only validate if group is formed
+        if (groupFormed) {
+          // If group is formed, activity count should be provided
+          if (!value || value === "" || value === "0") {
+            return {
+              field: 'elderly_support_group_activity',
+              message: 'If Yes, any activity conducted during the month is required',
+              type: 'logic_error' as const
+            };
+          }
+        }
+        
         return null;
       }
     }
