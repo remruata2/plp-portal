@@ -12,155 +12,79 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    console.log("API: User ID:", session.user.id);
+    const { searchParams } = new URL(request.url);
+    const facilityId = searchParams.get("facilityId");
 
-    // Check what data exists in the database
-    const allUsers = await prisma.user.findMany({
-      include: {
-        uploaded_data: {
-          include: {
-            facility: true,
-          },
-        },
+    if (!facilityId) {
+      return NextResponse.json(
+        { error: "facilityId is required" },
+        { status: 400 }
+      );
+    }
+
+    // Get existing field value submissions for this facility
+    const submissions = await prisma.fieldValue.findMany({
+      where: {
+        facility_id: facilityId,
+      },
+      select: {
+        report_month: true,
+        created_at: true,
+      },
+      distinct: ['report_month'],
+      orderBy: {
+        report_month: 'desc',
       },
     });
 
-    console.log("API: All users with data:", allUsers.length);
-    allUsers.forEach((user) => {
-      console.log(
-        `API: User ${user.id} (${user.username}) has ${user.uploaded_data.length} uploads`
-      );
-      user.uploaded_data.forEach((data) => {
-        console.log(
-          `API: - Upload: ${data.id}, Facility: ${
-            data.facility?.name || "No facility"
-          }`
-        );
+    // Also check for remuneration records (alternative submission tracking)
+    const remunerationSubmissions = await prisma.facilityRemunerationRecord.findMany({
+      where: {
+        facility_id: facilityId,
+      },
+      select: {
+        report_month: true,
+        calculation_date: true,
+      },
+      distinct: ['report_month'],
+      orderBy: {
+        report_month: 'desc',
+      },
+    });
+
+    // Combine and deduplicate submissions
+    const allSubmissions = new Map();
+    
+    submissions.forEach(sub => {
+      allSubmissions.set(sub.report_month, {
+        report_month: sub.report_month,
+        submission_date: sub.created_at,
+        type: 'field_value'
       });
     });
 
-    // Check all monthly health data
-    const allHealthData = await prisma.monthlyHealthData.findMany({
-      include: {
-        facility: true,
-        uploader: true,
-      },
-    });
-
-    console.log("API: Total health data records:", allHealthData.length);
-    allHealthData.forEach((data) => {
-      console.log(
-        `API: - Health Data: ${data.id}, Facility: ${
-          data.facility?.name || "No facility"
-        }, Uploader: ${data.uploader.username}`
-      );
-    });
-
-    // Get the user's facility through their uploaded field values
-    const userFieldValues = await prisma.fieldValue.findMany({
-      where: {
-        uploaded_by: parseInt(session.user.id),
-      },
-      include: {
-        field: true,
-        facility: {
-          include: {
-            facility_type: true,
-          },
-        },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-
-    console.log("API: User field values:", userFieldValues.length);
-    userFieldValues.forEach((fv) => {
-      console.log(
-        `API: - Field Value: ${fv.id}, Field: ${fv.field.code}, Facility: ${
-          fv.facility?.name || "No facility"
-        }, Month: ${fv.report_month}`
-      );
-    });
-
-    // Group field values by facility and report month
-    const submissionsMap = new Map();
-
-    userFieldValues.forEach((fieldValue) => {
-      const key = `${fieldValue.facility_id}-${fieldValue.report_month}`;
-
-      if (!submissionsMap.has(key)) {
-        submissionsMap.set(key, {
-          id: key, // Use the facility_id-report_month format as submission ID
-          reportMonth: fieldValue.report_month,
-          facilityName: fieldValue.facility?.name || "Unknown Facility",
-          facilityType: fieldValue.facility?.facility_type?.name || "Unknown",
-          submittedAt: fieldValue.created_at.toISOString(),
-          status: "submitted",
-          fieldValues: [],
+    remunerationSubmissions.forEach(sub => {
+      if (!allSubmissions.has(sub.report_month)) {
+        allSubmissions.set(sub.report_month, {
+          report_month: sub.report_month,
+          submission_date: sub.calculation_date,
+          type: 'remuneration_record'
         });
       }
-
-      const submission = submissionsMap.get(key);
-      submission.fieldValues.push({
-        fieldCode: fieldValue.field.code,
-        value:
-          fieldValue.string_value ||
-          fieldValue.numeric_value ||
-          fieldValue.boolean_value,
-      });
     });
 
-    // Transform to the expected format
-    const submissions = Array.from(submissionsMap.values()).map(
-      (submission) => {
-        // Extract key metrics from field values
-        const totalFootfall = submission.fieldValues.find(
-          (fv) => fv.fieldCode === "total_footfall"
-        )?.value;
-        const wellnessSessions = submission.fieldValues.find(
-          (fv) => fv.fieldCode === "wellness_sessions"
-        )?.value;
-        const tbScreened = submission.fieldValues.find(
-          (fv) => fv.fieldCode === "tb_screened"
-        )?.value;
-        const patientSatisfaction = submission.fieldValues.find(
-          (fv) => fv.fieldCode === "patient_satisfaction"
-        )?.value;
-
-        return {
-          id: submission.id,
-          reportMonth: submission.reportMonth,
-          facilityName: submission.facilityName,
-          facilityType: submission.facilityType,
-          submittedAt: submission.submittedAt,
-          status: submission.status,
-          totalFootfall: totalFootfall ? parseInt(totalFootfall) : undefined,
-          wellnessSessions: wellnessSessions
-            ? parseInt(wellnessSessions)
-            : undefined,
-          tbScreened: tbScreened ? parseInt(tbScreened) : undefined,
-          patientSatisfactionScore: patientSatisfaction
-            ? parseInt(patientSatisfaction)
-            : undefined,
-        };
-      }
-    );
+    const uniqueSubmissions = Array.from(allSubmissions.values())
+      .sort((a, b) => b.report_month.localeCompare(a.report_month));
 
     return NextResponse.json({
-      submissions,
-      debug: {
-        userId: session.user.id,
-        totalUsers: allUsers.length,
-        totalHealthData: allHealthData.length,
-        totalFieldValues: userFieldValues.length,
-        submissionsFound: submissions.length,
-      },
+      submissions: uniqueSubmissions,
+      count: uniqueSubmissions.length,
     });
+
   } catch (error) {
     console.error("Error fetching submissions:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to fetch submissions" },
       { status: 500 }
     );
   }

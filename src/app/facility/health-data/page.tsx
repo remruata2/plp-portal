@@ -21,16 +21,9 @@ interface Facility {
 }
 
 interface HealthDataSubmission {
-  id: number;
-  reportMonth: string;
-  facilityName: string;
-  facilityType: string;
-  submittedAt: string;
-  status: "submitted" | "pending" | "approved" | "rejected";
-  totalFootfall?: number;
-  wellnessSessions?: number;
-  tbScreened?: number;
-  patientSatisfactionScore?: number;
+  report_month: string;
+  submission_date: string;
+  type: 'field_value' | 'remuneration_record';
 }
 
 export default function FacilityHealthDataPage() {
@@ -85,8 +78,18 @@ export default function FacilityHealthDataPage() {
   const loadSubmissions = async () => {
     try {
       setLoadingSubmissions(true);
+      
+      // Get facility ID from session
+      const facilityId = session?.user?.facility_id;
+      
+      if (!facilityId) {
+        console.error("No facility ID found in session");
+        setSubmissions([]);
+        return;
+      }
+      
       // Fetch submissions from the API - facility users only see their own submissions
-      const response = await fetch("/api/health-data/submissions", {
+      const response = await fetch(`/api/health-data/submissions?facilityId=${facilityId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -294,23 +297,25 @@ export default function FacilityHealthDataPage() {
             <div className="space-y-4">
               {submissions.map((submission) => (
                 <div
-                  key={submission.id}
+                  key={submission.report_month}
                   className="flex items-center justify-between p-4 border rounded-lg"
                 >
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900">
-                      {submission.reportMonth}
+                      {submission.report_month}
                     </h3>
                     <p className="text-sm text-gray-500">
-                      Submitted on {submission.submittedAt}
+                      Submitted on {new Date(submission.submission_date).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
-                    {getStatusBadge(submission.status)}
+                    <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                      {submission.type === 'field_value' ? 'Data Submitted' : 'Calculated'}
+                    </span>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleViewSubmission(submission.id.toString())}
+                      onClick={() => handleViewSubmission(`${session?.user?.facility_id}-${submission.report_month}`)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>

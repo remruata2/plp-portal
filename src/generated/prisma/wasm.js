@@ -422,6 +422,28 @@ exports.Prisma.IndicatorWorkerAllocationScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.FacilityRemunerationRecordScalarFieldEnum = {
+  id: 'id',
+  facility_id: 'facility_id',
+  report_month: 'report_month',
+  indicator_id: 'indicator_id',
+  worker_id: 'worker_id',
+  actual_value: 'actual_value',
+  target_value: 'target_value',
+  percentage_achieved: 'percentage_achieved',
+  status: 'status',
+  incentive_amount: 'incentive_amount',
+  max_remuneration: 'max_remuneration',
+  raw_percentage: 'raw_percentage',
+  worker_type: 'worker_type',
+  worker_role: 'worker_role',
+  allocated_amount: 'allocated_amount',
+  performance_percentage: 'performance_percentage',
+  calculated_amount: 'calculated_amount',
+  calculation_date: 'calculation_date',
+  calculation_version: 'calculation_version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -481,12 +503,12 @@ exports.formula_type = exports.$Enums.formula_type = {
 
 exports.TargetType = exports.$Enums.TargetType = {
   PERCENTAGE: 'PERCENTAGE',
-  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE',
   CONSTANT_VALUE: 'CONSTANT_VALUE',
   BINARY: 'BINARY',
   RANGE: 'RANGE',
   MINIMUM_THRESHOLD: 'MINIMUM_THRESHOLD',
-  MAXIMUM_THRESHOLD: 'MAXIMUM_THRESHOLD'
+  MAXIMUM_THRESHOLD: 'MAXIMUM_THRESHOLD',
+  PERCENTAGE_RANGE: 'PERCENTAGE_RANGE'
 };
 
 exports.FieldType = exports.$Enums.FieldType = {
@@ -534,7 +556,8 @@ exports.Prisma.ModelName = {
   IndicatorRemuneration: 'IndicatorRemuneration',
   PerformanceCalculation: 'PerformanceCalculation',
   FacilityTarget: 'FacilityTarget',
-  IndicatorWorkerAllocation: 'IndicatorWorkerAllocation'
+  IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
+  FacilityRemunerationRecord: 'FacilityRemunerationRecord'
 };
 
 /**

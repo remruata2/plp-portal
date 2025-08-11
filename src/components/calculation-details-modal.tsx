@@ -75,29 +75,13 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
     // Create a proper calculation display that shows the actual formula being used
     const getCalculationDisplay = () => {
       if (formula === "(A/(B/12))*100") {
-        // Check if the denominator value is already divided by 12 (likely old data)
-        // If denominator is very small (< 100), it's probably already divided
-        const isLikelyDivided = denominatorValue < 100;
-        
-        if (isLikelyDivided) {
-          // Old data: denominator is already B/12, so calculation is A/B*100
-          return `${numeratorValue} ÷ ${denominatorValue} × 100 = ${percentage.toFixed(1)}%`;
-        } else {
-          // New data: denominator is raw B, so calculation is A/(B/12)*100
-          return `${numeratorValue} ÷ (${denominatorValue} ÷ 12) × 100 = ${percentage.toFixed(1)}%`;
-        }
+        // Population-based formula: A/(B/12)*100
+        return `${numeratorValue} ÷ (${denominatorValue} ÷ 12) × 100 = ${percentage.toFixed(1)}%`;
       } else if (formula === "(A/(B/60))*100") {
-        // Check if the denominator value is already divided by 60
-        const isLikelyDivided = denominatorValue < 100;
-        
-        if (isLikelyDivided) {
-          // Old data: denominator is already B/60, so calculation is A/B*100
-          return `${numeratorValue} ÷ ${denominatorValue} × 100 = ${percentage.toFixed(1)}%`;
-        } else {
-          // New data: denominator is raw B, so calculation is A/(B/60)*100
-          return `${numeratorValue} ÷ (${denominatorValue} ÷ 60) × 100 = ${percentage.toFixed(1)}%`;
-        }
+        // Population-based formula: A/(B/60)*100  
+        return `${numeratorValue} ÷ (${denominatorValue} ÷ 60) × 100 = ${percentage.toFixed(1)}%`;
       } else {
+        // Standard formula: A/B*100
         return `${numeratorValue} ÷ ${denominatorValue} × 100 = ${percentage.toFixed(1)}%`;
       }
     };
@@ -321,28 +305,13 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
                     const denominator = indicator.denominator_value || 1;
                     
                     if (formula === "(A/(B/12))*100") {
-                      // Check if denominator is already divided (old data)
-                      const isLikelyDivided = denominator < 100;
-                      
-                      if (isLikelyDivided) {
-                        // Old data: denominator is already B/12
-                        return `${numerator} ÷ ${denominator} × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
-                      } else {
-                        // New data: denominator is raw B
-                        return `${numerator} ÷ (${denominator} ÷ 12) × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
-                      }
+                      // Population-based formula: A/(B/12)*100
+                      return `${numerator} ÷ (${denominator} ÷ 12) × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
                     } else if (formula === "(A/(B/60))*100") {
-                      // Check if denominator is already divided (old data)
-                      const isLikelyDivided = denominator < 100;
-                      
-                      if (isLikelyDivided) {
-                        // Old data: denominator is already B/60
-                        return `${numerator} ÷ ${denominator} × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
-                      } else {
-                        // New data: denominator is raw B
-                        return `${numerator} ÷ (${denominator} ÷ 60) × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
-                      }
+                      // Population-based formula: A/(B/60)*100
+                      return `${numerator} ÷ (${denominator} ÷ 60) × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
                     } else {
+                      // Standard formula: A/B*100
                       return `${numerator} ÷ ${denominator} × 100 = ${indicator.raw_percentage?.toFixed(2) || indicator.percentage?.toFixed(1)}%`;
                     }
                   })()}
@@ -355,21 +324,7 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
               </div>
             </div>
             
-            {/* Data Consistency Note */}
-            {(() => {
-              const formula = indicator.formula_config?.calculationFormula || "(A/B)*100";
-              const denominator = indicator.denominator_value || 1;
-              
-              if ((formula === "(A/(B/12))*100" || formula === "(A/(B/60))*100") && denominator < 100) {
-                return (
-                  <div className="mt-3 p-2 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800">
-                    <strong>Note:</strong> This calculation uses pre-divided population data (likely from previous system version). 
-                    The system automatically detects and handles this data format to ensure accurate calculations.
-                  </div>
-                );
-              }
-              return null;
-            })()}
+            {/* Removed problematic data consistency note - formulas are always correct from database */}
           </div>
         </div>
 

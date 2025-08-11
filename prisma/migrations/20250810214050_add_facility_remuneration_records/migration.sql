@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "FacilityRemunerationRecord" (
+CREATE TABLE "facility_remuneration_record" (
     "id" TEXT NOT NULL,
     "facility_id" TEXT NOT NULL,
     "report_month" TEXT NOT NULL,
@@ -20,29 +20,29 @@ CREATE TABLE "FacilityRemunerationRecord" (
     "calculation_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "calculation_version" TEXT NOT NULL DEFAULT '1.0',
 
-    CONSTRAINT "FacilityRemunerationRecord_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "facility_remuneration_record_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE INDEX "FacilityRemunerationRecord_facility_id_report_month_idx" ON "FacilityRemunerationRecord"("facility_id", "report_month");
+CREATE INDEX "facility_remuneration_record_facility_id_report_month_idx" ON "facility_remuneration_record"("facility_id", "report_month");
 
 -- CreateIndex
-CREATE INDEX "FacilityRemunerationRecord_report_month_idx" ON "FacilityRemunerationRecord"("report_month");
+CREATE INDEX "facility_remuneration_record_report_month_idx" ON "facility_remuneration_record"("report_month");
 
 -- CreateIndex
-CREATE INDEX "FacilityRemunerationRecord_indicator_id_idx" ON "FacilityRemunerationRecord"("indicator_id");
+CREATE INDEX "facility_remuneration_record_indicator_id_idx" ON "facility_remuneration_record"("indicator_id");
 
 -- CreateIndex
-CREATE INDEX "FacilityRemunerationRecord_worker_id_idx" ON "FacilityRemunerationRecord"("worker_id");
+CREATE INDEX "facility_remuneration_record_worker_id_idx" ON "facility_remuneration_record"("worker_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "FacilityRemunerationRecord_facility_id_report_month_indicat_key" ON "FacilityRemunerationRecord"("facility_id", "report_month", "indicator_id", "worker_id");
+CREATE UNIQUE INDEX "facility_remuneration_record_facility_id_report_month_indicat_key" ON "facility_remuneration_record"("facility_id", "report_month", "indicator_id", "worker_id");
 
 -- AddForeignKey
-ALTER TABLE "FacilityRemunerationRecord" ADD CONSTRAINT "FacilityRemunerationRecord_facility_id_fkey" FOREIGN KEY ("facility_id") REFERENCES "facility"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "facility_remuneration_record" ADD CONSTRAINT "facility_remuneration_record_facility_id_fkey" FOREIGN KEY ("facility_id") REFERENCES "facility"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FacilityRemunerationRecord" ADD CONSTRAINT "FacilityRemunerationRecord_indicator_id_fkey" FOREIGN KEY ("indicator_id") REFERENCES "indicator"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "facility_remuneration_record" ADD CONSTRAINT "facility_remuneration_record_indicator_id_fkey" FOREIGN KEY ("indicator_id") REFERENCES "indicator"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FacilityRemunerationRecord" ADD CONSTRAINT "FacilityRemunerationRecord_worker_id_fkey" FOREIGN KEY ("worker_id") REFERENCES "health_workers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "facility_remuneration_record" ADD CONSTRAINT "facility_remuneration_record_worker_id_fkey" FOREIGN KEY ("worker_id") REFERENCES "health_workers"("id") ON DELETE CASCADE ON UPDATE CASCADE;

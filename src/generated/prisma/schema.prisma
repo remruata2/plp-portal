@@ -68,17 +68,18 @@ model FacilityType {
 }
 
 model Facility {
-  id                        String                     @id @default(cuid())
-  name                      String                     @db.VarChar(200)
-  created_at                DateTime                   @default(now()) @db.Timestamptz(6)
-  description               String?                    @db.VarChar(500)
-  display_name              String                     @db.VarChar(200)
+  id                        String                       @id @default(cuid())
+  name                      String                       @db.VarChar(200)
+  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
+  description               String?                      @db.VarChar(500)
+  display_name              String                       @db.VarChar(200)
   district_id               String
   facility_type_id          String
-  is_active                 Boolean                    @default(true)
-  updated_at                DateTime                   @updatedAt @db.Timestamptz(6)
-  district                  District                   @relation(fields: [district_id], references: [id])
-  facility_type             FacilityType               @relation(fields: [facility_type_id], references: [id])
+  is_active                 Boolean                      @default(true)
+  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
+  remuneration_records      FacilityRemunerationRecord[]
+  district                  District                     @relation(fields: [district_id], references: [id])
+  facility_type             FacilityType                 @relation(fields: [facility_type_id], references: [id])
   facility_field_defaults   FacilityFieldDefaults[]
   facility_targets          FacilityTarget[]
   worker_allocations        FacilityWorkerAllocation[]
@@ -159,31 +160,32 @@ model Formula {
 }
 
 model Indicator {
-  id                        Int                         @id @default(autoincrement())
-  name                      String                      @db.VarChar(200)
+  id                        Int                          @id @default(autoincrement())
+  name                      String                       @db.VarChar(200)
   description               String?
-  type                      String                      @db.VarChar(20)
+  type                      String                       @db.VarChar(20)
   structure                 Json?
-  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime                    @updatedAt @db.Timestamptz(6)
-  code                      String                      @unique @db.VarChar(50)
+  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
+  code                      String                       @unique @db.VarChar(50)
   applicable_facility_types Json?
-  conditions                String?                     @db.VarChar(1000)
+  conditions                String?                      @db.VarChar(1000)
   denominator_field_id      Int?
-  denominator_label         String?                     @db.VarChar(200)
+  denominator_label         String?                      @db.VarChar(200)
   formula_config            Json?
-  formula_type              formula_type                @default(RANGE_BASED)
+  formula_type              formula_type                 @default(RANGE_BASED)
   numerator_field_id        Int?
-  numerator_label           String?                     @db.VarChar(200)
-  target_formula            String?                     @db.VarChar(500)
-  target_type               TargetType                  @default(PERCENTAGE)
-  target_value              String?                     @db.VarChar(100)
+  numerator_label           String?                      @db.VarChar(200)
+  target_formula            String?                      @db.VarChar(500)
+  target_type               TargetType                   @default(PERCENTAGE)
+  target_value              String?                      @db.VarChar(100)
   target_field_id           Int?
-  source_of_verification    String?                     @db.VarChar(100)
+  source_of_verification    String?                      @db.VarChar(100)
+  remuneration_records      FacilityRemunerationRecord[]
   facility_targets          FacilityTarget[]
-  denominator_field         Field?                      @relation("DenominatorField", fields: [denominator_field_id], references: [id])
-  numerator_field           Field?                      @relation("NumeratorField", fields: [numerator_field_id], references: [id])
-  target_field              Field?                      @relation("TargetField", fields: [target_field_id], references: [id])
+  denominator_field         Field?                       @relation("DenominatorField", fields: [denominator_field_id], references: [id])
+  numerator_field           Field?                       @relation("NumeratorField", fields: [numerator_field_id], references: [id])
+  target_field              Field?                       @relation("TargetField", fields: [target_field_id], references: [id])
   remunerations             IndicatorRemuneration[]
   worker_allocations        IndicatorWorkerAllocation[]
   monthly_data              MonthlyHealthData[]
@@ -288,17 +290,18 @@ model sub_centre {
 }
 
 model HealthWorker {
-  id                        Int                  @id @default(autoincrement())
+  id                        Int                          @id @default(autoincrement())
   facility_id               String
   name                      String
   worker_type               String
-  allocated_amount          Decimal              @db.Decimal(10, 2)
+  allocated_amount          Decimal                      @db.Decimal(10, 2)
   contact_number            String?
   email                     String?
-  is_active                 Boolean              @default(true)
-  created_at                DateTime             @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime             @updatedAt @db.Timestamptz(6)
-  facility                  Facility             @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  is_active                 Boolean                      @default(true)
+  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
+  remuneration_records      FacilityRemunerationRecord[]
+  facility                  Facility                     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   remuneration_calculations WorkerRemuneration[]
 
   @@map("health_workers")
@@ -451,6 +454,37 @@ model IndicatorWorkerAllocation {
   @@map("indicator_worker_allocation")
 }
 
+model FacilityRemunerationRecord {
+  id                     String        @id @default(cuid())
+  facility_id            String
+  report_month           String
+  indicator_id           Int?
+  worker_id              Int?
+  actual_value           Float?
+  target_value           Float?
+  percentage_achieved    Float?
+  status                 String
+  incentive_amount       Float         @default(0)
+  max_remuneration       Float?
+  raw_percentage         Float?
+  worker_type            String?
+  worker_role            String?
+  allocated_amount       Float?
+  performance_percentage Float?
+  calculated_amount      Float?
+  calculation_date       DateTime      @default(now())
+  calculation_version    String        @default("1.0")
+  facility               Facility      @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  indicator              Indicator?    @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
+  worker                 HealthWorker? @relation(fields: [worker_id], references: [id], onDelete: Cascade)
+
+  @@unique([facility_id, report_month, indicator_id, worker_id])
+  @@index([facility_id, report_month])
+  @@index([report_month])
+  @@index([indicator_id])
+  @@index([worker_id])
+}
+
 enum UserRole {
   admin
   facility
@@ -514,12 +548,12 @@ enum UploadStatus {
 
 enum TargetType {
   PERCENTAGE
-  PERCENTAGE_RANGE
   CONSTANT_VALUE
   BINARY
   RANGE
   MINIMUM_THRESHOLD
   MAXIMUM_THRESHOLD
+  PERCENTAGE_RANGE
 
   @@map("target_type")
 }

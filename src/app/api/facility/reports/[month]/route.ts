@@ -141,6 +141,21 @@ export async function GET(
       // Get denominator value - use proper population defaults instead of fallback to 1
       let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
       
+      // Debug: Log field value lookup for CB001
+      if (indicator.code === "CB001") {
+        console.log(`🔍 CB001 Debug:`);
+        console.log(`  Numerator Field ID: ${indicator.numerator_field_id}`);
+        console.log(`  Denominator Field ID: ${indicator.denominator_field_id}`);
+        console.log(`  Field Value Map Keys: ${Array.from(fieldValueMap.keys()).join(', ')}`);
+        console.log(`  Numerator Value: ${actualValue}`);
+        console.log(`  Denominator Value: ${denominatorValue}`);
+        console.log(`  Field Values Count: ${fieldValues.length}`);
+        fieldValues.forEach(fv => {
+          if (fv.field_id === indicator.denominator_field_id) {
+            console.log(`  ✅ Found denominator field value: ${fv.field_id} = ${fv.string_value || fv.numeric_value || fv.boolean_value}`);
+          }
+        });
+      }
       // Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
       if (indicator.code === "PS001") {
         denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
@@ -424,13 +439,18 @@ export async function GET(
         // Add calculation details
         numerator_value: actualValue,
         denominator_value: (() => {
-          if (indicator.target_type === "RANGE") {
-            return targetValue; // Use target value for RANGE indicators
-          } else {
-            // For other types, return the raw denominator value
-            // The formula handles any necessary adjustments (e.g., (A/(B/12))*100)
-            return denominatorValue;
+          const finalDenominatorValue = indicator.target_type === "RANGE" ? targetValue : denominatorValue;
+          
+          // Debug: Log CB001 denominator value assignment
+          if (indicator.code === "CB001") {
+            console.log(`🔍 CB001 denominator_value assignment:`);
+            console.log(`  target_type: ${indicator.target_type}`);
+            console.log(`  targetValue: ${targetValue}`);
+            console.log(`  denominatorValue: ${denominatorValue}`);
+            console.log(`  final denominator_value: ${finalDenominatorValue}`);
           }
+          
+          return finalDenominatorValue;
         })(),
         formula_config: indicator.formula_config,
         calculation_result: result,

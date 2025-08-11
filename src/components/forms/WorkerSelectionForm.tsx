@@ -21,6 +21,7 @@ interface WorkerSelectionFormProps {
   facilityId: string;
   selectedWorkers: number[];
   onWorkersChange: (workerIds: number[]) => void;
+  onAvailableWorkersChange?: (workers: any[]) => void;
   facilityType?: string; // Add facility type parameter
 }
 
@@ -28,6 +29,7 @@ export default function WorkerSelectionForm({
   facilityId,
   selectedWorkers,
   onWorkersChange,
+  onAvailableWorkersChange,
   facilityType,
 }: WorkerSelectionFormProps) {
   const [workersByType, setWorkersByType] = useState<Record<string, Worker[]>>({});
@@ -61,6 +63,11 @@ export default function WorkerSelectionForm({
           
           setWorkersByType(groupedWorkers);
           setWorkerAllocationConfig(configData.config || {});
+          
+          // Pass available workers to parent
+          if (onAvailableWorkersChange) {
+            onAvailableWorkersChange(workersData.workers || []);
+          }
         }
       } catch (error) {
         console.error("Error loading workers and config:", error);

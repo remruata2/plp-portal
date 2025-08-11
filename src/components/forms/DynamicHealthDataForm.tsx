@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,14 @@ import { toast } from "sonner";
 import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
 import WorkerSelectionForm from "./WorkerSelectionForm";
 import ConditionalIndicatorDisplay from "@/components/indicators/ConditionalIndicatorDisplay";
+import { 
+  validateForm, 
+  validateField, 
+  getFieldValidationMessage,
+  type ValidationError,
+  type ValidationWarning,
+  type FormValidationResult 
+} from "@/lib/validations/facility-form-validation";
 
 interface FieldMapping {
   formFieldName: string;
@@ -48,8 +56,19 @@ export default function DynamicHealthDataForm({
   const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
   const [indicatorGroups, setIndicatorGroups] = useState<IndicatorGroup[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<number[]>([]);
+  const [availableWorkers, setAvailableWorkers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationWarnings, setValidationWarnings] = useState<ValidationWarning[]>([]);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, ValidationError[]>>({});
+  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [existingSubmissions, setExistingSubmissions] = useState<string[]>([]);
+  const [checkingSubmissions, setCheckingSubmissions] = useState(false);
+  
+  // Ref for debouncing full validation
+  const fullValidationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Month and year selection state
   const [selectedMonth, setSelectedMonth] = useState<string>("");
@@ -79,6 +98,15 @@ export default function DynamicHealthDataForm({
     
     setSelectedMonth(currentMonth);
     setSelectedYear(currentYear);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (fullValidationTimeoutRef.current) {
+        clearTimeout(fullValidationTimeoutRef.current);
+      }
+    };
   }, []);
 
   // Fetch field mappings for this facility type
@@ -149,6 +177,47 @@ export default function DynamicHealthDataForm({
 
     fetchFieldMappings();
   }, [facilityType]);
+
+  // Load existing submissions for this facility
+  useEffect(() => {
+    const fetchExistingSubmissions = async () => {
+      try {
+        setCheckingSubmissions(true);
+        
+        const effectiveFacilityId = facilityId || session?.user?.facility_id;
+        if (!effectiveFacilityId) return;
+
+        const response = await fetch(`/api/health-data/submissions?facilityId=${effectiveFacilityId}`);
+        if (response.ok) {
+          const data = await response.json();
+          // Extract report months from submissions
+          const months = data.submissions?.map((sub: any) => sub.report_month) || [];
+          setExistingSubmissions(months);
+        }
+      } catch (error) {
+        console.error("Error fetching existing submissions:", error);
+      } finally {
+        setCheckingSubmissions(false);
+      }
+    };
+
+    if (session?.user && !loading) {
+      fetchExistingSubmissions();
+    }
+  }, [session, facilityId, loading]);
+
+  // Re-validate form when workers change - only if submit has been attempted
+  useEffect(() => {
+    if (fieldMappings.length > 0 && hasAttemptedSubmit) {
+      // Debounce validation when workers change
+      if (fullValidationTimeoutRef.current) {
+        clearTimeout(fullValidationTimeoutRef.current);
+      }
+      fullValidationTimeoutRef.current = setTimeout(() => {
+        validateFullForm();
+      }, 300);
+    }
+  }, [selectedWorkers, availableWorkers, hasAttemptedSubmit]);
 
   // Function to group fields by indicators
   const groupFieldsByIndicators = (mappings: FieldMapping[]): IndicatorGroup[] => {
@@ -324,8 +393,96 @@ export default function DynamicHealthDataForm({
         }
       }
 
+      // Only validate if field has been touched or submit has been attempted
+      if (touchedFields.has(fieldName) || hasAttemptedSubmit) {
+        setTimeout(() => {
+          validateFieldRealTime(fieldName, value, newData);
+        }, 300); // Debounce validation
+      }
+
       return newData;
     });
+  };
+
+  const handleFieldBlur = (fieldName: string) => {
+    // Mark field as touched when user leaves the field
+    setTouchedFields(prev => new Set([...prev, fieldName]));
+    
+    // Validate the field
+    const value = formData[fieldName];
+    setTimeout(() => {
+      validateFieldRealTime(fieldName, value, formData);
+    }, 100);
+  };
+
+  // Real-time field validation
+  const validateFieldRealTime = (fieldName: string, value: any, currentFormData?: Record<string, any>) => {
+    const fieldMapping = fieldMappings.find(f => f.formFieldName === fieldName);
+    if (!fieldMapping) return;
+
+    // Use the current form data passed in, or fall back to state
+    const dataToValidate = currentFormData || formData;
+    const errors = validateField(fieldName, value, dataToValidate, facilityType, fieldMapping);
+    
+    // Update field errors - always set the array (empty if no errors)
+    setFieldErrors(prev => ({
+      ...prev,
+      [fieldName]: errors
+    }));
+
+    // Debug log (remove in production)
+    // console.log(`Validation for ${fieldName}: ${errors.length} errors`, errors);
+
+    // Also trigger a debounced full form validation to update summary - only if submit attempted
+    if (hasAttemptedSubmit) {
+      if (fullValidationTimeoutRef.current) {
+        clearTimeout(fullValidationTimeoutRef.current);
+      }
+      fullValidationTimeoutRef.current = setTimeout(() => {
+        validateFullForm();
+      }, 500);
+    }
+  };
+
+  // Full form validation
+  const validateFullForm = (): FormValidationResult => {
+    const result = validateForm(
+      formData,
+      fieldMappings,
+      facilityType,
+      selectedWorkers,
+      availableWorkers
+    );
+    
+    setValidationErrors(result.errors);
+    setValidationWarnings(result.warnings);
+    
+    // Group field errors and clear any fields that no longer have errors
+    const grouped: Record<string, ValidationError[]> = {};
+    
+    // Initialize all fields with empty arrays
+    fieldMappings.forEach(mapping => {
+      grouped[mapping.formFieldName] = [];
+    });
+    
+    // Add worker field if needed
+    grouped['workers'] = [];
+    
+    // Add errors to the appropriate fields
+    result.errors.forEach(error => {
+      if (!grouped[error.field]) {
+        grouped[error.field] = [];
+      }
+      grouped[error.field].push(error);
+    });
+    
+    setFieldErrors(grouped);
+    
+    // Debug log (remove in production)
+    // console.log(`Full form validation: ${result.errors.length} errors total`, result.errors);
+    // console.log('Field errors state:', grouped);
+    
+    return result;
   };
 
   // Utility function to render the appropriate input based on field type
@@ -338,6 +495,12 @@ export default function DynamicHealthDataForm({
     const elderlyGroupFormed = formData.elderly_support_group_formed === "1" || formData.elderly_support_group_formed === true;
     const shouldDisableElderlyActivity = isElderlyActivityField && !elderlyGroupFormed;
     
+    // Get validation errors for this field - only show if touched or submit attempted
+    const errors = fieldErrors[fieldId] || [];
+    const shouldShowErrors = hasAttemptedSubmit || touchedFields.has(fieldId);
+    const hasErrors = errors.length > 0 && shouldShowErrors;
+    const validationMessage = getFieldValidationMessage(fieldId, facilityType);
+    
     // Handle BINARY fields with Switch component
     if (mapping.fieldType === "BINARY") {
       const isChecked = fieldValue === "1" || fieldValue === true;
@@ -349,6 +512,8 @@ export default function DynamicHealthDataForm({
             checked={isChecked}
             onCheckedChange={(checked) => {
               handleInputChange(fieldId, checked ? "1" : "0");
+              // Mark as touched immediately for switches
+              setTouchedFields(prev => new Set([...prev, fieldId]));
             }}
             disabled={submitting}
           />
@@ -397,6 +562,7 @@ export default function DynamicHealthDataForm({
                   handleInputChange(fieldId, e.target.value);
                 }
               }}
+              onBlur={() => handleFieldBlur(fieldId)}
               placeholder={shouldDisableElderlyActivity ? "N/A" : "0"}
               disabled={submitting || shouldDisableElderlyActivity}
               className={`text-center border-0 rounded-none focus:ring-0 text-sm font-medium min-w-[80px] ${shouldDisableElderlyActivity ? 'bg-gray-100 text-gray-500' : ''}`}
@@ -443,13 +609,30 @@ export default function DynamicHealthDataForm({
           type={mapping.fieldType === "numeric" ? "number" : "text"}
           value={shouldDisableElderlyActivity ? "" : fieldValue}
           onChange={(e) => handleInputChange(fieldId, e.target.value)}
+          onBlur={() => handleFieldBlur(fieldId)}
           placeholder={shouldDisableElderlyActivity ? "N/A - Group not formed" : `Enter ${mapping.description.toLowerCase()}`}
           disabled={submitting || shouldDisableElderlyActivity}
-          className={`text-sm ${shouldDisableElderlyActivity ? 'bg-gray-100 text-gray-500' : ''}`}
+          className={`text-sm ${shouldDisableElderlyActivity ? 'bg-gray-100 text-gray-500' : ''} ${hasErrors ? 'border-red-500 focus:border-red-500' : ''}`}
         />
         {shouldDisableElderlyActivity && (
           <p className="text-xs text-orange-600">
             This field is disabled because the Elderly Support Group is not formed.
+          </p>
+        )}
+        {/* Validation messages */}
+        {hasErrors && (
+          <div className="space-y-1">
+            {errors.map((error, idx) => (
+              <p key={idx} className="text-xs text-red-600">
+                {error.message}
+              </p>
+            ))}
+          </div>
+        )}
+        {/* Validation hints */}
+        {validationMessage && !hasErrors && (
+          <p className="text-xs text-gray-500">
+            {validationMessage}
           </p>
         )}
       </div>
@@ -617,8 +800,43 @@ export default function DynamicHealthDataForm({
         return;
       }
 
+      // Mark that submit has been attempted (this will trigger validation displays)
+      setHasAttemptedSubmit(true);
+      
+      // Mark all fields as touched to show validation errors
+      const allFieldNames = fieldMappings.map(m => m.formFieldName);
+      setTouchedFields(new Set(allFieldNames));
+
+      // Validate the entire form
+      const validationResult = validateFullForm();
+      
+      if (!validationResult.isValid) {
+        const errorCount = validationResult.errors.length;
+        toast.error(`Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''} before submitting`);
+        
+        // Scroll to first error
+        const firstErrorField = validationResult.errors[0]?.field;
+        if (firstErrorField) {
+          const element = document.getElementById(firstErrorField);
+          element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
+      // Show warnings if any
+      if (validationResult.warnings.length > 0) {
+        const warningMessages = validationResult.warnings.map(w => w.message).join('\n');
+        toast.warning(`Data submitted with ${validationResult.warnings.length} warning(s):\n${warningMessages}`);
+      }
+
       // Format report month as YYYY-MM
       const reportMonth = `${selectedYear}-${selectedMonth}`;
+
+      // Check for duplicate submission
+      if (existingSubmissions.includes(reportMonth)) {
+        toast.error(`Data has already been submitted for ${reportMonth}. Please select a different month or contact administrator to modify existing data.`);
+        return;
+      }
 
       // Check if session is loaded
       if (status === "loading") {
@@ -666,12 +884,22 @@ export default function DynamicHealthDataForm({
 
       toast.success("Data submitted successfully!");
 
+      // Add the submitted month to existing submissions
+      setExistingSubmissions(prev => [...prev, reportMonth].sort().reverse());
+
       // Reset form
       const initialData: Record<string, any> = {};
       fieldMappings.forEach((mapping) => {
         initialData[mapping.formFieldName] = "";
       });
       setFormData(initialData);
+      
+      // Reset validation state
+      setHasAttemptedSubmit(false);
+      setTouchedFields(new Set());
+      setFieldErrors({});
+      setValidationErrors([]);
+      setValidationWarnings([]);
 
       // Notify parent component of successful submission
       if (onSubmissionSuccess) {
@@ -779,6 +1007,49 @@ export default function DynamicHealthDataForm({
                   </Select>
                 </div>
               </div>
+              
+              {/* Duplicate submission warning */}
+              {selectedMonth && selectedYear && existingSubmissions.includes(`${selectedYear}-${selectedMonth}`) && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-600">⚠️</span>
+                    <div>
+                      <h4 className="text-sm font-medium text-red-800">
+                        Data Already Submitted
+                      </h4>
+                      <p className="text-sm text-red-700">
+                        Data has already been submitted for {selectedYear}-{selectedMonth}. 
+                        Please select a different month or contact your administrator to modify existing data.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Existing submissions info */}
+              {existingSubmissions.length > 0 && (
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <h4 className="text-sm font-medium text-blue-800 mb-2">
+                    Previous Submissions ({existingSubmissions.length})
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {existingSubmissions.slice(-6).map((month) => (
+                      <span 
+                        key={month}
+                        className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded"
+                      >
+                        {month}
+                      </span>
+                    ))}
+                    {existingSubmissions.length > 6 && (
+                      <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
+                        +{existingSubmissions.length - 6} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+              
               <p className="text-sm text-gray-500 mt-2">
                 Select the month and year for which you are submitting data. You can submit data for past months.
               </p>
@@ -890,12 +1161,95 @@ export default function DynamicHealthDataForm({
                 facilityId={facilityId}
                 selectedWorkers={selectedWorkers}
                 onWorkersChange={setSelectedWorkers}
+                onAvailableWorkersChange={setAvailableWorkers}
                 facilityType={facilityType}
               />
+              
+              {/* Worker validation errors - only show after submit attempt */}
+              {hasAttemptedSubmit && fieldErrors.workers && fieldErrors.workers.length > 0 && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <h4 className="text-sm font-medium text-red-800 mb-2">Worker Selection Errors:</h4>
+                  <ul className="text-sm text-red-700 space-y-1">
+                    {fieldErrors.workers.map((error, idx) => (
+                      <li key={idx}>• {error.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
-            <div className="flex justify-end">
-              <Button type="submit" disabled={submitting}>
+            {/* Validation Summary - only show after submit attempt */}
+            {hasAttemptedSubmit && (validationErrors.length > 0 || validationWarnings.length > 0) && (
+              <div className="border-t pt-6 space-y-4">
+                {validationErrors.length > 0 && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+                    <h3 className="text-lg font-semibold text-red-800 mb-3">
+                      Validation Errors ({validationErrors.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {validationErrors.map((error, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <span className="text-red-600 text-xs mt-0.5">•</span>
+                          <div className="flex-1">
+                            <span className="text-sm font-medium text-red-800">
+                              {error.field}:
+                            </span>
+                            <span className="text-sm text-red-700 ml-1">
+                              {error.message}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {validationWarnings.length > 0 && (
+                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                    <h3 className="text-lg font-semibold text-yellow-800 mb-3">
+                      Warnings ({validationWarnings.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {validationWarnings.map((warning, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <span className="text-yellow-600 text-xs mt-0.5">⚠</span>
+                          <div className="flex-1">
+                            <span className="text-sm font-medium text-yellow-800">
+                              {warning.field}:
+                            </span>
+                            <span className="text-sm text-yellow-700 ml-1">
+                              {warning.message}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-gray-600">
+                {hasAttemptedSubmit && validationErrors.length > 0 && (
+                  <span className="text-red-600">
+                    Please fix {validationErrors.length} error{validationErrors.length > 1 ? 's' : ''} before submitting
+                  </span>
+                )}
+                {hasAttemptedSubmit && validationErrors.length === 0 && validationWarnings.length > 0 && (
+                  <span className="text-yellow-600">
+                    {validationWarnings.length} warning{validationWarnings.length > 1 ? 's' : ''} found
+                  </span>
+                )}
+              </div>
+              <Button 
+                type="submit" 
+                disabled={
+                  submitting || 
+                  (hasAttemptedSubmit && validationErrors.length > 0) ||
+                  (Boolean(selectedMonth && selectedYear && existingSubmissions.includes(`${selectedYear}-${selectedMonth}`)))
+                }
+              >
                 {submitting ? "Submitting..." : "Submit Data"}
               </Button>
             </div>
