@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, FileText, Upload, Eye, Users } from "lucide-react";
+import { Loader2, FileText, Upload, Users } from "lucide-react";
 import { toast } from "sonner";
 
 // Import dynamic form component
@@ -303,7 +303,10 @@ export default function FacilityHealthDataPage() {
                 >
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900">
-                      {submission.report_month}
+                      {new Date(submission.report_month + "-01").toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                      })}
                     </h3>
                     <p className="text-sm text-gray-500">
                       Submitted on {new Date(submission.submission_date).toLocaleDateString()}
@@ -313,9 +316,6 @@ export default function FacilityHealthDataPage() {
                     <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                       {submission.type === 'field_value' ? 'Data Submitted' : 'Calculated'}
                     </span>
-                    <div className="text-gray-400">
-                      <Eye className="h-4 w-4" />
-                    </div>
                   </div>
                 </div>
               ))}

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, FileText, Upload, Edit, Trash2, Eye } from "lucide-react";
+import { Loader2, FileText, Upload, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -310,7 +310,10 @@ export default function HealthDataPage() {
                   className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div 
+                      className="flex-1 cursor-pointer"
+                      onClick={() => handleViewSubmission(submission.id)}
+                    >
                       <h3 className="font-medium text-gray-900">
                         {submission.facilityName} -{" "}
                         {new Date(
@@ -335,18 +338,14 @@ export default function HealthDataPage() {
                     <div className="flex items-center gap-2">
                       {getStatusBadge(submission.status)}
                       <div className="flex items-center gap-1">
+
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleViewSubmission(submission.id)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditSubmission(submission.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditSubmission(submission.id);
+                          }}
                           className="h-8 w-8 p-0"
                         >
                           <Edit className="h-3 w-3" />
@@ -354,7 +353,10 @@ export default function HealthDataPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteSubmission(submission.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSubmission(submission.id);
+                          }}
                           className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="h-3 w-3" />
