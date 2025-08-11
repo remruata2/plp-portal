@@ -26,7 +26,7 @@ export default function FacilitySidebar({
     "text-gray-600 hover:text-gray-900 hover:bg-gray-50";
 
   return (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200">
+    <div className="flex flex-col h-full min-h-screen flex-1 min-h-0 h-screen overflow-hidden bg-white border-r border-gray-200">
       {/* User Profile Section */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
@@ -45,7 +45,7 @@ export default function FacilitySidebar({
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         <Link
           href="/facility/dashboard"
           onClick={() => setSidebarOpen && setSidebarOpen(false)}

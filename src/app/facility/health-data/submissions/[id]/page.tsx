@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, ArrowLeft } from "lucide-react";
+import { groupFieldsByIndicators, type FieldMapping } from "@/lib/utils/indicator-grouping";
 
 interface FieldValue {
   id: number;
@@ -27,6 +28,26 @@ interface Submission {
   submittedAt: string;
   status: string;
   fieldValues: Record<string, FieldValue[]>;
+}
+
+// Function to group submission fields by indicators using the existing utility
+function groupSubmissionFieldsByIndicators(fieldValues: Record<string, FieldValue[]>) {
+  // Convert submission field values to FieldMapping format that the utility expects
+  const fieldMappings: FieldMapping[] = [];
+  
+  Object.entries(fieldValues).forEach(([category, fields]) => {
+    fields.forEach((field) => {
+      fieldMappings.push({
+        formFieldName: field.fieldCode, // Use fieldCode which should match the form field names
+        databaseFieldId: field.fieldId,
+        fieldType: field.fieldType,
+        description: field.description || field.fieldName
+      });
+    });
+  });
+
+  // Use the existing utility to group and sort fields
+  return groupFieldsByIndicators(fieldMappings);
 }
 
 export default function ViewFacilitySubmissionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -115,6 +136,9 @@ export default function ViewFacilitySubmissionPage({ params }: { params: Promise
     );
   }
 
+  // Group and sort the submission fields by indicators
+  const groupedFields = groupSubmissionFieldsByIndicators(submission.fieldValues);
+
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
@@ -166,24 +190,57 @@ export default function ViewFacilitySubmissionPage({ params }: { params: Promise
         </CardContent>
       </Card>
 
-      {/* Field Values */}
-      <div className="space-y-4">
-        {Object.entries(submission.fieldValues).map(([category, fields]) => (
-          <Card key={category}>
+      {/* Field Values - Organized by Indicators (same structure as form) */}
+      <div className="space-y-6">
+        {groupedFields.map((group, groupIndex) => (
+          <Card key={group.indicatorCode}>
             <CardHeader>
-              <CardTitle>{category}</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-lg font-semibold text-gray-900">
+                  {groupIndex + 1}. {group.indicatorName}
+                </span>
+                <span className="text-sm font-normal text-gray-500">
+                  ({group.indicatorCode})
+                </span>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {fields.map((field) => (
-                  <div key={field.id} className="space-y-2">
+                {group.fields.map((field, fieldIndex) => (
+                  <div key={field.databaseFieldId} className="space-y-2">
                     <label className="text-sm font-medium text-gray-700">
-                      {field.description || field.fieldName}
+                      {groupIndex + 1}{String.fromCharCode(97 + fieldIndex)}. {field.description}
                     </label>
                     <p className="text-lg font-semibold text-gray-900">
-                      {field.value !== null && field.value !== undefined 
-                        ? String(field.value) 
-                        : "Not provided"}
+                      {/* Find the corresponding field value from submission data */}
+                      {(() => {
+                        // Find the field value by matching the fieldCode
+                        let fieldValue = null;
+                        Object.values(submission.fieldValues).forEach(categoryFields => {
+                          categoryFields.forEach(subField => {
+                            if (subField.fieldCode === field.formFieldName) {
+                              fieldValue = subField.value;
+                            }
+                          });
+                        });
+                        
+                        if (fieldValue === null || fieldValue === undefined) {
+                          return "Not provided";
+                        }
+                        
+                        // Handle different field types for better display
+                        if (field.fieldType === 'boolean' || field.fieldType === 'BINARY') {
+                          // Convert 0/1 to Yes/No for boolean fields
+                          if (fieldValue === 1 || fieldValue === true || fieldValue === "1") {
+                            return "Yes";
+                          } else if (fieldValue === 0 || fieldValue === false || fieldValue === "0") {
+                            return "No";
+                          }
+                        }
+                        
+                        // For other field types, return the value as string
+                        return String(fieldValue);
+                      })()}
                     </p>
                   </div>
                 ))}
