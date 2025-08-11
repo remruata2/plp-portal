@@ -85,7 +85,7 @@ interface FacilityReport {
   };
   reportMonth: string;
   totalIncentive: number;
-  totalWorkerRemuneration: number;
+  totalPersonalIncentives: number;
   totalRemuneration: number;
   performancePercentage: number;
   indicators: PerformanceIndicator[];

@@ -96,7 +96,7 @@ export class RemunerationRecordsService {
     workers: any[];
     totals: {
       totalIncentive: number;
-      totalWorkerRemuneration: number;
+      totalPersonalIncentives: number;
       totalRemuneration: number;
     };
   }> {
@@ -119,26 +119,57 @@ export class RemunerationRecordsService {
       // Separate indicator and worker records
       const indicators = records
         .filter((record) => record.indicator_id)
-        .map((record) => ({
-          id: record.indicator_id,
-          name: record.indicator?.name || "",
-          target: record.indicator?.target_description || "",
-          actual: record.actual_value || 0,
-          percentage: record.percentage_achieved || 0,
-          status: record.status as "achieved" | "partial" | "not_achieved",
-          incentive_amount: record.incentive_amount,
-          indicator_code: record.indicator?.code,
-          target_type: record.indicator?.target_type,
-          target_description: record.indicator?.target_description,
-          target_value_for_calculation: record.target_value,
-          numerator_value: record.actual_value,
-          denominator_value: record.target_value,
-          max_remuneration: record.max_remuneration,
-          raw_percentage: record.raw_percentage,
-          numerator_field: record.indicator?.numerator_field,
-          denominator_field: record.indicator?.denominator_field,
-          target_field: record.indicator?.target_field,
-        }));
+        .map((record) => {
+          // Reconstruct target description from indicator data since target_description field doesn't exist
+          let targetDescription = record.indicator?.target_formula || "Standard target";
+          
+          if (record.indicator?.target_value) {
+            const targetValueStr = record.indicator.target_value.toString();
+            
+            // Handle JSON range format
+            if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
+              try {
+                const parsedRange = JSON.parse(targetValueStr);
+                if (parsedRange.min !== undefined && parsedRange.max !== undefined) {
+                  if (!record.indicator.target_formula) {
+                    targetDescription = `Target: ${parsedRange.min}-${parsedRange.max}`;
+                  }
+                }
+              } catch (error) {
+                // Ignore parsing errors, use target_formula
+              }
+            } else if (targetValueStr.includes('-')) {
+              // Handle range format (e.g., "3-5", "50-100")
+              const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
+              if (rangeMatch && !record.indicator.target_formula) {
+                targetDescription = `Target: ${rangeMatch[1]}-${rangeMatch[2]}`;
+              }
+            } else if (!record.indicator.target_formula) {
+              targetDescription = `${record.indicator.target_value}`;
+            }
+          }
+          
+          return {
+            id: record.indicator_id,
+            name: record.indicator?.name || "",
+            target: targetDescription, // Use reconstructed target description
+            actual: record.actual_value || 0,
+            percentage: record.percentage_achieved || 0,
+            status: record.status as "achieved" | "partial" | "not_achieved",
+            incentive_amount: record.incentive_amount,
+            indicator_code: record.indicator?.code,
+            target_type: record.indicator?.target_type,
+            target_description: targetDescription, // Use reconstructed target description
+            target_value_for_calculation: record.target_value,
+            numerator_value: record.actual_value,
+            denominator_value: record.target_value,
+            max_remuneration: record.max_remuneration,
+            raw_percentage: record.raw_percentage,
+            numerator_field: record.indicator?.numerator_field,
+            denominator_field: record.indicator?.denominator_field,
+            target_field: record.indicator?.target_field,
+          };
+        });
 
       const workers = records
         .filter((record) => record.worker_id)
@@ -154,16 +185,16 @@ export class RemunerationRecordsService {
 
       // Calculate totals
       const totalIncentive = indicators.reduce((sum, ind) => sum + ind.incentive_amount, 0);
-      const totalWorkerRemuneration = workers.reduce((sum, worker) => sum + worker.calculated_amount, 0);
-      const totalRemuneration = totalIncentive + totalWorkerRemuneration;
+      const totalPersonalIncentives = workers.reduce((sum, worker) => sum + worker.calculated_amount, 0);
+      const totalRemuneration = totalIncentive + totalPersonalIncentives;
 
       return {
         indicators,
         workers,
         totals: {
-          totalIncentive,
-          totalWorkerRemuneration,
-          totalRemuneration,
+                  totalIncentive,
+        totalPersonalIncentives,
+        totalRemuneration,
         },
       };
     } catch (error) {

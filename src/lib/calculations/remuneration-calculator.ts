@@ -11,7 +11,7 @@ export interface RemunerationCalculation {
   totalAllocatedAmount: number;
   performancePercentage: number;
   workers: WorkerRemuneration[];
-  totalWorkerRemuneration: number;
+  totalPersonalIncentives: number;
   totalRemuneration: number;
 }
 
@@ -30,7 +30,7 @@ export class RemunerationCalculator {
    * Calculate remuneration for a facility with proper individual/team-based allocation
    * - HWO and AYUSH MO: Individual-based (receive full facility incentive)
    * - MO: Team-based (not listed individually)
-   * - Others (HW, ASHA, Colocated SC HW): Performance-based
+   * - HW, ASHA, Colocated SC HW: Performance-based
    */
   static async calculateFacilityRemuneration(
     facilityId: string,
@@ -83,7 +83,7 @@ export class RemunerationCalculator {
         w.worker_type === 'mo'
       );
       const performanceWorkers = allWorkers.filter(w => 
-        !['hwo', 'ayush_mo', 'mo'].includes(w.worker_type)
+        ['hw', 'asha', 'colocated_sc_hw'].includes(w.worker_type)
       );
 
       const workersRemuneration: WorkerRemuneration[] = [];
@@ -128,13 +128,14 @@ export class RemunerationCalculator {
         0
       );
 
-      const totalWorkerRemuneration = workersRemuneration.reduce(
+      // Calculate total personal incentives (only performance-based workers)
+      const totalPersonalIncentives = workersRemuneration.reduce(
         (sum, worker) => sum + worker.calculatedAmount,
         0
       );
 
-      // Total remuneration is worker remuneration only
-      const totalRemuneration = totalWorkerRemuneration;
+      // Total remuneration = Personal incentives (performance-based workers only)
+      const totalRemuneration = totalPersonalIncentives;
 
       return {
         facilityId: facility.id,
@@ -145,7 +146,7 @@ export class RemunerationCalculator {
         totalAllocatedAmount,
         performancePercentage,
         workers: workersRemuneration,
-        totalWorkerRemuneration,
+        totalPersonalIncentives,
         totalRemuneration,
       };
     } catch (error) {
@@ -198,7 +199,7 @@ export class RemunerationCalculator {
         totalAllocatedAmount: calculation.totalAllocatedAmount,
         performancePercentage: calculation.performancePercentage,
         workers: calculation.workers,
-        totalWorkerRemuneration: calculation.totalWorkerRemuneration,
+        totalPersonalIncentives: calculation.totalPersonalIncentives,
         totalRemuneration: calculation.totalRemuneration,
       };
     } catch (error) {
@@ -453,7 +454,7 @@ export class RemunerationCalculator {
         update: {
           performance_percentage: calculation.performancePercentage,
           facility_remuneration: 0, // No facility remuneration - all goes to workers
-          total_worker_remuneration: calculation.totalWorkerRemuneration,
+          total_worker_remuneration: calculation.totalPersonalIncentives,
           total_remuneration: calculation.totalRemuneration,
           health_workers_count: calculation.workers.filter(w => w.workerType === 'hw').length,
           asha_workers_count: calculation.workers.filter(w => w.workerType === 'asha').length,
@@ -464,7 +465,7 @@ export class RemunerationCalculator {
           report_month: reportMonth,
           performance_percentage: calculation.performancePercentage,
           facility_remuneration: 0, // No facility remuneration - all goes to workers
-          total_worker_remuneration: calculation.totalWorkerRemuneration,
+          total_worker_remuneration: calculation.totalPersonalIncentives,
           total_remuneration: calculation.totalRemuneration,
           health_workers_count: calculation.workers.filter(w => w.workerType === 'hw').length,
           asha_workers_count: calculation.workers.filter(w => w.workerType === 'asha').length,

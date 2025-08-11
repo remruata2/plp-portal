@@ -22,7 +22,7 @@ interface IncentivesSummaryProps {
 
 interface IncentivesData {
   performancePercentage: number;
-  totalWorkerRemuneration: number;
+  totalPersonalIncentives: number;
   totalRemuneration: number;
   workers: Array<{
     id: number;
@@ -194,7 +194,7 @@ export default function IncentivesSummary({
                     Individual Worker Incentives
                   </p>
                   <p className="text-2xl font-bold text-blue-900">
-                    ₹{incentivesData.totalWorkerRemuneration.toLocaleString()}
+                    ₹{incentivesData.totalPersonalIncentives.toLocaleString()}
                   </p>
                   <p className="text-xs text-blue-600 mt-1">
                     Distributed to {incentivesData.workers.length} worker{incentivesData.workers.length !== 1 ? 's' : ''}

@@ -41,7 +41,10 @@ export async function GET(
     // Check if remuneration records already exist for this month
     const hasRecords = await RemunerationRecordsService.hasRemunerationRecords(facilityId, month);
     
-    if (hasRecords) {
+    // Force recalculation for September 2025 to apply worker classification fixes
+    const shouldForceRecalculation = month === '2025-09';
+    
+    if (hasRecords && !shouldForceRecalculation) {
       console.log(`📊 Using cached remuneration records for facility ${facilityId}, month ${month}`);
       
       // Retrieve pre-calculated remuneration records
@@ -72,8 +75,14 @@ export async function GET(
       return NextResponse.json(report);
     }
 
-    // If no records exist, calculate and store them
-    console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
+    // If no records exist or we're forcing recalculation, calculate and store them
+    if (shouldForceRecalculation) {
+      console.log(`🔄 Forcing recalculation for September 2025 to apply worker classification fixes`);
+      // Clear existing records to force fresh calculation
+      await RemunerationRecordsService.deleteRemunerationRecords(facilityId, month);
+    } else {
+      console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
+    }
     
     // Get all indicators for this facility type
     const indicators = await prisma.indicator.findMany({
@@ -137,23 +146,66 @@ export async function GET(
         denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
         console.log(`🎯 PS001: Using fixed denominator value of 5 for satisfaction scale`);
       }
-      // If denominator value is missing, use facility-type based population defaults
+      // For binary indicators, use target value as denominator when missing
       else if (denominatorValue === undefined || denominatorValue === null) {
-        const facilityTypeName = facility.facility_type.name;
+        // Check if this is a binary indicator - they have target_type "BINARY"
+        const targetType = indicator.target_type;
         
-        // Default population values by facility type (based on typical catchment sizes)
-        const defaultPopulationValues: Record<string, number> = {
-          'PHC': 25000,
-          'SC_HWC': 3000,
-          'A_HWC': 3000,
-          'U_HWC': 10000,
-          'UPHC': 50000,
-        };
-        
-        // Use default based on facility type, or a reasonable fallback
-        denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
-        
-        console.log(`⚠️ Missing denominator value for indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`);
+        if (targetType === "BINARY") {
+          // For binary indicators, the denominator should be the target value, not population
+          // Get target value for binary indicators with facility-specific targets
+          const facilityTypeName = facility.facility_type.name;
+          
+          // Binary indicators with facility-specific targets
+          if (indicator.code === "EC001") {
+            // Elderly Clinic targets by facility type
+            const clinicTargets: Record<string, number> = {
+              SC_HWC: 1,
+              PHC: 4,
+              UPHC: 4,
+              U_HWC: 4,
+              A_HWC: 4,
+            };
+            denominatorValue = clinicTargets[facilityTypeName] || 4;
+            console.log(`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`);
+          } else if (indicator.code === "JM001") {
+            // JAS Meeting - always 1
+            denominatorValue = 1;
+            console.log(`🎯 Binary indicator ${indicator.code}: Using target value 1 as denominator`);
+          } else if (indicator.code === "DI001") {
+            // DVDMS Issues - facility-specific targets
+            const dvdmsTargets: Record<string, number> = {
+              SC_HWC: 20,
+              PHC: 50,
+              UPHC: 100,
+              U_HWC: 100,
+              A_HWC: 100,
+            };
+            denominatorValue = dvdmsTargets[facilityTypeName] || 50;
+            console.log(`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`);
+          } else {
+            // Other binary indicators default to 1
+            denominatorValue = 1;
+            console.log(`🎯 Binary indicator ${indicator.code}: Using default target value 1 as denominator`);
+          }
+        } else {
+          // For non-binary indicators, use facility-type based population defaults
+          const facilityTypeName = facility.facility_type.name;
+          
+          // Default population values by facility type (based on typical catchment sizes)
+          const defaultPopulationValues: Record<string, number> = {
+            'PHC': 25000,
+            'SC_HWC': 3000,
+            'A_HWC': 3000,
+            'U_HWC': 10000,
+            'UPHC': 50000,
+          };
+          
+          // Use default based on facility type, or a reasonable fallback
+          denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
+          
+          console.log(`⚠️ Missing denominator value for non-binary indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`);
+        }
       }
 
       // Get target value from the database (seeded from indicator source files)
@@ -174,7 +226,10 @@ export async function GET(
             const parsedRange = JSON.parse(targetValueStr);
             if (parsedRange.min !== undefined && parsedRange.max !== undefined) {
               targetValue = parsedRange.max; // Use max value for calculations
-              targetDescription = `Target: ${parsedRange.min}-${parsedRange.max}`;
+              // Keep the target_formula from database instead of overwriting
+              if (!indicator.target_formula) {
+                targetDescription = `Target: ${parsedRange.min}-${parsedRange.max}`;
+              }
             } else {
               targetValue = parseFloat(targetValueStr);
             }
@@ -190,7 +245,10 @@ export async function GET(
           const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
           if (rangeMatch) {
             targetValue = parseFloat(rangeMatch[2]); // Use max value for calculations
-            targetDescription = `Target: ${rangeMatch[1]}-${rangeMatch[2]}`;
+            // Keep the target_formula from database instead of overwriting
+            if (!indicator.target_formula) {
+              targetDescription = `Target: ${rangeMatch[1]}-${rangeMatch[2]}`;
+            }
           } else {
             targetValue = parseFloat(targetValueStr);
           }
@@ -202,34 +260,43 @@ export async function GET(
           targetValue = parseFloat(targetValueStr);
         }
         
-        // Use the target formula if available, otherwise create a description
-        if (indicator.target_formula) {
-          targetDescription = indicator.target_formula;
-        } else if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
-          // For JSON ranges, keep the parsed description
-          // targetDescription is already set above
-        } else {
-          targetDescription = `${indicator.target_value}`;
+        // Always prefer target_formula from database if available
+        // Don't overwrite targetDescription if target_formula exists
+        if (!indicator.target_formula) {
+          // Only set fallback description if no target_formula exists
+          if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
+            // For JSON ranges, description was already set above
+          } else {
+            targetDescription = `${indicator.target_value}`;
+          }
         }
       } else if (formulaConfig.targetValue) {
         // Fallback to formula config
         targetValue = formulaConfig.targetValue;
-        targetDescription = `Target: ${formulaConfig.targetValue}`;
+        if (!indicator.target_formula) {
+          targetDescription = `Target: ${formulaConfig.targetValue}`;
+        }
       } else if (formulaConfig.range?.max) {
         // For range-based indicators, use the max value
         targetValue = formulaConfig.range.max;
-        targetDescription = `Target: ${formulaConfig.range.min}-${formulaConfig.range.max}`;
+        if (!indicator.target_formula) {
+          targetDescription = `Target: ${formulaConfig.range.min}-${formulaConfig.range.max}`;
+        }
       } else if (indicator.target_field_id) {
         // Use target field value if available
         const targetFieldValue = fieldValueMap.get(indicator.target_field_id);
         if (targetFieldValue !== undefined) {
           targetValue = targetFieldValue;
-          targetDescription = `Target: ${targetFieldValue}`;
+          if (!indicator.target_formula) {
+            targetDescription = `Target: ${targetFieldValue}`;
+          }
         }
       } else {
         // Default fallback for any remaining cases
         targetValue = 100;
-        targetDescription = "Target: 100%";
+        if (!indicator.target_formula) {
+          targetDescription = "Target: 100%";
+        }
       }
 
       // Calculate incentive using FormulaCalculator
@@ -395,6 +462,9 @@ export async function GET(
       },
     });
     
+    // Debug: Log worker types to understand what's in the database
+    console.log('Facility workers:', workers.map(w => ({ name: w.name, type: w.worker_type, allocated: w.allocated_amount })));
+    
     // Get worker allocation config to map worker types to roles
     const workerConfigs = await prisma.workerAllocationConfig.findMany({
       where: {
@@ -407,22 +477,28 @@ export async function GET(
     const workerRoleMap = new Map(workerConfigs.map(config => [config.worker_type, config.worker_role]));
 
     // Calculate worker remuneration based on facility performance
-    const performancePercentage = indicators.length > 0 ? (achievedCount / indicators.length) * 100 : 0;
+    // Use the same weighted average calculation as overall performance
+    const performancePercentage = calculateOverallPerformance(performanceIndicators);
     
     // Calculate facility incentive (Total Incentive Earned from image)
     const facilityIncentive = totalIncentive; // This is the facility incentive amount
 
     // Define worker types and their calculation methods
-    // - HWO, MO, and AYUSH MO: Team-based (NOT listed individually - their incentives are already in facility total)
+    // - HWO, AYUSH MO: Individual-based (receive full facility incentive directly)
+    // - MO: Team-based (NOT listed individually - their incentives are included in facility total)
     // - HW, ASHA, Colocated SC HW: Performance-based (listed individually with performance-based calculation)
     // Note: UPHC and UHWC (U_HWC) are COMPLETELY team-based facilities - they cannot have individual workers
-    const teamBasedWorkerTypes = ['hwo', 'mo', 'ayush_mo']; // These are NOT listed individually
-    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // These ARE listed individually
+    const teamBasedWorkerTypes = ['mo']; // Only MO is team-based (NOT listed individually)
+    const individualBasedWorkerTypes = ['hwo', 'ayush_mo']; // Get full facility incentive
+    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // Performance calculation
+    
+    // Handle any other worker types that might exist in the database
+    // These will be treated as performance-based workers
     
     // UPHC and UHWC are completely team-based - they should not have any individual workers
     const completelyTeamBasedFacilities = ['UPHC', 'U_HWC'];
     
-    // Calculate worker remuneration - ONLY show performance-based workers
+    // Calculate worker remuneration for all individual workers (both individual-based and performance-based)
     // UPHC and UHWC are completely team-based - they should not show any individual workers
     const workersRemuneration = workers
       .filter(worker => {
@@ -430,8 +506,9 @@ export async function GET(
         if (completelyTeamBasedFacilities.includes(facility.facility_type.name)) {
           return false;
         }
-        // For other facilities, only show performance-based workers
-        return performanceBasedWorkerTypes.includes(worker.worker_type.toLowerCase());
+        // For other facilities, show ALL workers (both individual-based and performance-based)
+        // This ensures we don't miss any workers due to type mismatches
+        return true;
       })
       .map((worker) => {
         const workerType = worker.worker_type.toLowerCase();
@@ -440,8 +517,22 @@ export async function GET(
         const workerConfig = workerConfigs.find(config => config.worker_type === worker.worker_type);
         const workerRole = workerConfig?.worker_role || worker.worker_type.toUpperCase();
         
-        // Performance-based calculation for individual workers
-        const calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
+        // Calculate incentive based on worker type
+        let calculatedAmount = 0;
+        if (individualBasedWorkerTypes.includes(workerType)) {
+          // Individual-based workers get the full facility incentive
+          calculatedAmount = facilityIncentive;
+        } else if (performanceBasedWorkerTypes.includes(workerType)) {
+          // Performance-based workers get allocated amount × performance percentage
+          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
+        } else {
+          // Handle any other worker types as performance-based workers
+          // This ensures we don't miss any workers due to type mismatches
+          calculatedAmount = (Number(worker.allocated_amount) * performancePercentage) / 100;
+        }
+        
+        // Debug: Log worker remuneration calculation
+        console.log(`Worker ${worker.name} (${workerType}): allocated=${worker.allocated_amount}, performance=${performancePercentage}%, calculated=${calculatedAmount}`);
         
         return {
           id: worker.id,
@@ -454,16 +545,24 @@ export async function GET(
         };
       });
 
-    // Calculate total worker remuneration (only personal incentives)
-    const totalWorkerRemuneration = workersRemuneration.reduce(
+    // Calculate total worker remuneration (only performance-based workers for personal incentives)
+    const personalIncentives = workersRemuneration.filter(worker => {
+      const workerType = worker.worker_type.toLowerCase();
+      // Only include performance-based workers in personal incentives
+      // HWO and Ayush MO are individual-based and get facility incentive directly
+      return performanceBasedWorkerTypes.includes(workerType);
+    });
+    
+    const totalPersonalIncentives = personalIncentives.reduce(
       (sum, worker) => sum + worker.calculated_amount,
       0
     );
 
-    const totalRemuneration = totalIncentive + totalWorkerRemuneration;
+    // Total remuneration = Facility incentive + Personal incentives (performance-based only)
+    const totalRemuneration = totalIncentive + totalPersonalIncentives;
 
-    // Count workers by type (only performance-based workers that are displayed)
-    const workerCounts = workersRemuneration.reduce((counts: Record<string, number>, worker) => {
+    // Count workers by type (only performance-based workers for personal incentives)
+    const workerCounts = personalIncentives.reduce((counts: Record<string, number>, worker) => {
       const type = worker.worker_type;
       counts[type] = (counts[type] || 0) + 1;
       return counts;
@@ -482,7 +581,7 @@ export async function GET(
         type_display_name: facility.facility_type.display_name,
       },
       totalIncentive: totalIncentive,
-      totalWorkerRemuneration: totalWorkerRemuneration,
+      totalPersonalIncentives: totalPersonalIncentives,
       totalRemuneration: totalRemuneration,
       performancePercentage: performancePercentage,
       indicators: sortedPerformanceIndicators,
@@ -501,7 +600,7 @@ export async function GET(
       facilityId, 
       month, 
       performanceIndicators, 
-      workers
+      workersRemuneration
     );
 
     return NextResponse.json(report);

@@ -100,6 +100,49 @@ export async function POST(request: NextRequest) {
       if (indicator.code === "PS001") {
         denominatorValue = 5;
       }
+      // For binary indicators, use target value as denominator when missing
+      else if (denominatorValue === undefined || denominatorValue === null) {
+        // Check if this is a binary indicator - they have target_type "BINARY"
+        const targetType = indicator.target_type;
+        
+        if (targetType === "BINARY") {
+          // For binary indicators, the denominator should be the target value, not population
+          // Get target value for binary indicators with facility-specific targets
+          const facilityTypeName = facility.facility_type.name;
+          
+          // Binary indicators with facility-specific targets
+          if (indicator.code === "EC001") {
+            // Elderly Clinic targets by facility type
+            const clinicTargets: Record<string, number> = {
+              SC_HWC: 1,
+              PHC: 4,
+              UPHC: 4,
+              U_HWC: 4,
+              A_HWC: 4,
+            };
+            denominatorValue = clinicTargets[facilityTypeName] || 4;
+          } else if (indicator.code === "JM001") {
+            // JAS Meeting - always 1
+            denominatorValue = 1;
+          } else if (indicator.code === "DI001") {
+            // DVDMS Issues - facility-specific targets
+            const dvdmsTargets: Record<string, number> = {
+              SC_HWC: 20,
+              PHC: 50,
+              UPHC: 100,
+              U_HWC: 100,
+              A_HWC: 100,
+            };
+            denominatorValue = dvdmsTargets[facilityTypeName] || 50;
+          } else {
+            // Other binary indicators default to 1
+            denominatorValue = 1;
+          }
+        } else {
+          // For non-binary indicators, fall back to 1 (existing behavior)
+          denominatorValue = 1;
+        }
+      }
 
       // Calculate percentage and status
       let percentage = 0;
@@ -153,6 +196,9 @@ export async function POST(request: NextRequest) {
     const workers = await prisma.healthWorker.findMany({
       where: { facility_id: facilityId },
     });
+    
+    // Debug: Log worker types to understand what's in the database
+    console.log('Calculate remuneration - Facility workers:', workers.map(w => ({ name: w.name, type: w.worker_type, allocated: w.allocated_amount })));
 
     // Calculate overall facility performance correctly
     // Use weighted average based on indicator importance and cap at 100%
@@ -177,11 +223,34 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Define worker types and their calculation methods
+    const individualBasedWorkerTypes = ['hwo', 'ayush_mo']; // Get full facility incentive
+    const performanceBasedWorkerTypes = ['hw', 'asha', 'colocated_sc_hw']; // Performance calculation
+    
+    // Get total facility incentive earned
+    const totalFacilityIncentive = performanceIndicators.reduce((sum, ind) => sum + ind.incentive_amount, 0);
+
     const workerRemuneration = workers.map((worker) => {
       const allocatedAmount = Number(worker.allocated_amount) || 0;
-      // Fix: Don't divide by 100 since overallPerformance is already a percentage
-      const calculatedAmount = (allocatedAmount * overallPerformance) / 100;
+      const workerType = worker.worker_type.toLowerCase();
+      
+      // Calculate incentive based on worker type
+      let calculatedAmount = 0;
+      if (individualBasedWorkerTypes.includes(workerType)) {
+        // Individual-based workers get the full facility incentive
+        calculatedAmount = totalFacilityIncentive;
+      } else if (performanceBasedWorkerTypes.includes(workerType)) {
+        // Performance-based workers get allocated amount × performance percentage
+        calculatedAmount = (allocatedAmount * overallPerformance) / 100;
+      } else {
+        // Handle any other worker types as performance-based workers
+        // This ensures we don't miss any workers due to type mismatches
+        calculatedAmount = (allocatedAmount * overallPerformance) / 100;
+      }
 
+      // Debug: Log worker remuneration calculation
+      console.log(`Calculate remuneration - Worker ${worker.name} (${workerType}): allocated=${allocatedAmount}, performance=${overallPerformance}%, calculated=${calculatedAmount}`);
+      
       return {
         id: worker.id,
         name: worker.name,
@@ -192,6 +261,16 @@ export async function POST(request: NextRequest) {
         calculated_amount: calculatedAmount,
       };
     });
+
+    // Calculate total personal incentives (only performance-based workers)
+    const totalPersonalIncentives = workerRemuneration
+      .filter(worker => {
+        const workerType = worker.worker_type.toLowerCase();
+        // Only include performance-based workers in personal incentives
+        // HWO and Ayush MO are individual-based and get facility incentive directly
+        return performanceBasedWorkerTypes.includes(workerType);
+      })
+      .reduce((sum, worker) => sum + worker.calculated_amount, 0);
 
     // Store the calculated remuneration records
     await RemunerationRecordsService.storeRemunerationRecords(
@@ -209,6 +288,8 @@ export async function POST(request: NextRequest) {
       data: {
         indicatorsCount: performanceIndicators.length,
         workersCount: workerRemuneration.length,
+        totalFacilityIncentive,
+        totalPersonalIncentives,
         month,
       },
     });

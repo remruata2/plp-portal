@@ -86,7 +86,7 @@ interface MonthlyReport {
     type_display_name: string;
   };
   totalIncentive: number;
-  totalWorkerRemuneration: number;
+  totalPersonalIncentives: number;
   totalRemuneration: number;
   performancePercentage: number;
   indicators: PerformanceIndicator[];
@@ -415,10 +415,10 @@ export default function FacilityReportsPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-blue-600">
-                  ₹{report.totalWorkerRemuneration.toFixed(2)}
+                  ₹{report.totalPersonalIncentives.toFixed(2)}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {report.workers.length === 0 ? 'No personal incentives' : `${report.workers.length} workers (${report.workers.map(w => w.worker_type.toUpperCase()).join(', ')})`}
+                  {report.workers.filter(w => ['hw', 'asha', 'colocated_sc_hw'].includes(w.worker_type.toLowerCase())).length === 0 ? 'No personal incentives' : `${report.workers.filter(w => ['hw', 'asha', 'colocated_sc_hw'].includes(w.worker_type.toLowerCase())).length} performance-based workers (${report.workers.filter(w => ['hw', 'asha', 'colocated_sc_hw'].includes(w.worker_type.toLowerCase())).map(w => w.worker_type.toUpperCase()).join(', ')})`}
                 </p>
               </CardContent>
             </Card>
@@ -787,10 +787,10 @@ export default function FacilityReportsPage() {
                       </div>
                       <div className="text-right">
                         <div className="text-3xl font-bold text-purple-800">
-                          ₹{report.totalWorkerRemuneration.toFixed(2)}
+                          ₹{report.totalPersonalIncentives.toFixed(2)}
                         </div>
                         <p className="text-sm text-purple-600">
-                          {report.workers.length} workers at {typeof report.performancePercentage === 'number' ? report.performancePercentage.toFixed(1) : '0.0'}% performance
+                          {report.workers.filter(w => ['hw', 'asha', 'colocated_sc_hw'].includes(w.worker_type.toLowerCase())).length} performance-based workers at {typeof report.performancePercentage === 'number' ? report.performancePercentage.toFixed(1) : '0.0'}% performance
                         </p>
                       </div>
                     </div>
