@@ -152,13 +152,7 @@ export default function WorkerSelectionForm({
     return config?.worker_role || workerType.toUpperCase();
   };
   
-  // Check if max count is exceeded for a worker type
-  const isMaxCountExceeded = (workerType: string): boolean => {
-    const workers = workersByType[workerType] || [];
-    const selectedOfType = workers.filter(w => selectedWorkers.includes(w.id)).length;
-    const maxCount = workerAllocationConfig[workerType]?.max_count || 1;
-    return selectedOfType >= maxCount;
-  };
+
 
   return (
     <Card>
@@ -222,8 +216,6 @@ export default function WorkerSelectionForm({
                 if (workers.length === 0) return null;
                 
                 const config = workerAllocationConfig[workerType];
-                const selectedOfType = workers.filter(w => selectedWorkers.includes(w.id)).length;
-                const maxCount = config?.max_count || 1;
                 const allocatedAmount = config?.allocated_amount || 0;
                 
                 return (
@@ -234,49 +226,30 @@ export default function WorkerSelectionForm({
                         {getWorkerTypeDisplayName(workerType)}
                       </Label>
                       <div className="text-sm text-gray-600 space-x-4">
-                        <span>Max: {maxCount}</span>
                         <span>₹{allocatedAmount.toLocaleString()}</span>
-                        <span className={selectedOfType > maxCount ? "text-red-600 font-semibold" : "text-green-600"}>
-                          Selected: {selectedOfType}/{maxCount}
-                        </span>
                       </div>
                     </div>
-                    
-                    {selectedOfType > maxCount && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                        <p className="text-sm text-red-800">
-                          ⚠️ You have selected {selectedOfType} workers, but the maximum allowed is {maxCount}. 
-                          Please deselect {selectedOfType - maxCount} worker(s).
-                        </p>
-                      </div>
-                    )}
                     
                     <div className="space-y-2">
                       {workers.map((worker) => {
                         const isSelected = selectedWorkers.includes(worker.id);
-                        const canSelect = isSelected || selectedOfType < maxCount;
                         
                         return (
                           <div
                             key={worker.id}
-                            className={`flex items-center justify-between space-x-2 p-2 rounded-lg ${
-                              !canSelect ? 'bg-gray-50 opacity-60' : 'bg-white border'
-                            }`}
+                            className="flex items-center justify-between space-x-2 p-2 rounded-lg bg-white border"
                           >
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 id={`worker-${worker.id}`}
                                 checked={isSelected}
-                                disabled={!canSelect}
                                 onCheckedChange={(checked: boolean) =>
                                   handleWorkerToggle(worker.id, checked)
                                 }
                               />
                               <Label
                                 htmlFor={`worker-${worker.id}`}
-                                className={`text-sm font-medium leading-none ${
-                                  !canSelect ? 'cursor-not-allowed opacity-70' : ''
-                                }`}
+                                className="text-sm font-medium leading-none"
                               >
                                 {worker.name}
                               </Label>
