@@ -88,11 +88,9 @@ export default function WorkerSelectionForm({
     }
   };
 
-  const selectAllWorkersOfType = (workerType: string) => {
-    const workers = workersByType[workerType] || [];
-    const workerIds = workers.map((w) => w.id);
-    const currentSelected = selectedWorkers.filter((id) => !workerIds.includes(id));
-    onWorkersChange([...currentSelected, ...workerIds]);
+  const selectAllWorkers = () => {
+    const allWorkerIds = Object.values(workersByType).flat().map(w => w.id);
+    onWorkersChange(allWorkerIds);
   };
 
   const clearAllSelections = () => {
@@ -189,101 +187,111 @@ export default function WorkerSelectionForm({
           <>
             {/* Quick Actions */}
             <div className="flex gap-2 flex-wrap">
-              {Object.keys(workersByType).map((workerType) => (
-                <Button
-                  key={workerType}
-                  onClick={() => selectAllWorkersOfType(workerType)}
-                  size="sm"
-                  variant="outline"
-                  disabled={workersByType[workerType].length === 0 || isMaxCountExceeded(workerType)}
-                >
-                  Select All {getWorkerTypeDisplayName(workerType)}
-                </Button>
-              ))}
+              <Button
+                onClick={selectAllWorkers}
+                size="sm"
+                variant="outline"
+                type="button"
+                disabled={totalWorkers === 0}
+              >
+                Select All
+              </Button>
               <Button
                 onClick={clearAllSelections}
                 size="sm"
                 variant="outline"
+                type="button"
                 disabled={selectedCount === 0}
               >
                 Clear All
               </Button>
             </div>
 
-            {/* Worker Sections by Type */}
-            {Object.entries(workersByType).map(([workerType, workers]) => {
-              if (workers.length === 0) return null;
+            {/* Worker Sections by Type - Ordered: HWO, HW, ASHA */}
+            {(() => {
+              // Define the order we want to display worker types
+              const workerTypeOrder = ['hwo', 'hw', 'asha', 'mo', 'ayush_mo', 'colocated_sc_hw'];
               
-              const config = workerAllocationConfig[workerType];
-              const selectedOfType = workers.filter(w => selectedWorkers.includes(w.id)).length;
-              const maxCount = config?.max_count || 1;
-              const allocatedAmount = config?.allocated_amount || 0;
-              
-              return (
-                <div key={workerType} className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-lg font-semibold flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      {getWorkerTypeDisplayName(workerType)}
-                    </Label>
-                    <div className="text-sm text-gray-600 space-x-4">
-                      <span>Max: {maxCount}</span>
-                      <span>₹{allocatedAmount.toLocaleString()}</span>
-                      <span className={selectedOfType > maxCount ? "text-red-600 font-semibold" : "text-green-600"}>
-                        Selected: {selectedOfType}/{maxCount}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {selectedOfType > maxCount && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                      <p className="text-sm text-red-800">
-                        ⚠️ You have selected {selectedOfType} workers, but the maximum allowed is {maxCount}. 
-                        Please deselect {selectedOfType - maxCount} worker(s).
-                      </p>
-                    </div>
-                  )}
-                  
-                  <div className="space-y-2">
-                    {workers.map((worker) => {
-                      const isSelected = selectedWorkers.includes(worker.id);
-                      const canSelect = isSelected || selectedOfType < maxCount;
-                      
-                      return (
-                        <div
-                          key={worker.id}
-                          className={`flex items-center justify-between space-x-2 p-2 rounded-lg ${
-                            !canSelect ? 'bg-gray-50 opacity-60' : 'bg-white border'
-                          }`}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`worker-${worker.id}`}
-                              checked={isSelected}
-                              disabled={!canSelect}
-                              onCheckedChange={(checked: boolean) =>
-                                handleWorkerToggle(worker.id, checked)
-                              }
-                            />
-                            <Label
-                              htmlFor={`worker-${worker.id}`}
-                              className={`text-sm font-medium leading-none ${
-                                !canSelect ? 'cursor-not-allowed opacity-70' : ''
-                              }`}
-                            >
-                              {worker.name}
-                            </Label>
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            ₹{worker.allocated_amount?.toLocaleString() || allocatedAmount.toLocaleString()}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+              // Filter and sort worker types according to our desired order
+              const sortedWorkerTypes = workerTypeOrder.filter(type => 
+                workersByType[type] && workersByType[type].length > 0
               );
-            })}
+              
+              return sortedWorkerTypes.map((workerType) => {
+                const workers = workersByType[workerType];
+                if (workers.length === 0) return null;
+                
+                const config = workerAllocationConfig[workerType];
+                const selectedOfType = workers.filter(w => selectedWorkers.includes(w.id)).length;
+                const maxCount = config?.max_count || 1;
+                const allocatedAmount = config?.allocated_amount || 0;
+                
+                return (
+                  <div key={workerType} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-semibold flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        {getWorkerTypeDisplayName(workerType)}
+                      </Label>
+                      <div className="text-sm text-gray-600 space-x-4">
+                        <span>Max: {maxCount}</span>
+                        <span>₹{allocatedAmount.toLocaleString()}</span>
+                        <span className={selectedOfType > maxCount ? "text-red-600 font-semibold" : "text-green-600"}>
+                          Selected: {selectedOfType}/{maxCount}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {selectedOfType > maxCount && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-sm text-red-800">
+                          ⚠️ You have selected {selectedOfType} workers, but the maximum allowed is {maxCount}. 
+                          Please deselect {selectedOfType - maxCount} worker(s).
+                        </p>
+                      </div>
+                    )}
+                    
+                    <div className="space-y-2">
+                      {workers.map((worker) => {
+                        const isSelected = selectedWorkers.includes(worker.id);
+                        const canSelect = isSelected || selectedOfType < maxCount;
+                        
+                        return (
+                          <div
+                            key={worker.id}
+                            className={`flex items-center justify-between space-x-2 p-2 rounded-lg ${
+                              !canSelect ? 'bg-gray-50 opacity-60' : 'bg-white border'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`worker-${worker.id}`}
+                                checked={isSelected}
+                                disabled={!canSelect}
+                                onCheckedChange={(checked: boolean) =>
+                                  handleWorkerToggle(worker.id, checked)
+                                }
+                              />
+                              <Label
+                                htmlFor={`worker-${worker.id}`}
+                                className={`text-sm font-medium leading-none ${
+                                  !canSelect ? 'cursor-not-allowed opacity-70' : ''
+                                }`}
+                              >
+                                {worker.name}
+                              </Label>
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              ₹{worker.allocated_amount?.toLocaleString() || allocatedAmount.toLocaleString()}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              });
+            })()}
 
             {/* Summary */}
             {selectedCount > 0 && (

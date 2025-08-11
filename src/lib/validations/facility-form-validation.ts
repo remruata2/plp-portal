@@ -45,15 +45,15 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
     // Population data validation
     total_population: {
       required: true,
-      minValue: 1000,
-      maxValue: 50000,
       customValidator: (value, formData) => {
+        // No hardcoded limits - villages can have populations as low as 500
+        // Only validate that it's a positive number
         const numValue = Number(value);
-        if (numValue < 2000) {
+        if (numValue <= 0) {
           return {
             field: 'total_population',
-            message: 'Total population seems low for a health facility catchment area',
-            type: 'suspicious_value' as const
+            message: 'Total population must be a positive number',
+            type: 'invalid_value' as const
           };
         }
         return null;
@@ -61,39 +61,64 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
     },
     population_30_plus: {
       required: true,
-      minValue: 0,
       customValidator: (value, formData) => {
         const totalPop = Number(formData.total_population || 0);
         const pop30Plus = Number(value);
-        if (totalPop > 0 && pop30Plus > totalPop * 0.8) {
-          return {
-            field: 'population_30_plus',
-            message: '30+ population cannot exceed 80% of total population',
-            type: 'logic_error' as const
-          };
+        
+        if (totalPop > 0) {
+          // Check if 30+ population is too low (should be at least 20% of total population)
+          if (pop30Plus < totalPop * 0.2) {
+            return {
+              field: 'population_30_plus',
+              message: '30+ population seems too low. Should be at least 20% of total population',
+              type: 'logic_error' as const
+            };
+          }
+          
+          // Check if 30+ population is too high (should not exceed 80% of total population)
+          if (pop30Plus > totalPop * 0.8) {
+            return {
+              field: 'population_30_plus',
+              message: '30+ population cannot exceed 80% of total population',
+              type: 'logic_error' as const
+            };
+          }
         }
+        
         return null;
       }
     },
     population_30_plus_female: {
       required: true,
-      minValue: 0,
       customValidator: (value, formData) => {
         const pop30Plus = Number(formData.population_30_plus || 0);
         const femalePop = Number(value);
-        if (pop30Plus > 0 && femalePop > pop30Plus * 0.6) {
-          return {
-            field: 'population_30_plus_female',
-            message: 'Female 30+ population seems too high compared to total 30+ population',
-            type: 'logic_error' as const
-          };
+        
+        if (pop30Plus > 0) {
+          // Check if female population is too low (should be at least 40% of 30+ population)
+          if (femalePop < pop30Plus * 0.4) {
+            return {
+              field: 'population_30_plus_female',
+              message: 'Female 30+ population seems too low. Should be at least 40% of total 30+ population',
+              type: 'logic_error' as const
+            };
+          }
+          
+          // Check if female population is too high (should not exceed 60% of 30+ population)
+          if (femalePop > pop30Plus * 0.6) {
+            return {
+              field: 'population_30_plus_female',
+              message: 'Female 30+ population seems too high compared to total 30+ population',
+              type: 'logic_error' as const
+            };
+          }
         }
+        
         return null;
       }
     },
     population_18_plus: {
       required: true,
-      minValue: 0,
       customValidator: (value, formData) => {
         const totalPop = Number(formData.total_population || 0);
         const pop18Plus = Number(value);
@@ -119,7 +144,7 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
           return {
             field: 'patient_satisfaction_score',
             message: 'Patient satisfaction score below 3 needs action plan',
-            type: 'suspicious_value' as const
+            type: 'logic_error' as const
           };
         }
         return null;
@@ -160,14 +185,14 @@ export const FACILITY_VALIDATION_RULES: Record<string, Record<string, Validation
             return {
               field: 'total_footfall_phc_colocated_sc',
               message: 'Monthly footfall seems low for the catchment population',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
           if (percentage > 15) {
             return {
               field: 'total_footfall_phc_colocated_sc',
               message: 'Monthly footfall seems unusually high for the catchment population',
-              type: 'suspicious_value' as const
+              type: 'logic_error' as const
             };
           }
         }
