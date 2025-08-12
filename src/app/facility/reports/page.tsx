@@ -298,7 +298,7 @@ export default function FacilityReportsPage() {
 	}
 
 	return (
-		<div className="max-w-7xl mx-auto p-6">
+		<div className="max-w-7xl mx-auto p-4 sm:p-6">
 			{/* Page Header */}
 			<div className="space-y-4 mb-6">
 				<div className="flex justify-start">
@@ -309,12 +309,12 @@ export default function FacilityReportsPage() {
 						size="sm"
 					/>
 				</div>
-				<div className="flex justify-between items-start">
-					<div>
-						<h1 className="text-3xl font-bold text-gray-900">
+				<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+					<div className="flex-1">
+						<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
 							Performance Reports
 						</h1>
-						<p className="text-gray-600 mt-2">
+						<p className="text-gray-600 mt-2 text-sm sm:text-base">
 							{report ? (
 								<>
 									<span className="flex items-center gap-2 mt-1">
@@ -328,7 +328,7 @@ export default function FacilityReportsPage() {
 							)}
 						</p>
 					</div>
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-2 sm:gap-4">
 						<div className="flex items-center gap-2">
 							<Calendar className="h-4 w-4 text-gray-500" />
 							<Select
@@ -338,7 +338,7 @@ export default function FacilityReportsPage() {
 									setSelectedMonth(null); // Reset month when year changes
 								}}
 							>
-								<SelectTrigger className="w-24">
+								<SelectTrigger className="w-20 sm:w-24 h-9 sm:h-10">
 									<SelectValue placeholder="Year" />
 								</SelectTrigger>
 								<SelectContent>
@@ -354,7 +354,7 @@ export default function FacilityReportsPage() {
 								onValueChange={setSelectedMonth}
 								disabled={!selectedYear}
 							>
-								<SelectTrigger className="w-24">
+								<SelectTrigger className="w-20 sm:w-24 h-9 sm:h-10">
 									<SelectValue
 										placeholder={selectedYear ? "Month" : "Select year first"}
 									/>
@@ -384,13 +384,13 @@ export default function FacilityReportsPage() {
 
 			{loading ? (
 				<Card>
-					<CardContent className="p-8">
+					<CardContent className="p-6 sm:p-8">
 						<div className="text-center">
-							<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-							<h3 className="text-lg font-medium text-gray-900 mb-2">
+							<div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+							<h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
 								Loading report...
 							</h3>
-							<p className="text-gray-500">
+							<p className="text-gray-500 text-sm sm:text-base">
 								Please wait while we load your performance data.
 							</p>
 						</div>
@@ -398,15 +398,15 @@ export default function FacilityReportsPage() {
 				</Card>
 			) : !report ? (
 				<Card>
-					<CardContent className="p-8">
+					<CardContent className="p-6 sm:p-8">
 						<div className="text-center">
-							<FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-							<h3 className="text-lg font-medium text-gray-900 mb-2">
+							<FileText className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+							<h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
 								{availableMonths.length === 0
 									? "No Data Available"
 									: "No Report Available"}
 							</h3>
-							<p className="text-gray-500">
+							<p className="text-gray-500 text-sm sm:text-base">
 								{availableMonths.length === 0
 									? "No performance data has been submitted yet. Please submit PLP report to view reports."
 									: "No performance report is available for the selected month. Please ensure you have submitted PLP report for this period."}
@@ -417,7 +417,7 @@ export default function FacilityReportsPage() {
 			) : (
 				<div className="space-y-6">
 					{/* Summary Cards */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
 						<Card>
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 								<CardTitle className="text-sm font-medium">
@@ -427,11 +427,11 @@ export default function FacilityReportsPage() {
 								</CardTitle>
 								<DollarSign className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold">
 									₹{report.totalIncentive.toFixed(2)}
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									{["PHC", "UPHC", "U_HWC"].includes(report.facility.type)
 										? "MO team-based incentive"
 										: "Facility incentives"}
@@ -446,11 +446,11 @@ export default function FacilityReportsPage() {
 								</CardTitle>
 								<Users className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold text-blue-600">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold text-blue-600">
 									₹{report.totalPersonalIncentives.toFixed(2)}
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									{report.workers.filter((w) =>
 										["hw", "asha", "colocated_sc_hw"].includes(
 											w.worker_type.toLowerCase()
@@ -482,11 +482,11 @@ export default function FacilityReportsPage() {
 								</CardTitle>
 								<DollarSign className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold text-purple-600">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold text-purple-600">
 									₹{report.totalRemuneration.toFixed(2)}
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									Incentive + Worker remuneration
 								</p>
 							</CardContent>
@@ -499,14 +499,14 @@ export default function FacilityReportsPage() {
 								</CardTitle>
 								<TrendingUp className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold text-green-600">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold text-green-600">
 									{typeof report.performancePercentage === "number"
 										? report.performancePercentage.toFixed(1)
 										: "0.0"}
 									%
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									Overall facility performance
 								</p>
 							</CardContent>
@@ -519,11 +519,11 @@ export default function FacilityReportsPage() {
 								</CardTitle>
 								<Activity className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold text-blue-600">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold text-blue-600">
 									{report.summary.totalIndicators}
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									Indicators for {report.facility.type_display_name}
 								</p>
 							</CardContent>
@@ -534,11 +534,11 @@ export default function FacilityReportsPage() {
 								<CardTitle className="text-sm font-medium">Achieved</CardTitle>
 								<TrendingUp className="h-4 w-4 text-muted-foreground" />
 							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold text-green-600">
+							<CardContent className="p-3 sm:p-6">
+								<div className="text-xl sm:text-2xl font-bold text-green-600">
 									{report.summary.achievedIndicators}
 								</div>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground mt-1">
 									Out of {report.summary.totalIndicators} indicators
 								</p>
 							</CardContent>
@@ -547,41 +547,41 @@ export default function FacilityReportsPage() {
 
 					{/* Detailed Performance Table */}
 					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
+						<CardHeader className="p-4 sm:p-6">
+							<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 								<BarChart3 className="h-5 w-5" />
 								Detailed Performance Report
 							</CardTitle>
-							<CardDescription>
+							<CardDescription className="text-sm">
 								Indicators are numbered according to their order in the official
 								source files for consistency with government documentation.
 							</CardDescription>
 						</CardHeader>
-						<CardContent>
+						<CardContent className="p-0 sm:p-6">
 							<div className="overflow-x-auto">
-								<table className="w-full">
+								<table className="w-full min-w-full">
 									<thead>
 										<tr className="border-b">
-											<th className="text-left py-3 px-4 font-medium">#</th>
-											<th className="text-left py-3 px-4 font-medium">
+											<th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">#</th>
+											<th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Indicator
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Target
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Actual
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Achievement %
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Status
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Incentive
 											</th>
-											<th className="text-center py-3 px-4 font-medium">
+											<th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Calculation
 											</th>
 										</tr>
@@ -594,14 +594,14 @@ export default function FacilityReportsPage() {
 													key={indicator.id}
 													className="border-b hover:bg-gray-50"
 												>
-													<td className="py-3 px-4 text-center">
-														<span className="inline-flex items-center justify-center w-8 h-8 text-sm font-medium text-blue-700 bg-blue-50 rounded-full border border-blue-200">
+													<td className="py-2 sm:py-3 px-2 sm:px-4 text-center">
+														<span className="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 rounded-full border border-blue-200">
 															{indicatorNumber}
 														</span>
 													</td>
-													<td className="py-3 px-4 font-medium">
+													<td className="py-2 sm:py-3 px-2 sm:px-4 font-medium">
 														<div className="flex flex-col">
-															<span className="font-medium">
+															<span className="font-medium text-xs sm:text-sm">
 																{indicator.name}
 															</span>
 															<span className="text-xs text-gray-500 font-mono">
@@ -609,13 +609,13 @@ export default function FacilityReportsPage() {
 															</span>
 														</div>
 													</td>
-													<td className="text-center py-3 px-4">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
 														{indicator.target}
 													</td>
-													<td className="text-center py-3 px-4">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
 														{indicator.actual}
 													</td>
-													<td className="text-center py-3 px-4">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
 														<span
 															className={`font-medium ${
 																(indicator.percentage || 0) >= 100
@@ -631,16 +631,16 @@ export default function FacilityReportsPage() {
 															%
 														</span>
 													</td>
-													<td className="text-center py-3 px-4">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
 														<div className="flex items-center justify-center gap-2">
 															{getStatusIcon(indicator.status)}
 															{getStatusBadge(indicator.status)}
 														</div>
 													</td>
-													<td className="text-center py-3 px-4 font-medium">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 														₹{indicator.incentive_amount.toFixed(2)}
 													</td>
-													<td className="text-center py-3 px-4">
+													<td className="text-center py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
 														<CalculationDetailsModal
 															indicator={indicator}
 															facilityType={report.facility.type}
@@ -657,20 +657,20 @@ export default function FacilityReportsPage() {
 
 					{/* Incentive Summary */}
 					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
+						<CardHeader className="p-4 sm:p-6">
+							<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 								<DollarSign className="h-5 w-5" />
 								Incentive Summary
 							</CardTitle>
 						</CardHeader>
-						<CardContent>
-							<div className="bg-green-50 border border-green-200 rounded-lg p-4">
-								<div className="flex items-center justify-between">
+						<CardContent className="p-4 sm:p-6">
+							<div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4">
+								<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
 									<div>
-										<h3 className="text-lg font-semibold text-green-800">
+										<h3 className="text-base sm:text-lg font-semibold text-green-800">
 											Total Incentive Earned
 										</h3>
-										<p className="text-green-600">
+										<p className="text-green-600 text-sm sm:text-base">
 											{new Date(report.reportMonth + "-01").toLocaleDateString(
 												"en-US",
 												{
@@ -680,8 +680,8 @@ export default function FacilityReportsPage() {
 											)}
 										</p>
 									</div>
-									<div className="text-right">
-										<div className="text-3xl font-bold text-green-800">
+									<div className="text-left sm:text-right">
+										<div className="text-2xl sm:text-3xl font-bold text-green-800">
 											₹{report.totalIncentive.toFixed(2)}
 										</div>
 										<p className="text-sm text-green-600">
@@ -696,22 +696,22 @@ export default function FacilityReportsPage() {
 
 					{/* Worker Remuneration Summary */}
 					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
+						<CardHeader className="p-4 sm:p-6">
+							<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 								<DollarSign className="h-5 w-5" />
 								Worker Remuneration Summary
 							</CardTitle>
 						</CardHeader>
-						<CardContent>
-							<div className="space-y-6">
+						<CardContent className="p-4 sm:p-6">
+							<div className="space-y-4 sm:space-y-6">
 								{/* Performance Overview */}
-								<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-									<div className="flex items-center justify-between">
+								<div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+									<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
 										<div>
-											<h3 className="text-lg font-semibold text-blue-800">
+											<h3 className="text-base sm:text-lg font-semibold text-blue-800">
 												Overall Performance
 											</h3>
-											<p className="text-blue-600">
+											<p className="text-blue-600 text-sm sm:text-base">
 												Facility performance for{" "}
 												{new Date(
 													report.reportMonth + "-01"
@@ -721,8 +721,8 @@ export default function FacilityReportsPage() {
 												})}
 											</p>
 										</div>
-										<div className="text-right">
-											<div className="text-3xl font-bold text-blue-800">
+										<div className="text-left sm:text-right">
+											<div className="text-2xl sm:text-3xl font-bold text-blue-800">
 												{typeof report.performancePercentage === "number"
 													? report.performancePercentage.toFixed(1)
 													: "0.0"}
@@ -739,11 +739,11 @@ export default function FacilityReportsPage() {
 								{/* Workers Section */}
 								{["UPHC", "U_HWC"].includes(report.facility.type) ? (
 									// UPHC and UHWC are completely team-based - no individual workers
-									<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-										<div className="flex items-center gap-3">
-											<Users className="h-6 w-6 text-blue-600" />
+									<div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+										<div className="flex items-start gap-3">
+											<Users className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 mt-0.5" />
 											<div>
-												<h4 className="text-lg font-semibold text-blue-800">
+												<h4 className="text-base sm:text-lg font-semibold text-blue-800">
 													Team-Based Facility
 												</h4>
 												<p className="text-blue-700 text-sm">
@@ -758,27 +758,27 @@ export default function FacilityReportsPage() {
 								) : report.workers.length > 0 ? (
 									// Other facilities show individual workers
 									<div>
-										<h4 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+										<h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
 											<Users className="h-5 w-5" /> Workers (
 											{report.workers.length})
 										</h4>
 										<div className="overflow-x-auto">
-											<table className="w-full">
+											<table className="w-full min-w-full">
 												<thead>
 													<tr className="border-b">
-														<th className="text-left py-2 px-3 font-medium text-sm">
+														<th className="text-left py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 															Name
 														</th>
-														<th className="text-left py-2 px-3 font-medium text-sm">
+														<th className="text-left py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 															Role
 														</th>
-														<th className="text-center py-2 px-3 font-medium text-sm">
+														<th className="text-center py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 															Allocated Amount
 														</th>
-														<th className="text-center py-2 px-3 font-medium text-sm">
+														<th className="text-center py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 															Performance
 														</th>
-														<th className="text-center py-2 px-3 font-medium text-sm">
+														<th className="text-center py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 															Calculated Amount
 														</th>
 													</tr>
@@ -789,16 +789,16 @@ export default function FacilityReportsPage() {
 															key={worker.id}
 															className="border-b hover:bg-gray-50"
 														>
-															<td className="py-2 px-3 font-medium">
+															<td className="py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 																{worker.name}
 															</td>
-															<td className="py-2 px-3">
+															<td className="py-2 px-2 sm:px-3 text-xs sm:text-sm">
 																{worker.worker_role}
 															</td>
-															<td className="text-center py-2 px-3">
+															<td className="text-center py-2 px-2 sm:px-3 text-xs sm:text-sm">
 																₹{worker.allocated_amount.toFixed(2)}
 															</td>
-															<td className="text-center py-2 px-3">
+															<td className="text-center py-2 px-2 sm:px-3 text-xs sm:text-sm">
 																<span className="font-medium text-blue-600">
 																	{typeof worker.performance_percentage ===
 																	"number"
@@ -807,7 +807,7 @@ export default function FacilityReportsPage() {
 																	%
 																</span>
 															</td>
-															<td className="text-center py-2 px-3 font-medium">
+															<td className="text-center py-2 px-2 sm:px-3 font-medium text-xs sm:text-sm">
 																₹{worker.calculated_amount.toFixed(2)}
 															</td>
 														</tr>
@@ -821,18 +821,18 @@ export default function FacilityReportsPage() {
 								{/* Total Remuneration */}
 								{["UPHC", "U_HWC"].includes(report.facility.type) ? (
 									// UPHC and UHWC - team-based incentives only
-									<div className="bg-green-50 border border-green-200 rounded-lg p-4">
-										<div className="flex items-center justify-between">
+									<div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4">
+										<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
 											<div>
-												<h3 className="text-lg font-semibold text-green-800">
+												<h3 className="text-base sm:text-lg font-semibold text-green-800">
 													Team-Based Incentives
 												</h3>
-												<p className="text-green-700">
+												<p className="text-green-700 text-sm sm:text-base">
 													Medical Officer incentives included in facility total
 												</p>
 											</div>
-											<div className="text-right">
-												<div className="text-3xl font-bold text-green-800">
+											<div className="text-left sm:text-right">
+												<div className="text-2xl sm:text-3xl font-bold text-green-800">
 													₹0.00
 												</div>
 												<p className="text-sm text-green-600">
@@ -843,18 +843,18 @@ export default function FacilityReportsPage() {
 									</div>
 								) : (
 									// Other facilities - individual worker incentives
-									<div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-										<div className="flex items-center justify-between">
+									<div className="bg-purple-50 border border-purple-200 rounded-lg p-3 sm:p-4">
+										<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
 											<div>
-												<h3 className="text-lg font-semibold text-purple-800">
+												<h3 className="text-base sm:text-lg font-semibold text-purple-800">
 													Total Worker Remuneration
 												</h3>
-												<p className="text-purple-600">
+												<p className="text-purple-600 text-sm sm:text-base">
 													Based on performance and allocated amounts
 												</p>
 											</div>
-											<div className="text-right">
-												<div className="text-3xl font-bold text-purple-800">
+											<div className="text-left sm:text-right">
+												<div className="text-2xl sm:text-3xl font-bold text-purple-800">
 													₹{report.totalPersonalIncentives.toFixed(2)}
 												</div>
 												<p className="text-sm text-purple-600">
