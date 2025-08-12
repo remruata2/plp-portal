@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Users, Calendar, Loader2, DollarSign, UserCheck } from "lucide-react";
+import BackToHome from "@/components/ui/back-to-home";
+import Link from "next/link";
 
 interface DashboardStats {
   totalSubmissions: number;
@@ -242,7 +244,7 @@ export default function FacilityDashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Workers</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -253,13 +255,13 @@ export default function FacilityDashboardPage() {
               {stats
                 ? getChangeText(
                     stats.totalWorkers,
-                    0, // No previous month data for workers
-                    "worker"
+                    0, // No previous month data for employees
+                    "employee"
                   )
                 : "Loading..."}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Total workers in the facility
+              Total employees in the facility
             </p>
           </CardContent>
         </Card>
@@ -272,22 +274,22 @@ export default function FacilityDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href="/facility/health-data"
+            <Link
+              href="/facility/health-data/form"
               className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
               <FileText className="h-8 w-8 text-blue-600 mr-4" />
               <div>
                 <h3 className="font-medium text-gray-900">
-                  Submit Health Data
+                  Submit PLP Report
                 </h3>
                 <p className="text-sm text-gray-500">
                   Submit monthly health indicators
                 </p>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/facility/profile"
               className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
@@ -298,7 +300,7 @@ export default function FacilityDashboardPage() {
                   Manage your facility profile
                 </p>
               </div>
-            </a>
+            </Link>
           </div>
         </CardContent>
       </Card>

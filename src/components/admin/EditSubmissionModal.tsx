@@ -128,7 +128,7 @@ export default function EditSubmissionModal({
       "This will permanently delete:\n" +
       "• All field data values\n" +
       "• Remuneration calculations\n" +
-      "• Worker remuneration records\n" +
+                  "• Employee remuneration records\n" +
       "• Performance records\n" +
       "• Facility targets\n" +
       "• All other associated core data\n\n" +

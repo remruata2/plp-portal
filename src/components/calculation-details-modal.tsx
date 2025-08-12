@@ -370,7 +370,7 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
                 <p className="font-medium mb-1">How this affects your facility:</p>
                 <p>
                   This indicator contributes to your overall facility performance score, 
-                  which determines the distribution of incentives across your health workers. 
+                  which determines the distribution of incentives across your health employees. 
                   Higher achievement percentages result in better incentive distribution.
                 </p>
               </div>

@@ -128,13 +128,13 @@ export default function WorkerSelectionForm({
               <div className="flex items-center gap-3 justify-center mb-3">
                 <Users className="h-6 w-6 text-blue-600" />
                 <h4 className="text-lg font-semibold text-blue-800">
-                  No Worker Selection Required
+                  No Employee Selection Required
                 </h4>
               </div>
               <p className="text-blue-700 text-sm">
                 This facility operates on a team-based incentive system. 
                 Medical Officers receive team-based incentives included in the facility total.
-                No individual worker selection is needed.
+                No individual employee selection is needed.
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function WorkerSelectionForm({
               </Button>
             </div>
 
-            {/* Worker Sections by Type - Ordered: HWO, HW, ASHA */}
+            {/* Employee Sections by Type - Ordered: HWO, HW, ASHA */}
             {(() => {
               // Define the order we want to display worker types
               const workerTypeOrder = ['hwo', 'hw', 'asha', 'mo', 'ayush_mo', 'colocated_sc_hw'];

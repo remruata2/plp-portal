@@ -343,6 +343,16 @@ model FacilityRemunerationRecord {
   @@index([calculation_version])
 }
 
+model SystemSetting {
+  id         String   @id @default(cuid())
+  key        String   @unique
+  value      String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("system_setting")
+}
+
 enum UserRole {
   admin
   facility

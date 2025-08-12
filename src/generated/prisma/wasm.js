@@ -344,6 +344,14 @@ exports.Prisma.FacilityRemunerationRecordScalarFieldEnum = {
   calculation_metadata: 'calculation_metadata'
 };
 
+exports.Prisma.SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -431,7 +439,8 @@ exports.Prisma.ModelName = {
   IndicatorRemuneration: 'IndicatorRemuneration',
   FacilityTarget: 'FacilityTarget',
   IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
-  FacilityRemunerationRecord: 'FacilityRemunerationRecord'
+  FacilityRemunerationRecord: 'FacilityRemunerationRecord',
+  SystemSetting: 'SystemSetting'
 };
 
 /**
