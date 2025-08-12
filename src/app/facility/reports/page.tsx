@@ -329,54 +329,59 @@ export default function FacilityReportsPage() {
 						</p>
 					</div>
 					<div className="flex items-center gap-2 sm:gap-4">
-						<div className="flex items-center gap-2">
-							<Calendar className="h-4 w-4 text-gray-500" />
-							<Select
-								value={selectedYear || undefined}
-								onValueChange={(year) => {
-									setSelectedYear(year);
-									setSelectedMonth(null); // Reset month when year changes
-								}}
-							>
-								<SelectTrigger className="w-20 sm:w-24 h-9 sm:h-10">
-									<SelectValue placeholder="Year" />
-								</SelectTrigger>
-								<SelectContent>
-									{availableYears.map((year) => (
-										<SelectItem key={year} value={year}>
-											{year}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<Select
-								value={selectedMonth || undefined}
-								onValueChange={setSelectedMonth}
-								disabled={!selectedYear}
-							>
-								<SelectTrigger className="w-20 sm:w-24 h-9 sm:h-10">
-									<SelectValue
-										placeholder={selectedYear ? "Month" : "Select year first"}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									{selectedYear ? (
-										getAvailableMonthsForYear(selectedYear).map((month) => (
-											<SelectItem key={month} value={month}>
-												{new Date(
-													`${selectedYear}-${month}-01`
-												).toLocaleDateString("en-US", {
-													month: "long",
-												})}
+						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+							<div className="flex items-center gap-2">
+								<Calendar className="h-5 w-5 text-gray-500" />
+								<span className="text-sm font-medium text-gray-700 hidden sm:block">Select Period:</span>
+							</div>
+							<div className="flex items-center gap-3">
+								<Select
+									value={selectedYear || undefined}
+									onValueChange={(year) => {
+										setSelectedYear(year);
+										setSelectedMonth(null); // Reset month when year changes
+									}}
+								>
+									<SelectTrigger className="w-24 sm:w-28 h-10 sm:h-11 text-sm sm:text-base">
+										<SelectValue placeholder="Year" />
+									</SelectTrigger>
+									<SelectContent>
+										{availableYears.map((year) => (
+											<SelectItem key={year} value={year}>
+												{year}
 											</SelectItem>
-										))
-									) : (
-										<SelectItem value="no-year" disabled>
-											Select year first
-										</SelectItem>
-									)}
-								</SelectContent>
-							</Select>
+										))}
+									</SelectContent>
+								</Select>
+								<Select
+									value={selectedMonth || undefined}
+									onValueChange={setSelectedMonth}
+									disabled={!selectedYear}
+								>
+									<SelectTrigger className="w-28 sm:w-32 h-10 sm:h-11 text-sm sm:text-base">
+										<SelectValue
+											placeholder={selectedYear ? "Month" : "Select year first"}
+										/>
+									</SelectTrigger>
+									<SelectContent>
+										{selectedYear ? (
+											getAvailableMonthsForYear(selectedYear).map((month) => (
+												<SelectItem key={month} value={month}>
+													{new Date(
+														`${selectedYear}-${month}-01`
+													).toLocaleDateString("en-US", {
+														month: "long",
+													})}
+												</SelectItem>
+											))
+										) : (
+											<SelectItem value="no-year" disabled>
+												Select year first
+											</SelectItem>
+										)}
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -562,7 +567,9 @@ export default function FacilityReportsPage() {
 								<table className="w-full min-w-full">
 									<thead>
 										<tr className="border-b">
-											<th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">#</th>
+											<th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
+												#
+											</th>
 											<th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-xs sm:text-sm">
 												Indicator
 											</th>
