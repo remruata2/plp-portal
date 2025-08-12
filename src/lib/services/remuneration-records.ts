@@ -56,18 +56,36 @@ export class RemunerationRecordsService {
 
       // Store indicator records in FacilityRemunerationRecord
       if (indicators.length > 0) {
-        const indicatorRecords: RemunerationRecordData[] = indicators.map((indicator) => ({
-          facility_id: facilityId,
-          report_month: month,
-          indicator_id: indicator.id,
-          actual_value: indicator.actual,
-          target_value: indicator.target_value_for_calculation, // This should be JSON for min/max ranges
-          percentage_achieved: indicator.percentage,
-          status: indicator.status,
-          incentive_amount: indicator.incentive_amount,
-          max_remuneration: indicator.max_remuneration,
-          raw_percentage: indicator.raw_percentage,
-        }));
+        const indicatorRecords: RemunerationRecordData[] = indicators.map((indicator) => {
+          // Map indicator status to database enum values
+          let dbStatus: "achieved" | "partial" | "not_achieved";
+          switch (indicator.status) {
+            case "ACHIEVED":
+              dbStatus = "achieved";
+              break;
+            case "PARTIALLY_ACHIEVED":
+              dbStatus = "partial";
+              break;
+            case "BELOW_TARGET":
+            case "NA":
+            default:
+              dbStatus = "not_achieved";
+              break;
+          }
+
+          return {
+            facility_id: facilityId,
+            report_month: month,
+            indicator_id: indicator.id,
+            actual_value: indicator.actual,
+            target_value: indicator.target_value_for_calculation, // This should be JSON for min/max ranges
+            percentage_achieved: indicator.percentage,
+            status: dbStatus, // Use mapped database status
+            incentive_amount: indicator.incentive_amount,
+            max_remuneration: indicator.max_remuneration,
+            raw_percentage: indicator.raw_percentage,
+          };
+        });
 
         await prisma.facilityRemunerationRecord.createMany({
           data: indicatorRecords,

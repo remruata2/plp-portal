@@ -3,56 +3,91 @@ import { PrismaClient } from "../src/generated/prisma";
 const prisma = new PrismaClient();
 
 async function setupCompleteSystem() {
-  console.log("🚀 Setting up complete field-based system...");
-
   try {
-    // Step 1: Clear existing data
-    console.log("🧹 Clearing existing data...");
+    console.log("🚀 Starting complete system setup...");
+
+    // Clear existing data
+    console.log("🗑️ Clearing existing data...");
+    
+    // Clear performance calculations (now using FacilityRemunerationRecord)
+    console.log("📊 Clearing existing performance records...");
+    await prisma.facilityRemunerationRecord.deleteMany();
+    console.log("✅ Performance records cleared");
+
+    // Clear remuneration calculations
+    console.log("💰 Clearing existing remuneration calculations...");
+    await prisma.remunerationCalculation.deleteMany();
+    console.log("✅ Remuneration calculations cleared");
+
+    // Clear worker remunerations
+    console.log("👥 Clearing existing worker remunerations...");
+    await prisma.workerRemuneration.deleteMany();
+    console.log("✅ Worker remunerations cleared");
+
+    // Clear field values
+    console.log("📝 Clearing existing field values...");
     await prisma.fieldValue.deleteMany();
-    await prisma.facilityFieldDefaults.deleteMany();
-    await prisma.facilityFieldMapping.deleteMany();
-    await prisma.monthlyHealthData.deleteMany();
-    await prisma.indicatorRemuneration.deleteMany();
-    await prisma.performanceCalculation.deleteMany();
+    console.log("✅ Field values cleared");
+
+    // Clear facility targets
+    console.log("🎯 Clearing existing facility targets...");
     await prisma.facilityTarget.deleteMany();
+    console.log("✅ Facility targets cleared");
+
+    // Clear health workers
+    console.log("🏥 Clearing existing health workers...");
+    await prisma.healthWorker.deleteMany();
+    console.log("✅ Health workers cleared");
+
+    // Clear facilities
+    console.log("🏢 Clearing existing facilities...");
+    await prisma.facility.deleteMany();
+    console.log("✅ Facilities cleared");
+
+    // Clear facility types
+    console.log("🏥 Clearing existing facility types...");
+    await prisma.facilityType.deleteMany();
+    console.log("✅ Facility types cleared");
+
+    // Clear districts
+    console.log("🗺️ Clearing existing districts...");
+    await prisma.district.deleteMany();
+    console.log("✅ Districts cleared");
+
+    // Clear indicators
+    console.log("📊 Clearing existing indicators...");
     await prisma.indicator.deleteMany();
+    console.log("✅ Indicators cleared");
+
+    // Clear fields
+    console.log("📝 Clearing existing fields...");
     await prisma.field.deleteMany();
+    console.log("✅ Fields cleared");
 
-    // Step 2: Seed fields
-    console.log("📝 Seeding fields...");
-    const { execSync } = require("child_process");
-    execSync("npx tsx prisma/seed-fields-complete.ts", { stdio: "inherit" });
+    // Clear users
+    console.log("👤 Clearing existing users...");
+    await prisma.user.deleteMany();
+    console.log("✅ Users cleared");
 
-    // Step 3: Seed indicators
-    console.log("📊 Seeding indicators...");
-    execSync("npx tsx prisma/seed-indicators-from-fields.ts", {
-      stdio: "inherit",
-    });
+    console.log("🎉 Complete system setup completed successfully!");
+    console.log("📋 All existing data has been cleared");
+    console.log("🔧 The system is now ready for fresh data entry");
 
-    // Step 4: Setup facility field mappings
-    console.log("🔗 Setting up facility field mappings...");
-    execSync("npx tsx scripts/setup-facility-field-mappings.ts", {
-      stdio: "inherit",
-    });
-
-    console.log("✅ Complete system setup finished!");
-    console.log("");
-    console.log("📋 Summary:");
-    console.log("- Fields created and categorized");
-    console.log("- Indicators created with field mappings");
-    console.log("- Facility field mappings configured");
-    console.log("- Auto-calculation system ready");
-    console.log("");
-    console.log("🎯 Next steps:");
-    console.log("1. Run the system to test field submissions");
-    console.log("2. Verify indicator calculations");
-    console.log("3. Test incentive calculations");
   } catch (error) {
     console.error("❌ Error during system setup:", error);
-    process.exit(1);
+    throw error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-setupCompleteSystem();
+// Run the setup
+setupCompleteSystem()
+  .then(() => {
+    console.log("✅ Setup completed successfully");
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error("❌ Setup failed:", error);
+    process.exit(1);
+  });

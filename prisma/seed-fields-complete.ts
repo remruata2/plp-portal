@@ -8,14 +8,14 @@ async function seedFieldsComplete() {
   // Clear existing data in the correct order to avoid foreign key constraints
   console.log("🗑️ Clearing existing data...");
   
-  // Clear dependent tables first
+  // Clear dependent tables first (only those that exist in new schema)
   await prisma.fieldValue.deleteMany();
-  await prisma.facilityFieldDefaults.deleteMany();
-  await prisma.performanceCalculation.deleteMany();
+  await prisma.facilityTarget.deleteMany();
+  await prisma.facilityRemunerationRecord.deleteMany();
+  await prisma.workerRemuneration.deleteMany();
+  await prisma.remunerationCalculation.deleteMany();
   await prisma.indicatorRemuneration.deleteMany();
   await prisma.indicatorWorkerAllocation.deleteMany();
-  await prisma.facilityTarget.deleteMany();
-  await prisma.monthlyHealthData.deleteMany();
   
   // Clear main tables
   await prisma.indicator.deleteMany();

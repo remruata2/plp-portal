@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
+import { useToast } from "@/components/ui/toast";
 import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
 import WorkerSelectionForm from "./WorkerSelectionForm";
 import ConditionalIndicatorDisplay from "@/components/indicators/ConditionalIndicatorDisplay";
@@ -52,6 +52,7 @@ export default function DynamicHealthDataForm({
   onSubmissionSuccess,
 }: DynamicHealthDataFormProps) {
   const { data: session, status } = useSession();
+  const { toast } = useToast();
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
   const [indicatorGroups, setIndicatorGroups] = useState<IndicatorGroup[]>([]);
@@ -170,7 +171,11 @@ export default function DynamicHealthDataForm({
         setLoading(false);
       } catch (error: any) {
         console.error("Error fetching field mappings:", error);
-        toast.error("Failed to load form fields");
+        toast({
+          title: "Failed to load form fields",
+          description: error.message,
+          variant: "destructive",
+        });
         setLoading(false);
       }
     };
@@ -796,7 +801,11 @@ export default function DynamicHealthDataForm({
 
       // Validate month and year selection
       if (!selectedMonth || !selectedYear) {
-        toast.error("Please select both month and year");
+        toast({
+          title: "Please select both month and year",
+          description: "Please select both month and year",
+          variant: "destructive",
+        });
         return;
       }
 
@@ -812,7 +821,11 @@ export default function DynamicHealthDataForm({
       
       if (!validationResult.isValid) {
         const errorCount = validationResult.errors.length;
-        toast.error(`Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''} before submitting`);
+        toast({
+          title: `Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''} before submitting`,
+          description: `Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''} before submitting`,
+          variant: "destructive",
+        });
         
         // Scroll to first error
         const firstErrorField = validationResult.errors[0]?.field;
@@ -826,7 +839,11 @@ export default function DynamicHealthDataForm({
       // Show warnings if any
       if (validationResult.warnings.length > 0) {
         const warningMessages = validationResult.warnings.map(w => w.message).join('\n');
-        toast.warning(`Data submitted with ${validationResult.warnings.length} warning(s):\n${warningMessages}`);
+        toast({
+          title: `Data submitted with ${validationResult.warnings.length} warning(s)`,
+          description: `Data submitted with ${validationResult.warnings.length} warning(s):\n${warningMessages}`,
+          variant: "warning",
+        });
       }
 
       // Format report month as YYYY-MM
@@ -834,20 +851,53 @@ export default function DynamicHealthDataForm({
 
       // Check for duplicate submission
       if (existingSubmissions.includes(reportMonth)) {
-        toast.error(`Data has already been submitted for ${reportMonth}. Please select a different month or contact administrator to modify existing data.`);
+        toast({
+          title: `Data has already been submitted for ${reportMonth}`,
+          description: `Data has already been submitted for ${reportMonth}. Please select a different month or contact administrator to modify existing data.`,
+          variant: "destructive",
+        });
         return;
       }
 
       // Check if session is loaded
       if (status === "loading") {
-        toast.error("Session is still loading. Please wait and try again.");
+        toast({
+          title: "Session is still loading",
+          description: "Session is still loading. Please wait and try again.",
+          variant: "destructive",
+        });
         return;
       }
 
       // Use facility ID from props or fallback to session
       const effectiveFacilityId = facilityId || session?.user?.facility_id;
 
-      console.log("Submitting form with facilityId:", effectiveFacilityId);
+      // Convert formData to fieldValues format for the normal API
+      const fieldValues = fieldMappings.map(mapping => {
+        const formValue = formData[mapping.formFieldName];
+        const fieldValue: any = {
+          fieldId: mapping.databaseFieldId,
+          remarks: "",
+        };
+        
+        // Convert value based on field type
+        switch (mapping.fieldType) {
+          case "BINARY":
+            fieldValue.booleanValue = formValue === "1" || formValue === true;
+            break;
+          case "numeric":
+            fieldValue.numericValue = parseFloat(formValue) || 0;
+            break;
+          case "text":
+          default:
+            fieldValue.stringValue = String(formValue || "");
+            break;
+        }
+        
+        return fieldValue;
+      });
+
+      console.log("Submitting fieldValues to API:", fieldValues);
       console.log("Form data keys:", Object.keys(formData));
       console.log("Selected month/year:", { selectedMonth, selectedYear, reportMonth });
       console.log("Session facility_id:", session?.user?.facility_id);
@@ -855,34 +905,70 @@ export default function DynamicHealthDataForm({
       console.log("Session data:", session);
 
       if (!effectiveFacilityId) {
-        toast.error("No facility ID available. Please contact administrator.");
+        toast({
+          title: "No facility ID available",
+          description: "No facility ID available. Please contact administrator.",
+          variant: "destructive",
+        });
         return;
       }
 
-      // Submit raw form data to API - let server handle field mapping conversion
-      const response = await fetch("/api/health-data/temporary-submission", {
+      // Submit to the normal health-data API with remuneration calculation
+      console.log("About to submit to /api/health-data with:", {
+        facilityId: effectiveFacilityId,
+        reportMonth: reportMonth,
+        fieldValuesCount: fieldValues.length,
+        fieldValues: fieldValues
+      });
+
+      const response = await fetch("/api/health-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          formData,
           facilityId: effectiveFacilityId, // Send as string, let server parse
           reportMonth: reportMonth,
-          facilityType,
-          userRole,
-          selectedWorkers, // Include selected workers
+          fieldValues: fieldValues,
         }),
       });
 
+      console.log("API response received:", {
+        status: response.status,
+        ok: response.ok,
+        statusText: response.statusText
+      });
+
       if (!response.ok) {
-        throw new Error("Failed to submit data");
+        const errorText = await response.text();
+        console.error("API error response:", errorText);
+        throw new Error(`Failed to submit data: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
       console.log("Submission result:", result);
+      console.log("Result data:", result.data);
+      console.log("Result remuneration:", result.data?.remuneration);
 
-      toast.success("Data submitted successfully!");
+      // Check if remuneration calculation was successful
+      if (result.data?.remuneration) {
+        const remuneration = result.data.remuneration;
+        console.log("Remuneration data found:", remuneration);
+        console.log("Performance percentage:", remuneration.performancePercentage);
+        
+        toast({
+          title: `Data submitted successfully! Performance: ${remuneration.performancePercentage?.toFixed(1)}%`,
+          description: `Data submitted successfully! Performance: ${remuneration.performancePercentage?.toFixed(1)}%`,
+        });
+        console.log("Success toast should have been shown");
+      } else {
+        console.log("No remuneration data found, showing basic success toast");
+        toast({
+          title: "Data submitted successfully!",
+          description: "Data submitted successfully!",
+        });
+        console.log("Basic success toast should have been shown");
+      }
 
       // Add the submitted month to existing submissions
       setExistingSubmissions(prev => [...prev, reportMonth].sort().reverse());
@@ -907,7 +993,11 @@ export default function DynamicHealthDataForm({
       }
     } catch (error) {
       console.error("Error submitting data:", error);
-      toast.error("Failed to submit data");
+      toast({
+        title: "Failed to submit data",
+        description: "Failed to submit data",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }

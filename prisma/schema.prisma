@@ -18,10 +18,7 @@ model User {
   created_at      DateTime?           @default(now()) @db.Timestamptz(6)
   email           String?             @unique @db.VarChar(255)
   facility_id     String?
-  upload_sessions DataUploadSession[]
   field_values    FieldValue[]
-  approved_data   MonthlyHealthData[] @relation("DataApprover")
-  uploaded_data   MonthlyHealthData[] @relation("DataUploader")
   facility        Facility?           @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 
   @@index([facility_id])
@@ -34,21 +31,8 @@ model District {
   created_at   DateTime            @default(now()) @db.Timestamptz(6)
   updated_at   DateTime            @updatedAt @db.Timestamptz(6)
   facilities   Facility[]
-  monthly_data MonthlyHealthData[]
 
   @@map("district")
-}
-
-model RemunerationSystem {
-  id                      String                  @id @default(cuid())
-  name                    String                  @unique @db.VarChar(100)
-  description             String?                 @db.VarChar(500)
-  is_active               Boolean                 @default(true)
-  created_at              DateTime                @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime                @updatedAt @db.Timestamptz(6)
-  indicator_remunerations IndicatorRemuneration[]
-
-  @@map("remuneration_system")
 }
 
 model FacilityType {
@@ -81,83 +65,16 @@ model Facility {
   worker_remunerations      WorkerRemuneration[]
   district                  District                     @relation(fields: [district_id], references: [id])
   facility_type             FacilityType                 @relation(fields: [facility_type_id], references: [id])
-  facility_field_defaults   FacilityFieldDefaults[]
   facility_targets          FacilityTarget[]
-  worker_allocations        FacilityWorkerAllocation[]
   field_values              FieldValue[]
   health_workers            HealthWorker[]
-  monthly_data              MonthlyHealthData[]
-  performance_calculations  PerformanceCalculation[]
   remuneration_calculations RemunerationCalculation[]
-  sub_centres               sub_centre[]
   users                     User[]
 
   @@unique([name, district_id])
   @@index([district_id])
   @@index([facility_type_id])
   @@map("facility")
-}
-
-model MonthlyHealthData {
-  id            Int         @id @default(autoincrement())
-  sub_centre_id Int?
-  report_month  String      @db.VarChar(7)
-  value         Decimal?    @db.Decimal(15, 2)
-  data_quality  DataQuality @default(PENDING)
-  remarks       String?
-  uploaded_by   Int
-  approved_by   Int?
-  approved_at   DateTime?   @db.Timestamptz(6)
-  created_at    DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at    DateTime    @updatedAt @db.Timestamptz(6)
-  achievement   Decimal?    @db.Decimal(5, 2)
-  denominator   Decimal?    @db.Decimal(15, 2)
-  numerator     Decimal?    @db.Decimal(15, 2)
-  target_value  Decimal?    @db.Decimal(10, 2)
-  indicator_id  Int?
-  district_id   String
-  facility_id   String?
-  approver      User?       @relation("DataApprover", fields: [approved_by], references: [id])
-  district      District    @relation(fields: [district_id], references: [id])
-  facility      Facility?   @relation(fields: [facility_id], references: [id])
-  indicator     Indicator?  @relation(fields: [indicator_id], references: [id])
-  sub_centre    sub_centre? @relation(fields: [sub_centre_id], references: [id])
-  uploader      User        @relation("DataUploader", fields: [uploaded_by], references: [id])
-
-  @@unique([facility_id, sub_centre_id, indicator_id, report_month])
-  @@index([report_month])
-  @@index([district_id])
-  @@index([indicator_id])
-  @@map("monthly_health_data")
-}
-
-model DataUploadSession {
-  id             Int          @id @default(autoincrement())
-  file_name      String       @db.VarChar(200)
-  report_month   String       @db.VarChar(7)
-  total_records  Int
-  success_count  Int          @default(0)
-  error_count    Int          @default(0)
-  status         UploadStatus @default(PROCESSING)
-  upload_summary Json?
-  uploaded_by    Int
-  created_at     DateTime     @default(now()) @db.Timestamptz(6)
-  completed_at   DateTime?    @db.Timestamptz(6)
-  file_path      String?      @db.VarChar(500)
-  uploader       User         @relation(fields: [uploaded_by], references: [id])
-
-  @@map("data_upload_session")
-}
-
-model Formula {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique @db.VarChar(200)
-  description String?
-  structure   Json
-  created_at  DateTime @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime @updatedAt @db.Timestamptz(6)
-
-  @@map("formula")
 }
 
 model Indicator {
@@ -189,8 +106,6 @@ model Indicator {
   target_field              Field?                       @relation("TargetField", fields: [target_field_id], references: [id])
   remunerations             IndicatorRemuneration[]
   worker_allocations        IndicatorWorkerAllocation[]
-  monthly_data              MonthlyHealthData[]
-  performance_calculations  PerformanceCalculation[]
 
   @@map("indicator")
 }
@@ -211,7 +126,6 @@ model Field {
   user_type                  UserType
   validation_rules           Json?
   field_category             FieldCategory           @default(DATA_FIELD)
-  facility_field_defaults    FacilityFieldDefaults[]
   facility_field_mappings    FacilityFieldMapping[]
   field_values               FieldValue[]
   denominator_for_indicators Indicator[]             @relation("DenominatorField")
@@ -244,24 +158,6 @@ model FieldValue {
   @@map("field_value")
 }
 
-model FacilityFieldDefaults {
-  id            Int      @id @default(autoincrement())
-  field_id      Int
-  string_value  String?  @db.VarChar(500)
-  numeric_value Decimal? @db.Decimal(15, 2)
-  boolean_value Boolean?
-  json_value    Json?
-  is_active     Boolean  @default(true)
-  created_at    DateTime @default(now()) @db.Timestamptz(6)
-  updated_at    DateTime @updatedAt @db.Timestamptz(6)
-  facility_id   String
-  facility      Facility @relation(fields: [facility_id], references: [id])
-  field         Field    @relation(fields: [field_id], references: [id])
-
-  @@unique([field_id, facility_id])
-  @@map("facility_field_defaults")
-}
-
 model FacilityFieldMapping {
   id               Int          @id @default(autoincrement())
   field_id         Int
@@ -275,19 +171,6 @@ model FacilityFieldMapping {
 
   @@unique([facility_type_id, field_id])
   @@map("facility_field_mapping")
-}
-
-model sub_centre {
-  id                       Int                      @id @default(autoincrement())
-  name                     String                   @db.VarChar(200)
-  created_at               DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime                 @db.Timestamptz(6)
-  facility_id              String
-  monthly_health_data      MonthlyHealthData[]
-  performance_calculations PerformanceCalculation[]
-  facility                 Facility                 @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-
-  @@index([facility_id])
 }
 
 model HealthWorker {
@@ -357,27 +240,10 @@ model WorkerAllocationConfig {
   is_active            Boolean                    @default(true)
   created_at           DateTime                   @default(now()) @db.Timestamptz(6)
   updated_at           DateTime                   @updatedAt @db.Timestamptz(6)
-  facility_allocations FacilityWorkerAllocation[]
   facility_type        FacilityType               @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
 
   @@unique([facility_type_id, worker_type, worker_role])
   @@map("worker_allocation_config")
-}
-
-model FacilityWorkerAllocation {
-  id                          Int                    @id @default(autoincrement())
-  facility_id                 String
-  worker_allocation_config_id Int
-  worker_count                Int                    @default(1)
-  total_allocated_amount      Decimal                @db.Decimal(10, 2)
-  is_active                   Boolean                @default(true)
-  created_at                  DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at                  DateTime               @updatedAt @db.Timestamptz(6)
-  facility                    Facility               @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-  worker_allocation_config    WorkerAllocationConfig @relation(fields: [worker_allocation_config_id], references: [id], onDelete: Cascade)
-
-  @@unique([facility_id, worker_allocation_config_id])
-  @@map("facility_worker_allocation")
 }
 
 model FacilityTypeRemuneration {
@@ -403,33 +269,11 @@ model IndicatorRemuneration {
   condition_type                String?                  @db.VarChar(50)
   created_at                    DateTime                 @default(now()) @db.Timestamptz(6)
   updated_at                    DateTime                 @updatedAt @db.Timestamptz(6)
-  remuneration_system_id        String?
   facility_type_remuneration    FacilityTypeRemuneration @relation(fields: [facility_type_remuneration_id], references: [id])
   indicator                     Indicator                @relation(fields: [indicator_id], references: [id])
-  remuneration_system           RemunerationSystem?      @relation(fields: [remuneration_system_id], references: [id])
 
   @@unique([facility_type_remuneration_id, indicator_id])
   @@map("indicator_remuneration")
-}
-
-model PerformanceCalculation {
-  id                  Int         @id @default(autoincrement())
-  sub_centre_id       Int?
-  indicator_id        Int
-  report_month        String      @db.VarChar(7)
-  numerator           Decimal?    @db.Decimal(15, 2)
-  denominator         Decimal?    @db.Decimal(15, 2)
-  achievement         Decimal?    @db.Decimal(5, 2)
-  target_value        Decimal?    @db.Decimal(10, 2)
-  remuneration_amount Decimal?    @db.Decimal(10, 2)
-  calculated_at       DateTime    @default(now()) @db.Timestamptz(6)
-  facility_id         String?
-  facility            Facility?   @relation(fields: [facility_id], references: [id])
-  indicator           Indicator   @relation(fields: [indicator_id], references: [id])
-  sub_centre          sub_centre? @relation(fields: [sub_centre_id], references: [id])
-
-  @@unique([facility_id, sub_centre_id, indicator_id, report_month])
-  @@map("performance_calculation")
 }
 
 model FacilityTarget {

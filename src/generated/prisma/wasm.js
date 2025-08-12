@@ -139,15 +139,6 @@ exports.Prisma.DistrictScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.RemunerationSystemScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
 exports.Prisma.FacilityTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -167,51 +158,6 @@ exports.Prisma.FacilityScalarFieldEnum = {
   district_id: 'district_id',
   facility_type_id: 'facility_type_id',
   is_active: 'is_active',
-  updated_at: 'updated_at'
-};
-
-exports.Prisma.MonthlyHealthDataScalarFieldEnum = {
-  id: 'id',
-  sub_centre_id: 'sub_centre_id',
-  report_month: 'report_month',
-  value: 'value',
-  data_quality: 'data_quality',
-  remarks: 'remarks',
-  uploaded_by: 'uploaded_by',
-  approved_by: 'approved_by',
-  approved_at: 'approved_at',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  achievement: 'achievement',
-  denominator: 'denominator',
-  numerator: 'numerator',
-  target_value: 'target_value',
-  indicator_id: 'indicator_id',
-  district_id: 'district_id',
-  facility_id: 'facility_id'
-};
-
-exports.Prisma.DataUploadSessionScalarFieldEnum = {
-  id: 'id',
-  file_name: 'file_name',
-  report_month: 'report_month',
-  total_records: 'total_records',
-  success_count: 'success_count',
-  error_count: 'error_count',
-  status: 'status',
-  upload_summary: 'upload_summary',
-  uploaded_by: 'uploaded_by',
-  created_at: 'created_at',
-  completed_at: 'completed_at',
-  file_path: 'file_path'
-};
-
-exports.Prisma.FormulaScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  structure: 'structure',
-  created_at: 'created_at',
   updated_at: 'updated_at'
 };
 
@@ -274,19 +220,6 @@ exports.Prisma.FieldValueScalarFieldEnum = {
   facility_id: 'facility_id'
 };
 
-exports.Prisma.FacilityFieldDefaultsScalarFieldEnum = {
-  id: 'id',
-  field_id: 'field_id',
-  string_value: 'string_value',
-  numeric_value: 'numeric_value',
-  boolean_value: 'boolean_value',
-  json_value: 'json_value',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  facility_id: 'facility_id'
-};
-
 exports.Prisma.FacilityFieldMappingScalarFieldEnum = {
   id: 'id',
   field_id: 'field_id',
@@ -295,14 +228,6 @@ exports.Prisma.FacilityFieldMappingScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   facility_type_id: 'facility_type_id'
-};
-
-exports.Prisma.Sub_centreScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  facility_id: 'facility_id'
 };
 
 exports.Prisma.HealthWorkerScalarFieldEnum = {
@@ -357,17 +282,6 @@ exports.Prisma.WorkerAllocationConfigScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.FacilityWorkerAllocationScalarFieldEnum = {
-  id: 'id',
-  facility_id: 'facility_id',
-  worker_allocation_config_id: 'worker_allocation_config_id',
-  worker_count: 'worker_count',
-  total_allocated_amount: 'total_allocated_amount',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
 exports.Prisma.FacilityTypeRemunerationScalarFieldEnum = {
   id: 'id',
   total_amount: 'total_amount',
@@ -386,22 +300,7 @@ exports.Prisma.IndicatorRemunerationScalarFieldEnum = {
   conditional_amount: 'conditional_amount',
   condition_type: 'condition_type',
   created_at: 'created_at',
-  updated_at: 'updated_at',
-  remuneration_system_id: 'remuneration_system_id'
-};
-
-exports.Prisma.PerformanceCalculationScalarFieldEnum = {
-  id: 'id',
-  sub_centre_id: 'sub_centre_id',
-  indicator_id: 'indicator_id',
-  report_month: 'report_month',
-  numerator: 'numerator',
-  denominator: 'denominator',
-  achievement: 'achievement',
-  target_value: 'target_value',
-  remuneration_amount: 'remuneration_amount',
-  calculated_at: 'calculated_at',
-  facility_id: 'facility_id'
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.FacilityTargetScalarFieldEnum = {
@@ -455,10 +354,6 @@ exports.Prisma.NullableJsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
-};
-
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -477,20 +372,6 @@ exports.Prisma.JsonNullValueFilter = {
 exports.UserRole = exports.$Enums.UserRole = {
   admin: 'admin',
   facility: 'facility'
-};
-
-exports.DataQuality = exports.$Enums.DataQuality = {
-  PENDING: 'PENDING',
-  VALIDATED: 'VALIDATED',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.UploadStatus = exports.$Enums.UploadStatus = {
-  PROCESSING: 'PROCESSING',
-  COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED',
-  CANCELLED: 'CANCELLED'
 };
 
 exports.formula_type = exports.$Enums.formula_type = {
@@ -536,26 +417,18 @@ exports.FieldCategory = exports.$Enums.FieldCategory = {
 exports.Prisma.ModelName = {
   User: 'User',
   District: 'District',
-  RemunerationSystem: 'RemunerationSystem',
   FacilityType: 'FacilityType',
   Facility: 'Facility',
-  MonthlyHealthData: 'MonthlyHealthData',
-  DataUploadSession: 'DataUploadSession',
-  Formula: 'Formula',
   Indicator: 'Indicator',
   Field: 'Field',
   FieldValue: 'FieldValue',
-  FacilityFieldDefaults: 'FacilityFieldDefaults',
   FacilityFieldMapping: 'FacilityFieldMapping',
-  sub_centre: 'sub_centre',
   HealthWorker: 'HealthWorker',
   RemunerationCalculation: 'RemunerationCalculation',
   WorkerRemuneration: 'WorkerRemuneration',
   WorkerAllocationConfig: 'WorkerAllocationConfig',
-  FacilityWorkerAllocation: 'FacilityWorkerAllocation',
   FacilityTypeRemuneration: 'FacilityTypeRemuneration',
   IndicatorRemuneration: 'IndicatorRemuneration',
-  PerformanceCalculation: 'PerformanceCalculation',
   FacilityTarget: 'FacilityTarget',
   IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
   FacilityRemunerationRecord: 'FacilityRemunerationRecord'

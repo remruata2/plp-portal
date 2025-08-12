@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TemplateGenerator from "@/components/dashboard/template-generator";
-import DataUploader from "@/components/dashboard/data-uploader";
 import EnhancedIndicators from "@/components/dashboard/enhanced-indicators";
 import {
   DistrictPerformanceChart,
@@ -18,7 +17,6 @@ import {
 } from "@/components/charts/indicator-bar-chart";
 import {
   Download,
-  Upload,
   BarChart3,
   FileSpreadsheet,
   Target,
@@ -27,7 +25,6 @@ import {
 type ActiveTab =
   | "overview"
   | "template"
-  | "upload"
   | "analytics"
   | "enhanced-indicators";
 
@@ -54,13 +51,6 @@ export default function DashboardPage() {
       badge: "Excel",
     },
     {
-      id: "upload" as const,
-      label: "Upload Data",
-      icon: Upload,
-      description: "Upload completed data files",
-      badge: "File",
-    },
-    {
       id: "analytics" as const,
       label: "Analytics & Charts",
       icon: FileSpreadsheet,
@@ -82,8 +72,6 @@ export default function DashboardPage() {
         return <DashboardOverview />;
       case "template":
         return <TemplateGenerator />;
-      case "upload":
-        return <DataUploader />;
       case "analytics":
         return <AnalyticsView />;
       case "enhanced-indicators":
@@ -164,7 +152,6 @@ export default function DashboardPage() {
             </div>
             <div className="text-sm text-gray-500">
               {activeTab === "analytics" && "📊 Interactive Charts"}
-              {activeTab === "upload" && "📤 File Upload"}
               {activeTab === "template" && "📥 Excel Download"}
               {activeTab === "overview" && "🏠 Dashboard Home"}
             </div>
@@ -249,27 +236,7 @@ function DashboardOverview() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="h-5 w-5" />
-              Upload Data
-            </CardTitle>
-            <CardDescription>
-              Upload completed Excel files with health data
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 mb-4">
-              Upload completed Excel templates with monthly health data. The
-              system will validate and process the data automatically.
-            </p>
-            <Button className="w-full">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload File
-            </Button>
-          </CardContent>
-        </Card>
+
       </div>
 
       {/* System Status */}
@@ -290,10 +257,7 @@ function DashboardOverview() {
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               <span className="text-sm">Template Generator Ready</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-sm">Upload System Active</span>
-            </div>
+
           </div>
         </CardContent>
       </Card>

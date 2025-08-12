@@ -9,166 +9,187 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check if user is admin
-    if (session.user.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!session || session.user.role !== "admin") {
+      return NextResponse.json(
+        { error: "Unauthorized - Admin access required" },
+        { status: 401 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
-    const facilityTypeId = searchParams.get("facilityTypeId");
     const reportMonth = searchParams.get("reportMonth");
+    const districtId = searchParams.get("districtId");
+    const facilityTypeId = searchParams.get("facilityTypeId");
 
-    // Build where clause based on filters (optional)
-    const whereClause: any = {};
-    
-    if (reportMonth) {
-      whereClause.report_month = reportMonth;
+    // Build where clause for facilities
+    const facilityWhere: any = { is_active: true };
+    if (districtId) {
+      facilityWhere.district_id = districtId;
     }
-
     if (facilityTypeId) {
-      whereClause.facility = {
-        facility_type_id: facilityTypeId,
-      };
+      facilityWhere.facility_type_id = facilityTypeId;
     }
 
-    // Get remuneration calculations with related data
-    const remunerationCalculations = await prisma.remunerationCalculation.findMany({
-      where: whereClause,
+    // Get all facilities with their basic info
+    const facilities = await prisma.facility.findMany({
+      where: facilityWhere,
       include: {
-        facility: {
-          include: {
-            facility_type: true,
+        district: true,
+        facility_type: true,
+        _count: {
+          select: {
+            health_workers: true,
+            field_values: true,
           },
         },
       },
       orderBy: [
-        { facility: { name: "asc" } },
-        { report_month: "desc" },
+        { district: { name: "asc" } },
+        { facility_type: { name: "asc" } },
+        { name: "asc" },
       ],
     });
 
-    if (remunerationCalculations.length === 0) {
-      return NextResponse.json({ reports: [] });
-    }
-
-    // Get performance calculations for each facility/month combination
-    const performanceCalculations = await prisma.performanceCalculation.findMany({
+    // Get performance data from FacilityRemunerationRecord for the specified month
+    const performanceData = await prisma.facilityRemunerationRecord.findMany({
       where: {
-        OR: remunerationCalculations.map((calc) => ({
-          facility_id: calc.facility_id,
-          report_month: calc.report_month,
-        })),
+        report_month: reportMonth || undefined,
+        facility: {
+          is_active: true,
+          ...(districtId && { district_id: districtId }),
+          ...(facilityTypeId && { facility_type_id: facilityTypeId }),
+        },
       },
       include: {
+        facility: {
+          include: {
+            district: true,
+            facility_type: true,
+          },
+        },
         indicator: true,
       },
     });
 
-    // Get worker remunerations for each facility/month combination
-    const workerRemunerations = await prisma.workerRemuneration.findMany({
+    // Get remuneration calculations for each facility/month combination
+    const remunerationCalculations = await prisma.remunerationCalculation.findMany({
       where: {
-        OR: remunerationCalculations.map((calc) => ({
-          report_month: calc.report_month,
-          health_worker: {
-            facility_id: calc.facility_id,
-          },
-        })),
+        report_month: reportMonth || undefined,
+        facility: {
+          is_active: true,
+          ...(districtId && { district_id: districtId }),
+          ...(facilityTypeId && { facility_type_id: facilityTypeId }),
+        },
       },
       include: {
-        health_worker: true,
+        facility: {
+          include: {
+            district: true,
+            facility_type: true,
+          },
+        },
       },
     });
 
-    // Transform data into the expected format
-    const reports = remunerationCalculations.map((remunerationCalc) => {
+    // Process facilities and add performance data
+    const facilitiesWithPerformance = facilities.map((facility) => {
+      // Get performance records for this facility
+      const facilityPerformanceData = performanceData.filter(
+        (perf) => perf.facility_id === facility.id
+      );
+
+      // Get remuneration calculation for this facility
+      const facilityRemunerationCalc = remunerationCalculations.find(
+        (calc) => calc.facility_id === facility.id
+      );
+
+      // Calculate performance metrics
+      const totalIndicators = facilityPerformanceData.length;
+      const indicatorsWithData = facilityPerformanceData.filter(
+        (perf) => perf.percentage_achieved !== null
+      ).length;
+
+      const achievements = facilityPerformanceData
+        .map((perf) => perf.percentage_achieved)
+        .filter((achievement) => achievement !== null) as number[];
+
+      const averageAchievement =
+        achievements.length > 0
+          ? achievements.reduce((sum, achievement) => sum + achievement, 0) /
+            achievements.length
+          : 0;
+
+      const totalIncentive = facilityPerformanceData.reduce(
+        (sum, perf) => sum + (perf.incentive_amount || 0),
+        0
+      );
+
       // Get related performance calculations
-      const facilityPerformanceCalcs = performanceCalculations.filter(
-        (perfCalc) =>
-          perfCalc.facility_id === remunerationCalc.facility_id &&
-          perfCalc.report_month === remunerationCalc.report_month
-      );
-
-      // Get related worker remunerations
-      const facilityWorkerRemunerations = workerRemunerations.filter(
-        (workerRem) =>
-          workerRem.health_worker.facility_id === remunerationCalc.facility_id &&
-          workerRem.report_month === remunerationCalc.report_month
-      );
-
-      // Transform performance indicators
-      const indicators = facilityPerformanceCalcs.map((perfCalc) => {
-        const achievementPercentage = Number(perfCalc.achievement || 0);
-        let status: "achieved" | "partial" | "not_achieved" = "not_achieved";
-        
-        if (achievementPercentage >= 100) status = "achieved";
-        else if (achievementPercentage >= 50) status = "partial";
-
-        return {
-          id: perfCalc.id,
-          name: perfCalc.indicator.name,
-          code: perfCalc.indicator.code,
-          target: perfCalc.target_value ? Number(perfCalc.target_value).toString() : "N/A",
-          actual: Number(perfCalc.numerator || 0),
-          percentage: achievementPercentage,
-          status,
-          incentive_amount: Number(perfCalc.remuneration_amount || 0),
-          max_remuneration: Number(perfCalc.remuneration_amount || 0),
-          numerator_value: Number(perfCalc.numerator || 0),
-          denominator_value: Number(perfCalc.denominator || 0),
-        };
-      });
-
-      // Transform worker remunerations
-      const workers = facilityWorkerRemunerations.map((workerRem) => ({
-        id: workerRem.health_worker.id,
-        name: workerRem.health_worker.name,
-        worker_type: workerRem.health_worker.worker_type,
-        worker_role: workerRem.health_worker.worker_type, // Using worker_type as role for now
-        allocated_amount: Number(workerRem.allocated_amount),
-        performance_percentage: Number(workerRem.performance_percentage),
-        calculated_amount: Number(workerRem.calculated_amount),
-        awarded_amount: Number(workerRem.calculated_amount), // Default to calculated amount
+      const facilityPerformanceCalcs = facilityPerformanceData.map((perf) => ({
+        indicator_id: perf.indicator_id,
+        indicator_name: perf.indicator?.name || "Unknown",
+        percentage_achieved: perf.percentage_achieved,
+        incentive_amount: perf.incentive_amount,
+        status: perf.status,
       }));
 
-      // Calculate summary statistics
-      const summary = {
-        totalIndicators: indicators.length,
-        achievedIndicators: indicators.filter((ind) => ind.status === "achieved").length,
-        partialIndicators: indicators.filter((ind) => ind.status === "partial").length,
-        notAchievedIndicators: indicators.filter((ind) => ind.status === "not_achieved").length,
-        workerCounts: workers.reduce((acc, worker) => {
-          acc[worker.worker_type] = (acc[worker.worker_type] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>),
-      };
-
       return {
-        facility: {
-          id: remunerationCalc.facility.id,
-          name: remunerationCalc.facility.name,
-          display_name: remunerationCalc.facility.display_name,
-          type: remunerationCalc.facility.facility_type.name,
-          type_display_name: remunerationCalc.facility.facility_type.display_name,
-        },
-        reportMonth: remunerationCalc.report_month,
-        totalIncentive: Number(remunerationCalc.facility_remuneration),
-        totalWorkerRemuneration: Number(remunerationCalc.total_worker_remuneration),
-        totalRemuneration: Number(remunerationCalc.total_remuneration),
-        performancePercentage: Number(remunerationCalc.performance_percentage),
-        indicators,
-        workers,
-        summary,
-        lastUpdated: remunerationCalc.calculated_at.toISOString(),
+        id: facility.id,
+        name: facility.name,
+        display_name: facility.display_name,
+        district: facility.district.name,
+        facility_type: facility.facility_type.name,
+        total_indicators: totalIndicators,
+        indicators_with_data: indicatorsWithData,
+        average_achievement: Math.round(averageAchievement * 100) / 100,
+        total_incentive: totalIncentive,
+        health_workers_count: facility._count.health_workers,
+        field_values_count: facility._count.field_values,
+        performance_details: facilityPerformanceCalcs,
+        remuneration_summary: facilityRemunerationCalc
+          ? {
+              performance_percentage: Number(facilityRemunerationCalc.performance_percentage),
+              facility_remuneration: Number(facilityRemunerationCalc.facility_remuneration),
+              total_worker_remuneration: Number(facilityRemunerationCalc.total_worker_remuneration),
+              total_remuneration: Number(facilityRemunerationCalc.total_remuneration),
+              health_workers_count: facilityRemunerationCalc.health_workers_count,
+              asha_workers_count: facilityRemunerationCalc.asha_workers_count,
+            }
+          : null,
       };
     });
 
-    return NextResponse.json({ reports });
+    // Calculate summary statistics
+    const totalFacilities = facilitiesWithPerformance.length;
+    const facilitiesWithData = facilitiesWithPerformance.filter(
+      (f) => f.indicators_with_data > 0
+    ).length;
+    const overallAverageAchievement =
+      facilitiesWithData > 0
+        ? facilitiesWithPerformance
+            .filter((f) => f.average_achievement > 0)
+            .reduce((sum, f) => sum + f.average_achievement, 0) /
+          facilitiesWithData
+        : 0;
+    const totalIncentives = facilitiesWithPerformance.reduce(
+      (sum, f) => sum + f.total_incentive,
+      0
+    );
+
+    const summary = {
+      total_facilities: totalFacilities,
+      facilities_with_data: facilitiesWithData,
+      overall_average_achievement: Math.round(overallAverageAchievement * 100) / 100,
+      total_incentives: totalIncentives,
+      report_month: reportMonth || "All months",
+    };
+
+    return NextResponse.json({
+      summary,
+      facilities: facilitiesWithPerformance,
+    });
   } catch (error) {
-    console.error("Error fetching admin performance reports:", error);
+    console.error("Error fetching performance reports:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

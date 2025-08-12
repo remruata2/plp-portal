@@ -290,7 +290,7 @@ export class HistoricalRemunerationCalculator {
         id: `facility_${facilityId}_${reportMonth}_${Date.now()}`,
         facility_id: facilityId,
         report_month: reportMonth,
-        status: 'facility_performance',
+        status: 'achieved', // Use valid enum value
         performance_percentage: performancePercentage,
         calculation_version: version,
         kpi_config_snapshot: kpiConfig,
@@ -308,7 +308,7 @@ export class HistoricalRemunerationCalculator {
           facility_id: facilityId,
           report_month: reportMonth,
           worker_id: worker.id,
-          status: 'worker_remuneration',
+          status: 'achieved', // Use valid enum value
           allocated_amount: worker.allocatedAmount,
           performance_percentage: worker.performancePercentage,
           calculated_amount: worker.calculatedAmount,

@@ -76,7 +76,17 @@ export default function ViewSubmissionPage({ params }: { params: Promise<{ id: s
   };
 
   const handleDelete = async () => {
-    if (!submission || !confirm("Are you sure you want to delete this submission? This action cannot be undone.")) {
+    if (!submission || !confirm(
+      "Are you sure you want to delete this submission?\n\n" +
+      "This will permanently delete:\n" +
+      "• All field data values\n" +
+      "• Remuneration calculations\n" +
+      "• Worker remuneration records\n" +
+      "• Performance records\n" +
+      "• Facility targets\n" +
+      "• All other associated core data\n\n" +
+      "This action cannot be undone."
+    )) {
       return;
     }
 
@@ -89,7 +99,20 @@ export default function ViewSubmissionPage({ params }: { params: Promise<{ id: s
         throw new Error("Failed to delete submission");
       }
 
-      toast.success("Submission deleted successfully");
+      const result = await response.json();
+      
+      // Show detailed success message with deletion breakdown
+      if (result.breakdown) {
+        const breakdownText = Object.entries(result.breakdown)
+          .filter(([_, count]) => (count as number) > 0)
+          .map(([table, count]) => `${table}: ${count} records`)
+          .join(', ');
+        
+        toast.success(`Submission deleted successfully. Removed ${result.totalDeletedCount} total records (${breakdownText})`);
+      } else {
+        toast.success("Submission deleted successfully");
+      }
+      
       router.push("/admin/health-data");
     } catch (error) {
       console.error("Error deleting submission:", error);

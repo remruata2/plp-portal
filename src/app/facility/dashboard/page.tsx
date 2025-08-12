@@ -3,17 +3,15 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Users, TrendingUp, Calendar, Loader2, DollarSign, UserCheck } from "lucide-react";
+import { FileText, Users, Calendar, Loader2, DollarSign, UserCheck } from "lucide-react";
 
 interface DashboardStats {
   totalSubmissions: number;
   totalFootfall: number;
-  performance: number;
   totalIncentives: number;
   totalWorkers: number;
   lastMonthSubmissions: number;
   lastMonthFootfall: number;
-  lastMonthPerformance: number;
 }
 
 export default function FacilityDashboardPage() {
@@ -39,12 +37,10 @@ export default function FacilityDashboardPage() {
         setStats({
           totalSubmissions: 0,
           totalFootfall: 0,
-          performance: 0,
           totalIncentives: 0,
           totalWorkers: 0,
           lastMonthSubmissions: 0,
           lastMonthFootfall: 0,
-          lastMonthPerformance: 0,
         });
         return;
       }
@@ -70,12 +66,10 @@ export default function FacilityDashboardPage() {
         setStats({
           totalSubmissions: 0,
           totalFootfall: 0,
-          performance: 0,
           totalIncentives: 0,
           totalWorkers: 0,
           lastMonthSubmissions: 0,
           lastMonthFootfall: 0,
-          lastMonthPerformance: 0,
         });
       }
     } catch (error) {
@@ -84,12 +78,10 @@ export default function FacilityDashboardPage() {
       setStats({
         totalSubmissions: 0,
         totalFootfall: 0,
-        performance: 0,
         totalIncentives: 0,
         totalWorkers: 0,
         lastMonthSubmissions: 0,
         lastMonthFootfall: 0,
-        lastMonthPerformance: 0,
       });
     } finally {
       setLoading(false);
@@ -108,8 +100,6 @@ export default function FacilityDashboardPage() {
         return current > 0 ? "First submission" : "No submissions yet";
       } else if (label === "visitor") {
         return current > 0 ? "First visitors" : "No visitors yet";
-      } else if (label === "performance") {
-        return current > 0 ? "First performance data" : "No performance data";
       } else if (label === "incentive") {
         return current > 0 ? "First incentives earned" : "No incentives yet";
       } else if (label === "worker") {
@@ -124,8 +114,6 @@ export default function FacilityDashboardPage() {
         return `+${change} more than last month`;
       } else if (label === "visitor") {
         return `+${change.toLocaleString()} more visitors`;
-      } else if (label === "performance") {
-        return `+${change}% improvement`;
       } else if (label === "incentive") {
         return `+₹${change.toLocaleString()} more incentives`;
       } else if (label === "worker") {
@@ -138,8 +126,6 @@ export default function FacilityDashboardPage() {
         return `${change} fewer than last month`;
       } else if (label === "visitor") {
         return `${change.toLocaleString()} fewer visitors`;
-      } else if (label === "performance") {
-        return `${change}% decrease`;
       } else if (label === "incentive") {
         return `₹${change.toLocaleString()} fewer incentives`;
       } else if (label === "worker") {
@@ -179,7 +165,7 @@ export default function FacilityDashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -226,28 +212,6 @@ export default function FacilityDashboardPage() {
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Total visitors across all months
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Performance</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.performance || 0}%</div>
-            <p className="text-xs text-muted-foreground">
-              {stats
-                ? getChangeText(
-                    stats.performance,
-                    stats.lastMonthPerformance,
-                    "performance"
-                  )
-                : "Loading..."}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Based on worker performance
             </p>
           </CardContent>
         </Card>

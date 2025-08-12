@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
-import { RemunerationRecordsService } from "@/lib/services/remuneration-records";
 
 const prisma = new PrismaClient();
 
@@ -26,11 +25,15 @@ export async function GET(
       );
     }
 
-    // Get facility details
+    // Check if facility exists
     const facility = await prisma.facility.findUnique({
       where: { id: facilityId },
-      include: { facility_type: true },
+      include: {
+        district: true,
+        facility_type: true,
+      },
     });
+
     if (!facility) {
       return NextResponse.json(
         { error: "Facility not found" },
@@ -38,51 +41,7 @@ export async function GET(
       );
     }
 
-    // Check if remuneration records already exist for this month
-    const hasRecords = await RemunerationRecordsService.hasRemunerationRecords(facilityId, month);
-    
-    // Force recalculation for September 2025 to apply worker classification fixes
-    const shouldForceRecalculation = month === '2025-09';
-    
-    if (hasRecords && !shouldForceRecalculation) {
-      console.log(`📊 Using cached remuneration records for facility ${facilityId}, month ${month}`);
-      
-      // Retrieve pre-calculated remuneration records
-      const remunerationData = await RemunerationRecordsService.getRemunerationRecords(facilityId, month);
-      
-      // Get additional facility and summary data
-      const summary = await calculateSummary(remunerationData.indicators);
-      const performancePercentage = calculateOverallPerformance(remunerationData.indicators);
-      
-      const report = {
-        reportMonth: month,
-        facility: {
-          id: facility.id,
-          name: facility.name,
-          display_name: facility.display_name,
-          type: facility.facility_type.name,
-          type_display_name: facility.facility_type.display_name,
-        },
-        totalIncentive: remunerationData.totals.totalIncentive,
-        totalPersonalIncentives: remunerationData.totals.totalPersonalIncentives,
-        totalRemuneration: remunerationData.totals.totalRemuneration,
-        performancePercentage,
-        indicators: remunerationData.indicators,
-        workers: remunerationData.workers,
-        summary,
-      };
-
-      return NextResponse.json(report);
-    }
-
-    // If no records exist or we're forcing recalculation, calculate and store them
-    if (shouldForceRecalculation) {
-      console.log(`🔄 Forcing recalculation for September 2025 to apply worker classification fixes`);
-      // Clear existing records to force fresh calculation
-      await RemunerationRecordsService.deleteRemunerationRecords(facilityId, month);
-    } else {
-      console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
-    }
+    console.log(`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`);
     
     // Get all indicators for this facility type
     const indicators = await prisma.indicator.findMany({
@@ -424,12 +383,33 @@ export async function GET(
       }
 
       totalIncentive += result.remuneration;
+
+      // Apply storage logic for range-based targets (same as service)
+      let displayPercentage = result.achievement;
+      if (indicator.target_type === "PERCENTAGE_RANGE" && rangeData?.min && rangeData?.max) {
+        // For percentage range targets (e.g., TF001_SC: 3-5%), check if actual percentage is within or above range
+        const actualPercentage = (actualValue / denominatorValue) * 100;
+        
+        if (actualPercentage >= rangeData.min) {
+          // If actual percentage meets the minimum target, store 100% (achieved)
+          displayPercentage = 100;
+          console.log(`🎯 Range target ${indicator.code}: Actual ${actualPercentage.toFixed(2)}% >= min ${rangeData.min}%, storing 100% (achieved)`);
+        } else {
+          // If below minimum target, store the actual achievement percentage relative to minimum
+          displayPercentage = (actualPercentage / rangeData.min) * 100;
+          console.log(`🎯 Range target ${indicator.code}: Actual ${actualPercentage.toFixed(2)}% < min ${rangeData.min}%, storing ${displayPercentage.toFixed(2)}% (relative to min)`);
+        }
+      } else {
+        // For other indicators, cap at 100% to match service behavior
+        displayPercentage = Math.min(result.achievement, 100);
+      }
+
       performanceIndicators.push({
         id: indicator.id,
         name: indicator.name,
         target: targetDescription, // Show target description instead of max value
         actual: actualValue,
-        percentage: result.achievement, // Use FormulaCalculator result achievement percentage
+        percentage: displayPercentage, // Use storage logic percentage (100% when target achieved)
         status: status,
         incentive_amount: result.remuneration,
         target_type: indicator.target_type,
@@ -498,6 +478,11 @@ export async function GET(
 
     // Calculate worker remuneration based on facility performance
     // Use the same weighted average calculation as overall performance
+    console.log(`🔍 DEBUG REPORT: About to calculate overall performance with ${performanceIndicators.length} indicators:`);
+    performanceIndicators.forEach((ind, index) => {
+      console.log(`🔍 DEBUG REPORT PRE-CALC: ${index + 1}. ${ind.indicator_code}: ${ind.percentage}%`);
+    });
+    
     const performancePercentage = calculateOverallPerformance(performanceIndicators);
     
     // Calculate facility incentive (Total Incentive Earned from image)
@@ -624,14 +609,6 @@ export async function GET(
       },
     };
 
-    // Store the calculated remuneration records
-    await RemunerationRecordsService.storeRemunerationRecords(
-      facilityId, 
-      month, 
-      performanceIndicators, 
-      workersRemuneration
-    );
-
     return NextResponse.json(report);
   } catch (error) {
     console.error("Error generating report:", error);
@@ -665,6 +642,22 @@ async function calculateSummary(indicators: any[]) {
 function calculateOverallPerformance(indicators: any[]) {
   if (indicators.length === 0) return 0;
   
-  const totalPercentage = indicators.reduce((sum, ind) => sum + (ind.percentage || 0), 0);
-  return totalPercentage / indicators.length;
+  console.log(`🔍 DEBUG REPORT: Calculating overall performance percentage:`);
+  console.log(`🔍 DEBUG REPORT: Total indicators in calculation: ${indicators.length}`);
+  
+  let totalPercentage = 0;
+  indicators.forEach((ind, index) => {
+    const percentage = ind.percentage || 0;
+    console.log(`🔍 DEBUG REPORT: ${index + 1}. ${ind.indicator_code}: ${percentage.toFixed(2)}%`);
+    totalPercentage += percentage;
+  });
+  
+  const performancePercentage = totalPercentage / indicators.length;
+  
+  console.log(`🔍 DEBUG REPORT: Total percentage sum: ${totalPercentage.toFixed(2)}%`);
+  console.log(`🔍 DEBUG REPORT: Number of indicators: ${indicators.length}`);
+  console.log(`🔍 DEBUG REPORT: Final performance percentage: ${performancePercentage.toFixed(2)}% (${totalPercentage.toFixed(2)} / ${indicators.length})`);
+  console.log(`🔍 DEBUG REPORT: Manual verification: ${totalPercentage.toFixed(2)} ÷ ${indicators.length} = ${(totalPercentage / indicators.length).toFixed(2)}%`);
+  
+  return performancePercentage;
 }

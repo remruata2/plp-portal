@@ -24,11 +24,6 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type District = $Result.DefaultSelection<Prisma.$DistrictPayload>
 /**
- * Model RemunerationSystem
- * 
- */
-export type RemunerationSystem = $Result.DefaultSelection<Prisma.$RemunerationSystemPayload>
-/**
  * Model FacilityType
  * 
  */
@@ -38,21 +33,6 @@ export type FacilityType = $Result.DefaultSelection<Prisma.$FacilityTypePayload>
  * 
  */
 export type Facility = $Result.DefaultSelection<Prisma.$FacilityPayload>
-/**
- * Model MonthlyHealthData
- * 
- */
-export type MonthlyHealthData = $Result.DefaultSelection<Prisma.$MonthlyHealthDataPayload>
-/**
- * Model DataUploadSession
- * 
- */
-export type DataUploadSession = $Result.DefaultSelection<Prisma.$DataUploadSessionPayload>
-/**
- * Model Formula
- * 
- */
-export type Formula = $Result.DefaultSelection<Prisma.$FormulaPayload>
 /**
  * Model Indicator
  * 
@@ -69,20 +49,10 @@ export type Field = $Result.DefaultSelection<Prisma.$FieldPayload>
  */
 export type FieldValue = $Result.DefaultSelection<Prisma.$FieldValuePayload>
 /**
- * Model FacilityFieldDefaults
- * 
- */
-export type FacilityFieldDefaults = $Result.DefaultSelection<Prisma.$FacilityFieldDefaultsPayload>
-/**
  * Model FacilityFieldMapping
  * 
  */
 export type FacilityFieldMapping = $Result.DefaultSelection<Prisma.$FacilityFieldMappingPayload>
-/**
- * Model sub_centre
- * 
- */
-export type sub_centre = $Result.DefaultSelection<Prisma.$sub_centrePayload>
 /**
  * Model HealthWorker
  * 
@@ -104,11 +74,6 @@ export type WorkerRemuneration = $Result.DefaultSelection<Prisma.$WorkerRemunera
  */
 export type WorkerAllocationConfig = $Result.DefaultSelection<Prisma.$WorkerAllocationConfigPayload>
 /**
- * Model FacilityWorkerAllocation
- * 
- */
-export type FacilityWorkerAllocation = $Result.DefaultSelection<Prisma.$FacilityWorkerAllocationPayload>
-/**
  * Model FacilityTypeRemuneration
  * 
  */
@@ -118,11 +83,6 @@ export type FacilityTypeRemuneration = $Result.DefaultSelection<Prisma.$Facility
  * 
  */
 export type IndicatorRemuneration = $Result.DefaultSelection<Prisma.$IndicatorRemunerationPayload>
-/**
- * Model PerformanceCalculation
- * 
- */
-export type PerformanceCalculation = $Result.DefaultSelection<Prisma.$PerformanceCalculationPayload>
 /**
  * Model FacilityTarget
  * 
@@ -437,16 +397,6 @@ export class PrismaClient<
   get district(): Prisma.DistrictDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.remunerationSystem`: Exposes CRUD operations for the **RemunerationSystem** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more RemunerationSystems
-    * const remunerationSystems = await prisma.remunerationSystem.findMany()
-    * ```
-    */
-  get remunerationSystem(): Prisma.RemunerationSystemDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.facilityType`: Exposes CRUD operations for the **FacilityType** model.
     * Example usage:
     * ```ts
@@ -465,36 +415,6 @@ export class PrismaClient<
     * ```
     */
   get facility(): Prisma.FacilityDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.monthlyHealthData`: Exposes CRUD operations for the **MonthlyHealthData** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more MonthlyHealthData
-    * const monthlyHealthData = await prisma.monthlyHealthData.findMany()
-    * ```
-    */
-  get monthlyHealthData(): Prisma.MonthlyHealthDataDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.dataUploadSession`: Exposes CRUD operations for the **DataUploadSession** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more DataUploadSessions
-    * const dataUploadSessions = await prisma.dataUploadSession.findMany()
-    * ```
-    */
-  get dataUploadSession(): Prisma.DataUploadSessionDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.formula`: Exposes CRUD operations for the **Formula** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Formulas
-    * const formulas = await prisma.formula.findMany()
-    * ```
-    */
-  get formula(): Prisma.FormulaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.indicator`: Exposes CRUD operations for the **Indicator** model.
@@ -527,16 +447,6 @@ export class PrismaClient<
   get fieldValue(): Prisma.FieldValueDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.facilityFieldDefaults`: Exposes CRUD operations for the **FacilityFieldDefaults** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more FacilityFieldDefaults
-    * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findMany()
-    * ```
-    */
-  get facilityFieldDefaults(): Prisma.FacilityFieldDefaultsDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.facilityFieldMapping`: Exposes CRUD operations for the **FacilityFieldMapping** model.
     * Example usage:
     * ```ts
@@ -545,16 +455,6 @@ export class PrismaClient<
     * ```
     */
   get facilityFieldMapping(): Prisma.FacilityFieldMappingDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.sub_centre`: Exposes CRUD operations for the **sub_centre** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Sub_centres
-    * const sub_centres = await prisma.sub_centre.findMany()
-    * ```
-    */
-  get sub_centre(): Prisma.sub_centreDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.healthWorker`: Exposes CRUD operations for the **HealthWorker** model.
@@ -597,16 +497,6 @@ export class PrismaClient<
   get workerAllocationConfig(): Prisma.WorkerAllocationConfigDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.facilityWorkerAllocation`: Exposes CRUD operations for the **FacilityWorkerAllocation** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more FacilityWorkerAllocations
-    * const facilityWorkerAllocations = await prisma.facilityWorkerAllocation.findMany()
-    * ```
-    */
-  get facilityWorkerAllocation(): Prisma.FacilityWorkerAllocationDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.facilityTypeRemuneration`: Exposes CRUD operations for the **FacilityTypeRemuneration** model.
     * Example usage:
     * ```ts
@@ -625,16 +515,6 @@ export class PrismaClient<
     * ```
     */
   get indicatorRemuneration(): Prisma.IndicatorRemunerationDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.performanceCalculation`: Exposes CRUD operations for the **PerformanceCalculation** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more PerformanceCalculations
-    * const performanceCalculations = await prisma.performanceCalculation.findMany()
-    * ```
-    */
-  get performanceCalculation(): Prisma.PerformanceCalculationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.facilityTarget`: Exposes CRUD operations for the **FacilityTarget** model.
@@ -1107,26 +987,18 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     District: 'District',
-    RemunerationSystem: 'RemunerationSystem',
     FacilityType: 'FacilityType',
     Facility: 'Facility',
-    MonthlyHealthData: 'MonthlyHealthData',
-    DataUploadSession: 'DataUploadSession',
-    Formula: 'Formula',
     Indicator: 'Indicator',
     Field: 'Field',
     FieldValue: 'FieldValue',
-    FacilityFieldDefaults: 'FacilityFieldDefaults',
     FacilityFieldMapping: 'FacilityFieldMapping',
-    sub_centre: 'sub_centre',
     HealthWorker: 'HealthWorker',
     RemunerationCalculation: 'RemunerationCalculation',
     WorkerRemuneration: 'WorkerRemuneration',
     WorkerAllocationConfig: 'WorkerAllocationConfig',
-    FacilityWorkerAllocation: 'FacilityWorkerAllocation',
     FacilityTypeRemuneration: 'FacilityTypeRemuneration',
     IndicatorRemuneration: 'IndicatorRemuneration',
-    PerformanceCalculation: 'PerformanceCalculation',
     FacilityTarget: 'FacilityTarget',
     IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
     FacilityRemunerationRecord: 'FacilityRemunerationRecord'
@@ -1148,7 +1020,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "district" | "remunerationSystem" | "facilityType" | "facility" | "monthlyHealthData" | "dataUploadSession" | "formula" | "indicator" | "field" | "fieldValue" | "facilityFieldDefaults" | "facilityFieldMapping" | "sub_centre" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityWorkerAllocation" | "facilityTypeRemuneration" | "indicatorRemuneration" | "performanceCalculation" | "facilityTarget" | "indicatorWorkerAllocation" | "facilityRemunerationRecord"
+      modelProps: "user" | "district" | "facilityType" | "facility" | "indicator" | "field" | "fieldValue" | "facilityFieldMapping" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityTypeRemuneration" | "indicatorRemuneration" | "facilityTarget" | "indicatorWorkerAllocation" | "facilityRemunerationRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1300,80 +1172,6 @@ export namespace Prisma {
           }
         }
       }
-      RemunerationSystem: {
-        payload: Prisma.$RemunerationSystemPayload<ExtArgs>
-        fields: Prisma.RemunerationSystemFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.RemunerationSystemFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.RemunerationSystemFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          findFirst: {
-            args: Prisma.RemunerationSystemFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.RemunerationSystemFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          findMany: {
-            args: Prisma.RemunerationSystemFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>[]
-          }
-          create: {
-            args: Prisma.RemunerationSystemCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          createMany: {
-            args: Prisma.RemunerationSystemCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.RemunerationSystemCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>[]
-          }
-          delete: {
-            args: Prisma.RemunerationSystemDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          update: {
-            args: Prisma.RemunerationSystemUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          deleteMany: {
-            args: Prisma.RemunerationSystemDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.RemunerationSystemUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.RemunerationSystemUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>[]
-          }
-          upsert: {
-            args: Prisma.RemunerationSystemUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RemunerationSystemPayload>
-          }
-          aggregate: {
-            args: Prisma.RemunerationSystemAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateRemunerationSystem>
-          }
-          groupBy: {
-            args: Prisma.RemunerationSystemGroupByArgs<ExtArgs>
-            result: $Utils.Optional<RemunerationSystemGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.RemunerationSystemCountArgs<ExtArgs>
-            result: $Utils.Optional<RemunerationSystemCountAggregateOutputType> | number
-          }
-        }
-      }
       FacilityType: {
         payload: Prisma.$FacilityTypePayload<ExtArgs>
         fields: Prisma.FacilityTypeFieldRefs
@@ -1519,228 +1317,6 @@ export namespace Prisma {
           count: {
             args: Prisma.FacilityCountArgs<ExtArgs>
             result: $Utils.Optional<FacilityCountAggregateOutputType> | number
-          }
-        }
-      }
-      MonthlyHealthData: {
-        payload: Prisma.$MonthlyHealthDataPayload<ExtArgs>
-        fields: Prisma.MonthlyHealthDataFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.MonthlyHealthDataFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.MonthlyHealthDataFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          findFirst: {
-            args: Prisma.MonthlyHealthDataFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.MonthlyHealthDataFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          findMany: {
-            args: Prisma.MonthlyHealthDataFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>[]
-          }
-          create: {
-            args: Prisma.MonthlyHealthDataCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          createMany: {
-            args: Prisma.MonthlyHealthDataCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.MonthlyHealthDataCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>[]
-          }
-          delete: {
-            args: Prisma.MonthlyHealthDataDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          update: {
-            args: Prisma.MonthlyHealthDataUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          deleteMany: {
-            args: Prisma.MonthlyHealthDataDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.MonthlyHealthDataUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.MonthlyHealthDataUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>[]
-          }
-          upsert: {
-            args: Prisma.MonthlyHealthDataUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonthlyHealthDataPayload>
-          }
-          aggregate: {
-            args: Prisma.MonthlyHealthDataAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMonthlyHealthData>
-          }
-          groupBy: {
-            args: Prisma.MonthlyHealthDataGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MonthlyHealthDataGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.MonthlyHealthDataCountArgs<ExtArgs>
-            result: $Utils.Optional<MonthlyHealthDataCountAggregateOutputType> | number
-          }
-        }
-      }
-      DataUploadSession: {
-        payload: Prisma.$DataUploadSessionPayload<ExtArgs>
-        fields: Prisma.DataUploadSessionFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.DataUploadSessionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.DataUploadSessionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          findFirst: {
-            args: Prisma.DataUploadSessionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.DataUploadSessionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          findMany: {
-            args: Prisma.DataUploadSessionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>[]
-          }
-          create: {
-            args: Prisma.DataUploadSessionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          createMany: {
-            args: Prisma.DataUploadSessionCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.DataUploadSessionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>[]
-          }
-          delete: {
-            args: Prisma.DataUploadSessionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          update: {
-            args: Prisma.DataUploadSessionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          deleteMany: {
-            args: Prisma.DataUploadSessionDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.DataUploadSessionUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.DataUploadSessionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>[]
-          }
-          upsert: {
-            args: Prisma.DataUploadSessionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DataUploadSessionPayload>
-          }
-          aggregate: {
-            args: Prisma.DataUploadSessionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateDataUploadSession>
-          }
-          groupBy: {
-            args: Prisma.DataUploadSessionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<DataUploadSessionGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.DataUploadSessionCountArgs<ExtArgs>
-            result: $Utils.Optional<DataUploadSessionCountAggregateOutputType> | number
-          }
-        }
-      }
-      Formula: {
-        payload: Prisma.$FormulaPayload<ExtArgs>
-        fields: Prisma.FormulaFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.FormulaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.FormulaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          findFirst: {
-            args: Prisma.FormulaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.FormulaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          findMany: {
-            args: Prisma.FormulaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>[]
-          }
-          create: {
-            args: Prisma.FormulaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          createMany: {
-            args: Prisma.FormulaCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.FormulaCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>[]
-          }
-          delete: {
-            args: Prisma.FormulaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          update: {
-            args: Prisma.FormulaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          deleteMany: {
-            args: Prisma.FormulaDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.FormulaUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.FormulaUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>[]
-          }
-          upsert: {
-            args: Prisma.FormulaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FormulaPayload>
-          }
-          aggregate: {
-            args: Prisma.FormulaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFormula>
-          }
-          groupBy: {
-            args: Prisma.FormulaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FormulaGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.FormulaCountArgs<ExtArgs>
-            result: $Utils.Optional<FormulaCountAggregateOutputType> | number
           }
         }
       }
@@ -1966,80 +1542,6 @@ export namespace Prisma {
           }
         }
       }
-      FacilityFieldDefaults: {
-        payload: Prisma.$FacilityFieldDefaultsPayload<ExtArgs>
-        fields: Prisma.FacilityFieldDefaultsFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.FacilityFieldDefaultsFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.FacilityFieldDefaultsFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          findFirst: {
-            args: Prisma.FacilityFieldDefaultsFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.FacilityFieldDefaultsFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          findMany: {
-            args: Prisma.FacilityFieldDefaultsFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>[]
-          }
-          create: {
-            args: Prisma.FacilityFieldDefaultsCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          createMany: {
-            args: Prisma.FacilityFieldDefaultsCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.FacilityFieldDefaultsCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>[]
-          }
-          delete: {
-            args: Prisma.FacilityFieldDefaultsDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          update: {
-            args: Prisma.FacilityFieldDefaultsUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          deleteMany: {
-            args: Prisma.FacilityFieldDefaultsDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.FacilityFieldDefaultsUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.FacilityFieldDefaultsUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>[]
-          }
-          upsert: {
-            args: Prisma.FacilityFieldDefaultsUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityFieldDefaultsPayload>
-          }
-          aggregate: {
-            args: Prisma.FacilityFieldDefaultsAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFacilityFieldDefaults>
-          }
-          groupBy: {
-            args: Prisma.FacilityFieldDefaultsGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FacilityFieldDefaultsGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.FacilityFieldDefaultsCountArgs<ExtArgs>
-            result: $Utils.Optional<FacilityFieldDefaultsCountAggregateOutputType> | number
-          }
-        }
-      }
       FacilityFieldMapping: {
         payload: Prisma.$FacilityFieldMappingPayload<ExtArgs>
         fields: Prisma.FacilityFieldMappingFieldRefs
@@ -2111,80 +1613,6 @@ export namespace Prisma {
           count: {
             args: Prisma.FacilityFieldMappingCountArgs<ExtArgs>
             result: $Utils.Optional<FacilityFieldMappingCountAggregateOutputType> | number
-          }
-        }
-      }
-      sub_centre: {
-        payload: Prisma.$sub_centrePayload<ExtArgs>
-        fields: Prisma.sub_centreFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.sub_centreFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.sub_centreFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          findFirst: {
-            args: Prisma.sub_centreFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.sub_centreFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          findMany: {
-            args: Prisma.sub_centreFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>[]
-          }
-          create: {
-            args: Prisma.sub_centreCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          createMany: {
-            args: Prisma.sub_centreCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.sub_centreCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>[]
-          }
-          delete: {
-            args: Prisma.sub_centreDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          update: {
-            args: Prisma.sub_centreUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          deleteMany: {
-            args: Prisma.sub_centreDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.sub_centreUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.sub_centreUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>[]
-          }
-          upsert: {
-            args: Prisma.sub_centreUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$sub_centrePayload>
-          }
-          aggregate: {
-            args: Prisma.Sub_centreAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSub_centre>
-          }
-          groupBy: {
-            args: Prisma.sub_centreGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Sub_centreGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.sub_centreCountArgs<ExtArgs>
-            result: $Utils.Optional<Sub_centreCountAggregateOutputType> | number
           }
         }
       }
@@ -2484,80 +1912,6 @@ export namespace Prisma {
           }
         }
       }
-      FacilityWorkerAllocation: {
-        payload: Prisma.$FacilityWorkerAllocationPayload<ExtArgs>
-        fields: Prisma.FacilityWorkerAllocationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.FacilityWorkerAllocationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.FacilityWorkerAllocationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          findFirst: {
-            args: Prisma.FacilityWorkerAllocationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.FacilityWorkerAllocationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          findMany: {
-            args: Prisma.FacilityWorkerAllocationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>[]
-          }
-          create: {
-            args: Prisma.FacilityWorkerAllocationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          createMany: {
-            args: Prisma.FacilityWorkerAllocationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.FacilityWorkerAllocationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>[]
-          }
-          delete: {
-            args: Prisma.FacilityWorkerAllocationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          update: {
-            args: Prisma.FacilityWorkerAllocationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          deleteMany: {
-            args: Prisma.FacilityWorkerAllocationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.FacilityWorkerAllocationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.FacilityWorkerAllocationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>[]
-          }
-          upsert: {
-            args: Prisma.FacilityWorkerAllocationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FacilityWorkerAllocationPayload>
-          }
-          aggregate: {
-            args: Prisma.FacilityWorkerAllocationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFacilityWorkerAllocation>
-          }
-          groupBy: {
-            args: Prisma.FacilityWorkerAllocationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FacilityWorkerAllocationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.FacilityWorkerAllocationCountArgs<ExtArgs>
-            result: $Utils.Optional<FacilityWorkerAllocationCountAggregateOutputType> | number
-          }
-        }
-      }
       FacilityTypeRemuneration: {
         payload: Prisma.$FacilityTypeRemunerationPayload<ExtArgs>
         fields: Prisma.FacilityTypeRemunerationFieldRefs
@@ -2703,80 +2057,6 @@ export namespace Prisma {
           count: {
             args: Prisma.IndicatorRemunerationCountArgs<ExtArgs>
             result: $Utils.Optional<IndicatorRemunerationCountAggregateOutputType> | number
-          }
-        }
-      }
-      PerformanceCalculation: {
-        payload: Prisma.$PerformanceCalculationPayload<ExtArgs>
-        fields: Prisma.PerformanceCalculationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PerformanceCalculationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PerformanceCalculationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          findFirst: {
-            args: Prisma.PerformanceCalculationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PerformanceCalculationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          findMany: {
-            args: Prisma.PerformanceCalculationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>[]
-          }
-          create: {
-            args: Prisma.PerformanceCalculationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          createMany: {
-            args: Prisma.PerformanceCalculationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.PerformanceCalculationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>[]
-          }
-          delete: {
-            args: Prisma.PerformanceCalculationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          update: {
-            args: Prisma.PerformanceCalculationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          deleteMany: {
-            args: Prisma.PerformanceCalculationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PerformanceCalculationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.PerformanceCalculationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>[]
-          }
-          upsert: {
-            args: Prisma.PerformanceCalculationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PerformanceCalculationPayload>
-          }
-          aggregate: {
-            args: Prisma.PerformanceCalculationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePerformanceCalculation>
-          }
-          groupBy: {
-            args: Prisma.PerformanceCalculationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PerformanceCalculationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PerformanceCalculationCountArgs<ExtArgs>
-            result: $Utils.Optional<PerformanceCalculationCountAggregateOutputType> | number
           }
         }
       }
@@ -3088,26 +2368,18 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     district?: DistrictOmit
-    remunerationSystem?: RemunerationSystemOmit
     facilityType?: FacilityTypeOmit
     facility?: FacilityOmit
-    monthlyHealthData?: MonthlyHealthDataOmit
-    dataUploadSession?: DataUploadSessionOmit
-    formula?: FormulaOmit
     indicator?: IndicatorOmit
     field?: FieldOmit
     fieldValue?: FieldValueOmit
-    facilityFieldDefaults?: FacilityFieldDefaultsOmit
     facilityFieldMapping?: FacilityFieldMappingOmit
-    sub_centre?: sub_centreOmit
     healthWorker?: HealthWorkerOmit
     remunerationCalculation?: RemunerationCalculationOmit
     workerRemuneration?: WorkerRemunerationOmit
     workerAllocationConfig?: WorkerAllocationConfigOmit
-    facilityWorkerAllocation?: FacilityWorkerAllocationOmit
     facilityTypeRemuneration?: FacilityTypeRemunerationOmit
     indicatorRemuneration?: IndicatorRemunerationOmit
-    performanceCalculation?: PerformanceCalculationOmit
     facilityTarget?: FacilityTargetOmit
     indicatorWorkerAllocation?: IndicatorWorkerAllocationOmit
     facilityRemunerationRecord?: FacilityRemunerationRecordOmit
@@ -3205,17 +2477,11 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    upload_sessions: number
     field_values: number
-    approved_data: number
-    uploaded_data: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    upload_sessions?: boolean | UserCountOutputTypeCountUpload_sessionsArgs
     field_values?: boolean | UserCountOutputTypeCountField_valuesArgs
-    approved_data?: boolean | UserCountOutputTypeCountApproved_dataArgs
-    uploaded_data?: boolean | UserCountOutputTypeCountUploaded_dataArgs
   }
 
   // Custom InputTypes
@@ -3232,29 +2498,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountUpload_sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DataUploadSessionWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountField_valuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FieldValueWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountApproved_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountUploaded_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
   }
 
 
@@ -3264,12 +2509,10 @@ export namespace Prisma {
 
   export type DistrictCountOutputType = {
     facilities: number
-    monthly_data: number
   }
 
   export type DistrictCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facilities?: boolean | DistrictCountOutputTypeCountFacilitiesArgs
-    monthly_data?: boolean | DistrictCountOutputTypeCountMonthly_dataArgs
   }
 
   // Custom InputTypes
@@ -3288,44 +2531,6 @@ export namespace Prisma {
    */
   export type DistrictCountOutputTypeCountFacilitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FacilityWhereInput
-  }
-
-  /**
-   * DistrictCountOutputType without action
-   */
-  export type DistrictCountOutputTypeCountMonthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-  }
-
-
-  /**
-   * Count Type RemunerationSystemCountOutputType
-   */
-
-  export type RemunerationSystemCountOutputType = {
-    indicator_remunerations: number
-  }
-
-  export type RemunerationSystemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    indicator_remunerations?: boolean | RemunerationSystemCountOutputTypeCountIndicator_remunerationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * RemunerationSystemCountOutputType without action
-   */
-  export type RemunerationSystemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystemCountOutputType
-     */
-    select?: RemunerationSystemCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * RemunerationSystemCountOutputType without action
-   */
-  export type RemunerationSystemCountOutputTypeCountIndicator_remunerationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: IndicatorRemunerationWhereInput
   }
 
 
@@ -3385,30 +2590,20 @@ export namespace Prisma {
   export type FacilityCountOutputType = {
     remuneration_records: number
     worker_remunerations: number
-    facility_field_defaults: number
     facility_targets: number
-    worker_allocations: number
     field_values: number
     health_workers: number
-    monthly_data: number
-    performance_calculations: number
     remuneration_calculations: number
-    sub_centres: number
     users: number
   }
 
   export type FacilityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     remuneration_records?: boolean | FacilityCountOutputTypeCountRemuneration_recordsArgs
     worker_remunerations?: boolean | FacilityCountOutputTypeCountWorker_remunerationsArgs
-    facility_field_defaults?: boolean | FacilityCountOutputTypeCountFacility_field_defaultsArgs
     facility_targets?: boolean | FacilityCountOutputTypeCountFacility_targetsArgs
-    worker_allocations?: boolean | FacilityCountOutputTypeCountWorker_allocationsArgs
     field_values?: boolean | FacilityCountOutputTypeCountField_valuesArgs
     health_workers?: boolean | FacilityCountOutputTypeCountHealth_workersArgs
-    monthly_data?: boolean | FacilityCountOutputTypeCountMonthly_dataArgs
-    performance_calculations?: boolean | FacilityCountOutputTypeCountPerformance_calculationsArgs
     remuneration_calculations?: boolean | FacilityCountOutputTypeCountRemuneration_calculationsArgs
-    sub_centres?: boolean | FacilityCountOutputTypeCountSub_centresArgs
     users?: boolean | FacilityCountOutputTypeCountUsersArgs
   }
 
@@ -3440,22 +2635,8 @@ export namespace Prisma {
   /**
    * FacilityCountOutputType without action
    */
-  export type FacilityCountOutputTypeCountFacility_field_defaultsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityFieldDefaultsWhereInput
-  }
-
-  /**
-   * FacilityCountOutputType without action
-   */
   export type FacilityCountOutputTypeCountFacility_targetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FacilityTargetWhereInput
-  }
-
-  /**
-   * FacilityCountOutputType without action
-   */
-  export type FacilityCountOutputTypeCountWorker_allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityWorkerAllocationWhereInput
   }
 
   /**
@@ -3475,29 +2656,8 @@ export namespace Prisma {
   /**
    * FacilityCountOutputType without action
    */
-  export type FacilityCountOutputTypeCountMonthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-  }
-
-  /**
-   * FacilityCountOutputType without action
-   */
-  export type FacilityCountOutputTypeCountPerformance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PerformanceCalculationWhereInput
-  }
-
-  /**
-   * FacilityCountOutputType without action
-   */
   export type FacilityCountOutputTypeCountRemuneration_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RemunerationCalculationWhereInput
-  }
-
-  /**
-   * FacilityCountOutputType without action
-   */
-  export type FacilityCountOutputTypeCountSub_centresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: sub_centreWhereInput
   }
 
   /**
@@ -3517,8 +2677,6 @@ export namespace Prisma {
     facility_targets: number
     remunerations: number
     worker_allocations: number
-    monthly_data: number
-    performance_calculations: number
   }
 
   export type IndicatorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3526,8 +2684,6 @@ export namespace Prisma {
     facility_targets?: boolean | IndicatorCountOutputTypeCountFacility_targetsArgs
     remunerations?: boolean | IndicatorCountOutputTypeCountRemunerationsArgs
     worker_allocations?: boolean | IndicatorCountOutputTypeCountWorker_allocationsArgs
-    monthly_data?: boolean | IndicatorCountOutputTypeCountMonthly_dataArgs
-    performance_calculations?: boolean | IndicatorCountOutputTypeCountPerformance_calculationsArgs
   }
 
   // Custom InputTypes
@@ -3569,27 +2725,12 @@ export namespace Prisma {
     where?: IndicatorWorkerAllocationWhereInput
   }
 
-  /**
-   * IndicatorCountOutputType without action
-   */
-  export type IndicatorCountOutputTypeCountMonthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-  }
-
-  /**
-   * IndicatorCountOutputType without action
-   */
-  export type IndicatorCountOutputTypeCountPerformance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PerformanceCalculationWhereInput
-  }
-
 
   /**
    * Count Type FieldCountOutputType
    */
 
   export type FieldCountOutputType = {
-    facility_field_defaults: number
     facility_field_mappings: number
     field_values: number
     denominator_for_indicators: number
@@ -3598,7 +2739,6 @@ export namespace Prisma {
   }
 
   export type FieldCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility_field_defaults?: boolean | FieldCountOutputTypeCountFacility_field_defaultsArgs
     facility_field_mappings?: boolean | FieldCountOutputTypeCountFacility_field_mappingsArgs
     field_values?: boolean | FieldCountOutputTypeCountField_valuesArgs
     denominator_for_indicators?: boolean | FieldCountOutputTypeCountDenominator_for_indicatorsArgs
@@ -3615,13 +2755,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the FieldCountOutputType
      */
     select?: FieldCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * FieldCountOutputType without action
-   */
-  export type FieldCountOutputTypeCountFacility_field_defaultsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityFieldDefaultsWhereInput
   }
 
   /**
@@ -3661,46 +2794,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type Sub_centreCountOutputType
-   */
-
-  export type Sub_centreCountOutputType = {
-    monthly_health_data: number
-    performance_calculations: number
-  }
-
-  export type Sub_centreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    monthly_health_data?: boolean | Sub_centreCountOutputTypeCountMonthly_health_dataArgs
-    performance_calculations?: boolean | Sub_centreCountOutputTypeCountPerformance_calculationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Sub_centreCountOutputType without action
-   */
-  export type Sub_centreCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Sub_centreCountOutputType
-     */
-    select?: Sub_centreCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Sub_centreCountOutputType without action
-   */
-  export type Sub_centreCountOutputTypeCountMonthly_health_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-  }
-
-  /**
-   * Sub_centreCountOutputType without action
-   */
-  export type Sub_centreCountOutputTypeCountPerformance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PerformanceCalculationWhereInput
-  }
-
-
-  /**
    * Count Type HealthWorkerCountOutputType
    */
 
@@ -3728,37 +2821,6 @@ export namespace Prisma {
    */
   export type HealthWorkerCountOutputTypeCountRemuneration_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkerRemunerationWhereInput
-  }
-
-
-  /**
-   * Count Type WorkerAllocationConfigCountOutputType
-   */
-
-  export type WorkerAllocationConfigCountOutputType = {
-    facility_allocations: number
-  }
-
-  export type WorkerAllocationConfigCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility_allocations?: boolean | WorkerAllocationConfigCountOutputTypeCountFacility_allocationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * WorkerAllocationConfigCountOutputType without action
-   */
-  export type WorkerAllocationConfigCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WorkerAllocationConfigCountOutputType
-     */
-    select?: WorkerAllocationConfigCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * WorkerAllocationConfigCountOutputType without action
-   */
-  export type WorkerAllocationConfigCountOutputTypeCountFacility_allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityWorkerAllocationWhereInput
   }
 
 
@@ -4027,10 +3089,7 @@ export namespace Prisma {
     created_at?: boolean
     email?: boolean
     facility_id?: boolean
-    upload_sessions?: boolean | User$upload_sessionsArgs<ExtArgs>
     field_values?: boolean | User$field_valuesArgs<ExtArgs>
-    approved_data?: boolean | User$approved_dataArgs<ExtArgs>
-    uploaded_data?: boolean | User$uploaded_dataArgs<ExtArgs>
     facility?: boolean | User$facilityArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -4075,10 +3134,7 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password_hash" | "role" | "is_active" | "last_login" | "created_at" | "email" | "facility_id", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    upload_sessions?: boolean | User$upload_sessionsArgs<ExtArgs>
     field_values?: boolean | User$field_valuesArgs<ExtArgs>
-    approved_data?: boolean | User$approved_dataArgs<ExtArgs>
-    uploaded_data?: boolean | User$uploaded_dataArgs<ExtArgs>
     facility?: boolean | User$facilityArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -4092,10 +3148,7 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      upload_sessions: Prisma.$DataUploadSessionPayload<ExtArgs>[]
       field_values: Prisma.$FieldValuePayload<ExtArgs>[]
-      approved_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
-      uploaded_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
       facility: Prisma.$FacilityPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4502,10 +3555,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    upload_sessions<T extends User$upload_sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$upload_sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     field_values<T extends User$field_valuesArgs<ExtArgs> = {}>(args?: Subset<T, User$field_valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FieldValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    approved_data<T extends User$approved_dataArgs<ExtArgs> = {}>(args?: Subset<T, User$approved_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    uploaded_data<T extends User$uploaded_dataArgs<ExtArgs> = {}>(args?: Subset<T, User$uploaded_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility<T extends User$facilityArgs<ExtArgs> = {}>(args?: Subset<T, User$facilityArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4941,30 +3991,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.upload_sessions
-   */
-  export type User$upload_sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    where?: DataUploadSessionWhereInput
-    orderBy?: DataUploadSessionOrderByWithRelationInput | DataUploadSessionOrderByWithRelationInput[]
-    cursor?: DataUploadSessionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DataUploadSessionScalarFieldEnum | DataUploadSessionScalarFieldEnum[]
-  }
-
-  /**
    * User.field_values
    */
   export type User$field_valuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4986,54 +4012,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FieldValueScalarFieldEnum | FieldValueScalarFieldEnum[]
-  }
-
-  /**
-   * User.approved_data
-   */
-  export type User$approved_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * User.uploaded_data
-   */
-  export type User$uploaded_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
   }
 
   /**
@@ -5231,7 +4209,6 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     facilities?: boolean | District$facilitiesArgs<ExtArgs>
-    monthly_data?: boolean | District$monthly_dataArgs<ExtArgs>
     _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["district"]>
 
@@ -5259,7 +4236,6 @@ export namespace Prisma {
   export type DistrictOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "created_at" | "updated_at", ExtArgs["result"]["district"]>
   export type DistrictInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facilities?: boolean | District$facilitiesArgs<ExtArgs>
-    monthly_data?: boolean | District$monthly_dataArgs<ExtArgs>
     _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DistrictIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5269,7 +4245,6 @@ export namespace Prisma {
     name: "District"
     objects: {
       facilities: Prisma.$FacilityPayload<ExtArgs>[]
-      monthly_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5671,7 +4646,6 @@ export namespace Prisma {
   export interface Prisma__DistrictClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     facilities<T extends District$facilitiesArgs<ExtArgs> = {}>(args?: Subset<T, District$facilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    monthly_data<T extends District$monthly_dataArgs<ExtArgs> = {}>(args?: Subset<T, District$monthly_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6117,30 +5091,6 @@ export namespace Prisma {
   }
 
   /**
-   * District.monthly_data
-   */
-  export type District$monthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
    * District without action
    */
   export type DistrictDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6156,1089 +5106,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DistrictInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model RemunerationSystem
-   */
-
-  export type AggregateRemunerationSystem = {
-    _count: RemunerationSystemCountAggregateOutputType | null
-    _min: RemunerationSystemMinAggregateOutputType | null
-    _max: RemunerationSystemMaxAggregateOutputType | null
-  }
-
-  export type RemunerationSystemMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    description: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type RemunerationSystemMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    description: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type RemunerationSystemCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    is_active: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type RemunerationSystemMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type RemunerationSystemMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type RemunerationSystemCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type RemunerationSystemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which RemunerationSystem to aggregate.
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of RemunerationSystems to fetch.
-     */
-    orderBy?: RemunerationSystemOrderByWithRelationInput | RemunerationSystemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: RemunerationSystemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` RemunerationSystems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` RemunerationSystems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned RemunerationSystems
-    **/
-    _count?: true | RemunerationSystemCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: RemunerationSystemMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: RemunerationSystemMaxAggregateInputType
-  }
-
-  export type GetRemunerationSystemAggregateType<T extends RemunerationSystemAggregateArgs> = {
-        [P in keyof T & keyof AggregateRemunerationSystem]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateRemunerationSystem[P]>
-      : GetScalarType<T[P], AggregateRemunerationSystem[P]>
-  }
-
-
-
-
-  export type RemunerationSystemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: RemunerationSystemWhereInput
-    orderBy?: RemunerationSystemOrderByWithAggregationInput | RemunerationSystemOrderByWithAggregationInput[]
-    by: RemunerationSystemScalarFieldEnum[] | RemunerationSystemScalarFieldEnum
-    having?: RemunerationSystemScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: RemunerationSystemCountAggregateInputType | true
-    _min?: RemunerationSystemMinAggregateInputType
-    _max?: RemunerationSystemMaxAggregateInputType
-  }
-
-  export type RemunerationSystemGroupByOutputType = {
-    id: string
-    name: string
-    description: string | null
-    is_active: boolean
-    created_at: Date
-    updated_at: Date
-    _count: RemunerationSystemCountAggregateOutputType | null
-    _min: RemunerationSystemMinAggregateOutputType | null
-    _max: RemunerationSystemMaxAggregateOutputType | null
-  }
-
-  type GetRemunerationSystemGroupByPayload<T extends RemunerationSystemGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<RemunerationSystemGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof RemunerationSystemGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], RemunerationSystemGroupByOutputType[P]>
-            : GetScalarType<T[P], RemunerationSystemGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type RemunerationSystemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    indicator_remunerations?: boolean | RemunerationSystem$indicator_remunerationsArgs<ExtArgs>
-    _count?: boolean | RemunerationSystemCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["remunerationSystem"]>
-
-  export type RemunerationSystemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["remunerationSystem"]>
-
-  export type RemunerationSystemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["remunerationSystem"]>
-
-  export type RemunerationSystemSelectScalar = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type RemunerationSystemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["remunerationSystem"]>
-  export type RemunerationSystemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    indicator_remunerations?: boolean | RemunerationSystem$indicator_remunerationsArgs<ExtArgs>
-    _count?: boolean | RemunerationSystemCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type RemunerationSystemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type RemunerationSystemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $RemunerationSystemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "RemunerationSystem"
-    objects: {
-      indicator_remunerations: Prisma.$IndicatorRemunerationPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      description: string | null
-      is_active: boolean
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["remunerationSystem"]>
-    composites: {}
-  }
-
-  type RemunerationSystemGetPayload<S extends boolean | null | undefined | RemunerationSystemDefaultArgs> = $Result.GetResult<Prisma.$RemunerationSystemPayload, S>
-
-  type RemunerationSystemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<RemunerationSystemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: RemunerationSystemCountAggregateInputType | true
-    }
-
-  export interface RemunerationSystemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RemunerationSystem'], meta: { name: 'RemunerationSystem' } }
-    /**
-     * Find zero or one RemunerationSystem that matches the filter.
-     * @param {RemunerationSystemFindUniqueArgs} args - Arguments to find a RemunerationSystem
-     * @example
-     * // Get one RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends RemunerationSystemFindUniqueArgs>(args: SelectSubset<T, RemunerationSystemFindUniqueArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one RemunerationSystem that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {RemunerationSystemFindUniqueOrThrowArgs} args - Arguments to find a RemunerationSystem
-     * @example
-     * // Get one RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends RemunerationSystemFindUniqueOrThrowArgs>(args: SelectSubset<T, RemunerationSystemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first RemunerationSystem that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemFindFirstArgs} args - Arguments to find a RemunerationSystem
-     * @example
-     * // Get one RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends RemunerationSystemFindFirstArgs>(args?: SelectSubset<T, RemunerationSystemFindFirstArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first RemunerationSystem that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemFindFirstOrThrowArgs} args - Arguments to find a RemunerationSystem
-     * @example
-     * // Get one RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends RemunerationSystemFindFirstOrThrowArgs>(args?: SelectSubset<T, RemunerationSystemFindFirstOrThrowArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more RemunerationSystems that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all RemunerationSystems
-     * const remunerationSystems = await prisma.remunerationSystem.findMany()
-     * 
-     * // Get first 10 RemunerationSystems
-     * const remunerationSystems = await prisma.remunerationSystem.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const remunerationSystemWithIdOnly = await prisma.remunerationSystem.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends RemunerationSystemFindManyArgs>(args?: SelectSubset<T, RemunerationSystemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a RemunerationSystem.
-     * @param {RemunerationSystemCreateArgs} args - Arguments to create a RemunerationSystem.
-     * @example
-     * // Create one RemunerationSystem
-     * const RemunerationSystem = await prisma.remunerationSystem.create({
-     *   data: {
-     *     // ... data to create a RemunerationSystem
-     *   }
-     * })
-     * 
-     */
-    create<T extends RemunerationSystemCreateArgs>(args: SelectSubset<T, RemunerationSystemCreateArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many RemunerationSystems.
-     * @param {RemunerationSystemCreateManyArgs} args - Arguments to create many RemunerationSystems.
-     * @example
-     * // Create many RemunerationSystems
-     * const remunerationSystem = await prisma.remunerationSystem.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends RemunerationSystemCreateManyArgs>(args?: SelectSubset<T, RemunerationSystemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many RemunerationSystems and returns the data saved in the database.
-     * @param {RemunerationSystemCreateManyAndReturnArgs} args - Arguments to create many RemunerationSystems.
-     * @example
-     * // Create many RemunerationSystems
-     * const remunerationSystem = await prisma.remunerationSystem.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many RemunerationSystems and only return the `id`
-     * const remunerationSystemWithIdOnly = await prisma.remunerationSystem.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends RemunerationSystemCreateManyAndReturnArgs>(args?: SelectSubset<T, RemunerationSystemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a RemunerationSystem.
-     * @param {RemunerationSystemDeleteArgs} args - Arguments to delete one RemunerationSystem.
-     * @example
-     * // Delete one RemunerationSystem
-     * const RemunerationSystem = await prisma.remunerationSystem.delete({
-     *   where: {
-     *     // ... filter to delete one RemunerationSystem
-     *   }
-     * })
-     * 
-     */
-    delete<T extends RemunerationSystemDeleteArgs>(args: SelectSubset<T, RemunerationSystemDeleteArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one RemunerationSystem.
-     * @param {RemunerationSystemUpdateArgs} args - Arguments to update one RemunerationSystem.
-     * @example
-     * // Update one RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends RemunerationSystemUpdateArgs>(args: SelectSubset<T, RemunerationSystemUpdateArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more RemunerationSystems.
-     * @param {RemunerationSystemDeleteManyArgs} args - Arguments to filter RemunerationSystems to delete.
-     * @example
-     * // Delete a few RemunerationSystems
-     * const { count } = await prisma.remunerationSystem.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends RemunerationSystemDeleteManyArgs>(args?: SelectSubset<T, RemunerationSystemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more RemunerationSystems.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many RemunerationSystems
-     * const remunerationSystem = await prisma.remunerationSystem.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends RemunerationSystemUpdateManyArgs>(args: SelectSubset<T, RemunerationSystemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more RemunerationSystems and returns the data updated in the database.
-     * @param {RemunerationSystemUpdateManyAndReturnArgs} args - Arguments to update many RemunerationSystems.
-     * @example
-     * // Update many RemunerationSystems
-     * const remunerationSystem = await prisma.remunerationSystem.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more RemunerationSystems and only return the `id`
-     * const remunerationSystemWithIdOnly = await prisma.remunerationSystem.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends RemunerationSystemUpdateManyAndReturnArgs>(args: SelectSubset<T, RemunerationSystemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one RemunerationSystem.
-     * @param {RemunerationSystemUpsertArgs} args - Arguments to update or create a RemunerationSystem.
-     * @example
-     * // Update or create a RemunerationSystem
-     * const remunerationSystem = await prisma.remunerationSystem.upsert({
-     *   create: {
-     *     // ... data to create a RemunerationSystem
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the RemunerationSystem we want to update
-     *   }
-     * })
-     */
-    upsert<T extends RemunerationSystemUpsertArgs>(args: SelectSubset<T, RemunerationSystemUpsertArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of RemunerationSystems.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemCountArgs} args - Arguments to filter RemunerationSystems to count.
-     * @example
-     * // Count the number of RemunerationSystems
-     * const count = await prisma.remunerationSystem.count({
-     *   where: {
-     *     // ... the filter for the RemunerationSystems we want to count
-     *   }
-     * })
-    **/
-    count<T extends RemunerationSystemCountArgs>(
-      args?: Subset<T, RemunerationSystemCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], RemunerationSystemCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a RemunerationSystem.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends RemunerationSystemAggregateArgs>(args: Subset<T, RemunerationSystemAggregateArgs>): Prisma.PrismaPromise<GetRemunerationSystemAggregateType<T>>
-
-    /**
-     * Group by RemunerationSystem.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {RemunerationSystemGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends RemunerationSystemGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: RemunerationSystemGroupByArgs['orderBy'] }
-        : { orderBy?: RemunerationSystemGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, RemunerationSystemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRemunerationSystemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the RemunerationSystem model
-   */
-  readonly fields: RemunerationSystemFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for RemunerationSystem.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__RemunerationSystemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    indicator_remunerations<T extends RemunerationSystem$indicator_remunerationsArgs<ExtArgs> = {}>(args?: Subset<T, RemunerationSystem$indicator_remunerationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndicatorRemunerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the RemunerationSystem model
-   */
-  interface RemunerationSystemFieldRefs {
-    readonly id: FieldRef<"RemunerationSystem", 'String'>
-    readonly name: FieldRef<"RemunerationSystem", 'String'>
-    readonly description: FieldRef<"RemunerationSystem", 'String'>
-    readonly is_active: FieldRef<"RemunerationSystem", 'Boolean'>
-    readonly created_at: FieldRef<"RemunerationSystem", 'DateTime'>
-    readonly updated_at: FieldRef<"RemunerationSystem", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * RemunerationSystem findUnique
-   */
-  export type RemunerationSystemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter, which RemunerationSystem to fetch.
-     */
-    where: RemunerationSystemWhereUniqueInput
-  }
-
-  /**
-   * RemunerationSystem findUniqueOrThrow
-   */
-  export type RemunerationSystemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter, which RemunerationSystem to fetch.
-     */
-    where: RemunerationSystemWhereUniqueInput
-  }
-
-  /**
-   * RemunerationSystem findFirst
-   */
-  export type RemunerationSystemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter, which RemunerationSystem to fetch.
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of RemunerationSystems to fetch.
-     */
-    orderBy?: RemunerationSystemOrderByWithRelationInput | RemunerationSystemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for RemunerationSystems.
-     */
-    cursor?: RemunerationSystemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` RemunerationSystems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` RemunerationSystems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of RemunerationSystems.
-     */
-    distinct?: RemunerationSystemScalarFieldEnum | RemunerationSystemScalarFieldEnum[]
-  }
-
-  /**
-   * RemunerationSystem findFirstOrThrow
-   */
-  export type RemunerationSystemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter, which RemunerationSystem to fetch.
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of RemunerationSystems to fetch.
-     */
-    orderBy?: RemunerationSystemOrderByWithRelationInput | RemunerationSystemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for RemunerationSystems.
-     */
-    cursor?: RemunerationSystemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` RemunerationSystems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` RemunerationSystems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of RemunerationSystems.
-     */
-    distinct?: RemunerationSystemScalarFieldEnum | RemunerationSystemScalarFieldEnum[]
-  }
-
-  /**
-   * RemunerationSystem findMany
-   */
-  export type RemunerationSystemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter, which RemunerationSystems to fetch.
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of RemunerationSystems to fetch.
-     */
-    orderBy?: RemunerationSystemOrderByWithRelationInput | RemunerationSystemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing RemunerationSystems.
-     */
-    cursor?: RemunerationSystemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` RemunerationSystems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` RemunerationSystems.
-     */
-    skip?: number
-    distinct?: RemunerationSystemScalarFieldEnum | RemunerationSystemScalarFieldEnum[]
-  }
-
-  /**
-   * RemunerationSystem create
-   */
-  export type RemunerationSystemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * The data needed to create a RemunerationSystem.
-     */
-    data: XOR<RemunerationSystemCreateInput, RemunerationSystemUncheckedCreateInput>
-  }
-
-  /**
-   * RemunerationSystem createMany
-   */
-  export type RemunerationSystemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many RemunerationSystems.
-     */
-    data: RemunerationSystemCreateManyInput | RemunerationSystemCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * RemunerationSystem createManyAndReturn
-   */
-  export type RemunerationSystemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * The data used to create many RemunerationSystems.
-     */
-    data: RemunerationSystemCreateManyInput | RemunerationSystemCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * RemunerationSystem update
-   */
-  export type RemunerationSystemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * The data needed to update a RemunerationSystem.
-     */
-    data: XOR<RemunerationSystemUpdateInput, RemunerationSystemUncheckedUpdateInput>
-    /**
-     * Choose, which RemunerationSystem to update.
-     */
-    where: RemunerationSystemWhereUniqueInput
-  }
-
-  /**
-   * RemunerationSystem updateMany
-   */
-  export type RemunerationSystemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update RemunerationSystems.
-     */
-    data: XOR<RemunerationSystemUpdateManyMutationInput, RemunerationSystemUncheckedUpdateManyInput>
-    /**
-     * Filter which RemunerationSystems to update
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * Limit how many RemunerationSystems to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * RemunerationSystem updateManyAndReturn
-   */
-  export type RemunerationSystemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * The data used to update RemunerationSystems.
-     */
-    data: XOR<RemunerationSystemUpdateManyMutationInput, RemunerationSystemUncheckedUpdateManyInput>
-    /**
-     * Filter which RemunerationSystems to update
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * Limit how many RemunerationSystems to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * RemunerationSystem upsert
-   */
-  export type RemunerationSystemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * The filter to search for the RemunerationSystem to update in case it exists.
-     */
-    where: RemunerationSystemWhereUniqueInput
-    /**
-     * In case the RemunerationSystem found by the `where` argument doesn't exist, create a new RemunerationSystem with this data.
-     */
-    create: XOR<RemunerationSystemCreateInput, RemunerationSystemUncheckedCreateInput>
-    /**
-     * In case the RemunerationSystem was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<RemunerationSystemUpdateInput, RemunerationSystemUncheckedUpdateInput>
-  }
-
-  /**
-   * RemunerationSystem delete
-   */
-  export type RemunerationSystemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    /**
-     * Filter which RemunerationSystem to delete.
-     */
-    where: RemunerationSystemWhereUniqueInput
-  }
-
-  /**
-   * RemunerationSystem deleteMany
-   */
-  export type RemunerationSystemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which RemunerationSystems to delete
-     */
-    where?: RemunerationSystemWhereInput
-    /**
-     * Limit how many RemunerationSystems to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * RemunerationSystem.indicator_remunerations
-   */
-  export type RemunerationSystem$indicator_remunerationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the IndicatorRemuneration
-     */
-    select?: IndicatorRemunerationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the IndicatorRemuneration
-     */
-    omit?: IndicatorRemunerationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: IndicatorRemunerationInclude<ExtArgs> | null
-    where?: IndicatorRemunerationWhereInput
-    orderBy?: IndicatorRemunerationOrderByWithRelationInput | IndicatorRemunerationOrderByWithRelationInput[]
-    cursor?: IndicatorRemunerationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: IndicatorRemunerationScalarFieldEnum | IndicatorRemunerationScalarFieldEnum[]
-  }
-
-  /**
-   * RemunerationSystem without action
-   */
-  export type RemunerationSystemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
   }
 
 
@@ -8617,15 +6484,10 @@ export namespace Prisma {
     worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
-    facility_field_defaults?: boolean | Facility$facility_field_defaultsArgs<ExtArgs>
     facility_targets?: boolean | Facility$facility_targetsArgs<ExtArgs>
-    worker_allocations?: boolean | Facility$worker_allocationsArgs<ExtArgs>
     field_values?: boolean | Facility$field_valuesArgs<ExtArgs>
     health_workers?: boolean | Facility$health_workersArgs<ExtArgs>
-    monthly_data?: boolean | Facility$monthly_dataArgs<ExtArgs>
-    performance_calculations?: boolean | Facility$performance_calculationsArgs<ExtArgs>
     remuneration_calculations?: boolean | Facility$remuneration_calculationsArgs<ExtArgs>
-    sub_centres?: boolean | Facility$sub_centresArgs<ExtArgs>
     users?: boolean | Facility$usersArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["facility"]>
@@ -8676,15 +6538,10 @@ export namespace Prisma {
     worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
-    facility_field_defaults?: boolean | Facility$facility_field_defaultsArgs<ExtArgs>
     facility_targets?: boolean | Facility$facility_targetsArgs<ExtArgs>
-    worker_allocations?: boolean | Facility$worker_allocationsArgs<ExtArgs>
     field_values?: boolean | Facility$field_valuesArgs<ExtArgs>
     health_workers?: boolean | Facility$health_workersArgs<ExtArgs>
-    monthly_data?: boolean | Facility$monthly_dataArgs<ExtArgs>
-    performance_calculations?: boolean | Facility$performance_calculationsArgs<ExtArgs>
     remuneration_calculations?: boolean | Facility$remuneration_calculationsArgs<ExtArgs>
-    sub_centres?: boolean | Facility$sub_centresArgs<ExtArgs>
     users?: boolean | Facility$usersArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8704,15 +6561,10 @@ export namespace Prisma {
       worker_remunerations: Prisma.$WorkerRemunerationPayload<ExtArgs>[]
       district: Prisma.$DistrictPayload<ExtArgs>
       facility_type: Prisma.$FacilityTypePayload<ExtArgs>
-      facility_field_defaults: Prisma.$FacilityFieldDefaultsPayload<ExtArgs>[]
       facility_targets: Prisma.$FacilityTargetPayload<ExtArgs>[]
-      worker_allocations: Prisma.$FacilityWorkerAllocationPayload<ExtArgs>[]
       field_values: Prisma.$FieldValuePayload<ExtArgs>[]
       health_workers: Prisma.$HealthWorkerPayload<ExtArgs>[]
-      monthly_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
-      performance_calculations: Prisma.$PerformanceCalculationPayload<ExtArgs>[]
       remuneration_calculations: Prisma.$RemunerationCalculationPayload<ExtArgs>[]
-      sub_centres: Prisma.$sub_centrePayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -9123,15 +6975,10 @@ export namespace Prisma {
     worker_remunerations<T extends Facility$worker_remunerationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$worker_remunerationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerRemunerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     district<T extends DistrictDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DistrictDefaultArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     facility_type<T extends FacilityTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityTypeDefaultArgs<ExtArgs>>): Prisma__FacilityTypeClient<$Result.GetResult<Prisma.$FacilityTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    facility_field_defaults<T extends Facility$facility_field_defaultsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$facility_field_defaultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility_targets<T extends Facility$facility_targetsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$facility_targetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    worker_allocations<T extends Facility$worker_allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$worker_allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     field_values<T extends Facility$field_valuesArgs<ExtArgs> = {}>(args?: Subset<T, Facility$field_valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FieldValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     health_workers<T extends Facility$health_workersArgs<ExtArgs> = {}>(args?: Subset<T, Facility$health_workersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HealthWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    monthly_data<T extends Facility$monthly_dataArgs<ExtArgs> = {}>(args?: Subset<T, Facility$monthly_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    performance_calculations<T extends Facility$performance_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$performance_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     remuneration_calculations<T extends Facility$remuneration_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$remuneration_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemunerationCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sub_centres<T extends Facility$sub_centresArgs<ExtArgs> = {}>(args?: Subset<T, Facility$sub_centresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Facility$usersArgs<ExtArgs> = {}>(args?: Subset<T, Facility$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9615,30 +7462,6 @@ export namespace Prisma {
   }
 
   /**
-   * Facility.facility_field_defaults
-   */
-  export type Facility$facility_field_defaultsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    where?: FacilityFieldDefaultsWhereInput
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FacilityFieldDefaultsScalarFieldEnum | FacilityFieldDefaultsScalarFieldEnum[]
-  }
-
-  /**
    * Facility.facility_targets
    */
   export type Facility$facility_targetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9660,30 +7483,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FacilityTargetScalarFieldEnum | FacilityTargetScalarFieldEnum[]
-  }
-
-  /**
-   * Facility.worker_allocations
-   */
-  export type Facility$worker_allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    where?: FacilityWorkerAllocationWhereInput
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FacilityWorkerAllocationScalarFieldEnum | FacilityWorkerAllocationScalarFieldEnum[]
   }
 
   /**
@@ -9735,54 +7534,6 @@ export namespace Prisma {
   }
 
   /**
-   * Facility.monthly_data
-   */
-  export type Facility$monthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * Facility.performance_calculations
-   */
-  export type Facility$performance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    where?: PerformanceCalculationWhereInput
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    cursor?: PerformanceCalculationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
    * Facility.remuneration_calculations
    */
   export type Facility$remuneration_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9804,30 +7555,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RemunerationCalculationScalarFieldEnum | RemunerationCalculationScalarFieldEnum[]
-  }
-
-  /**
-   * Facility.sub_centres
-   */
-  export type Facility$sub_centresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    where?: sub_centreWhereInput
-    orderBy?: sub_centreOrderByWithRelationInput | sub_centreOrderByWithRelationInput[]
-    cursor?: sub_centreWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Sub_centreScalarFieldEnum | Sub_centreScalarFieldEnum[]
   }
 
   /**
@@ -9870,3652 +7597,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FacilityInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model MonthlyHealthData
-   */
-
-  export type AggregateMonthlyHealthData = {
-    _count: MonthlyHealthDataCountAggregateOutputType | null
-    _avg: MonthlyHealthDataAvgAggregateOutputType | null
-    _sum: MonthlyHealthDataSumAggregateOutputType | null
-    _min: MonthlyHealthDataMinAggregateOutputType | null
-    _max: MonthlyHealthDataMaxAggregateOutputType | null
-  }
-
-  export type MonthlyHealthDataAvgAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    value: Decimal | null
-    uploaded_by: number | null
-    approved_by: number | null
-    achievement: Decimal | null
-    denominator: Decimal | null
-    numerator: Decimal | null
-    target_value: Decimal | null
-    indicator_id: number | null
-  }
-
-  export type MonthlyHealthDataSumAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    value: Decimal | null
-    uploaded_by: number | null
-    approved_by: number | null
-    achievement: Decimal | null
-    denominator: Decimal | null
-    numerator: Decimal | null
-    target_value: Decimal | null
-    indicator_id: number | null
-  }
-
-  export type MonthlyHealthDataMinAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    report_month: string | null
-    value: Decimal | null
-    data_quality: $Enums.DataQuality | null
-    remarks: string | null
-    uploaded_by: number | null
-    approved_by: number | null
-    approved_at: Date | null
-    created_at: Date | null
-    updated_at: Date | null
-    achievement: Decimal | null
-    denominator: Decimal | null
-    numerator: Decimal | null
-    target_value: Decimal | null
-    indicator_id: number | null
-    district_id: string | null
-    facility_id: string | null
-  }
-
-  export type MonthlyHealthDataMaxAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    report_month: string | null
-    value: Decimal | null
-    data_quality: $Enums.DataQuality | null
-    remarks: string | null
-    uploaded_by: number | null
-    approved_by: number | null
-    approved_at: Date | null
-    created_at: Date | null
-    updated_at: Date | null
-    achievement: Decimal | null
-    denominator: Decimal | null
-    numerator: Decimal | null
-    target_value: Decimal | null
-    indicator_id: number | null
-    district_id: string | null
-    facility_id: string | null
-  }
-
-  export type MonthlyHealthDataCountAggregateOutputType = {
-    id: number
-    sub_centre_id: number
-    report_month: number
-    value: number
-    data_quality: number
-    remarks: number
-    uploaded_by: number
-    approved_by: number
-    approved_at: number
-    created_at: number
-    updated_at: number
-    achievement: number
-    denominator: number
-    numerator: number
-    target_value: number
-    indicator_id: number
-    district_id: number
-    facility_id: number
-    _all: number
-  }
-
-
-  export type MonthlyHealthDataAvgAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    value?: true
-    uploaded_by?: true
-    approved_by?: true
-    achievement?: true
-    denominator?: true
-    numerator?: true
-    target_value?: true
-    indicator_id?: true
-  }
-
-  export type MonthlyHealthDataSumAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    value?: true
-    uploaded_by?: true
-    approved_by?: true
-    achievement?: true
-    denominator?: true
-    numerator?: true
-    target_value?: true
-    indicator_id?: true
-  }
-
-  export type MonthlyHealthDataMinAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    report_month?: true
-    value?: true
-    data_quality?: true
-    remarks?: true
-    uploaded_by?: true
-    approved_by?: true
-    approved_at?: true
-    created_at?: true
-    updated_at?: true
-    achievement?: true
-    denominator?: true
-    numerator?: true
-    target_value?: true
-    indicator_id?: true
-    district_id?: true
-    facility_id?: true
-  }
-
-  export type MonthlyHealthDataMaxAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    report_month?: true
-    value?: true
-    data_quality?: true
-    remarks?: true
-    uploaded_by?: true
-    approved_by?: true
-    approved_at?: true
-    created_at?: true
-    updated_at?: true
-    achievement?: true
-    denominator?: true
-    numerator?: true
-    target_value?: true
-    indicator_id?: true
-    district_id?: true
-    facility_id?: true
-  }
-
-  export type MonthlyHealthDataCountAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    report_month?: true
-    value?: true
-    data_quality?: true
-    remarks?: true
-    uploaded_by?: true
-    approved_by?: true
-    approved_at?: true
-    created_at?: true
-    updated_at?: true
-    achievement?: true
-    denominator?: true
-    numerator?: true
-    target_value?: true
-    indicator_id?: true
-    district_id?: true
-    facility_id?: true
-    _all?: true
-  }
-
-  export type MonthlyHealthDataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which MonthlyHealthData to aggregate.
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonthlyHealthData to fetch.
-     */
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonthlyHealthData from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonthlyHealthData.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned MonthlyHealthData
-    **/
-    _count?: true | MonthlyHealthDataCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: MonthlyHealthDataAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: MonthlyHealthDataSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: MonthlyHealthDataMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: MonthlyHealthDataMaxAggregateInputType
-  }
-
-  export type GetMonthlyHealthDataAggregateType<T extends MonthlyHealthDataAggregateArgs> = {
-        [P in keyof T & keyof AggregateMonthlyHealthData]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateMonthlyHealthData[P]>
-      : GetScalarType<T[P], AggregateMonthlyHealthData[P]>
-  }
-
-
-
-
-  export type MonthlyHealthDataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithAggregationInput | MonthlyHealthDataOrderByWithAggregationInput[]
-    by: MonthlyHealthDataScalarFieldEnum[] | MonthlyHealthDataScalarFieldEnum
-    having?: MonthlyHealthDataScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: MonthlyHealthDataCountAggregateInputType | true
-    _avg?: MonthlyHealthDataAvgAggregateInputType
-    _sum?: MonthlyHealthDataSumAggregateInputType
-    _min?: MonthlyHealthDataMinAggregateInputType
-    _max?: MonthlyHealthDataMaxAggregateInputType
-  }
-
-  export type MonthlyHealthDataGroupByOutputType = {
-    id: number
-    sub_centre_id: number | null
-    report_month: string
-    value: Decimal | null
-    data_quality: $Enums.DataQuality
-    remarks: string | null
-    uploaded_by: number
-    approved_by: number | null
-    approved_at: Date | null
-    created_at: Date
-    updated_at: Date
-    achievement: Decimal | null
-    denominator: Decimal | null
-    numerator: Decimal | null
-    target_value: Decimal | null
-    indicator_id: number | null
-    district_id: string
-    facility_id: string | null
-    _count: MonthlyHealthDataCountAggregateOutputType | null
-    _avg: MonthlyHealthDataAvgAggregateOutputType | null
-    _sum: MonthlyHealthDataSumAggregateOutputType | null
-    _min: MonthlyHealthDataMinAggregateOutputType | null
-    _max: MonthlyHealthDataMaxAggregateOutputType | null
-  }
-
-  type GetMonthlyHealthDataGroupByPayload<T extends MonthlyHealthDataGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<MonthlyHealthDataGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof MonthlyHealthDataGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], MonthlyHealthDataGroupByOutputType[P]>
-            : GetScalarType<T[P], MonthlyHealthDataGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type MonthlyHealthDataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    report_month?: boolean
-    value?: boolean
-    data_quality?: boolean
-    remarks?: boolean
-    uploaded_by?: boolean
-    approved_by?: boolean
-    approved_at?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    achievement?: boolean
-    denominator?: boolean
-    numerator?: boolean
-    target_value?: boolean
-    indicator_id?: boolean
-    district_id?: boolean
-    facility_id?: boolean
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["monthlyHealthData"]>
-
-  export type MonthlyHealthDataSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    report_month?: boolean
-    value?: boolean
-    data_quality?: boolean
-    remarks?: boolean
-    uploaded_by?: boolean
-    approved_by?: boolean
-    approved_at?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    achievement?: boolean
-    denominator?: boolean
-    numerator?: boolean
-    target_value?: boolean
-    indicator_id?: boolean
-    district_id?: boolean
-    facility_id?: boolean
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["monthlyHealthData"]>
-
-  export type MonthlyHealthDataSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    report_month?: boolean
-    value?: boolean
-    data_quality?: boolean
-    remarks?: boolean
-    uploaded_by?: boolean
-    approved_by?: boolean
-    approved_at?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    achievement?: boolean
-    denominator?: boolean
-    numerator?: boolean
-    target_value?: boolean
-    indicator_id?: boolean
-    district_id?: boolean
-    facility_id?: boolean
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["monthlyHealthData"]>
-
-  export type MonthlyHealthDataSelectScalar = {
-    id?: boolean
-    sub_centre_id?: boolean
-    report_month?: boolean
-    value?: boolean
-    data_quality?: boolean
-    remarks?: boolean
-    uploaded_by?: boolean
-    approved_by?: boolean
-    approved_at?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    achievement?: boolean
-    denominator?: boolean
-    numerator?: boolean
-    target_value?: boolean
-    indicator_id?: boolean
-    district_id?: boolean
-    facility_id?: boolean
-  }
-
-  export type MonthlyHealthDataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sub_centre_id" | "report_month" | "value" | "data_quality" | "remarks" | "uploaded_by" | "approved_by" | "approved_at" | "created_at" | "updated_at" | "achievement" | "denominator" | "numerator" | "target_value" | "indicator_id" | "district_id" | "facility_id", ExtArgs["result"]["monthlyHealthData"]>
-  export type MonthlyHealthDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type MonthlyHealthDataIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type MonthlyHealthDataIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    approver?: boolean | MonthlyHealthData$approverArgs<ExtArgs>
-    district?: boolean | DistrictDefaultArgs<ExtArgs>
-    facility?: boolean | MonthlyHealthData$facilityArgs<ExtArgs>
-    indicator?: boolean | MonthlyHealthData$indicatorArgs<ExtArgs>
-    sub_centre?: boolean | MonthlyHealthData$sub_centreArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $MonthlyHealthDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "MonthlyHealthData"
-    objects: {
-      approver: Prisma.$UserPayload<ExtArgs> | null
-      district: Prisma.$DistrictPayload<ExtArgs>
-      facility: Prisma.$FacilityPayload<ExtArgs> | null
-      indicator: Prisma.$IndicatorPayload<ExtArgs> | null
-      sub_centre: Prisma.$sub_centrePayload<ExtArgs> | null
-      uploader: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      sub_centre_id: number | null
-      report_month: string
-      value: Prisma.Decimal | null
-      data_quality: $Enums.DataQuality
-      remarks: string | null
-      uploaded_by: number
-      approved_by: number | null
-      approved_at: Date | null
-      created_at: Date
-      updated_at: Date
-      achievement: Prisma.Decimal | null
-      denominator: Prisma.Decimal | null
-      numerator: Prisma.Decimal | null
-      target_value: Prisma.Decimal | null
-      indicator_id: number | null
-      district_id: string
-      facility_id: string | null
-    }, ExtArgs["result"]["monthlyHealthData"]>
-    composites: {}
-  }
-
-  type MonthlyHealthDataGetPayload<S extends boolean | null | undefined | MonthlyHealthDataDefaultArgs> = $Result.GetResult<Prisma.$MonthlyHealthDataPayload, S>
-
-  type MonthlyHealthDataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<MonthlyHealthDataFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: MonthlyHealthDataCountAggregateInputType | true
-    }
-
-  export interface MonthlyHealthDataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyHealthData'], meta: { name: 'MonthlyHealthData' } }
-    /**
-     * Find zero or one MonthlyHealthData that matches the filter.
-     * @param {MonthlyHealthDataFindUniqueArgs} args - Arguments to find a MonthlyHealthData
-     * @example
-     * // Get one MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends MonthlyHealthDataFindUniqueArgs>(args: SelectSubset<T, MonthlyHealthDataFindUniqueArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one MonthlyHealthData that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {MonthlyHealthDataFindUniqueOrThrowArgs} args - Arguments to find a MonthlyHealthData
-     * @example
-     * // Get one MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends MonthlyHealthDataFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyHealthDataFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first MonthlyHealthData that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataFindFirstArgs} args - Arguments to find a MonthlyHealthData
-     * @example
-     * // Get one MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends MonthlyHealthDataFindFirstArgs>(args?: SelectSubset<T, MonthlyHealthDataFindFirstArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first MonthlyHealthData that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataFindFirstOrThrowArgs} args - Arguments to find a MonthlyHealthData
-     * @example
-     * // Get one MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends MonthlyHealthDataFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyHealthDataFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more MonthlyHealthData that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findMany()
-     * 
-     * // Get first 10 MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const monthlyHealthDataWithIdOnly = await prisma.monthlyHealthData.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends MonthlyHealthDataFindManyArgs>(args?: SelectSubset<T, MonthlyHealthDataFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a MonthlyHealthData.
-     * @param {MonthlyHealthDataCreateArgs} args - Arguments to create a MonthlyHealthData.
-     * @example
-     * // Create one MonthlyHealthData
-     * const MonthlyHealthData = await prisma.monthlyHealthData.create({
-     *   data: {
-     *     // ... data to create a MonthlyHealthData
-     *   }
-     * })
-     * 
-     */
-    create<T extends MonthlyHealthDataCreateArgs>(args: SelectSubset<T, MonthlyHealthDataCreateArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many MonthlyHealthData.
-     * @param {MonthlyHealthDataCreateManyArgs} args - Arguments to create many MonthlyHealthData.
-     * @example
-     * // Create many MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends MonthlyHealthDataCreateManyArgs>(args?: SelectSubset<T, MonthlyHealthDataCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many MonthlyHealthData and returns the data saved in the database.
-     * @param {MonthlyHealthDataCreateManyAndReturnArgs} args - Arguments to create many MonthlyHealthData.
-     * @example
-     * // Create many MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many MonthlyHealthData and only return the `id`
-     * const monthlyHealthDataWithIdOnly = await prisma.monthlyHealthData.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends MonthlyHealthDataCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyHealthDataCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a MonthlyHealthData.
-     * @param {MonthlyHealthDataDeleteArgs} args - Arguments to delete one MonthlyHealthData.
-     * @example
-     * // Delete one MonthlyHealthData
-     * const MonthlyHealthData = await prisma.monthlyHealthData.delete({
-     *   where: {
-     *     // ... filter to delete one MonthlyHealthData
-     *   }
-     * })
-     * 
-     */
-    delete<T extends MonthlyHealthDataDeleteArgs>(args: SelectSubset<T, MonthlyHealthDataDeleteArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one MonthlyHealthData.
-     * @param {MonthlyHealthDataUpdateArgs} args - Arguments to update one MonthlyHealthData.
-     * @example
-     * // Update one MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends MonthlyHealthDataUpdateArgs>(args: SelectSubset<T, MonthlyHealthDataUpdateArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more MonthlyHealthData.
-     * @param {MonthlyHealthDataDeleteManyArgs} args - Arguments to filter MonthlyHealthData to delete.
-     * @example
-     * // Delete a few MonthlyHealthData
-     * const { count } = await prisma.monthlyHealthData.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends MonthlyHealthDataDeleteManyArgs>(args?: SelectSubset<T, MonthlyHealthDataDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more MonthlyHealthData.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends MonthlyHealthDataUpdateManyArgs>(args: SelectSubset<T, MonthlyHealthDataUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more MonthlyHealthData and returns the data updated in the database.
-     * @param {MonthlyHealthDataUpdateManyAndReturnArgs} args - Arguments to update many MonthlyHealthData.
-     * @example
-     * // Update many MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more MonthlyHealthData and only return the `id`
-     * const monthlyHealthDataWithIdOnly = await prisma.monthlyHealthData.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends MonthlyHealthDataUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyHealthDataUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one MonthlyHealthData.
-     * @param {MonthlyHealthDataUpsertArgs} args - Arguments to update or create a MonthlyHealthData.
-     * @example
-     * // Update or create a MonthlyHealthData
-     * const monthlyHealthData = await prisma.monthlyHealthData.upsert({
-     *   create: {
-     *     // ... data to create a MonthlyHealthData
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the MonthlyHealthData we want to update
-     *   }
-     * })
-     */
-    upsert<T extends MonthlyHealthDataUpsertArgs>(args: SelectSubset<T, MonthlyHealthDataUpsertArgs<ExtArgs>>): Prisma__MonthlyHealthDataClient<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of MonthlyHealthData.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataCountArgs} args - Arguments to filter MonthlyHealthData to count.
-     * @example
-     * // Count the number of MonthlyHealthData
-     * const count = await prisma.monthlyHealthData.count({
-     *   where: {
-     *     // ... the filter for the MonthlyHealthData we want to count
-     *   }
-     * })
-    **/
-    count<T extends MonthlyHealthDataCountArgs>(
-      args?: Subset<T, MonthlyHealthDataCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], MonthlyHealthDataCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a MonthlyHealthData.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends MonthlyHealthDataAggregateArgs>(args: Subset<T, MonthlyHealthDataAggregateArgs>): Prisma.PrismaPromise<GetMonthlyHealthDataAggregateType<T>>
-
-    /**
-     * Group by MonthlyHealthData.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonthlyHealthDataGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends MonthlyHealthDataGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MonthlyHealthDataGroupByArgs['orderBy'] }
-        : { orderBy?: MonthlyHealthDataGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, MonthlyHealthDataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyHealthDataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the MonthlyHealthData model
-   */
-  readonly fields: MonthlyHealthDataFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for MonthlyHealthData.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__MonthlyHealthDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    approver<T extends MonthlyHealthData$approverArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyHealthData$approverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    district<T extends DistrictDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DistrictDefaultArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    facility<T extends MonthlyHealthData$facilityArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyHealthData$facilityArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    indicator<T extends MonthlyHealthData$indicatorArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyHealthData$indicatorArgs<ExtArgs>>): Prisma__IndicatorClient<$Result.GetResult<Prisma.$IndicatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    sub_centre<T extends MonthlyHealthData$sub_centreArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyHealthData$sub_centreArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the MonthlyHealthData model
-   */
-  interface MonthlyHealthDataFieldRefs {
-    readonly id: FieldRef<"MonthlyHealthData", 'Int'>
-    readonly sub_centre_id: FieldRef<"MonthlyHealthData", 'Int'>
-    readonly report_month: FieldRef<"MonthlyHealthData", 'String'>
-    readonly value: FieldRef<"MonthlyHealthData", 'Decimal'>
-    readonly data_quality: FieldRef<"MonthlyHealthData", 'DataQuality'>
-    readonly remarks: FieldRef<"MonthlyHealthData", 'String'>
-    readonly uploaded_by: FieldRef<"MonthlyHealthData", 'Int'>
-    readonly approved_by: FieldRef<"MonthlyHealthData", 'Int'>
-    readonly approved_at: FieldRef<"MonthlyHealthData", 'DateTime'>
-    readonly created_at: FieldRef<"MonthlyHealthData", 'DateTime'>
-    readonly updated_at: FieldRef<"MonthlyHealthData", 'DateTime'>
-    readonly achievement: FieldRef<"MonthlyHealthData", 'Decimal'>
-    readonly denominator: FieldRef<"MonthlyHealthData", 'Decimal'>
-    readonly numerator: FieldRef<"MonthlyHealthData", 'Decimal'>
-    readonly target_value: FieldRef<"MonthlyHealthData", 'Decimal'>
-    readonly indicator_id: FieldRef<"MonthlyHealthData", 'Int'>
-    readonly district_id: FieldRef<"MonthlyHealthData", 'String'>
-    readonly facility_id: FieldRef<"MonthlyHealthData", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * MonthlyHealthData findUnique
-   */
-  export type MonthlyHealthDataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter, which MonthlyHealthData to fetch.
-     */
-    where: MonthlyHealthDataWhereUniqueInput
-  }
-
-  /**
-   * MonthlyHealthData findUniqueOrThrow
-   */
-  export type MonthlyHealthDataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter, which MonthlyHealthData to fetch.
-     */
-    where: MonthlyHealthDataWhereUniqueInput
-  }
-
-  /**
-   * MonthlyHealthData findFirst
-   */
-  export type MonthlyHealthDataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter, which MonthlyHealthData to fetch.
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonthlyHealthData to fetch.
-     */
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for MonthlyHealthData.
-     */
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonthlyHealthData from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonthlyHealthData.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of MonthlyHealthData.
-     */
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * MonthlyHealthData findFirstOrThrow
-   */
-  export type MonthlyHealthDataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter, which MonthlyHealthData to fetch.
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonthlyHealthData to fetch.
-     */
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for MonthlyHealthData.
-     */
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonthlyHealthData from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonthlyHealthData.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of MonthlyHealthData.
-     */
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * MonthlyHealthData findMany
-   */
-  export type MonthlyHealthDataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter, which MonthlyHealthData to fetch.
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonthlyHealthData to fetch.
-     */
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing MonthlyHealthData.
-     */
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonthlyHealthData from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonthlyHealthData.
-     */
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * MonthlyHealthData create
-   */
-  export type MonthlyHealthDataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * The data needed to create a MonthlyHealthData.
-     */
-    data: XOR<MonthlyHealthDataCreateInput, MonthlyHealthDataUncheckedCreateInput>
-  }
-
-  /**
-   * MonthlyHealthData createMany
-   */
-  export type MonthlyHealthDataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many MonthlyHealthData.
-     */
-    data: MonthlyHealthDataCreateManyInput | MonthlyHealthDataCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * MonthlyHealthData createManyAndReturn
-   */
-  export type MonthlyHealthDataCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * The data used to create many MonthlyHealthData.
-     */
-    data: MonthlyHealthDataCreateManyInput | MonthlyHealthDataCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * MonthlyHealthData update
-   */
-  export type MonthlyHealthDataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * The data needed to update a MonthlyHealthData.
-     */
-    data: XOR<MonthlyHealthDataUpdateInput, MonthlyHealthDataUncheckedUpdateInput>
-    /**
-     * Choose, which MonthlyHealthData to update.
-     */
-    where: MonthlyHealthDataWhereUniqueInput
-  }
-
-  /**
-   * MonthlyHealthData updateMany
-   */
-  export type MonthlyHealthDataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update MonthlyHealthData.
-     */
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyInput>
-    /**
-     * Filter which MonthlyHealthData to update
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * Limit how many MonthlyHealthData to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * MonthlyHealthData updateManyAndReturn
-   */
-  export type MonthlyHealthDataUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * The data used to update MonthlyHealthData.
-     */
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyInput>
-    /**
-     * Filter which MonthlyHealthData to update
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * Limit how many MonthlyHealthData to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * MonthlyHealthData upsert
-   */
-  export type MonthlyHealthDataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * The filter to search for the MonthlyHealthData to update in case it exists.
-     */
-    where: MonthlyHealthDataWhereUniqueInput
-    /**
-     * In case the MonthlyHealthData found by the `where` argument doesn't exist, create a new MonthlyHealthData with this data.
-     */
-    create: XOR<MonthlyHealthDataCreateInput, MonthlyHealthDataUncheckedCreateInput>
-    /**
-     * In case the MonthlyHealthData was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<MonthlyHealthDataUpdateInput, MonthlyHealthDataUncheckedUpdateInput>
-  }
-
-  /**
-   * MonthlyHealthData delete
-   */
-  export type MonthlyHealthDataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    /**
-     * Filter which MonthlyHealthData to delete.
-     */
-    where: MonthlyHealthDataWhereUniqueInput
-  }
-
-  /**
-   * MonthlyHealthData deleteMany
-   */
-  export type MonthlyHealthDataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which MonthlyHealthData to delete
-     */
-    where?: MonthlyHealthDataWhereInput
-    /**
-     * Limit how many MonthlyHealthData to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * MonthlyHealthData.approver
-   */
-  export type MonthlyHealthData$approverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * MonthlyHealthData.facility
-   */
-  export type MonthlyHealthData$facilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Facility
-     */
-    select?: FacilitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Facility
-     */
-    omit?: FacilityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityInclude<ExtArgs> | null
-    where?: FacilityWhereInput
-  }
-
-  /**
-   * MonthlyHealthData.indicator
-   */
-  export type MonthlyHealthData$indicatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Indicator
-     */
-    select?: IndicatorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Indicator
-     */
-    omit?: IndicatorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: IndicatorInclude<ExtArgs> | null
-    where?: IndicatorWhereInput
-  }
-
-  /**
-   * MonthlyHealthData.sub_centre
-   */
-  export type MonthlyHealthData$sub_centreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    where?: sub_centreWhereInput
-  }
-
-  /**
-   * MonthlyHealthData without action
-   */
-  export type MonthlyHealthDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model DataUploadSession
-   */
-
-  export type AggregateDataUploadSession = {
-    _count: DataUploadSessionCountAggregateOutputType | null
-    _avg: DataUploadSessionAvgAggregateOutputType | null
-    _sum: DataUploadSessionSumAggregateOutputType | null
-    _min: DataUploadSessionMinAggregateOutputType | null
-    _max: DataUploadSessionMaxAggregateOutputType | null
-  }
-
-  export type DataUploadSessionAvgAggregateOutputType = {
-    id: number | null
-    total_records: number | null
-    success_count: number | null
-    error_count: number | null
-    uploaded_by: number | null
-  }
-
-  export type DataUploadSessionSumAggregateOutputType = {
-    id: number | null
-    total_records: number | null
-    success_count: number | null
-    error_count: number | null
-    uploaded_by: number | null
-  }
-
-  export type DataUploadSessionMinAggregateOutputType = {
-    id: number | null
-    file_name: string | null
-    report_month: string | null
-    total_records: number | null
-    success_count: number | null
-    error_count: number | null
-    status: $Enums.UploadStatus | null
-    uploaded_by: number | null
-    created_at: Date | null
-    completed_at: Date | null
-    file_path: string | null
-  }
-
-  export type DataUploadSessionMaxAggregateOutputType = {
-    id: number | null
-    file_name: string | null
-    report_month: string | null
-    total_records: number | null
-    success_count: number | null
-    error_count: number | null
-    status: $Enums.UploadStatus | null
-    uploaded_by: number | null
-    created_at: Date | null
-    completed_at: Date | null
-    file_path: string | null
-  }
-
-  export type DataUploadSessionCountAggregateOutputType = {
-    id: number
-    file_name: number
-    report_month: number
-    total_records: number
-    success_count: number
-    error_count: number
-    status: number
-    upload_summary: number
-    uploaded_by: number
-    created_at: number
-    completed_at: number
-    file_path: number
-    _all: number
-  }
-
-
-  export type DataUploadSessionAvgAggregateInputType = {
-    id?: true
-    total_records?: true
-    success_count?: true
-    error_count?: true
-    uploaded_by?: true
-  }
-
-  export type DataUploadSessionSumAggregateInputType = {
-    id?: true
-    total_records?: true
-    success_count?: true
-    error_count?: true
-    uploaded_by?: true
-  }
-
-  export type DataUploadSessionMinAggregateInputType = {
-    id?: true
-    file_name?: true
-    report_month?: true
-    total_records?: true
-    success_count?: true
-    error_count?: true
-    status?: true
-    uploaded_by?: true
-    created_at?: true
-    completed_at?: true
-    file_path?: true
-  }
-
-  export type DataUploadSessionMaxAggregateInputType = {
-    id?: true
-    file_name?: true
-    report_month?: true
-    total_records?: true
-    success_count?: true
-    error_count?: true
-    status?: true
-    uploaded_by?: true
-    created_at?: true
-    completed_at?: true
-    file_path?: true
-  }
-
-  export type DataUploadSessionCountAggregateInputType = {
-    id?: true
-    file_name?: true
-    report_month?: true
-    total_records?: true
-    success_count?: true
-    error_count?: true
-    status?: true
-    upload_summary?: true
-    uploaded_by?: true
-    created_at?: true
-    completed_at?: true
-    file_path?: true
-    _all?: true
-  }
-
-  export type DataUploadSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which DataUploadSession to aggregate.
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of DataUploadSessions to fetch.
-     */
-    orderBy?: DataUploadSessionOrderByWithRelationInput | DataUploadSessionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: DataUploadSessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` DataUploadSessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` DataUploadSessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned DataUploadSessions
-    **/
-    _count?: true | DataUploadSessionCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: DataUploadSessionAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: DataUploadSessionSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: DataUploadSessionMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: DataUploadSessionMaxAggregateInputType
-  }
-
-  export type GetDataUploadSessionAggregateType<T extends DataUploadSessionAggregateArgs> = {
-        [P in keyof T & keyof AggregateDataUploadSession]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDataUploadSession[P]>
-      : GetScalarType<T[P], AggregateDataUploadSession[P]>
-  }
-
-
-
-
-  export type DataUploadSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DataUploadSessionWhereInput
-    orderBy?: DataUploadSessionOrderByWithAggregationInput | DataUploadSessionOrderByWithAggregationInput[]
-    by: DataUploadSessionScalarFieldEnum[] | DataUploadSessionScalarFieldEnum
-    having?: DataUploadSessionScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DataUploadSessionCountAggregateInputType | true
-    _avg?: DataUploadSessionAvgAggregateInputType
-    _sum?: DataUploadSessionSumAggregateInputType
-    _min?: DataUploadSessionMinAggregateInputType
-    _max?: DataUploadSessionMaxAggregateInputType
-  }
-
-  export type DataUploadSessionGroupByOutputType = {
-    id: number
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count: number
-    error_count: number
-    status: $Enums.UploadStatus
-    upload_summary: JsonValue | null
-    uploaded_by: number
-    created_at: Date
-    completed_at: Date | null
-    file_path: string | null
-    _count: DataUploadSessionCountAggregateOutputType | null
-    _avg: DataUploadSessionAvgAggregateOutputType | null
-    _sum: DataUploadSessionSumAggregateOutputType | null
-    _min: DataUploadSessionMinAggregateOutputType | null
-    _max: DataUploadSessionMaxAggregateOutputType | null
-  }
-
-  type GetDataUploadSessionGroupByPayload<T extends DataUploadSessionGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<DataUploadSessionGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof DataUploadSessionGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DataUploadSessionGroupByOutputType[P]>
-            : GetScalarType<T[P], DataUploadSessionGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type DataUploadSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    file_name?: boolean
-    report_month?: boolean
-    total_records?: boolean
-    success_count?: boolean
-    error_count?: boolean
-    status?: boolean
-    upload_summary?: boolean
-    uploaded_by?: boolean
-    created_at?: boolean
-    completed_at?: boolean
-    file_path?: boolean
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["dataUploadSession"]>
-
-  export type DataUploadSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    file_name?: boolean
-    report_month?: boolean
-    total_records?: boolean
-    success_count?: boolean
-    error_count?: boolean
-    status?: boolean
-    upload_summary?: boolean
-    uploaded_by?: boolean
-    created_at?: boolean
-    completed_at?: boolean
-    file_path?: boolean
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["dataUploadSession"]>
-
-  export type DataUploadSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    file_name?: boolean
-    report_month?: boolean
-    total_records?: boolean
-    success_count?: boolean
-    error_count?: boolean
-    status?: boolean
-    upload_summary?: boolean
-    uploaded_by?: boolean
-    created_at?: boolean
-    completed_at?: boolean
-    file_path?: boolean
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["dataUploadSession"]>
-
-  export type DataUploadSessionSelectScalar = {
-    id?: boolean
-    file_name?: boolean
-    report_month?: boolean
-    total_records?: boolean
-    success_count?: boolean
-    error_count?: boolean
-    status?: boolean
-    upload_summary?: boolean
-    uploaded_by?: boolean
-    created_at?: boolean
-    completed_at?: boolean
-    file_path?: boolean
-  }
-
-  export type DataUploadSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "file_name" | "report_month" | "total_records" | "success_count" | "error_count" | "status" | "upload_summary" | "uploaded_by" | "created_at" | "completed_at" | "file_path", ExtArgs["result"]["dataUploadSession"]>
-  export type DataUploadSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type DataUploadSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type DataUploadSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $DataUploadSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "DataUploadSession"
-    objects: {
-      uploader: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      file_name: string
-      report_month: string
-      total_records: number
-      success_count: number
-      error_count: number
-      status: $Enums.UploadStatus
-      upload_summary: Prisma.JsonValue | null
-      uploaded_by: number
-      created_at: Date
-      completed_at: Date | null
-      file_path: string | null
-    }, ExtArgs["result"]["dataUploadSession"]>
-    composites: {}
-  }
-
-  type DataUploadSessionGetPayload<S extends boolean | null | undefined | DataUploadSessionDefaultArgs> = $Result.GetResult<Prisma.$DataUploadSessionPayload, S>
-
-  type DataUploadSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<DataUploadSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: DataUploadSessionCountAggregateInputType | true
-    }
-
-  export interface DataUploadSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DataUploadSession'], meta: { name: 'DataUploadSession' } }
-    /**
-     * Find zero or one DataUploadSession that matches the filter.
-     * @param {DataUploadSessionFindUniqueArgs} args - Arguments to find a DataUploadSession
-     * @example
-     * // Get one DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends DataUploadSessionFindUniqueArgs>(args: SelectSubset<T, DataUploadSessionFindUniqueArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one DataUploadSession that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {DataUploadSessionFindUniqueOrThrowArgs} args - Arguments to find a DataUploadSession
-     * @example
-     * // Get one DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends DataUploadSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, DataUploadSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first DataUploadSession that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionFindFirstArgs} args - Arguments to find a DataUploadSession
-     * @example
-     * // Get one DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends DataUploadSessionFindFirstArgs>(args?: SelectSubset<T, DataUploadSessionFindFirstArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first DataUploadSession that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionFindFirstOrThrowArgs} args - Arguments to find a DataUploadSession
-     * @example
-     * // Get one DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends DataUploadSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, DataUploadSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more DataUploadSessions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all DataUploadSessions
-     * const dataUploadSessions = await prisma.dataUploadSession.findMany()
-     * 
-     * // Get first 10 DataUploadSessions
-     * const dataUploadSessions = await prisma.dataUploadSession.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const dataUploadSessionWithIdOnly = await prisma.dataUploadSession.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends DataUploadSessionFindManyArgs>(args?: SelectSubset<T, DataUploadSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a DataUploadSession.
-     * @param {DataUploadSessionCreateArgs} args - Arguments to create a DataUploadSession.
-     * @example
-     * // Create one DataUploadSession
-     * const DataUploadSession = await prisma.dataUploadSession.create({
-     *   data: {
-     *     // ... data to create a DataUploadSession
-     *   }
-     * })
-     * 
-     */
-    create<T extends DataUploadSessionCreateArgs>(args: SelectSubset<T, DataUploadSessionCreateArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many DataUploadSessions.
-     * @param {DataUploadSessionCreateManyArgs} args - Arguments to create many DataUploadSessions.
-     * @example
-     * // Create many DataUploadSessions
-     * const dataUploadSession = await prisma.dataUploadSession.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends DataUploadSessionCreateManyArgs>(args?: SelectSubset<T, DataUploadSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many DataUploadSessions and returns the data saved in the database.
-     * @param {DataUploadSessionCreateManyAndReturnArgs} args - Arguments to create many DataUploadSessions.
-     * @example
-     * // Create many DataUploadSessions
-     * const dataUploadSession = await prisma.dataUploadSession.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many DataUploadSessions and only return the `id`
-     * const dataUploadSessionWithIdOnly = await prisma.dataUploadSession.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends DataUploadSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, DataUploadSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a DataUploadSession.
-     * @param {DataUploadSessionDeleteArgs} args - Arguments to delete one DataUploadSession.
-     * @example
-     * // Delete one DataUploadSession
-     * const DataUploadSession = await prisma.dataUploadSession.delete({
-     *   where: {
-     *     // ... filter to delete one DataUploadSession
-     *   }
-     * })
-     * 
-     */
-    delete<T extends DataUploadSessionDeleteArgs>(args: SelectSubset<T, DataUploadSessionDeleteArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one DataUploadSession.
-     * @param {DataUploadSessionUpdateArgs} args - Arguments to update one DataUploadSession.
-     * @example
-     * // Update one DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends DataUploadSessionUpdateArgs>(args: SelectSubset<T, DataUploadSessionUpdateArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more DataUploadSessions.
-     * @param {DataUploadSessionDeleteManyArgs} args - Arguments to filter DataUploadSessions to delete.
-     * @example
-     * // Delete a few DataUploadSessions
-     * const { count } = await prisma.dataUploadSession.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends DataUploadSessionDeleteManyArgs>(args?: SelectSubset<T, DataUploadSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more DataUploadSessions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many DataUploadSessions
-     * const dataUploadSession = await prisma.dataUploadSession.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends DataUploadSessionUpdateManyArgs>(args: SelectSubset<T, DataUploadSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more DataUploadSessions and returns the data updated in the database.
-     * @param {DataUploadSessionUpdateManyAndReturnArgs} args - Arguments to update many DataUploadSessions.
-     * @example
-     * // Update many DataUploadSessions
-     * const dataUploadSession = await prisma.dataUploadSession.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more DataUploadSessions and only return the `id`
-     * const dataUploadSessionWithIdOnly = await prisma.dataUploadSession.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends DataUploadSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, DataUploadSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one DataUploadSession.
-     * @param {DataUploadSessionUpsertArgs} args - Arguments to update or create a DataUploadSession.
-     * @example
-     * // Update or create a DataUploadSession
-     * const dataUploadSession = await prisma.dataUploadSession.upsert({
-     *   create: {
-     *     // ... data to create a DataUploadSession
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the DataUploadSession we want to update
-     *   }
-     * })
-     */
-    upsert<T extends DataUploadSessionUpsertArgs>(args: SelectSubset<T, DataUploadSessionUpsertArgs<ExtArgs>>): Prisma__DataUploadSessionClient<$Result.GetResult<Prisma.$DataUploadSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of DataUploadSessions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionCountArgs} args - Arguments to filter DataUploadSessions to count.
-     * @example
-     * // Count the number of DataUploadSessions
-     * const count = await prisma.dataUploadSession.count({
-     *   where: {
-     *     // ... the filter for the DataUploadSessions we want to count
-     *   }
-     * })
-    **/
-    count<T extends DataUploadSessionCountArgs>(
-      args?: Subset<T, DataUploadSessionCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], DataUploadSessionCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a DataUploadSession.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends DataUploadSessionAggregateArgs>(args: Subset<T, DataUploadSessionAggregateArgs>): Prisma.PrismaPromise<GetDataUploadSessionAggregateType<T>>
-
-    /**
-     * Group by DataUploadSession.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DataUploadSessionGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends DataUploadSessionGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: DataUploadSessionGroupByArgs['orderBy'] }
-        : { orderBy?: DataUploadSessionGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, DataUploadSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDataUploadSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the DataUploadSession model
-   */
-  readonly fields: DataUploadSessionFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for DataUploadSession.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__DataUploadSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the DataUploadSession model
-   */
-  interface DataUploadSessionFieldRefs {
-    readonly id: FieldRef<"DataUploadSession", 'Int'>
-    readonly file_name: FieldRef<"DataUploadSession", 'String'>
-    readonly report_month: FieldRef<"DataUploadSession", 'String'>
-    readonly total_records: FieldRef<"DataUploadSession", 'Int'>
-    readonly success_count: FieldRef<"DataUploadSession", 'Int'>
-    readonly error_count: FieldRef<"DataUploadSession", 'Int'>
-    readonly status: FieldRef<"DataUploadSession", 'UploadStatus'>
-    readonly upload_summary: FieldRef<"DataUploadSession", 'Json'>
-    readonly uploaded_by: FieldRef<"DataUploadSession", 'Int'>
-    readonly created_at: FieldRef<"DataUploadSession", 'DateTime'>
-    readonly completed_at: FieldRef<"DataUploadSession", 'DateTime'>
-    readonly file_path: FieldRef<"DataUploadSession", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * DataUploadSession findUnique
-   */
-  export type DataUploadSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter, which DataUploadSession to fetch.
-     */
-    where: DataUploadSessionWhereUniqueInput
-  }
-
-  /**
-   * DataUploadSession findUniqueOrThrow
-   */
-  export type DataUploadSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter, which DataUploadSession to fetch.
-     */
-    where: DataUploadSessionWhereUniqueInput
-  }
-
-  /**
-   * DataUploadSession findFirst
-   */
-  export type DataUploadSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter, which DataUploadSession to fetch.
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of DataUploadSessions to fetch.
-     */
-    orderBy?: DataUploadSessionOrderByWithRelationInput | DataUploadSessionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for DataUploadSessions.
-     */
-    cursor?: DataUploadSessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` DataUploadSessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` DataUploadSessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of DataUploadSessions.
-     */
-    distinct?: DataUploadSessionScalarFieldEnum | DataUploadSessionScalarFieldEnum[]
-  }
-
-  /**
-   * DataUploadSession findFirstOrThrow
-   */
-  export type DataUploadSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter, which DataUploadSession to fetch.
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of DataUploadSessions to fetch.
-     */
-    orderBy?: DataUploadSessionOrderByWithRelationInput | DataUploadSessionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for DataUploadSessions.
-     */
-    cursor?: DataUploadSessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` DataUploadSessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` DataUploadSessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of DataUploadSessions.
-     */
-    distinct?: DataUploadSessionScalarFieldEnum | DataUploadSessionScalarFieldEnum[]
-  }
-
-  /**
-   * DataUploadSession findMany
-   */
-  export type DataUploadSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter, which DataUploadSessions to fetch.
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of DataUploadSessions to fetch.
-     */
-    orderBy?: DataUploadSessionOrderByWithRelationInput | DataUploadSessionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing DataUploadSessions.
-     */
-    cursor?: DataUploadSessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` DataUploadSessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` DataUploadSessions.
-     */
-    skip?: number
-    distinct?: DataUploadSessionScalarFieldEnum | DataUploadSessionScalarFieldEnum[]
-  }
-
-  /**
-   * DataUploadSession create
-   */
-  export type DataUploadSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * The data needed to create a DataUploadSession.
-     */
-    data: XOR<DataUploadSessionCreateInput, DataUploadSessionUncheckedCreateInput>
-  }
-
-  /**
-   * DataUploadSession createMany
-   */
-  export type DataUploadSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many DataUploadSessions.
-     */
-    data: DataUploadSessionCreateManyInput | DataUploadSessionCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * DataUploadSession createManyAndReturn
-   */
-  export type DataUploadSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * The data used to create many DataUploadSessions.
-     */
-    data: DataUploadSessionCreateManyInput | DataUploadSessionCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * DataUploadSession update
-   */
-  export type DataUploadSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * The data needed to update a DataUploadSession.
-     */
-    data: XOR<DataUploadSessionUpdateInput, DataUploadSessionUncheckedUpdateInput>
-    /**
-     * Choose, which DataUploadSession to update.
-     */
-    where: DataUploadSessionWhereUniqueInput
-  }
-
-  /**
-   * DataUploadSession updateMany
-   */
-  export type DataUploadSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update DataUploadSessions.
-     */
-    data: XOR<DataUploadSessionUpdateManyMutationInput, DataUploadSessionUncheckedUpdateManyInput>
-    /**
-     * Filter which DataUploadSessions to update
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * Limit how many DataUploadSessions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * DataUploadSession updateManyAndReturn
-   */
-  export type DataUploadSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * The data used to update DataUploadSessions.
-     */
-    data: XOR<DataUploadSessionUpdateManyMutationInput, DataUploadSessionUncheckedUpdateManyInput>
-    /**
-     * Filter which DataUploadSessions to update
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * Limit how many DataUploadSessions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * DataUploadSession upsert
-   */
-  export type DataUploadSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * The filter to search for the DataUploadSession to update in case it exists.
-     */
-    where: DataUploadSessionWhereUniqueInput
-    /**
-     * In case the DataUploadSession found by the `where` argument doesn't exist, create a new DataUploadSession with this data.
-     */
-    create: XOR<DataUploadSessionCreateInput, DataUploadSessionUncheckedCreateInput>
-    /**
-     * In case the DataUploadSession was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<DataUploadSessionUpdateInput, DataUploadSessionUncheckedUpdateInput>
-  }
-
-  /**
-   * DataUploadSession delete
-   */
-  export type DataUploadSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-    /**
-     * Filter which DataUploadSession to delete.
-     */
-    where: DataUploadSessionWhereUniqueInput
-  }
-
-  /**
-   * DataUploadSession deleteMany
-   */
-  export type DataUploadSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which DataUploadSessions to delete
-     */
-    where?: DataUploadSessionWhereInput
-    /**
-     * Limit how many DataUploadSessions to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * DataUploadSession without action
-   */
-  export type DataUploadSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DataUploadSession
-     */
-    select?: DataUploadSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DataUploadSession
-     */
-    omit?: DataUploadSessionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DataUploadSessionInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Formula
-   */
-
-  export type AggregateFormula = {
-    _count: FormulaCountAggregateOutputType | null
-    _avg: FormulaAvgAggregateOutputType | null
-    _sum: FormulaSumAggregateOutputType | null
-    _min: FormulaMinAggregateOutputType | null
-    _max: FormulaMaxAggregateOutputType | null
-  }
-
-  export type FormulaAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type FormulaSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type FormulaMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type FormulaMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type FormulaCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    structure: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type FormulaAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type FormulaSumAggregateInputType = {
-    id?: true
-  }
-
-  export type FormulaMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type FormulaMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type FormulaCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    structure?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type FormulaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Formula to aggregate.
-     */
-    where?: FormulaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Formulas to fetch.
-     */
-    orderBy?: FormulaOrderByWithRelationInput | FormulaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: FormulaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Formulas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Formulas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Formulas
-    **/
-    _count?: true | FormulaCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: FormulaAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: FormulaSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: FormulaMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: FormulaMaxAggregateInputType
-  }
-
-  export type GetFormulaAggregateType<T extends FormulaAggregateArgs> = {
-        [P in keyof T & keyof AggregateFormula]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateFormula[P]>
-      : GetScalarType<T[P], AggregateFormula[P]>
-  }
-
-
-
-
-  export type FormulaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FormulaWhereInput
-    orderBy?: FormulaOrderByWithAggregationInput | FormulaOrderByWithAggregationInput[]
-    by: FormulaScalarFieldEnum[] | FormulaScalarFieldEnum
-    having?: FormulaScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: FormulaCountAggregateInputType | true
-    _avg?: FormulaAvgAggregateInputType
-    _sum?: FormulaSumAggregateInputType
-    _min?: FormulaMinAggregateInputType
-    _max?: FormulaMaxAggregateInputType
-  }
-
-  export type FormulaGroupByOutputType = {
-    id: number
-    name: string
-    description: string | null
-    structure: JsonValue
-    created_at: Date
-    updated_at: Date
-    _count: FormulaCountAggregateOutputType | null
-    _avg: FormulaAvgAggregateOutputType | null
-    _sum: FormulaSumAggregateOutputType | null
-    _min: FormulaMinAggregateOutputType | null
-    _max: FormulaMaxAggregateOutputType | null
-  }
-
-  type GetFormulaGroupByPayload<T extends FormulaGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<FormulaGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof FormulaGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], FormulaGroupByOutputType[P]>
-            : GetScalarType<T[P], FormulaGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type FormulaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    structure?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["formula"]>
-
-  export type FormulaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    structure?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["formula"]>
-
-  export type FormulaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    structure?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["formula"]>
-
-  export type FormulaSelectScalar = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    structure?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type FormulaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "structure" | "created_at" | "updated_at", ExtArgs["result"]["formula"]>
-
-  export type $FormulaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Formula"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      description: string | null
-      structure: Prisma.JsonValue
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["formula"]>
-    composites: {}
-  }
-
-  type FormulaGetPayload<S extends boolean | null | undefined | FormulaDefaultArgs> = $Result.GetResult<Prisma.$FormulaPayload, S>
-
-  type FormulaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<FormulaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: FormulaCountAggregateInputType | true
-    }
-
-  export interface FormulaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Formula'], meta: { name: 'Formula' } }
-    /**
-     * Find zero or one Formula that matches the filter.
-     * @param {FormulaFindUniqueArgs} args - Arguments to find a Formula
-     * @example
-     * // Get one Formula
-     * const formula = await prisma.formula.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends FormulaFindUniqueArgs>(args: SelectSubset<T, FormulaFindUniqueArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Formula that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {FormulaFindUniqueOrThrowArgs} args - Arguments to find a Formula
-     * @example
-     * // Get one Formula
-     * const formula = await prisma.formula.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends FormulaFindUniqueOrThrowArgs>(args: SelectSubset<T, FormulaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Formula that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaFindFirstArgs} args - Arguments to find a Formula
-     * @example
-     * // Get one Formula
-     * const formula = await prisma.formula.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends FormulaFindFirstArgs>(args?: SelectSubset<T, FormulaFindFirstArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Formula that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaFindFirstOrThrowArgs} args - Arguments to find a Formula
-     * @example
-     * // Get one Formula
-     * const formula = await prisma.formula.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends FormulaFindFirstOrThrowArgs>(args?: SelectSubset<T, FormulaFindFirstOrThrowArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Formulas that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Formulas
-     * const formulas = await prisma.formula.findMany()
-     * 
-     * // Get first 10 Formulas
-     * const formulas = await prisma.formula.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const formulaWithIdOnly = await prisma.formula.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends FormulaFindManyArgs>(args?: SelectSubset<T, FormulaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Formula.
-     * @param {FormulaCreateArgs} args - Arguments to create a Formula.
-     * @example
-     * // Create one Formula
-     * const Formula = await prisma.formula.create({
-     *   data: {
-     *     // ... data to create a Formula
-     *   }
-     * })
-     * 
-     */
-    create<T extends FormulaCreateArgs>(args: SelectSubset<T, FormulaCreateArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Formulas.
-     * @param {FormulaCreateManyArgs} args - Arguments to create many Formulas.
-     * @example
-     * // Create many Formulas
-     * const formula = await prisma.formula.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends FormulaCreateManyArgs>(args?: SelectSubset<T, FormulaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Formulas and returns the data saved in the database.
-     * @param {FormulaCreateManyAndReturnArgs} args - Arguments to create many Formulas.
-     * @example
-     * // Create many Formulas
-     * const formula = await prisma.formula.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Formulas and only return the `id`
-     * const formulaWithIdOnly = await prisma.formula.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends FormulaCreateManyAndReturnArgs>(args?: SelectSubset<T, FormulaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Formula.
-     * @param {FormulaDeleteArgs} args - Arguments to delete one Formula.
-     * @example
-     * // Delete one Formula
-     * const Formula = await prisma.formula.delete({
-     *   where: {
-     *     // ... filter to delete one Formula
-     *   }
-     * })
-     * 
-     */
-    delete<T extends FormulaDeleteArgs>(args: SelectSubset<T, FormulaDeleteArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Formula.
-     * @param {FormulaUpdateArgs} args - Arguments to update one Formula.
-     * @example
-     * // Update one Formula
-     * const formula = await prisma.formula.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends FormulaUpdateArgs>(args: SelectSubset<T, FormulaUpdateArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Formulas.
-     * @param {FormulaDeleteManyArgs} args - Arguments to filter Formulas to delete.
-     * @example
-     * // Delete a few Formulas
-     * const { count } = await prisma.formula.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends FormulaDeleteManyArgs>(args?: SelectSubset<T, FormulaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Formulas.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Formulas
-     * const formula = await prisma.formula.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends FormulaUpdateManyArgs>(args: SelectSubset<T, FormulaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Formulas and returns the data updated in the database.
-     * @param {FormulaUpdateManyAndReturnArgs} args - Arguments to update many Formulas.
-     * @example
-     * // Update many Formulas
-     * const formula = await prisma.formula.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Formulas and only return the `id`
-     * const formulaWithIdOnly = await prisma.formula.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends FormulaUpdateManyAndReturnArgs>(args: SelectSubset<T, FormulaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Formula.
-     * @param {FormulaUpsertArgs} args - Arguments to update or create a Formula.
-     * @example
-     * // Update or create a Formula
-     * const formula = await prisma.formula.upsert({
-     *   create: {
-     *     // ... data to create a Formula
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Formula we want to update
-     *   }
-     * })
-     */
-    upsert<T extends FormulaUpsertArgs>(args: SelectSubset<T, FormulaUpsertArgs<ExtArgs>>): Prisma__FormulaClient<$Result.GetResult<Prisma.$FormulaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Formulas.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaCountArgs} args - Arguments to filter Formulas to count.
-     * @example
-     * // Count the number of Formulas
-     * const count = await prisma.formula.count({
-     *   where: {
-     *     // ... the filter for the Formulas we want to count
-     *   }
-     * })
-    **/
-    count<T extends FormulaCountArgs>(
-      args?: Subset<T, FormulaCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], FormulaCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Formula.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends FormulaAggregateArgs>(args: Subset<T, FormulaAggregateArgs>): Prisma.PrismaPromise<GetFormulaAggregateType<T>>
-
-    /**
-     * Group by Formula.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormulaGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends FormulaGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FormulaGroupByArgs['orderBy'] }
-        : { orderBy?: FormulaGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, FormulaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormulaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Formula model
-   */
-  readonly fields: FormulaFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Formula.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__FormulaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Formula model
-   */
-  interface FormulaFieldRefs {
-    readonly id: FieldRef<"Formula", 'Int'>
-    readonly name: FieldRef<"Formula", 'String'>
-    readonly description: FieldRef<"Formula", 'String'>
-    readonly structure: FieldRef<"Formula", 'Json'>
-    readonly created_at: FieldRef<"Formula", 'DateTime'>
-    readonly updated_at: FieldRef<"Formula", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Formula findUnique
-   */
-  export type FormulaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter, which Formula to fetch.
-     */
-    where: FormulaWhereUniqueInput
-  }
-
-  /**
-   * Formula findUniqueOrThrow
-   */
-  export type FormulaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter, which Formula to fetch.
-     */
-    where: FormulaWhereUniqueInput
-  }
-
-  /**
-   * Formula findFirst
-   */
-  export type FormulaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter, which Formula to fetch.
-     */
-    where?: FormulaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Formulas to fetch.
-     */
-    orderBy?: FormulaOrderByWithRelationInput | FormulaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Formulas.
-     */
-    cursor?: FormulaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Formulas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Formulas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Formulas.
-     */
-    distinct?: FormulaScalarFieldEnum | FormulaScalarFieldEnum[]
-  }
-
-  /**
-   * Formula findFirstOrThrow
-   */
-  export type FormulaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter, which Formula to fetch.
-     */
-    where?: FormulaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Formulas to fetch.
-     */
-    orderBy?: FormulaOrderByWithRelationInput | FormulaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Formulas.
-     */
-    cursor?: FormulaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Formulas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Formulas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Formulas.
-     */
-    distinct?: FormulaScalarFieldEnum | FormulaScalarFieldEnum[]
-  }
-
-  /**
-   * Formula findMany
-   */
-  export type FormulaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter, which Formulas to fetch.
-     */
-    where?: FormulaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Formulas to fetch.
-     */
-    orderBy?: FormulaOrderByWithRelationInput | FormulaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Formulas.
-     */
-    cursor?: FormulaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Formulas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Formulas.
-     */
-    skip?: number
-    distinct?: FormulaScalarFieldEnum | FormulaScalarFieldEnum[]
-  }
-
-  /**
-   * Formula create
-   */
-  export type FormulaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * The data needed to create a Formula.
-     */
-    data: XOR<FormulaCreateInput, FormulaUncheckedCreateInput>
-  }
-
-  /**
-   * Formula createMany
-   */
-  export type FormulaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Formulas.
-     */
-    data: FormulaCreateManyInput | FormulaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Formula createManyAndReturn
-   */
-  export type FormulaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * The data used to create many Formulas.
-     */
-    data: FormulaCreateManyInput | FormulaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Formula update
-   */
-  export type FormulaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * The data needed to update a Formula.
-     */
-    data: XOR<FormulaUpdateInput, FormulaUncheckedUpdateInput>
-    /**
-     * Choose, which Formula to update.
-     */
-    where: FormulaWhereUniqueInput
-  }
-
-  /**
-   * Formula updateMany
-   */
-  export type FormulaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Formulas.
-     */
-    data: XOR<FormulaUpdateManyMutationInput, FormulaUncheckedUpdateManyInput>
-    /**
-     * Filter which Formulas to update
-     */
-    where?: FormulaWhereInput
-    /**
-     * Limit how many Formulas to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Formula updateManyAndReturn
-   */
-  export type FormulaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * The data used to update Formulas.
-     */
-    data: XOR<FormulaUpdateManyMutationInput, FormulaUncheckedUpdateManyInput>
-    /**
-     * Filter which Formulas to update
-     */
-    where?: FormulaWhereInput
-    /**
-     * Limit how many Formulas to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Formula upsert
-   */
-  export type FormulaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * The filter to search for the Formula to update in case it exists.
-     */
-    where: FormulaWhereUniqueInput
-    /**
-     * In case the Formula found by the `where` argument doesn't exist, create a new Formula with this data.
-     */
-    create: XOR<FormulaCreateInput, FormulaUncheckedCreateInput>
-    /**
-     * In case the Formula was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<FormulaUpdateInput, FormulaUncheckedUpdateInput>
-  }
-
-  /**
-   * Formula delete
-   */
-  export type FormulaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
-    /**
-     * Filter which Formula to delete.
-     */
-    where: FormulaWhereUniqueInput
-  }
-
-  /**
-   * Formula deleteMany
-   */
-  export type FormulaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Formulas to delete
-     */
-    where?: FormulaWhereInput
-    /**
-     * Limit how many Formulas to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Formula without action
-   */
-  export type FormulaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Formula
-     */
-    select?: FormulaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Formula
-     */
-    omit?: FormulaOmit<ExtArgs> | null
   }
 
 
@@ -13852,8 +7933,6 @@ export namespace Prisma {
     target_field?: boolean | Indicator$target_fieldArgs<ExtArgs>
     remunerations?: boolean | Indicator$remunerationsArgs<ExtArgs>
     worker_allocations?: boolean | Indicator$worker_allocationsArgs<ExtArgs>
-    monthly_data?: boolean | Indicator$monthly_dataArgs<ExtArgs>
-    performance_calculations?: boolean | Indicator$performance_calculationsArgs<ExtArgs>
     _count?: boolean | IndicatorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["indicator"]>
 
@@ -13944,8 +8023,6 @@ export namespace Prisma {
     target_field?: boolean | Indicator$target_fieldArgs<ExtArgs>
     remunerations?: boolean | Indicator$remunerationsArgs<ExtArgs>
     worker_allocations?: boolean | Indicator$worker_allocationsArgs<ExtArgs>
-    monthly_data?: boolean | Indicator$monthly_dataArgs<ExtArgs>
-    performance_calculations?: boolean | Indicator$performance_calculationsArgs<ExtArgs>
     _count?: boolean | IndicatorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type IndicatorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13969,8 +8046,6 @@ export namespace Prisma {
       target_field: Prisma.$FieldPayload<ExtArgs> | null
       remunerations: Prisma.$IndicatorRemunerationPayload<ExtArgs>[]
       worker_allocations: Prisma.$IndicatorWorkerAllocationPayload<ExtArgs>[]
-      monthly_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
-      performance_calculations: Prisma.$PerformanceCalculationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -14395,8 +8470,6 @@ export namespace Prisma {
     target_field<T extends Indicator$target_fieldArgs<ExtArgs> = {}>(args?: Subset<T, Indicator$target_fieldArgs<ExtArgs>>): Prisma__FieldClient<$Result.GetResult<Prisma.$FieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     remunerations<T extends Indicator$remunerationsArgs<ExtArgs> = {}>(args?: Subset<T, Indicator$remunerationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndicatorRemunerationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     worker_allocations<T extends Indicator$worker_allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Indicator$worker_allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndicatorWorkerAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    monthly_data<T extends Indicator$monthly_dataArgs<ExtArgs> = {}>(args?: Subset<T, Indicator$monthly_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    performance_calculations<T extends Indicator$performance_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, Indicator$performance_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14996,54 +9069,6 @@ export namespace Prisma {
   }
 
   /**
-   * Indicator.monthly_data
-   */
-  export type Indicator$monthly_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * Indicator.performance_calculations
-   */
-  export type Indicator$performance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    where?: PerformanceCalculationWhereInput
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    cursor?: PerformanceCalculationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
    * Indicator without action
    */
   export type IndicatorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15336,7 +9361,6 @@ export namespace Prisma {
     user_type?: boolean
     validation_rules?: boolean
     field_category?: boolean
-    facility_field_defaults?: boolean | Field$facility_field_defaultsArgs<ExtArgs>
     facility_field_mappings?: boolean | Field$facility_field_mappingsArgs<ExtArgs>
     field_values?: boolean | Field$field_valuesArgs<ExtArgs>
     denominator_for_indicators?: boolean | Field$denominator_for_indicatorsArgs<ExtArgs>
@@ -15401,7 +9425,6 @@ export namespace Prisma {
 
   export type FieldOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "description" | "created_at" | "updated_at" | "calculation_formula" | "default_value" | "facility_type_targets" | "field_type" | "is_active" | "sort_order" | "user_type" | "validation_rules" | "field_category", ExtArgs["result"]["field"]>
   export type FieldInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility_field_defaults?: boolean | Field$facility_field_defaultsArgs<ExtArgs>
     facility_field_mappings?: boolean | Field$facility_field_mappingsArgs<ExtArgs>
     field_values?: boolean | Field$field_valuesArgs<ExtArgs>
     denominator_for_indicators?: boolean | Field$denominator_for_indicatorsArgs<ExtArgs>
@@ -15415,7 +9438,6 @@ export namespace Prisma {
   export type $FieldPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Field"
     objects: {
-      facility_field_defaults: Prisma.$FacilityFieldDefaultsPayload<ExtArgs>[]
       facility_field_mappings: Prisma.$FacilityFieldMappingPayload<ExtArgs>[]
       field_values: Prisma.$FieldValuePayload<ExtArgs>[]
       denominator_for_indicators: Prisma.$IndicatorPayload<ExtArgs>[]
@@ -15832,7 +9854,6 @@ export namespace Prisma {
    */
   export interface Prisma__FieldClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    facility_field_defaults<T extends Field$facility_field_defaultsArgs<ExtArgs> = {}>(args?: Subset<T, Field$facility_field_defaultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility_field_mappings<T extends Field$facility_field_mappingsArgs<ExtArgs> = {}>(args?: Subset<T, Field$facility_field_mappingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     field_values<T extends Field$field_valuesArgs<ExtArgs> = {}>(args?: Subset<T, Field$field_valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FieldValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     denominator_for_indicators<T extends Field$denominator_for_indicatorsArgs<ExtArgs> = {}>(args?: Subset<T, Field$denominator_for_indicatorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndicatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -16267,30 +10288,6 @@ export namespace Prisma {
      * Limit how many Fields to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Field.facility_field_defaults
-   */
-  export type Field$facility_field_defaultsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    where?: FacilityFieldDefaultsWhereInput
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FacilityFieldDefaultsScalarFieldEnum | FacilityFieldDefaultsScalarFieldEnum[]
   }
 
   /**
@@ -17685,1175 +11682,6 @@ export namespace Prisma {
 
 
   /**
-   * Model FacilityFieldDefaults
-   */
-
-  export type AggregateFacilityFieldDefaults = {
-    _count: FacilityFieldDefaultsCountAggregateOutputType | null
-    _avg: FacilityFieldDefaultsAvgAggregateOutputType | null
-    _sum: FacilityFieldDefaultsSumAggregateOutputType | null
-    _min: FacilityFieldDefaultsMinAggregateOutputType | null
-    _max: FacilityFieldDefaultsMaxAggregateOutputType | null
-  }
-
-  export type FacilityFieldDefaultsAvgAggregateOutputType = {
-    id: number | null
-    field_id: number | null
-    numeric_value: Decimal | null
-  }
-
-  export type FacilityFieldDefaultsSumAggregateOutputType = {
-    id: number | null
-    field_id: number | null
-    numeric_value: Decimal | null
-  }
-
-  export type FacilityFieldDefaultsMinAggregateOutputType = {
-    id: number | null
-    field_id: number | null
-    string_value: string | null
-    numeric_value: Decimal | null
-    boolean_value: boolean | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type FacilityFieldDefaultsMaxAggregateOutputType = {
-    id: number | null
-    field_id: number | null
-    string_value: string | null
-    numeric_value: Decimal | null
-    boolean_value: boolean | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type FacilityFieldDefaultsCountAggregateOutputType = {
-    id: number
-    field_id: number
-    string_value: number
-    numeric_value: number
-    boolean_value: number
-    json_value: number
-    is_active: number
-    created_at: number
-    updated_at: number
-    facility_id: number
-    _all: number
-  }
-
-
-  export type FacilityFieldDefaultsAvgAggregateInputType = {
-    id?: true
-    field_id?: true
-    numeric_value?: true
-  }
-
-  export type FacilityFieldDefaultsSumAggregateInputType = {
-    id?: true
-    field_id?: true
-    numeric_value?: true
-  }
-
-  export type FacilityFieldDefaultsMinAggregateInputType = {
-    id?: true
-    field_id?: true
-    string_value?: true
-    numeric_value?: true
-    boolean_value?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-  }
-
-  export type FacilityFieldDefaultsMaxAggregateInputType = {
-    id?: true
-    field_id?: true
-    string_value?: true
-    numeric_value?: true
-    boolean_value?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-  }
-
-  export type FacilityFieldDefaultsCountAggregateInputType = {
-    id?: true
-    field_id?: true
-    string_value?: true
-    numeric_value?: true
-    boolean_value?: true
-    json_value?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-    _all?: true
-  }
-
-  export type FacilityFieldDefaultsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which FacilityFieldDefaults to aggregate.
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityFieldDefaults to fetch.
-     */
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityFieldDefaults from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityFieldDefaults.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned FacilityFieldDefaults
-    **/
-    _count?: true | FacilityFieldDefaultsCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: FacilityFieldDefaultsAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: FacilityFieldDefaultsSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: FacilityFieldDefaultsMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: FacilityFieldDefaultsMaxAggregateInputType
-  }
-
-  export type GetFacilityFieldDefaultsAggregateType<T extends FacilityFieldDefaultsAggregateArgs> = {
-        [P in keyof T & keyof AggregateFacilityFieldDefaults]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateFacilityFieldDefaults[P]>
-      : GetScalarType<T[P], AggregateFacilityFieldDefaults[P]>
-  }
-
-
-
-
-  export type FacilityFieldDefaultsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityFieldDefaultsWhereInput
-    orderBy?: FacilityFieldDefaultsOrderByWithAggregationInput | FacilityFieldDefaultsOrderByWithAggregationInput[]
-    by: FacilityFieldDefaultsScalarFieldEnum[] | FacilityFieldDefaultsScalarFieldEnum
-    having?: FacilityFieldDefaultsScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: FacilityFieldDefaultsCountAggregateInputType | true
-    _avg?: FacilityFieldDefaultsAvgAggregateInputType
-    _sum?: FacilityFieldDefaultsSumAggregateInputType
-    _min?: FacilityFieldDefaultsMinAggregateInputType
-    _max?: FacilityFieldDefaultsMaxAggregateInputType
-  }
-
-  export type FacilityFieldDefaultsGroupByOutputType = {
-    id: number
-    field_id: number
-    string_value: string | null
-    numeric_value: Decimal | null
-    boolean_value: boolean | null
-    json_value: JsonValue | null
-    is_active: boolean
-    created_at: Date
-    updated_at: Date
-    facility_id: string
-    _count: FacilityFieldDefaultsCountAggregateOutputType | null
-    _avg: FacilityFieldDefaultsAvgAggregateOutputType | null
-    _sum: FacilityFieldDefaultsSumAggregateOutputType | null
-    _min: FacilityFieldDefaultsMinAggregateOutputType | null
-    _max: FacilityFieldDefaultsMaxAggregateOutputType | null
-  }
-
-  type GetFacilityFieldDefaultsGroupByPayload<T extends FacilityFieldDefaultsGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<FacilityFieldDefaultsGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof FacilityFieldDefaultsGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], FacilityFieldDefaultsGroupByOutputType[P]>
-            : GetScalarType<T[P], FacilityFieldDefaultsGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type FacilityFieldDefaultsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    field_id?: boolean
-    string_value?: boolean
-    numeric_value?: boolean
-    boolean_value?: boolean
-    json_value?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityFieldDefaults"]>
-
-  export type FacilityFieldDefaultsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    field_id?: boolean
-    string_value?: boolean
-    numeric_value?: boolean
-    boolean_value?: boolean
-    json_value?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityFieldDefaults"]>
-
-  export type FacilityFieldDefaultsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    field_id?: boolean
-    string_value?: boolean
-    numeric_value?: boolean
-    boolean_value?: boolean
-    json_value?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityFieldDefaults"]>
-
-  export type FacilityFieldDefaultsSelectScalar = {
-    id?: boolean
-    field_id?: boolean
-    string_value?: boolean
-    numeric_value?: boolean
-    boolean_value?: boolean
-    json_value?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-  }
-
-  export type FacilityFieldDefaultsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "field_id" | "string_value" | "numeric_value" | "boolean_value" | "json_value" | "is_active" | "created_at" | "updated_at" | "facility_id", ExtArgs["result"]["facilityFieldDefaults"]>
-  export type FacilityFieldDefaultsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }
-  export type FacilityFieldDefaultsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }
-  export type FacilityFieldDefaultsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    field?: boolean | FieldDefaultArgs<ExtArgs>
-  }
-
-  export type $FacilityFieldDefaultsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "FacilityFieldDefaults"
-    objects: {
-      facility: Prisma.$FacilityPayload<ExtArgs>
-      field: Prisma.$FieldPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      field_id: number
-      string_value: string | null
-      numeric_value: Prisma.Decimal | null
-      boolean_value: boolean | null
-      json_value: Prisma.JsonValue | null
-      is_active: boolean
-      created_at: Date
-      updated_at: Date
-      facility_id: string
-    }, ExtArgs["result"]["facilityFieldDefaults"]>
-    composites: {}
-  }
-
-  type FacilityFieldDefaultsGetPayload<S extends boolean | null | undefined | FacilityFieldDefaultsDefaultArgs> = $Result.GetResult<Prisma.$FacilityFieldDefaultsPayload, S>
-
-  type FacilityFieldDefaultsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<FacilityFieldDefaultsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: FacilityFieldDefaultsCountAggregateInputType | true
-    }
-
-  export interface FacilityFieldDefaultsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilityFieldDefaults'], meta: { name: 'FacilityFieldDefaults' } }
-    /**
-     * Find zero or one FacilityFieldDefaults that matches the filter.
-     * @param {FacilityFieldDefaultsFindUniqueArgs} args - Arguments to find a FacilityFieldDefaults
-     * @example
-     * // Get one FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends FacilityFieldDefaultsFindUniqueArgs>(args: SelectSubset<T, FacilityFieldDefaultsFindUniqueArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one FacilityFieldDefaults that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {FacilityFieldDefaultsFindUniqueOrThrowArgs} args - Arguments to find a FacilityFieldDefaults
-     * @example
-     * // Get one FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends FacilityFieldDefaultsFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilityFieldDefaultsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first FacilityFieldDefaults that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsFindFirstArgs} args - Arguments to find a FacilityFieldDefaults
-     * @example
-     * // Get one FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends FacilityFieldDefaultsFindFirstArgs>(args?: SelectSubset<T, FacilityFieldDefaultsFindFirstArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first FacilityFieldDefaults that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsFindFirstOrThrowArgs} args - Arguments to find a FacilityFieldDefaults
-     * @example
-     * // Get one FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends FacilityFieldDefaultsFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilityFieldDefaultsFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more FacilityFieldDefaults that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findMany()
-     * 
-     * // Get first 10 FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const facilityFieldDefaultsWithIdOnly = await prisma.facilityFieldDefaults.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends FacilityFieldDefaultsFindManyArgs>(args?: SelectSubset<T, FacilityFieldDefaultsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsCreateArgs} args - Arguments to create a FacilityFieldDefaults.
-     * @example
-     * // Create one FacilityFieldDefaults
-     * const FacilityFieldDefaults = await prisma.facilityFieldDefaults.create({
-     *   data: {
-     *     // ... data to create a FacilityFieldDefaults
-     *   }
-     * })
-     * 
-     */
-    create<T extends FacilityFieldDefaultsCreateArgs>(args: SelectSubset<T, FacilityFieldDefaultsCreateArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsCreateManyArgs} args - Arguments to create many FacilityFieldDefaults.
-     * @example
-     * // Create many FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends FacilityFieldDefaultsCreateManyArgs>(args?: SelectSubset<T, FacilityFieldDefaultsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many FacilityFieldDefaults and returns the data saved in the database.
-     * @param {FacilityFieldDefaultsCreateManyAndReturnArgs} args - Arguments to create many FacilityFieldDefaults.
-     * @example
-     * // Create many FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many FacilityFieldDefaults and only return the `id`
-     * const facilityFieldDefaultsWithIdOnly = await prisma.facilityFieldDefaults.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends FacilityFieldDefaultsCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilityFieldDefaultsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsDeleteArgs} args - Arguments to delete one FacilityFieldDefaults.
-     * @example
-     * // Delete one FacilityFieldDefaults
-     * const FacilityFieldDefaults = await prisma.facilityFieldDefaults.delete({
-     *   where: {
-     *     // ... filter to delete one FacilityFieldDefaults
-     *   }
-     * })
-     * 
-     */
-    delete<T extends FacilityFieldDefaultsDeleteArgs>(args: SelectSubset<T, FacilityFieldDefaultsDeleteArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsUpdateArgs} args - Arguments to update one FacilityFieldDefaults.
-     * @example
-     * // Update one FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends FacilityFieldDefaultsUpdateArgs>(args: SelectSubset<T, FacilityFieldDefaultsUpdateArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsDeleteManyArgs} args - Arguments to filter FacilityFieldDefaults to delete.
-     * @example
-     * // Delete a few FacilityFieldDefaults
-     * const { count } = await prisma.facilityFieldDefaults.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends FacilityFieldDefaultsDeleteManyArgs>(args?: SelectSubset<T, FacilityFieldDefaultsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more FacilityFieldDefaults.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends FacilityFieldDefaultsUpdateManyArgs>(args: SelectSubset<T, FacilityFieldDefaultsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more FacilityFieldDefaults and returns the data updated in the database.
-     * @param {FacilityFieldDefaultsUpdateManyAndReturnArgs} args - Arguments to update many FacilityFieldDefaults.
-     * @example
-     * // Update many FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more FacilityFieldDefaults and only return the `id`
-     * const facilityFieldDefaultsWithIdOnly = await prisma.facilityFieldDefaults.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends FacilityFieldDefaultsUpdateManyAndReturnArgs>(args: SelectSubset<T, FacilityFieldDefaultsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one FacilityFieldDefaults.
-     * @param {FacilityFieldDefaultsUpsertArgs} args - Arguments to update or create a FacilityFieldDefaults.
-     * @example
-     * // Update or create a FacilityFieldDefaults
-     * const facilityFieldDefaults = await prisma.facilityFieldDefaults.upsert({
-     *   create: {
-     *     // ... data to create a FacilityFieldDefaults
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the FacilityFieldDefaults we want to update
-     *   }
-     * })
-     */
-    upsert<T extends FacilityFieldDefaultsUpsertArgs>(args: SelectSubset<T, FacilityFieldDefaultsUpsertArgs<ExtArgs>>): Prisma__FacilityFieldDefaultsClient<$Result.GetResult<Prisma.$FacilityFieldDefaultsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of FacilityFieldDefaults.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsCountArgs} args - Arguments to filter FacilityFieldDefaults to count.
-     * @example
-     * // Count the number of FacilityFieldDefaults
-     * const count = await prisma.facilityFieldDefaults.count({
-     *   where: {
-     *     // ... the filter for the FacilityFieldDefaults we want to count
-     *   }
-     * })
-    **/
-    count<T extends FacilityFieldDefaultsCountArgs>(
-      args?: Subset<T, FacilityFieldDefaultsCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], FacilityFieldDefaultsCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a FacilityFieldDefaults.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends FacilityFieldDefaultsAggregateArgs>(args: Subset<T, FacilityFieldDefaultsAggregateArgs>): Prisma.PrismaPromise<GetFacilityFieldDefaultsAggregateType<T>>
-
-    /**
-     * Group by FacilityFieldDefaults.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityFieldDefaultsGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends FacilityFieldDefaultsGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FacilityFieldDefaultsGroupByArgs['orderBy'] }
-        : { orderBy?: FacilityFieldDefaultsGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, FacilityFieldDefaultsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilityFieldDefaultsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the FacilityFieldDefaults model
-   */
-  readonly fields: FacilityFieldDefaultsFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for FacilityFieldDefaults.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__FacilityFieldDefaultsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    field<T extends FieldDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FieldDefaultArgs<ExtArgs>>): Prisma__FieldClient<$Result.GetResult<Prisma.$FieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the FacilityFieldDefaults model
-   */
-  interface FacilityFieldDefaultsFieldRefs {
-    readonly id: FieldRef<"FacilityFieldDefaults", 'Int'>
-    readonly field_id: FieldRef<"FacilityFieldDefaults", 'Int'>
-    readonly string_value: FieldRef<"FacilityFieldDefaults", 'String'>
-    readonly numeric_value: FieldRef<"FacilityFieldDefaults", 'Decimal'>
-    readonly boolean_value: FieldRef<"FacilityFieldDefaults", 'Boolean'>
-    readonly json_value: FieldRef<"FacilityFieldDefaults", 'Json'>
-    readonly is_active: FieldRef<"FacilityFieldDefaults", 'Boolean'>
-    readonly created_at: FieldRef<"FacilityFieldDefaults", 'DateTime'>
-    readonly updated_at: FieldRef<"FacilityFieldDefaults", 'DateTime'>
-    readonly facility_id: FieldRef<"FacilityFieldDefaults", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * FacilityFieldDefaults findUnique
-   */
-  export type FacilityFieldDefaultsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityFieldDefaults to fetch.
-     */
-    where: FacilityFieldDefaultsWhereUniqueInput
-  }
-
-  /**
-   * FacilityFieldDefaults findUniqueOrThrow
-   */
-  export type FacilityFieldDefaultsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityFieldDefaults to fetch.
-     */
-    where: FacilityFieldDefaultsWhereUniqueInput
-  }
-
-  /**
-   * FacilityFieldDefaults findFirst
-   */
-  export type FacilityFieldDefaultsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityFieldDefaults to fetch.
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityFieldDefaults to fetch.
-     */
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for FacilityFieldDefaults.
-     */
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityFieldDefaults from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityFieldDefaults.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of FacilityFieldDefaults.
-     */
-    distinct?: FacilityFieldDefaultsScalarFieldEnum | FacilityFieldDefaultsScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityFieldDefaults findFirstOrThrow
-   */
-  export type FacilityFieldDefaultsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityFieldDefaults to fetch.
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityFieldDefaults to fetch.
-     */
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for FacilityFieldDefaults.
-     */
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityFieldDefaults from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityFieldDefaults.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of FacilityFieldDefaults.
-     */
-    distinct?: FacilityFieldDefaultsScalarFieldEnum | FacilityFieldDefaultsScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityFieldDefaults findMany
-   */
-  export type FacilityFieldDefaultsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityFieldDefaults to fetch.
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityFieldDefaults to fetch.
-     */
-    orderBy?: FacilityFieldDefaultsOrderByWithRelationInput | FacilityFieldDefaultsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing FacilityFieldDefaults.
-     */
-    cursor?: FacilityFieldDefaultsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityFieldDefaults from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityFieldDefaults.
-     */
-    skip?: number
-    distinct?: FacilityFieldDefaultsScalarFieldEnum | FacilityFieldDefaultsScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityFieldDefaults create
-   */
-  export type FacilityFieldDefaultsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * The data needed to create a FacilityFieldDefaults.
-     */
-    data: XOR<FacilityFieldDefaultsCreateInput, FacilityFieldDefaultsUncheckedCreateInput>
-  }
-
-  /**
-   * FacilityFieldDefaults createMany
-   */
-  export type FacilityFieldDefaultsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many FacilityFieldDefaults.
-     */
-    data: FacilityFieldDefaultsCreateManyInput | FacilityFieldDefaultsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * FacilityFieldDefaults createManyAndReturn
-   */
-  export type FacilityFieldDefaultsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * The data used to create many FacilityFieldDefaults.
-     */
-    data: FacilityFieldDefaultsCreateManyInput | FacilityFieldDefaultsCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * FacilityFieldDefaults update
-   */
-  export type FacilityFieldDefaultsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * The data needed to update a FacilityFieldDefaults.
-     */
-    data: XOR<FacilityFieldDefaultsUpdateInput, FacilityFieldDefaultsUncheckedUpdateInput>
-    /**
-     * Choose, which FacilityFieldDefaults to update.
-     */
-    where: FacilityFieldDefaultsWhereUniqueInput
-  }
-
-  /**
-   * FacilityFieldDefaults updateMany
-   */
-  export type FacilityFieldDefaultsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update FacilityFieldDefaults.
-     */
-    data: XOR<FacilityFieldDefaultsUpdateManyMutationInput, FacilityFieldDefaultsUncheckedUpdateManyInput>
-    /**
-     * Filter which FacilityFieldDefaults to update
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * Limit how many FacilityFieldDefaults to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * FacilityFieldDefaults updateManyAndReturn
-   */
-  export type FacilityFieldDefaultsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * The data used to update FacilityFieldDefaults.
-     */
-    data: XOR<FacilityFieldDefaultsUpdateManyMutationInput, FacilityFieldDefaultsUncheckedUpdateManyInput>
-    /**
-     * Filter which FacilityFieldDefaults to update
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * Limit how many FacilityFieldDefaults to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * FacilityFieldDefaults upsert
-   */
-  export type FacilityFieldDefaultsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * The filter to search for the FacilityFieldDefaults to update in case it exists.
-     */
-    where: FacilityFieldDefaultsWhereUniqueInput
-    /**
-     * In case the FacilityFieldDefaults found by the `where` argument doesn't exist, create a new FacilityFieldDefaults with this data.
-     */
-    create: XOR<FacilityFieldDefaultsCreateInput, FacilityFieldDefaultsUncheckedCreateInput>
-    /**
-     * In case the FacilityFieldDefaults was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<FacilityFieldDefaultsUpdateInput, FacilityFieldDefaultsUncheckedUpdateInput>
-  }
-
-  /**
-   * FacilityFieldDefaults delete
-   */
-  export type FacilityFieldDefaultsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-    /**
-     * Filter which FacilityFieldDefaults to delete.
-     */
-    where: FacilityFieldDefaultsWhereUniqueInput
-  }
-
-  /**
-   * FacilityFieldDefaults deleteMany
-   */
-  export type FacilityFieldDefaultsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which FacilityFieldDefaults to delete
-     */
-    where?: FacilityFieldDefaultsWhereInput
-    /**
-     * Limit how many FacilityFieldDefaults to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * FacilityFieldDefaults without action
-   */
-  export type FacilityFieldDefaultsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityFieldDefaults
-     */
-    select?: FacilityFieldDefaultsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityFieldDefaults
-     */
-    omit?: FacilityFieldDefaultsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityFieldDefaultsInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model FacilityFieldMapping
    */
 
@@ -19984,1156 +12812,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FacilityFieldMappingInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model sub_centre
-   */
-
-  export type AggregateSub_centre = {
-    _count: Sub_centreCountAggregateOutputType | null
-    _avg: Sub_centreAvgAggregateOutputType | null
-    _sum: Sub_centreSumAggregateOutputType | null
-    _min: Sub_centreMinAggregateOutputType | null
-    _max: Sub_centreMaxAggregateOutputType | null
-  }
-
-  export type Sub_centreAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type Sub_centreSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type Sub_centreMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    created_at: Date | null
-    updated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type Sub_centreMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    created_at: Date | null
-    updated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type Sub_centreCountAggregateOutputType = {
-    id: number
-    name: number
-    created_at: number
-    updated_at: number
-    facility_id: number
-    _all: number
-  }
-
-
-  export type Sub_centreAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type Sub_centreSumAggregateInputType = {
-    id?: true
-  }
-
-  export type Sub_centreMinAggregateInputType = {
-    id?: true
-    name?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-  }
-
-  export type Sub_centreMaxAggregateInputType = {
-    id?: true
-    name?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-  }
-
-  export type Sub_centreCountAggregateInputType = {
-    id?: true
-    name?: true
-    created_at?: true
-    updated_at?: true
-    facility_id?: true
-    _all?: true
-  }
-
-  export type Sub_centreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which sub_centre to aggregate.
-     */
-    where?: sub_centreWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of sub_centres to fetch.
-     */
-    orderBy?: sub_centreOrderByWithRelationInput | sub_centreOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: sub_centreWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` sub_centres from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` sub_centres.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned sub_centres
-    **/
-    _count?: true | Sub_centreCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Sub_centreAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Sub_centreSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Sub_centreMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Sub_centreMaxAggregateInputType
-  }
-
-  export type GetSub_centreAggregateType<T extends Sub_centreAggregateArgs> = {
-        [P in keyof T & keyof AggregateSub_centre]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSub_centre[P]>
-      : GetScalarType<T[P], AggregateSub_centre[P]>
-  }
-
-
-
-
-  export type sub_centreGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: sub_centreWhereInput
-    orderBy?: sub_centreOrderByWithAggregationInput | sub_centreOrderByWithAggregationInput[]
-    by: Sub_centreScalarFieldEnum[] | Sub_centreScalarFieldEnum
-    having?: sub_centreScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Sub_centreCountAggregateInputType | true
-    _avg?: Sub_centreAvgAggregateInputType
-    _sum?: Sub_centreSumAggregateInputType
-    _min?: Sub_centreMinAggregateInputType
-    _max?: Sub_centreMaxAggregateInputType
-  }
-
-  export type Sub_centreGroupByOutputType = {
-    id: number
-    name: string
-    created_at: Date
-    updated_at: Date
-    facility_id: string
-    _count: Sub_centreCountAggregateOutputType | null
-    _avg: Sub_centreAvgAggregateOutputType | null
-    _sum: Sub_centreSumAggregateOutputType | null
-    _min: Sub_centreMinAggregateOutputType | null
-    _max: Sub_centreMaxAggregateOutputType | null
-  }
-
-  type GetSub_centreGroupByPayload<T extends sub_centreGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Sub_centreGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Sub_centreGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Sub_centreGroupByOutputType[P]>
-            : GetScalarType<T[P], Sub_centreGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type sub_centreSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    monthly_health_data?: boolean | sub_centre$monthly_health_dataArgs<ExtArgs>
-    performance_calculations?: boolean | sub_centre$performance_calculationsArgs<ExtArgs>
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    _count?: boolean | Sub_centreCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sub_centre"]>
-
-  export type sub_centreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sub_centre"]>
-
-  export type sub_centreSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sub_centre"]>
-
-  export type sub_centreSelectScalar = {
-    id?: boolean
-    name?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility_id?: boolean
-  }
-
-  export type sub_centreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "created_at" | "updated_at" | "facility_id", ExtArgs["result"]["sub_centre"]>
-  export type sub_centreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    monthly_health_data?: boolean | sub_centre$monthly_health_dataArgs<ExtArgs>
-    performance_calculations?: boolean | sub_centre$performance_calculationsArgs<ExtArgs>
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    _count?: boolean | Sub_centreCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type sub_centreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-  }
-  export type sub_centreIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-  }
-
-  export type $sub_centrePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "sub_centre"
-    objects: {
-      monthly_health_data: Prisma.$MonthlyHealthDataPayload<ExtArgs>[]
-      performance_calculations: Prisma.$PerformanceCalculationPayload<ExtArgs>[]
-      facility: Prisma.$FacilityPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      created_at: Date
-      updated_at: Date
-      facility_id: string
-    }, ExtArgs["result"]["sub_centre"]>
-    composites: {}
-  }
-
-  type sub_centreGetPayload<S extends boolean | null | undefined | sub_centreDefaultArgs> = $Result.GetResult<Prisma.$sub_centrePayload, S>
-
-  type sub_centreCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<sub_centreFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Sub_centreCountAggregateInputType | true
-    }
-
-  export interface sub_centreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['sub_centre'], meta: { name: 'sub_centre' } }
-    /**
-     * Find zero or one Sub_centre that matches the filter.
-     * @param {sub_centreFindUniqueArgs} args - Arguments to find a Sub_centre
-     * @example
-     * // Get one Sub_centre
-     * const sub_centre = await prisma.sub_centre.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends sub_centreFindUniqueArgs>(args: SelectSubset<T, sub_centreFindUniqueArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Sub_centre that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {sub_centreFindUniqueOrThrowArgs} args - Arguments to find a Sub_centre
-     * @example
-     * // Get one Sub_centre
-     * const sub_centre = await prisma.sub_centre.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends sub_centreFindUniqueOrThrowArgs>(args: SelectSubset<T, sub_centreFindUniqueOrThrowArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Sub_centre that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreFindFirstArgs} args - Arguments to find a Sub_centre
-     * @example
-     * // Get one Sub_centre
-     * const sub_centre = await prisma.sub_centre.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends sub_centreFindFirstArgs>(args?: SelectSubset<T, sub_centreFindFirstArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Sub_centre that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreFindFirstOrThrowArgs} args - Arguments to find a Sub_centre
-     * @example
-     * // Get one Sub_centre
-     * const sub_centre = await prisma.sub_centre.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends sub_centreFindFirstOrThrowArgs>(args?: SelectSubset<T, sub_centreFindFirstOrThrowArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Sub_centres that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Sub_centres
-     * const sub_centres = await prisma.sub_centre.findMany()
-     * 
-     * // Get first 10 Sub_centres
-     * const sub_centres = await prisma.sub_centre.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const sub_centreWithIdOnly = await prisma.sub_centre.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends sub_centreFindManyArgs>(args?: SelectSubset<T, sub_centreFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Sub_centre.
-     * @param {sub_centreCreateArgs} args - Arguments to create a Sub_centre.
-     * @example
-     * // Create one Sub_centre
-     * const Sub_centre = await prisma.sub_centre.create({
-     *   data: {
-     *     // ... data to create a Sub_centre
-     *   }
-     * })
-     * 
-     */
-    create<T extends sub_centreCreateArgs>(args: SelectSubset<T, sub_centreCreateArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Sub_centres.
-     * @param {sub_centreCreateManyArgs} args - Arguments to create many Sub_centres.
-     * @example
-     * // Create many Sub_centres
-     * const sub_centre = await prisma.sub_centre.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends sub_centreCreateManyArgs>(args?: SelectSubset<T, sub_centreCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Sub_centres and returns the data saved in the database.
-     * @param {sub_centreCreateManyAndReturnArgs} args - Arguments to create many Sub_centres.
-     * @example
-     * // Create many Sub_centres
-     * const sub_centre = await prisma.sub_centre.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Sub_centres and only return the `id`
-     * const sub_centreWithIdOnly = await prisma.sub_centre.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends sub_centreCreateManyAndReturnArgs>(args?: SelectSubset<T, sub_centreCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Sub_centre.
-     * @param {sub_centreDeleteArgs} args - Arguments to delete one Sub_centre.
-     * @example
-     * // Delete one Sub_centre
-     * const Sub_centre = await prisma.sub_centre.delete({
-     *   where: {
-     *     // ... filter to delete one Sub_centre
-     *   }
-     * })
-     * 
-     */
-    delete<T extends sub_centreDeleteArgs>(args: SelectSubset<T, sub_centreDeleteArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Sub_centre.
-     * @param {sub_centreUpdateArgs} args - Arguments to update one Sub_centre.
-     * @example
-     * // Update one Sub_centre
-     * const sub_centre = await prisma.sub_centre.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends sub_centreUpdateArgs>(args: SelectSubset<T, sub_centreUpdateArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Sub_centres.
-     * @param {sub_centreDeleteManyArgs} args - Arguments to filter Sub_centres to delete.
-     * @example
-     * // Delete a few Sub_centres
-     * const { count } = await prisma.sub_centre.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends sub_centreDeleteManyArgs>(args?: SelectSubset<T, sub_centreDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Sub_centres.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Sub_centres
-     * const sub_centre = await prisma.sub_centre.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends sub_centreUpdateManyArgs>(args: SelectSubset<T, sub_centreUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Sub_centres and returns the data updated in the database.
-     * @param {sub_centreUpdateManyAndReturnArgs} args - Arguments to update many Sub_centres.
-     * @example
-     * // Update many Sub_centres
-     * const sub_centre = await prisma.sub_centre.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Sub_centres and only return the `id`
-     * const sub_centreWithIdOnly = await prisma.sub_centre.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends sub_centreUpdateManyAndReturnArgs>(args: SelectSubset<T, sub_centreUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Sub_centre.
-     * @param {sub_centreUpsertArgs} args - Arguments to update or create a Sub_centre.
-     * @example
-     * // Update or create a Sub_centre
-     * const sub_centre = await prisma.sub_centre.upsert({
-     *   create: {
-     *     // ... data to create a Sub_centre
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Sub_centre we want to update
-     *   }
-     * })
-     */
-    upsert<T extends sub_centreUpsertArgs>(args: SelectSubset<T, sub_centreUpsertArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Sub_centres.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreCountArgs} args - Arguments to filter Sub_centres to count.
-     * @example
-     * // Count the number of Sub_centres
-     * const count = await prisma.sub_centre.count({
-     *   where: {
-     *     // ... the filter for the Sub_centres we want to count
-     *   }
-     * })
-    **/
-    count<T extends sub_centreCountArgs>(
-      args?: Subset<T, sub_centreCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Sub_centreCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Sub_centre.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Sub_centreAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Sub_centreAggregateArgs>(args: Subset<T, Sub_centreAggregateArgs>): Prisma.PrismaPromise<GetSub_centreAggregateType<T>>
-
-    /**
-     * Group by Sub_centre.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {sub_centreGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends sub_centreGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: sub_centreGroupByArgs['orderBy'] }
-        : { orderBy?: sub_centreGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, sub_centreGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSub_centreGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the sub_centre model
-   */
-  readonly fields: sub_centreFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for sub_centre.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__sub_centreClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    monthly_health_data<T extends sub_centre$monthly_health_dataArgs<ExtArgs> = {}>(args?: Subset<T, sub_centre$monthly_health_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyHealthDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    performance_calculations<T extends sub_centre$performance_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, sub_centre$performance_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the sub_centre model
-   */
-  interface sub_centreFieldRefs {
-    readonly id: FieldRef<"sub_centre", 'Int'>
-    readonly name: FieldRef<"sub_centre", 'String'>
-    readonly created_at: FieldRef<"sub_centre", 'DateTime'>
-    readonly updated_at: FieldRef<"sub_centre", 'DateTime'>
-    readonly facility_id: FieldRef<"sub_centre", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * sub_centre findUnique
-   */
-  export type sub_centreFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter, which sub_centre to fetch.
-     */
-    where: sub_centreWhereUniqueInput
-  }
-
-  /**
-   * sub_centre findUniqueOrThrow
-   */
-  export type sub_centreFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter, which sub_centre to fetch.
-     */
-    where: sub_centreWhereUniqueInput
-  }
-
-  /**
-   * sub_centre findFirst
-   */
-  export type sub_centreFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter, which sub_centre to fetch.
-     */
-    where?: sub_centreWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of sub_centres to fetch.
-     */
-    orderBy?: sub_centreOrderByWithRelationInput | sub_centreOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for sub_centres.
-     */
-    cursor?: sub_centreWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` sub_centres from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` sub_centres.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of sub_centres.
-     */
-    distinct?: Sub_centreScalarFieldEnum | Sub_centreScalarFieldEnum[]
-  }
-
-  /**
-   * sub_centre findFirstOrThrow
-   */
-  export type sub_centreFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter, which sub_centre to fetch.
-     */
-    where?: sub_centreWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of sub_centres to fetch.
-     */
-    orderBy?: sub_centreOrderByWithRelationInput | sub_centreOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for sub_centres.
-     */
-    cursor?: sub_centreWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` sub_centres from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` sub_centres.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of sub_centres.
-     */
-    distinct?: Sub_centreScalarFieldEnum | Sub_centreScalarFieldEnum[]
-  }
-
-  /**
-   * sub_centre findMany
-   */
-  export type sub_centreFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter, which sub_centres to fetch.
-     */
-    where?: sub_centreWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of sub_centres to fetch.
-     */
-    orderBy?: sub_centreOrderByWithRelationInput | sub_centreOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing sub_centres.
-     */
-    cursor?: sub_centreWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` sub_centres from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` sub_centres.
-     */
-    skip?: number
-    distinct?: Sub_centreScalarFieldEnum | Sub_centreScalarFieldEnum[]
-  }
-
-  /**
-   * sub_centre create
-   */
-  export type sub_centreCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * The data needed to create a sub_centre.
-     */
-    data: XOR<sub_centreCreateInput, sub_centreUncheckedCreateInput>
-  }
-
-  /**
-   * sub_centre createMany
-   */
-  export type sub_centreCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many sub_centres.
-     */
-    data: sub_centreCreateManyInput | sub_centreCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * sub_centre createManyAndReturn
-   */
-  export type sub_centreCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * The data used to create many sub_centres.
-     */
-    data: sub_centreCreateManyInput | sub_centreCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * sub_centre update
-   */
-  export type sub_centreUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * The data needed to update a sub_centre.
-     */
-    data: XOR<sub_centreUpdateInput, sub_centreUncheckedUpdateInput>
-    /**
-     * Choose, which sub_centre to update.
-     */
-    where: sub_centreWhereUniqueInput
-  }
-
-  /**
-   * sub_centre updateMany
-   */
-  export type sub_centreUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update sub_centres.
-     */
-    data: XOR<sub_centreUpdateManyMutationInput, sub_centreUncheckedUpdateManyInput>
-    /**
-     * Filter which sub_centres to update
-     */
-    where?: sub_centreWhereInput
-    /**
-     * Limit how many sub_centres to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * sub_centre updateManyAndReturn
-   */
-  export type sub_centreUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * The data used to update sub_centres.
-     */
-    data: XOR<sub_centreUpdateManyMutationInput, sub_centreUncheckedUpdateManyInput>
-    /**
-     * Filter which sub_centres to update
-     */
-    where?: sub_centreWhereInput
-    /**
-     * Limit how many sub_centres to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * sub_centre upsert
-   */
-  export type sub_centreUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * The filter to search for the sub_centre to update in case it exists.
-     */
-    where: sub_centreWhereUniqueInput
-    /**
-     * In case the sub_centre found by the `where` argument doesn't exist, create a new sub_centre with this data.
-     */
-    create: XOR<sub_centreCreateInput, sub_centreUncheckedCreateInput>
-    /**
-     * In case the sub_centre was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<sub_centreUpdateInput, sub_centreUncheckedUpdateInput>
-  }
-
-  /**
-   * sub_centre delete
-   */
-  export type sub_centreDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    /**
-     * Filter which sub_centre to delete.
-     */
-    where: sub_centreWhereUniqueInput
-  }
-
-  /**
-   * sub_centre deleteMany
-   */
-  export type sub_centreDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which sub_centres to delete
-     */
-    where?: sub_centreWhereInput
-    /**
-     * Limit how many sub_centres to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * sub_centre.monthly_health_data
-   */
-  export type sub_centre$monthly_health_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonthlyHealthData
-     */
-    select?: MonthlyHealthDataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MonthlyHealthData
-     */
-    omit?: MonthlyHealthDataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonthlyHealthDataInclude<ExtArgs> | null
-    where?: MonthlyHealthDataWhereInput
-    orderBy?: MonthlyHealthDataOrderByWithRelationInput | MonthlyHealthDataOrderByWithRelationInput[]
-    cursor?: MonthlyHealthDataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonthlyHealthDataScalarFieldEnum | MonthlyHealthDataScalarFieldEnum[]
-  }
-
-  /**
-   * sub_centre.performance_calculations
-   */
-  export type sub_centre$performance_calculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    where?: PerformanceCalculationWhereInput
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    cursor?: PerformanceCalculationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
-   * sub_centre without action
-   */
-  export type sub_centreDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
   }
 
 
@@ -24936,9 +16614,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
-    facility_allocations?: boolean | WorkerAllocationConfig$facility_allocationsArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
-    _count?: boolean | WorkerAllocationConfigCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workerAllocationConfig"]>
 
   export type WorkerAllocationConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -24984,9 +16660,7 @@ export namespace Prisma {
 
   export type WorkerAllocationConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_type_id" | "worker_type" | "worker_role" | "max_count" | "allocated_amount" | "description" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["workerAllocationConfig"]>
   export type WorkerAllocationConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility_allocations?: boolean | WorkerAllocationConfig$facility_allocationsArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
-    _count?: boolean | WorkerAllocationConfigCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkerAllocationConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
@@ -24998,7 +16672,6 @@ export namespace Prisma {
   export type $WorkerAllocationConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WorkerAllocationConfig"
     objects: {
-      facility_allocations: Prisma.$FacilityWorkerAllocationPayload<ExtArgs>[]
       facility_type: Prisma.$FacilityTypePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -25406,7 +17079,6 @@ export namespace Prisma {
    */
   export interface Prisma__WorkerAllocationConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    facility_allocations<T extends WorkerAllocationConfig$facility_allocationsArgs<ExtArgs> = {}>(args?: Subset<T, WorkerAllocationConfig$facility_allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility_type<T extends FacilityTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityTypeDefaultArgs<ExtArgs>>): Prisma__FacilityTypeClient<$Result.GetResult<Prisma.$FacilityTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -25843,30 +17515,6 @@ export namespace Prisma {
   }
 
   /**
-   * WorkerAllocationConfig.facility_allocations
-   */
-  export type WorkerAllocationConfig$facility_allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    where?: FacilityWorkerAllocationWhereInput
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FacilityWorkerAllocationScalarFieldEnum | FacilityWorkerAllocationScalarFieldEnum[]
-  }
-
-  /**
    * WorkerAllocationConfig without action
    */
   export type WorkerAllocationConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25882,1157 +17530,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: WorkerAllocationConfigInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model FacilityWorkerAllocation
-   */
-
-  export type AggregateFacilityWorkerAllocation = {
-    _count: FacilityWorkerAllocationCountAggregateOutputType | null
-    _avg: FacilityWorkerAllocationAvgAggregateOutputType | null
-    _sum: FacilityWorkerAllocationSumAggregateOutputType | null
-    _min: FacilityWorkerAllocationMinAggregateOutputType | null
-    _max: FacilityWorkerAllocationMaxAggregateOutputType | null
-  }
-
-  export type FacilityWorkerAllocationAvgAggregateOutputType = {
-    id: number | null
-    worker_allocation_config_id: number | null
-    worker_count: number | null
-    total_allocated_amount: Decimal | null
-  }
-
-  export type FacilityWorkerAllocationSumAggregateOutputType = {
-    id: number | null
-    worker_allocation_config_id: number | null
-    worker_count: number | null
-    total_allocated_amount: Decimal | null
-  }
-
-  export type FacilityWorkerAllocationMinAggregateOutputType = {
-    id: number | null
-    facility_id: string | null
-    worker_allocation_config_id: number | null
-    worker_count: number | null
-    total_allocated_amount: Decimal | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type FacilityWorkerAllocationMaxAggregateOutputType = {
-    id: number | null
-    facility_id: string | null
-    worker_allocation_config_id: number | null
-    worker_count: number | null
-    total_allocated_amount: Decimal | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type FacilityWorkerAllocationCountAggregateOutputType = {
-    id: number
-    facility_id: number
-    worker_allocation_config_id: number
-    worker_count: number
-    total_allocated_amount: number
-    is_active: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type FacilityWorkerAllocationAvgAggregateInputType = {
-    id?: true
-    worker_allocation_config_id?: true
-    worker_count?: true
-    total_allocated_amount?: true
-  }
-
-  export type FacilityWorkerAllocationSumAggregateInputType = {
-    id?: true
-    worker_allocation_config_id?: true
-    worker_count?: true
-    total_allocated_amount?: true
-  }
-
-  export type FacilityWorkerAllocationMinAggregateInputType = {
-    id?: true
-    facility_id?: true
-    worker_allocation_config_id?: true
-    worker_count?: true
-    total_allocated_amount?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type FacilityWorkerAllocationMaxAggregateInputType = {
-    id?: true
-    facility_id?: true
-    worker_allocation_config_id?: true
-    worker_count?: true
-    total_allocated_amount?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type FacilityWorkerAllocationCountAggregateInputType = {
-    id?: true
-    facility_id?: true
-    worker_allocation_config_id?: true
-    worker_count?: true
-    total_allocated_amount?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type FacilityWorkerAllocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which FacilityWorkerAllocation to aggregate.
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityWorkerAllocations to fetch.
-     */
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityWorkerAllocations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityWorkerAllocations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned FacilityWorkerAllocations
-    **/
-    _count?: true | FacilityWorkerAllocationCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: FacilityWorkerAllocationAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: FacilityWorkerAllocationSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: FacilityWorkerAllocationMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: FacilityWorkerAllocationMaxAggregateInputType
-  }
-
-  export type GetFacilityWorkerAllocationAggregateType<T extends FacilityWorkerAllocationAggregateArgs> = {
-        [P in keyof T & keyof AggregateFacilityWorkerAllocation]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateFacilityWorkerAllocation[P]>
-      : GetScalarType<T[P], AggregateFacilityWorkerAllocation[P]>
-  }
-
-
-
-
-  export type FacilityWorkerAllocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FacilityWorkerAllocationWhereInput
-    orderBy?: FacilityWorkerAllocationOrderByWithAggregationInput | FacilityWorkerAllocationOrderByWithAggregationInput[]
-    by: FacilityWorkerAllocationScalarFieldEnum[] | FacilityWorkerAllocationScalarFieldEnum
-    having?: FacilityWorkerAllocationScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: FacilityWorkerAllocationCountAggregateInputType | true
-    _avg?: FacilityWorkerAllocationAvgAggregateInputType
-    _sum?: FacilityWorkerAllocationSumAggregateInputType
-    _min?: FacilityWorkerAllocationMinAggregateInputType
-    _max?: FacilityWorkerAllocationMaxAggregateInputType
-  }
-
-  export type FacilityWorkerAllocationGroupByOutputType = {
-    id: number
-    facility_id: string
-    worker_allocation_config_id: number
-    worker_count: number
-    total_allocated_amount: Decimal
-    is_active: boolean
-    created_at: Date
-    updated_at: Date
-    _count: FacilityWorkerAllocationCountAggregateOutputType | null
-    _avg: FacilityWorkerAllocationAvgAggregateOutputType | null
-    _sum: FacilityWorkerAllocationSumAggregateOutputType | null
-    _min: FacilityWorkerAllocationMinAggregateOutputType | null
-    _max: FacilityWorkerAllocationMaxAggregateOutputType | null
-  }
-
-  type GetFacilityWorkerAllocationGroupByPayload<T extends FacilityWorkerAllocationGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<FacilityWorkerAllocationGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof FacilityWorkerAllocationGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], FacilityWorkerAllocationGroupByOutputType[P]>
-            : GetScalarType<T[P], FacilityWorkerAllocationGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type FacilityWorkerAllocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    facility_id?: boolean
-    worker_allocation_config_id?: boolean
-    worker_count?: boolean
-    total_allocated_amount?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityWorkerAllocation"]>
-
-  export type FacilityWorkerAllocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    facility_id?: boolean
-    worker_allocation_config_id?: boolean
-    worker_count?: boolean
-    total_allocated_amount?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityWorkerAllocation"]>
-
-  export type FacilityWorkerAllocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    facility_id?: boolean
-    worker_allocation_config_id?: boolean
-    worker_count?: boolean
-    total_allocated_amount?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["facilityWorkerAllocation"]>
-
-  export type FacilityWorkerAllocationSelectScalar = {
-    id?: boolean
-    facility_id?: boolean
-    worker_allocation_config_id?: boolean
-    worker_count?: boolean
-    total_allocated_amount?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type FacilityWorkerAllocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_id" | "worker_allocation_config_id" | "worker_count" | "total_allocated_amount" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["facilityWorkerAllocation"]>
-  export type FacilityWorkerAllocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }
-  export type FacilityWorkerAllocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }
-  export type FacilityWorkerAllocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | FacilityDefaultArgs<ExtArgs>
-    worker_allocation_config?: boolean | WorkerAllocationConfigDefaultArgs<ExtArgs>
-  }
-
-  export type $FacilityWorkerAllocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "FacilityWorkerAllocation"
-    objects: {
-      facility: Prisma.$FacilityPayload<ExtArgs>
-      worker_allocation_config: Prisma.$WorkerAllocationConfigPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      facility_id: string
-      worker_allocation_config_id: number
-      worker_count: number
-      total_allocated_amount: Prisma.Decimal
-      is_active: boolean
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["facilityWorkerAllocation"]>
-    composites: {}
-  }
-
-  type FacilityWorkerAllocationGetPayload<S extends boolean | null | undefined | FacilityWorkerAllocationDefaultArgs> = $Result.GetResult<Prisma.$FacilityWorkerAllocationPayload, S>
-
-  type FacilityWorkerAllocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<FacilityWorkerAllocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: FacilityWorkerAllocationCountAggregateInputType | true
-    }
-
-  export interface FacilityWorkerAllocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilityWorkerAllocation'], meta: { name: 'FacilityWorkerAllocation' } }
-    /**
-     * Find zero or one FacilityWorkerAllocation that matches the filter.
-     * @param {FacilityWorkerAllocationFindUniqueArgs} args - Arguments to find a FacilityWorkerAllocation
-     * @example
-     * // Get one FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends FacilityWorkerAllocationFindUniqueArgs>(args: SelectSubset<T, FacilityWorkerAllocationFindUniqueArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one FacilityWorkerAllocation that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {FacilityWorkerAllocationFindUniqueOrThrowArgs} args - Arguments to find a FacilityWorkerAllocation
-     * @example
-     * // Get one FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends FacilityWorkerAllocationFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilityWorkerAllocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first FacilityWorkerAllocation that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationFindFirstArgs} args - Arguments to find a FacilityWorkerAllocation
-     * @example
-     * // Get one FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends FacilityWorkerAllocationFindFirstArgs>(args?: SelectSubset<T, FacilityWorkerAllocationFindFirstArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first FacilityWorkerAllocation that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationFindFirstOrThrowArgs} args - Arguments to find a FacilityWorkerAllocation
-     * @example
-     * // Get one FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends FacilityWorkerAllocationFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilityWorkerAllocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more FacilityWorkerAllocations that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all FacilityWorkerAllocations
-     * const facilityWorkerAllocations = await prisma.facilityWorkerAllocation.findMany()
-     * 
-     * // Get first 10 FacilityWorkerAllocations
-     * const facilityWorkerAllocations = await prisma.facilityWorkerAllocation.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const facilityWorkerAllocationWithIdOnly = await prisma.facilityWorkerAllocation.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends FacilityWorkerAllocationFindManyArgs>(args?: SelectSubset<T, FacilityWorkerAllocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a FacilityWorkerAllocation.
-     * @param {FacilityWorkerAllocationCreateArgs} args - Arguments to create a FacilityWorkerAllocation.
-     * @example
-     * // Create one FacilityWorkerAllocation
-     * const FacilityWorkerAllocation = await prisma.facilityWorkerAllocation.create({
-     *   data: {
-     *     // ... data to create a FacilityWorkerAllocation
-     *   }
-     * })
-     * 
-     */
-    create<T extends FacilityWorkerAllocationCreateArgs>(args: SelectSubset<T, FacilityWorkerAllocationCreateArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many FacilityWorkerAllocations.
-     * @param {FacilityWorkerAllocationCreateManyArgs} args - Arguments to create many FacilityWorkerAllocations.
-     * @example
-     * // Create many FacilityWorkerAllocations
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends FacilityWorkerAllocationCreateManyArgs>(args?: SelectSubset<T, FacilityWorkerAllocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many FacilityWorkerAllocations and returns the data saved in the database.
-     * @param {FacilityWorkerAllocationCreateManyAndReturnArgs} args - Arguments to create many FacilityWorkerAllocations.
-     * @example
-     * // Create many FacilityWorkerAllocations
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many FacilityWorkerAllocations and only return the `id`
-     * const facilityWorkerAllocationWithIdOnly = await prisma.facilityWorkerAllocation.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends FacilityWorkerAllocationCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilityWorkerAllocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a FacilityWorkerAllocation.
-     * @param {FacilityWorkerAllocationDeleteArgs} args - Arguments to delete one FacilityWorkerAllocation.
-     * @example
-     * // Delete one FacilityWorkerAllocation
-     * const FacilityWorkerAllocation = await prisma.facilityWorkerAllocation.delete({
-     *   where: {
-     *     // ... filter to delete one FacilityWorkerAllocation
-     *   }
-     * })
-     * 
-     */
-    delete<T extends FacilityWorkerAllocationDeleteArgs>(args: SelectSubset<T, FacilityWorkerAllocationDeleteArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one FacilityWorkerAllocation.
-     * @param {FacilityWorkerAllocationUpdateArgs} args - Arguments to update one FacilityWorkerAllocation.
-     * @example
-     * // Update one FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends FacilityWorkerAllocationUpdateArgs>(args: SelectSubset<T, FacilityWorkerAllocationUpdateArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more FacilityWorkerAllocations.
-     * @param {FacilityWorkerAllocationDeleteManyArgs} args - Arguments to filter FacilityWorkerAllocations to delete.
-     * @example
-     * // Delete a few FacilityWorkerAllocations
-     * const { count } = await prisma.facilityWorkerAllocation.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends FacilityWorkerAllocationDeleteManyArgs>(args?: SelectSubset<T, FacilityWorkerAllocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more FacilityWorkerAllocations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many FacilityWorkerAllocations
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends FacilityWorkerAllocationUpdateManyArgs>(args: SelectSubset<T, FacilityWorkerAllocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more FacilityWorkerAllocations and returns the data updated in the database.
-     * @param {FacilityWorkerAllocationUpdateManyAndReturnArgs} args - Arguments to update many FacilityWorkerAllocations.
-     * @example
-     * // Update many FacilityWorkerAllocations
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more FacilityWorkerAllocations and only return the `id`
-     * const facilityWorkerAllocationWithIdOnly = await prisma.facilityWorkerAllocation.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends FacilityWorkerAllocationUpdateManyAndReturnArgs>(args: SelectSubset<T, FacilityWorkerAllocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one FacilityWorkerAllocation.
-     * @param {FacilityWorkerAllocationUpsertArgs} args - Arguments to update or create a FacilityWorkerAllocation.
-     * @example
-     * // Update or create a FacilityWorkerAllocation
-     * const facilityWorkerAllocation = await prisma.facilityWorkerAllocation.upsert({
-     *   create: {
-     *     // ... data to create a FacilityWorkerAllocation
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the FacilityWorkerAllocation we want to update
-     *   }
-     * })
-     */
-    upsert<T extends FacilityWorkerAllocationUpsertArgs>(args: SelectSubset<T, FacilityWorkerAllocationUpsertArgs<ExtArgs>>): Prisma__FacilityWorkerAllocationClient<$Result.GetResult<Prisma.$FacilityWorkerAllocationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of FacilityWorkerAllocations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationCountArgs} args - Arguments to filter FacilityWorkerAllocations to count.
-     * @example
-     * // Count the number of FacilityWorkerAllocations
-     * const count = await prisma.facilityWorkerAllocation.count({
-     *   where: {
-     *     // ... the filter for the FacilityWorkerAllocations we want to count
-     *   }
-     * })
-    **/
-    count<T extends FacilityWorkerAllocationCountArgs>(
-      args?: Subset<T, FacilityWorkerAllocationCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], FacilityWorkerAllocationCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a FacilityWorkerAllocation.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends FacilityWorkerAllocationAggregateArgs>(args: Subset<T, FacilityWorkerAllocationAggregateArgs>): Prisma.PrismaPromise<GetFacilityWorkerAllocationAggregateType<T>>
-
-    /**
-     * Group by FacilityWorkerAllocation.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FacilityWorkerAllocationGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends FacilityWorkerAllocationGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FacilityWorkerAllocationGroupByArgs['orderBy'] }
-        : { orderBy?: FacilityWorkerAllocationGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, FacilityWorkerAllocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilityWorkerAllocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the FacilityWorkerAllocation model
-   */
-  readonly fields: FacilityWorkerAllocationFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for FacilityWorkerAllocation.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__FacilityWorkerAllocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    worker_allocation_config<T extends WorkerAllocationConfigDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerAllocationConfigDefaultArgs<ExtArgs>>): Prisma__WorkerAllocationConfigClient<$Result.GetResult<Prisma.$WorkerAllocationConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the FacilityWorkerAllocation model
-   */
-  interface FacilityWorkerAllocationFieldRefs {
-    readonly id: FieldRef<"FacilityWorkerAllocation", 'Int'>
-    readonly facility_id: FieldRef<"FacilityWorkerAllocation", 'String'>
-    readonly worker_allocation_config_id: FieldRef<"FacilityWorkerAllocation", 'Int'>
-    readonly worker_count: FieldRef<"FacilityWorkerAllocation", 'Int'>
-    readonly total_allocated_amount: FieldRef<"FacilityWorkerAllocation", 'Decimal'>
-    readonly is_active: FieldRef<"FacilityWorkerAllocation", 'Boolean'>
-    readonly created_at: FieldRef<"FacilityWorkerAllocation", 'DateTime'>
-    readonly updated_at: FieldRef<"FacilityWorkerAllocation", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * FacilityWorkerAllocation findUnique
-   */
-  export type FacilityWorkerAllocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityWorkerAllocation to fetch.
-     */
-    where: FacilityWorkerAllocationWhereUniqueInput
-  }
-
-  /**
-   * FacilityWorkerAllocation findUniqueOrThrow
-   */
-  export type FacilityWorkerAllocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityWorkerAllocation to fetch.
-     */
-    where: FacilityWorkerAllocationWhereUniqueInput
-  }
-
-  /**
-   * FacilityWorkerAllocation findFirst
-   */
-  export type FacilityWorkerAllocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityWorkerAllocation to fetch.
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityWorkerAllocations to fetch.
-     */
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for FacilityWorkerAllocations.
-     */
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityWorkerAllocations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityWorkerAllocations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of FacilityWorkerAllocations.
-     */
-    distinct?: FacilityWorkerAllocationScalarFieldEnum | FacilityWorkerAllocationScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityWorkerAllocation findFirstOrThrow
-   */
-  export type FacilityWorkerAllocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityWorkerAllocation to fetch.
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityWorkerAllocations to fetch.
-     */
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for FacilityWorkerAllocations.
-     */
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityWorkerAllocations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityWorkerAllocations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of FacilityWorkerAllocations.
-     */
-    distinct?: FacilityWorkerAllocationScalarFieldEnum | FacilityWorkerAllocationScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityWorkerAllocation findMany
-   */
-  export type FacilityWorkerAllocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter, which FacilityWorkerAllocations to fetch.
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of FacilityWorkerAllocations to fetch.
-     */
-    orderBy?: FacilityWorkerAllocationOrderByWithRelationInput | FacilityWorkerAllocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing FacilityWorkerAllocations.
-     */
-    cursor?: FacilityWorkerAllocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` FacilityWorkerAllocations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` FacilityWorkerAllocations.
-     */
-    skip?: number
-    distinct?: FacilityWorkerAllocationScalarFieldEnum | FacilityWorkerAllocationScalarFieldEnum[]
-  }
-
-  /**
-   * FacilityWorkerAllocation create
-   */
-  export type FacilityWorkerAllocationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * The data needed to create a FacilityWorkerAllocation.
-     */
-    data: XOR<FacilityWorkerAllocationCreateInput, FacilityWorkerAllocationUncheckedCreateInput>
-  }
-
-  /**
-   * FacilityWorkerAllocation createMany
-   */
-  export type FacilityWorkerAllocationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many FacilityWorkerAllocations.
-     */
-    data: FacilityWorkerAllocationCreateManyInput | FacilityWorkerAllocationCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * FacilityWorkerAllocation createManyAndReturn
-   */
-  export type FacilityWorkerAllocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * The data used to create many FacilityWorkerAllocations.
-     */
-    data: FacilityWorkerAllocationCreateManyInput | FacilityWorkerAllocationCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * FacilityWorkerAllocation update
-   */
-  export type FacilityWorkerAllocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a FacilityWorkerAllocation.
-     */
-    data: XOR<FacilityWorkerAllocationUpdateInput, FacilityWorkerAllocationUncheckedUpdateInput>
-    /**
-     * Choose, which FacilityWorkerAllocation to update.
-     */
-    where: FacilityWorkerAllocationWhereUniqueInput
-  }
-
-  /**
-   * FacilityWorkerAllocation updateMany
-   */
-  export type FacilityWorkerAllocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update FacilityWorkerAllocations.
-     */
-    data: XOR<FacilityWorkerAllocationUpdateManyMutationInput, FacilityWorkerAllocationUncheckedUpdateManyInput>
-    /**
-     * Filter which FacilityWorkerAllocations to update
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * Limit how many FacilityWorkerAllocations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * FacilityWorkerAllocation updateManyAndReturn
-   */
-  export type FacilityWorkerAllocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * The data used to update FacilityWorkerAllocations.
-     */
-    data: XOR<FacilityWorkerAllocationUpdateManyMutationInput, FacilityWorkerAllocationUncheckedUpdateManyInput>
-    /**
-     * Filter which FacilityWorkerAllocations to update
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * Limit how many FacilityWorkerAllocations to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * FacilityWorkerAllocation upsert
-   */
-  export type FacilityWorkerAllocationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * The filter to search for the FacilityWorkerAllocation to update in case it exists.
-     */
-    where: FacilityWorkerAllocationWhereUniqueInput
-    /**
-     * In case the FacilityWorkerAllocation found by the `where` argument doesn't exist, create a new FacilityWorkerAllocation with this data.
-     */
-    create: XOR<FacilityWorkerAllocationCreateInput, FacilityWorkerAllocationUncheckedCreateInput>
-    /**
-     * In case the FacilityWorkerAllocation was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<FacilityWorkerAllocationUpdateInput, FacilityWorkerAllocationUncheckedUpdateInput>
-  }
-
-  /**
-   * FacilityWorkerAllocation delete
-   */
-  export type FacilityWorkerAllocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
-    /**
-     * Filter which FacilityWorkerAllocation to delete.
-     */
-    where: FacilityWorkerAllocationWhereUniqueInput
-  }
-
-  /**
-   * FacilityWorkerAllocation deleteMany
-   */
-  export type FacilityWorkerAllocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which FacilityWorkerAllocations to delete
-     */
-    where?: FacilityWorkerAllocationWhereInput
-    /**
-     * Limit how many FacilityWorkerAllocations to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * FacilityWorkerAllocation without action
-   */
-  export type FacilityWorkerAllocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FacilityWorkerAllocation
-     */
-    select?: FacilityWorkerAllocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FacilityWorkerAllocation
-     */
-    omit?: FacilityWorkerAllocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityWorkerAllocationInclude<ExtArgs> | null
   }
 
 
@@ -28225,7 +18722,6 @@ export namespace Prisma {
     condition_type: string | null
     created_at: Date | null
     updated_at: Date | null
-    remuneration_system_id: string | null
   }
 
   export type IndicatorRemunerationMaxAggregateOutputType = {
@@ -28237,7 +18733,6 @@ export namespace Prisma {
     condition_type: string | null
     created_at: Date | null
     updated_at: Date | null
-    remuneration_system_id: string | null
   }
 
   export type IndicatorRemunerationCountAggregateOutputType = {
@@ -28249,7 +18744,6 @@ export namespace Prisma {
     condition_type: number
     created_at: number
     updated_at: number
-    remuneration_system_id: number
     _all: number
   }
 
@@ -28279,7 +18773,6 @@ export namespace Prisma {
     condition_type?: true
     created_at?: true
     updated_at?: true
-    remuneration_system_id?: true
   }
 
   export type IndicatorRemunerationMaxAggregateInputType = {
@@ -28291,7 +18784,6 @@ export namespace Prisma {
     condition_type?: true
     created_at?: true
     updated_at?: true
-    remuneration_system_id?: true
   }
 
   export type IndicatorRemunerationCountAggregateInputType = {
@@ -28303,7 +18795,6 @@ export namespace Prisma {
     condition_type?: true
     created_at?: true
     updated_at?: true
-    remuneration_system_id?: true
     _all?: true
   }
 
@@ -28402,7 +18893,6 @@ export namespace Prisma {
     condition_type: string | null
     created_at: Date
     updated_at: Date
-    remuneration_system_id: string | null
     _count: IndicatorRemunerationCountAggregateOutputType | null
     _avg: IndicatorRemunerationAvgAggregateOutputType | null
     _sum: IndicatorRemunerationSumAggregateOutputType | null
@@ -28433,10 +18923,8 @@ export namespace Prisma {
     condition_type?: boolean
     created_at?: boolean
     updated_at?: boolean
-    remuneration_system_id?: boolean
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }, ExtArgs["result"]["indicatorRemuneration"]>
 
   export type IndicatorRemunerationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28448,10 +18936,8 @@ export namespace Prisma {
     condition_type?: boolean
     created_at?: boolean
     updated_at?: boolean
-    remuneration_system_id?: boolean
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }, ExtArgs["result"]["indicatorRemuneration"]>
 
   export type IndicatorRemunerationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28463,10 +18949,8 @@ export namespace Prisma {
     condition_type?: boolean
     created_at?: boolean
     updated_at?: boolean
-    remuneration_system_id?: boolean
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }, ExtArgs["result"]["indicatorRemuneration"]>
 
   export type IndicatorRemunerationSelectScalar = {
@@ -28478,24 +18962,20 @@ export namespace Prisma {
     condition_type?: boolean
     created_at?: boolean
     updated_at?: boolean
-    remuneration_system_id?: boolean
   }
 
-  export type IndicatorRemunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_type_remuneration_id" | "indicator_id" | "base_amount" | "conditional_amount" | "condition_type" | "created_at" | "updated_at" | "remuneration_system_id", ExtArgs["result"]["indicatorRemuneration"]>
+  export type IndicatorRemunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_type_remuneration_id" | "indicator_id" | "base_amount" | "conditional_amount" | "condition_type" | "created_at" | "updated_at", ExtArgs["result"]["indicatorRemuneration"]>
   export type IndicatorRemunerationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }
   export type IndicatorRemunerationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }
   export type IndicatorRemunerationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type_remuneration?: boolean | FacilityTypeRemunerationDefaultArgs<ExtArgs>
     indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    remuneration_system?: boolean | IndicatorRemuneration$remuneration_systemArgs<ExtArgs>
   }
 
   export type $IndicatorRemunerationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28503,7 +18983,6 @@ export namespace Prisma {
     objects: {
       facility_type_remuneration: Prisma.$FacilityTypeRemunerationPayload<ExtArgs>
       indicator: Prisma.$IndicatorPayload<ExtArgs>
-      remuneration_system: Prisma.$RemunerationSystemPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -28514,7 +18993,6 @@ export namespace Prisma {
       condition_type: string | null
       created_at: Date
       updated_at: Date
-      remuneration_system_id: string | null
     }, ExtArgs["result"]["indicatorRemuneration"]>
     composites: {}
   }
@@ -28911,7 +19389,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     facility_type_remuneration<T extends FacilityTypeRemunerationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityTypeRemunerationDefaultArgs<ExtArgs>>): Prisma__FacilityTypeRemunerationClient<$Result.GetResult<Prisma.$FacilityTypeRemunerationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     indicator<T extends IndicatorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IndicatorDefaultArgs<ExtArgs>>): Prisma__IndicatorClient<$Result.GetResult<Prisma.$IndicatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    remuneration_system<T extends IndicatorRemuneration$remuneration_systemArgs<ExtArgs> = {}>(args?: Subset<T, IndicatorRemuneration$remuneration_systemArgs<ExtArgs>>): Prisma__RemunerationSystemClient<$Result.GetResult<Prisma.$RemunerationSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28949,7 +19426,6 @@ export namespace Prisma {
     readonly condition_type: FieldRef<"IndicatorRemuneration", 'String'>
     readonly created_at: FieldRef<"IndicatorRemuneration", 'DateTime'>
     readonly updated_at: FieldRef<"IndicatorRemuneration", 'DateTime'>
-    readonly remuneration_system_id: FieldRef<"IndicatorRemuneration", 'String'>
   }
     
 
@@ -29346,25 +19822,6 @@ export namespace Prisma {
   }
 
   /**
-   * IndicatorRemuneration.remuneration_system
-   */
-  export type IndicatorRemuneration$remuneration_systemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RemunerationSystem
-     */
-    select?: RemunerationSystemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RemunerationSystem
-     */
-    omit?: RemunerationSystemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RemunerationSystemInclude<ExtArgs> | null
-    where?: RemunerationSystemWhereInput
-  }
-
-  /**
    * IndicatorRemuneration without action
    */
   export type IndicatorRemunerationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29380,1258 +19837,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: IndicatorRemunerationInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model PerformanceCalculation
-   */
-
-  export type AggregatePerformanceCalculation = {
-    _count: PerformanceCalculationCountAggregateOutputType | null
-    _avg: PerformanceCalculationAvgAggregateOutputType | null
-    _sum: PerformanceCalculationSumAggregateOutputType | null
-    _min: PerformanceCalculationMinAggregateOutputType | null
-    _max: PerformanceCalculationMaxAggregateOutputType | null
-  }
-
-  export type PerformanceCalculationAvgAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    indicator_id: number | null
-    numerator: Decimal | null
-    denominator: Decimal | null
-    achievement: Decimal | null
-    target_value: Decimal | null
-    remuneration_amount: Decimal | null
-  }
-
-  export type PerformanceCalculationSumAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    indicator_id: number | null
-    numerator: Decimal | null
-    denominator: Decimal | null
-    achievement: Decimal | null
-    target_value: Decimal | null
-    remuneration_amount: Decimal | null
-  }
-
-  export type PerformanceCalculationMinAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    indicator_id: number | null
-    report_month: string | null
-    numerator: Decimal | null
-    denominator: Decimal | null
-    achievement: Decimal | null
-    target_value: Decimal | null
-    remuneration_amount: Decimal | null
-    calculated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type PerformanceCalculationMaxAggregateOutputType = {
-    id: number | null
-    sub_centre_id: number | null
-    indicator_id: number | null
-    report_month: string | null
-    numerator: Decimal | null
-    denominator: Decimal | null
-    achievement: Decimal | null
-    target_value: Decimal | null
-    remuneration_amount: Decimal | null
-    calculated_at: Date | null
-    facility_id: string | null
-  }
-
-  export type PerformanceCalculationCountAggregateOutputType = {
-    id: number
-    sub_centre_id: number
-    indicator_id: number
-    report_month: number
-    numerator: number
-    denominator: number
-    achievement: number
-    target_value: number
-    remuneration_amount: number
-    calculated_at: number
-    facility_id: number
-    _all: number
-  }
-
-
-  export type PerformanceCalculationAvgAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    indicator_id?: true
-    numerator?: true
-    denominator?: true
-    achievement?: true
-    target_value?: true
-    remuneration_amount?: true
-  }
-
-  export type PerformanceCalculationSumAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    indicator_id?: true
-    numerator?: true
-    denominator?: true
-    achievement?: true
-    target_value?: true
-    remuneration_amount?: true
-  }
-
-  export type PerformanceCalculationMinAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    indicator_id?: true
-    report_month?: true
-    numerator?: true
-    denominator?: true
-    achievement?: true
-    target_value?: true
-    remuneration_amount?: true
-    calculated_at?: true
-    facility_id?: true
-  }
-
-  export type PerformanceCalculationMaxAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    indicator_id?: true
-    report_month?: true
-    numerator?: true
-    denominator?: true
-    achievement?: true
-    target_value?: true
-    remuneration_amount?: true
-    calculated_at?: true
-    facility_id?: true
-  }
-
-  export type PerformanceCalculationCountAggregateInputType = {
-    id?: true
-    sub_centre_id?: true
-    indicator_id?: true
-    report_month?: true
-    numerator?: true
-    denominator?: true
-    achievement?: true
-    target_value?: true
-    remuneration_amount?: true
-    calculated_at?: true
-    facility_id?: true
-    _all?: true
-  }
-
-  export type PerformanceCalculationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PerformanceCalculation to aggregate.
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PerformanceCalculations to fetch.
-     */
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PerformanceCalculationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PerformanceCalculations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PerformanceCalculations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned PerformanceCalculations
-    **/
-    _count?: true | PerformanceCalculationCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PerformanceCalculationAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PerformanceCalculationSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PerformanceCalculationMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PerformanceCalculationMaxAggregateInputType
-  }
-
-  export type GetPerformanceCalculationAggregateType<T extends PerformanceCalculationAggregateArgs> = {
-        [P in keyof T & keyof AggregatePerformanceCalculation]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePerformanceCalculation[P]>
-      : GetScalarType<T[P], AggregatePerformanceCalculation[P]>
-  }
-
-
-
-
-  export type PerformanceCalculationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PerformanceCalculationWhereInput
-    orderBy?: PerformanceCalculationOrderByWithAggregationInput | PerformanceCalculationOrderByWithAggregationInput[]
-    by: PerformanceCalculationScalarFieldEnum[] | PerformanceCalculationScalarFieldEnum
-    having?: PerformanceCalculationScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PerformanceCalculationCountAggregateInputType | true
-    _avg?: PerformanceCalculationAvgAggregateInputType
-    _sum?: PerformanceCalculationSumAggregateInputType
-    _min?: PerformanceCalculationMinAggregateInputType
-    _max?: PerformanceCalculationMaxAggregateInputType
-  }
-
-  export type PerformanceCalculationGroupByOutputType = {
-    id: number
-    sub_centre_id: number | null
-    indicator_id: number
-    report_month: string
-    numerator: Decimal | null
-    denominator: Decimal | null
-    achievement: Decimal | null
-    target_value: Decimal | null
-    remuneration_amount: Decimal | null
-    calculated_at: Date
-    facility_id: string | null
-    _count: PerformanceCalculationCountAggregateOutputType | null
-    _avg: PerformanceCalculationAvgAggregateOutputType | null
-    _sum: PerformanceCalculationSumAggregateOutputType | null
-    _min: PerformanceCalculationMinAggregateOutputType | null
-    _max: PerformanceCalculationMaxAggregateOutputType | null
-  }
-
-  type GetPerformanceCalculationGroupByPayload<T extends PerformanceCalculationGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PerformanceCalculationGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PerformanceCalculationGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PerformanceCalculationGroupByOutputType[P]>
-            : GetScalarType<T[P], PerformanceCalculationGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PerformanceCalculationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    indicator_id?: boolean
-    report_month?: boolean
-    numerator?: boolean
-    denominator?: boolean
-    achievement?: boolean
-    target_value?: boolean
-    remuneration_amount?: boolean
-    calculated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }, ExtArgs["result"]["performanceCalculation"]>
-
-  export type PerformanceCalculationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    indicator_id?: boolean
-    report_month?: boolean
-    numerator?: boolean
-    denominator?: boolean
-    achievement?: boolean
-    target_value?: boolean
-    remuneration_amount?: boolean
-    calculated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }, ExtArgs["result"]["performanceCalculation"]>
-
-  export type PerformanceCalculationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sub_centre_id?: boolean
-    indicator_id?: boolean
-    report_month?: boolean
-    numerator?: boolean
-    denominator?: boolean
-    achievement?: boolean
-    target_value?: boolean
-    remuneration_amount?: boolean
-    calculated_at?: boolean
-    facility_id?: boolean
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }, ExtArgs["result"]["performanceCalculation"]>
-
-  export type PerformanceCalculationSelectScalar = {
-    id?: boolean
-    sub_centre_id?: boolean
-    indicator_id?: boolean
-    report_month?: boolean
-    numerator?: boolean
-    denominator?: boolean
-    achievement?: boolean
-    target_value?: boolean
-    remuneration_amount?: boolean
-    calculated_at?: boolean
-    facility_id?: boolean
-  }
-
-  export type PerformanceCalculationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sub_centre_id" | "indicator_id" | "report_month" | "numerator" | "denominator" | "achievement" | "target_value" | "remuneration_amount" | "calculated_at" | "facility_id", ExtArgs["result"]["performanceCalculation"]>
-  export type PerformanceCalculationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }
-  export type PerformanceCalculationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }
-  export type PerformanceCalculationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    facility?: boolean | PerformanceCalculation$facilityArgs<ExtArgs>
-    indicator?: boolean | IndicatorDefaultArgs<ExtArgs>
-    sub_centre?: boolean | PerformanceCalculation$sub_centreArgs<ExtArgs>
-  }
-
-  export type $PerformanceCalculationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PerformanceCalculation"
-    objects: {
-      facility: Prisma.$FacilityPayload<ExtArgs> | null
-      indicator: Prisma.$IndicatorPayload<ExtArgs>
-      sub_centre: Prisma.$sub_centrePayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      sub_centre_id: number | null
-      indicator_id: number
-      report_month: string
-      numerator: Prisma.Decimal | null
-      denominator: Prisma.Decimal | null
-      achievement: Prisma.Decimal | null
-      target_value: Prisma.Decimal | null
-      remuneration_amount: Prisma.Decimal | null
-      calculated_at: Date
-      facility_id: string | null
-    }, ExtArgs["result"]["performanceCalculation"]>
-    composites: {}
-  }
-
-  type PerformanceCalculationGetPayload<S extends boolean | null | undefined | PerformanceCalculationDefaultArgs> = $Result.GetResult<Prisma.$PerformanceCalculationPayload, S>
-
-  type PerformanceCalculationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PerformanceCalculationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PerformanceCalculationCountAggregateInputType | true
-    }
-
-  export interface PerformanceCalculationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PerformanceCalculation'], meta: { name: 'PerformanceCalculation' } }
-    /**
-     * Find zero or one PerformanceCalculation that matches the filter.
-     * @param {PerformanceCalculationFindUniqueArgs} args - Arguments to find a PerformanceCalculation
-     * @example
-     * // Get one PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PerformanceCalculationFindUniqueArgs>(args: SelectSubset<T, PerformanceCalculationFindUniqueArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one PerformanceCalculation that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PerformanceCalculationFindUniqueOrThrowArgs} args - Arguments to find a PerformanceCalculation
-     * @example
-     * // Get one PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PerformanceCalculationFindUniqueOrThrowArgs>(args: SelectSubset<T, PerformanceCalculationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PerformanceCalculation that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationFindFirstArgs} args - Arguments to find a PerformanceCalculation
-     * @example
-     * // Get one PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PerformanceCalculationFindFirstArgs>(args?: SelectSubset<T, PerformanceCalculationFindFirstArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PerformanceCalculation that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationFindFirstOrThrowArgs} args - Arguments to find a PerformanceCalculation
-     * @example
-     * // Get one PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PerformanceCalculationFindFirstOrThrowArgs>(args?: SelectSubset<T, PerformanceCalculationFindFirstOrThrowArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more PerformanceCalculations that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all PerformanceCalculations
-     * const performanceCalculations = await prisma.performanceCalculation.findMany()
-     * 
-     * // Get first 10 PerformanceCalculations
-     * const performanceCalculations = await prisma.performanceCalculation.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const performanceCalculationWithIdOnly = await prisma.performanceCalculation.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PerformanceCalculationFindManyArgs>(args?: SelectSubset<T, PerformanceCalculationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a PerformanceCalculation.
-     * @param {PerformanceCalculationCreateArgs} args - Arguments to create a PerformanceCalculation.
-     * @example
-     * // Create one PerformanceCalculation
-     * const PerformanceCalculation = await prisma.performanceCalculation.create({
-     *   data: {
-     *     // ... data to create a PerformanceCalculation
-     *   }
-     * })
-     * 
-     */
-    create<T extends PerformanceCalculationCreateArgs>(args: SelectSubset<T, PerformanceCalculationCreateArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many PerformanceCalculations.
-     * @param {PerformanceCalculationCreateManyArgs} args - Arguments to create many PerformanceCalculations.
-     * @example
-     * // Create many PerformanceCalculations
-     * const performanceCalculation = await prisma.performanceCalculation.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PerformanceCalculationCreateManyArgs>(args?: SelectSubset<T, PerformanceCalculationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many PerformanceCalculations and returns the data saved in the database.
-     * @param {PerformanceCalculationCreateManyAndReturnArgs} args - Arguments to create many PerformanceCalculations.
-     * @example
-     * // Create many PerformanceCalculations
-     * const performanceCalculation = await prisma.performanceCalculation.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many PerformanceCalculations and only return the `id`
-     * const performanceCalculationWithIdOnly = await prisma.performanceCalculation.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PerformanceCalculationCreateManyAndReturnArgs>(args?: SelectSubset<T, PerformanceCalculationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a PerformanceCalculation.
-     * @param {PerformanceCalculationDeleteArgs} args - Arguments to delete one PerformanceCalculation.
-     * @example
-     * // Delete one PerformanceCalculation
-     * const PerformanceCalculation = await prisma.performanceCalculation.delete({
-     *   where: {
-     *     // ... filter to delete one PerformanceCalculation
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PerformanceCalculationDeleteArgs>(args: SelectSubset<T, PerformanceCalculationDeleteArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one PerformanceCalculation.
-     * @param {PerformanceCalculationUpdateArgs} args - Arguments to update one PerformanceCalculation.
-     * @example
-     * // Update one PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PerformanceCalculationUpdateArgs>(args: SelectSubset<T, PerformanceCalculationUpdateArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more PerformanceCalculations.
-     * @param {PerformanceCalculationDeleteManyArgs} args - Arguments to filter PerformanceCalculations to delete.
-     * @example
-     * // Delete a few PerformanceCalculations
-     * const { count } = await prisma.performanceCalculation.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PerformanceCalculationDeleteManyArgs>(args?: SelectSubset<T, PerformanceCalculationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PerformanceCalculations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many PerformanceCalculations
-     * const performanceCalculation = await prisma.performanceCalculation.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PerformanceCalculationUpdateManyArgs>(args: SelectSubset<T, PerformanceCalculationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PerformanceCalculations and returns the data updated in the database.
-     * @param {PerformanceCalculationUpdateManyAndReturnArgs} args - Arguments to update many PerformanceCalculations.
-     * @example
-     * // Update many PerformanceCalculations
-     * const performanceCalculation = await prisma.performanceCalculation.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more PerformanceCalculations and only return the `id`
-     * const performanceCalculationWithIdOnly = await prisma.performanceCalculation.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PerformanceCalculationUpdateManyAndReturnArgs>(args: SelectSubset<T, PerformanceCalculationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one PerformanceCalculation.
-     * @param {PerformanceCalculationUpsertArgs} args - Arguments to update or create a PerformanceCalculation.
-     * @example
-     * // Update or create a PerformanceCalculation
-     * const performanceCalculation = await prisma.performanceCalculation.upsert({
-     *   create: {
-     *     // ... data to create a PerformanceCalculation
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the PerformanceCalculation we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PerformanceCalculationUpsertArgs>(args: SelectSubset<T, PerformanceCalculationUpsertArgs<ExtArgs>>): Prisma__PerformanceCalculationClient<$Result.GetResult<Prisma.$PerformanceCalculationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of PerformanceCalculations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationCountArgs} args - Arguments to filter PerformanceCalculations to count.
-     * @example
-     * // Count the number of PerformanceCalculations
-     * const count = await prisma.performanceCalculation.count({
-     *   where: {
-     *     // ... the filter for the PerformanceCalculations we want to count
-     *   }
-     * })
-    **/
-    count<T extends PerformanceCalculationCountArgs>(
-      args?: Subset<T, PerformanceCalculationCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PerformanceCalculationCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a PerformanceCalculation.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PerformanceCalculationAggregateArgs>(args: Subset<T, PerformanceCalculationAggregateArgs>): Prisma.PrismaPromise<GetPerformanceCalculationAggregateType<T>>
-
-    /**
-     * Group by PerformanceCalculation.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PerformanceCalculationGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PerformanceCalculationGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PerformanceCalculationGroupByArgs['orderBy'] }
-        : { orderBy?: PerformanceCalculationGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PerformanceCalculationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPerformanceCalculationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the PerformanceCalculation model
-   */
-  readonly fields: PerformanceCalculationFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for PerformanceCalculation.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PerformanceCalculationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    facility<T extends PerformanceCalculation$facilityArgs<ExtArgs> = {}>(args?: Subset<T, PerformanceCalculation$facilityArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    indicator<T extends IndicatorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IndicatorDefaultArgs<ExtArgs>>): Prisma__IndicatorClient<$Result.GetResult<Prisma.$IndicatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sub_centre<T extends PerformanceCalculation$sub_centreArgs<ExtArgs> = {}>(args?: Subset<T, PerformanceCalculation$sub_centreArgs<ExtArgs>>): Prisma__sub_centreClient<$Result.GetResult<Prisma.$sub_centrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the PerformanceCalculation model
-   */
-  interface PerformanceCalculationFieldRefs {
-    readonly id: FieldRef<"PerformanceCalculation", 'Int'>
-    readonly sub_centre_id: FieldRef<"PerformanceCalculation", 'Int'>
-    readonly indicator_id: FieldRef<"PerformanceCalculation", 'Int'>
-    readonly report_month: FieldRef<"PerformanceCalculation", 'String'>
-    readonly numerator: FieldRef<"PerformanceCalculation", 'Decimal'>
-    readonly denominator: FieldRef<"PerformanceCalculation", 'Decimal'>
-    readonly achievement: FieldRef<"PerformanceCalculation", 'Decimal'>
-    readonly target_value: FieldRef<"PerformanceCalculation", 'Decimal'>
-    readonly remuneration_amount: FieldRef<"PerformanceCalculation", 'Decimal'>
-    readonly calculated_at: FieldRef<"PerformanceCalculation", 'DateTime'>
-    readonly facility_id: FieldRef<"PerformanceCalculation", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * PerformanceCalculation findUnique
-   */
-  export type PerformanceCalculationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter, which PerformanceCalculation to fetch.
-     */
-    where: PerformanceCalculationWhereUniqueInput
-  }
-
-  /**
-   * PerformanceCalculation findUniqueOrThrow
-   */
-  export type PerformanceCalculationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter, which PerformanceCalculation to fetch.
-     */
-    where: PerformanceCalculationWhereUniqueInput
-  }
-
-  /**
-   * PerformanceCalculation findFirst
-   */
-  export type PerformanceCalculationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter, which PerformanceCalculation to fetch.
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PerformanceCalculations to fetch.
-     */
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PerformanceCalculations.
-     */
-    cursor?: PerformanceCalculationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PerformanceCalculations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PerformanceCalculations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PerformanceCalculations.
-     */
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
-   * PerformanceCalculation findFirstOrThrow
-   */
-  export type PerformanceCalculationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter, which PerformanceCalculation to fetch.
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PerformanceCalculations to fetch.
-     */
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PerformanceCalculations.
-     */
-    cursor?: PerformanceCalculationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PerformanceCalculations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PerformanceCalculations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PerformanceCalculations.
-     */
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
-   * PerformanceCalculation findMany
-   */
-  export type PerformanceCalculationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter, which PerformanceCalculations to fetch.
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PerformanceCalculations to fetch.
-     */
-    orderBy?: PerformanceCalculationOrderByWithRelationInput | PerformanceCalculationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing PerformanceCalculations.
-     */
-    cursor?: PerformanceCalculationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PerformanceCalculations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PerformanceCalculations.
-     */
-    skip?: number
-    distinct?: PerformanceCalculationScalarFieldEnum | PerformanceCalculationScalarFieldEnum[]
-  }
-
-  /**
-   * PerformanceCalculation create
-   */
-  export type PerformanceCalculationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * The data needed to create a PerformanceCalculation.
-     */
-    data: XOR<PerformanceCalculationCreateInput, PerformanceCalculationUncheckedCreateInput>
-  }
-
-  /**
-   * PerformanceCalculation createMany
-   */
-  export type PerformanceCalculationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many PerformanceCalculations.
-     */
-    data: PerformanceCalculationCreateManyInput | PerformanceCalculationCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * PerformanceCalculation createManyAndReturn
-   */
-  export type PerformanceCalculationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * The data used to create many PerformanceCalculations.
-     */
-    data: PerformanceCalculationCreateManyInput | PerformanceCalculationCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * PerformanceCalculation update
-   */
-  export type PerformanceCalculationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a PerformanceCalculation.
-     */
-    data: XOR<PerformanceCalculationUpdateInput, PerformanceCalculationUncheckedUpdateInput>
-    /**
-     * Choose, which PerformanceCalculation to update.
-     */
-    where: PerformanceCalculationWhereUniqueInput
-  }
-
-  /**
-   * PerformanceCalculation updateMany
-   */
-  export type PerformanceCalculationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update PerformanceCalculations.
-     */
-    data: XOR<PerformanceCalculationUpdateManyMutationInput, PerformanceCalculationUncheckedUpdateManyInput>
-    /**
-     * Filter which PerformanceCalculations to update
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * Limit how many PerformanceCalculations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * PerformanceCalculation updateManyAndReturn
-   */
-  export type PerformanceCalculationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * The data used to update PerformanceCalculations.
-     */
-    data: XOR<PerformanceCalculationUpdateManyMutationInput, PerformanceCalculationUncheckedUpdateManyInput>
-    /**
-     * Filter which PerformanceCalculations to update
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * Limit how many PerformanceCalculations to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * PerformanceCalculation upsert
-   */
-  export type PerformanceCalculationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * The filter to search for the PerformanceCalculation to update in case it exists.
-     */
-    where: PerformanceCalculationWhereUniqueInput
-    /**
-     * In case the PerformanceCalculation found by the `where` argument doesn't exist, create a new PerformanceCalculation with this data.
-     */
-    create: XOR<PerformanceCalculationCreateInput, PerformanceCalculationUncheckedCreateInput>
-    /**
-     * In case the PerformanceCalculation was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PerformanceCalculationUpdateInput, PerformanceCalculationUncheckedUpdateInput>
-  }
-
-  /**
-   * PerformanceCalculation delete
-   */
-  export type PerformanceCalculationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
-    /**
-     * Filter which PerformanceCalculation to delete.
-     */
-    where: PerformanceCalculationWhereUniqueInput
-  }
-
-  /**
-   * PerformanceCalculation deleteMany
-   */
-  export type PerformanceCalculationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PerformanceCalculations to delete
-     */
-    where?: PerformanceCalculationWhereInput
-    /**
-     * Limit how many PerformanceCalculations to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * PerformanceCalculation.facility
-   */
-  export type PerformanceCalculation$facilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Facility
-     */
-    select?: FacilitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Facility
-     */
-    omit?: FacilityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FacilityInclude<ExtArgs> | null
-    where?: FacilityWhereInput
-  }
-
-  /**
-   * PerformanceCalculation.sub_centre
-   */
-  export type PerformanceCalculation$sub_centreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the sub_centre
-     */
-    select?: sub_centreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the sub_centre
-     */
-    omit?: sub_centreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: sub_centreInclude<ExtArgs> | null
-    where?: sub_centreWhereInput
-  }
-
-  /**
-   * PerformanceCalculation without action
-   */
-  export type PerformanceCalculationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PerformanceCalculation
-     */
-    select?: PerformanceCalculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PerformanceCalculation
-     */
-    omit?: PerformanceCalculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PerformanceCalculationInclude<ExtArgs> | null
   }
 
 
@@ -34218,18 +23423,6 @@ export namespace Prisma {
   export type DistrictScalarFieldEnum = (typeof DistrictScalarFieldEnum)[keyof typeof DistrictScalarFieldEnum]
 
 
-  export const RemunerationSystemScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    is_active: 'is_active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type RemunerationSystemScalarFieldEnum = (typeof RemunerationSystemScalarFieldEnum)[keyof typeof RemunerationSystemScalarFieldEnum]
-
-
   export const FacilityTypeScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -34256,60 +23449,6 @@ export namespace Prisma {
   };
 
   export type FacilityScalarFieldEnum = (typeof FacilityScalarFieldEnum)[keyof typeof FacilityScalarFieldEnum]
-
-
-  export const MonthlyHealthDataScalarFieldEnum: {
-    id: 'id',
-    sub_centre_id: 'sub_centre_id',
-    report_month: 'report_month',
-    value: 'value',
-    data_quality: 'data_quality',
-    remarks: 'remarks',
-    uploaded_by: 'uploaded_by',
-    approved_by: 'approved_by',
-    approved_at: 'approved_at',
-    created_at: 'created_at',
-    updated_at: 'updated_at',
-    achievement: 'achievement',
-    denominator: 'denominator',
-    numerator: 'numerator',
-    target_value: 'target_value',
-    indicator_id: 'indicator_id',
-    district_id: 'district_id',
-    facility_id: 'facility_id'
-  };
-
-  export type MonthlyHealthDataScalarFieldEnum = (typeof MonthlyHealthDataScalarFieldEnum)[keyof typeof MonthlyHealthDataScalarFieldEnum]
-
-
-  export const DataUploadSessionScalarFieldEnum: {
-    id: 'id',
-    file_name: 'file_name',
-    report_month: 'report_month',
-    total_records: 'total_records',
-    success_count: 'success_count',
-    error_count: 'error_count',
-    status: 'status',
-    upload_summary: 'upload_summary',
-    uploaded_by: 'uploaded_by',
-    created_at: 'created_at',
-    completed_at: 'completed_at',
-    file_path: 'file_path'
-  };
-
-  export type DataUploadSessionScalarFieldEnum = (typeof DataUploadSessionScalarFieldEnum)[keyof typeof DataUploadSessionScalarFieldEnum]
-
-
-  export const FormulaScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    structure: 'structure',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type FormulaScalarFieldEnum = (typeof FormulaScalarFieldEnum)[keyof typeof FormulaScalarFieldEnum]
 
 
   export const IndicatorScalarFieldEnum: {
@@ -34380,22 +23519,6 @@ export namespace Prisma {
   export type FieldValueScalarFieldEnum = (typeof FieldValueScalarFieldEnum)[keyof typeof FieldValueScalarFieldEnum]
 
 
-  export const FacilityFieldDefaultsScalarFieldEnum: {
-    id: 'id',
-    field_id: 'field_id',
-    string_value: 'string_value',
-    numeric_value: 'numeric_value',
-    boolean_value: 'boolean_value',
-    json_value: 'json_value',
-    is_active: 'is_active',
-    created_at: 'created_at',
-    updated_at: 'updated_at',
-    facility_id: 'facility_id'
-  };
-
-  export type FacilityFieldDefaultsScalarFieldEnum = (typeof FacilityFieldDefaultsScalarFieldEnum)[keyof typeof FacilityFieldDefaultsScalarFieldEnum]
-
-
   export const FacilityFieldMappingScalarFieldEnum: {
     id: 'id',
     field_id: 'field_id',
@@ -34407,17 +23530,6 @@ export namespace Prisma {
   };
 
   export type FacilityFieldMappingScalarFieldEnum = (typeof FacilityFieldMappingScalarFieldEnum)[keyof typeof FacilityFieldMappingScalarFieldEnum]
-
-
-  export const Sub_centreScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    created_at: 'created_at',
-    updated_at: 'updated_at',
-    facility_id: 'facility_id'
-  };
-
-  export type Sub_centreScalarFieldEnum = (typeof Sub_centreScalarFieldEnum)[keyof typeof Sub_centreScalarFieldEnum]
 
 
   export const HealthWorkerScalarFieldEnum: {
@@ -34484,20 +23596,6 @@ export namespace Prisma {
   export type WorkerAllocationConfigScalarFieldEnum = (typeof WorkerAllocationConfigScalarFieldEnum)[keyof typeof WorkerAllocationConfigScalarFieldEnum]
 
 
-  export const FacilityWorkerAllocationScalarFieldEnum: {
-    id: 'id',
-    facility_id: 'facility_id',
-    worker_allocation_config_id: 'worker_allocation_config_id',
-    worker_count: 'worker_count',
-    total_allocated_amount: 'total_allocated_amount',
-    is_active: 'is_active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type FacilityWorkerAllocationScalarFieldEnum = (typeof FacilityWorkerAllocationScalarFieldEnum)[keyof typeof FacilityWorkerAllocationScalarFieldEnum]
-
-
   export const FacilityTypeRemunerationScalarFieldEnum: {
     id: 'id',
     total_amount: 'total_amount',
@@ -34519,28 +23617,10 @@ export namespace Prisma {
     conditional_amount: 'conditional_amount',
     condition_type: 'condition_type',
     created_at: 'created_at',
-    updated_at: 'updated_at',
-    remuneration_system_id: 'remuneration_system_id'
+    updated_at: 'updated_at'
   };
 
   export type IndicatorRemunerationScalarFieldEnum = (typeof IndicatorRemunerationScalarFieldEnum)[keyof typeof IndicatorRemunerationScalarFieldEnum]
-
-
-  export const PerformanceCalculationScalarFieldEnum: {
-    id: 'id',
-    sub_centre_id: 'sub_centre_id',
-    indicator_id: 'indicator_id',
-    report_month: 'report_month',
-    numerator: 'numerator',
-    denominator: 'denominator',
-    achievement: 'achievement',
-    target_value: 'target_value',
-    remuneration_amount: 'remuneration_amount',
-    calculated_at: 'calculated_at',
-    facility_id: 'facility_id'
-  };
-
-  export type PerformanceCalculationScalarFieldEnum = (typeof PerformanceCalculationScalarFieldEnum)[keyof typeof PerformanceCalculationScalarFieldEnum]
 
 
   export const FacilityTargetScalarFieldEnum: {
@@ -34607,13 +23687,6 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -34710,48 +23783,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal[]'
-   */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DataQuality'
-   */
-  export type EnumDataQualityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DataQuality'>
-    
-
-
-  /**
-   * Reference to a field of type 'DataQuality[]'
-   */
-  export type ListEnumDataQualityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DataQuality[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'UploadStatus'
-   */
-  export type EnumUploadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UploadStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'UploadStatus[]'
-   */
-  export type ListEnumUploadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UploadStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -34836,6 +23867,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -34865,10 +23910,7 @@ export namespace Prisma {
     created_at?: DateTimeNullableFilter<"User"> | Date | string | null
     email?: StringNullableFilter<"User"> | string | null
     facility_id?: StringNullableFilter<"User"> | string | null
-    upload_sessions?: DataUploadSessionListRelationFilter
     field_values?: FieldValueListRelationFilter
-    approved_data?: MonthlyHealthDataListRelationFilter
-    uploaded_data?: MonthlyHealthDataListRelationFilter
     facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
   }
 
@@ -34882,10 +23924,7 @@ export namespace Prisma {
     created_at?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     facility_id?: SortOrderInput | SortOrder
-    upload_sessions?: DataUploadSessionOrderByRelationAggregateInput
     field_values?: FieldValueOrderByRelationAggregateInput
-    approved_data?: MonthlyHealthDataOrderByRelationAggregateInput
-    uploaded_data?: MonthlyHealthDataOrderByRelationAggregateInput
     facility?: FacilityOrderByWithRelationInput
   }
 
@@ -34902,10 +23941,7 @@ export namespace Prisma {
     last_login?: DateTimeNullableFilter<"User"> | Date | string | null
     created_at?: DateTimeNullableFilter<"User"> | Date | string | null
     facility_id?: StringNullableFilter<"User"> | string | null
-    upload_sessions?: DataUploadSessionListRelationFilter
     field_values?: FieldValueListRelationFilter
-    approved_data?: MonthlyHealthDataListRelationFilter
-    uploaded_data?: MonthlyHealthDataListRelationFilter
     facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
   }, "id" | "username" | "email">
 
@@ -34950,7 +23986,6 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"District"> | Date | string
     updated_at?: DateTimeFilter<"District"> | Date | string
     facilities?: FacilityListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
   }
 
   export type DistrictOrderByWithRelationInput = {
@@ -34959,7 +23994,6 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facilities?: FacilityOrderByRelationAggregateInput
-    monthly_data?: MonthlyHealthDataOrderByRelationAggregateInput
   }
 
   export type DistrictWhereUniqueInput = Prisma.AtLeast<{
@@ -34971,7 +24005,6 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"District"> | Date | string
     updated_at?: DateTimeFilter<"District"> | Date | string
     facilities?: FacilityListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
   }, "id" | "name">
 
   export type DistrictOrderByWithAggregationInput = {
@@ -34992,66 +24025,6 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"District"> | string
     created_at?: DateTimeWithAggregatesFilter<"District"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"District"> | Date | string
-  }
-
-  export type RemunerationSystemWhereInput = {
-    AND?: RemunerationSystemWhereInput | RemunerationSystemWhereInput[]
-    OR?: RemunerationSystemWhereInput[]
-    NOT?: RemunerationSystemWhereInput | RemunerationSystemWhereInput[]
-    id?: StringFilter<"RemunerationSystem"> | string
-    name?: StringFilter<"RemunerationSystem"> | string
-    description?: StringNullableFilter<"RemunerationSystem"> | string | null
-    is_active?: BoolFilter<"RemunerationSystem"> | boolean
-    created_at?: DateTimeFilter<"RemunerationSystem"> | Date | string
-    updated_at?: DateTimeFilter<"RemunerationSystem"> | Date | string
-    indicator_remunerations?: IndicatorRemunerationListRelationFilter
-  }
-
-  export type RemunerationSystemOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    indicator_remunerations?: IndicatorRemunerationOrderByRelationAggregateInput
-  }
-
-  export type RemunerationSystemWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    name?: string
-    AND?: RemunerationSystemWhereInput | RemunerationSystemWhereInput[]
-    OR?: RemunerationSystemWhereInput[]
-    NOT?: RemunerationSystemWhereInput | RemunerationSystemWhereInput[]
-    description?: StringNullableFilter<"RemunerationSystem"> | string | null
-    is_active?: BoolFilter<"RemunerationSystem"> | boolean
-    created_at?: DateTimeFilter<"RemunerationSystem"> | Date | string
-    updated_at?: DateTimeFilter<"RemunerationSystem"> | Date | string
-    indicator_remunerations?: IndicatorRemunerationListRelationFilter
-  }, "id" | "name">
-
-  export type RemunerationSystemOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: RemunerationSystemCountOrderByAggregateInput
-    _max?: RemunerationSystemMaxOrderByAggregateInput
-    _min?: RemunerationSystemMinOrderByAggregateInput
-  }
-
-  export type RemunerationSystemScalarWhereWithAggregatesInput = {
-    AND?: RemunerationSystemScalarWhereWithAggregatesInput | RemunerationSystemScalarWhereWithAggregatesInput[]
-    OR?: RemunerationSystemScalarWhereWithAggregatesInput[]
-    NOT?: RemunerationSystemScalarWhereWithAggregatesInput | RemunerationSystemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"RemunerationSystem"> | string
-    name?: StringWithAggregatesFilter<"RemunerationSystem"> | string
-    description?: StringNullableWithAggregatesFilter<"RemunerationSystem"> | string | null
-    is_active?: BoolWithAggregatesFilter<"RemunerationSystem"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"RemunerationSystem"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"RemunerationSystem"> | Date | string
   }
 
   export type FacilityTypeWhereInput = {
@@ -35145,15 +24118,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
-    facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
     facility_targets?: FacilityTargetListRelationFilter
-    worker_allocations?: FacilityWorkerAllocationListRelationFilter
     field_values?: FieldValueListRelationFilter
     health_workers?: HealthWorkerListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
     remuneration_calculations?: RemunerationCalculationListRelationFilter
-    sub_centres?: Sub_centreListRelationFilter
     users?: UserListRelationFilter
   }
 
@@ -35171,15 +24139,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationOrderByRelationAggregateInput
     district?: DistrictOrderByWithRelationInput
     facility_type?: FacilityTypeOrderByWithRelationInput
-    facility_field_defaults?: FacilityFieldDefaultsOrderByRelationAggregateInput
     facility_targets?: FacilityTargetOrderByRelationAggregateInput
-    worker_allocations?: FacilityWorkerAllocationOrderByRelationAggregateInput
     field_values?: FieldValueOrderByRelationAggregateInput
     health_workers?: HealthWorkerOrderByRelationAggregateInput
-    monthly_data?: MonthlyHealthDataOrderByRelationAggregateInput
-    performance_calculations?: PerformanceCalculationOrderByRelationAggregateInput
     remuneration_calculations?: RemunerationCalculationOrderByRelationAggregateInput
-    sub_centres?: sub_centreOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
   }
 
@@ -35201,15 +24164,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
-    facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
     facility_targets?: FacilityTargetListRelationFilter
-    worker_allocations?: FacilityWorkerAllocationListRelationFilter
     field_values?: FieldValueListRelationFilter
     health_workers?: HealthWorkerListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
     remuneration_calculations?: RemunerationCalculationListRelationFilter
-    sub_centres?: Sub_centreListRelationFilter
     users?: UserListRelationFilter
   }, "id" | "name_district_id">
 
@@ -35241,295 +24199,6 @@ export namespace Prisma {
     facility_type_id?: StringWithAggregatesFilter<"Facility"> | string
     is_active?: BoolWithAggregatesFilter<"Facility"> | boolean
     updated_at?: DateTimeWithAggregatesFilter<"Facility"> | Date | string
-  }
-
-  export type MonthlyHealthDataWhereInput = {
-    AND?: MonthlyHealthDataWhereInput | MonthlyHealthDataWhereInput[]
-    OR?: MonthlyHealthDataWhereInput[]
-    NOT?: MonthlyHealthDataWhereInput | MonthlyHealthDataWhereInput[]
-    id?: IntFilter<"MonthlyHealthData"> | number
-    sub_centre_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    report_month?: StringFilter<"MonthlyHealthData"> | string
-    value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFilter<"MonthlyHealthData"> | $Enums.DataQuality
-    remarks?: StringNullableFilter<"MonthlyHealthData"> | string | null
-    uploaded_by?: IntFilter<"MonthlyHealthData"> | number
-    approved_by?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    approved_at?: DateTimeNullableFilter<"MonthlyHealthData"> | Date | string | null
-    created_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    updated_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    achievement?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    numerator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    district_id?: StringFilter<"MonthlyHealthData"> | string
-    facility_id?: StringNullableFilter<"MonthlyHealthData"> | string | null
-    approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
-    facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
-    indicator?: XOR<IndicatorNullableScalarRelationFilter, IndicatorWhereInput> | null
-    sub_centre?: XOR<Sub_centreNullableScalarRelationFilter, sub_centreWhereInput> | null
-    uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type MonthlyHealthDataOrderByWithRelationInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrderInput | SortOrder
-    report_month?: SortOrder
-    value?: SortOrderInput | SortOrder
-    data_quality?: SortOrder
-    remarks?: SortOrderInput | SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrderInput | SortOrder
-    approved_at?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    achievement?: SortOrderInput | SortOrder
-    denominator?: SortOrderInput | SortOrder
-    numerator?: SortOrderInput | SortOrder
-    target_value?: SortOrderInput | SortOrder
-    indicator_id?: SortOrderInput | SortOrder
-    district_id?: SortOrder
-    facility_id?: SortOrderInput | SortOrder
-    approver?: UserOrderByWithRelationInput
-    district?: DistrictOrderByWithRelationInput
-    facility?: FacilityOrderByWithRelationInput
-    indicator?: IndicatorOrderByWithRelationInput
-    sub_centre?: sub_centreOrderByWithRelationInput
-    uploader?: UserOrderByWithRelationInput
-  }
-
-  export type MonthlyHealthDataWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    facility_id_sub_centre_id_indicator_id_report_month?: MonthlyHealthDataFacility_idSub_centre_idIndicator_idReport_monthCompoundUniqueInput
-    AND?: MonthlyHealthDataWhereInput | MonthlyHealthDataWhereInput[]
-    OR?: MonthlyHealthDataWhereInput[]
-    NOT?: MonthlyHealthDataWhereInput | MonthlyHealthDataWhereInput[]
-    sub_centre_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    report_month?: StringFilter<"MonthlyHealthData"> | string
-    value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFilter<"MonthlyHealthData"> | $Enums.DataQuality
-    remarks?: StringNullableFilter<"MonthlyHealthData"> | string | null
-    uploaded_by?: IntFilter<"MonthlyHealthData"> | number
-    approved_by?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    approved_at?: DateTimeNullableFilter<"MonthlyHealthData"> | Date | string | null
-    created_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    updated_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    achievement?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    numerator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    district_id?: StringFilter<"MonthlyHealthData"> | string
-    facility_id?: StringNullableFilter<"MonthlyHealthData"> | string | null
-    approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
-    facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
-    indicator?: XOR<IndicatorNullableScalarRelationFilter, IndicatorWhereInput> | null
-    sub_centre?: XOR<Sub_centreNullableScalarRelationFilter, sub_centreWhereInput> | null
-    uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "facility_id_sub_centre_id_indicator_id_report_month">
-
-  export type MonthlyHealthDataOrderByWithAggregationInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrderInput | SortOrder
-    report_month?: SortOrder
-    value?: SortOrderInput | SortOrder
-    data_quality?: SortOrder
-    remarks?: SortOrderInput | SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrderInput | SortOrder
-    approved_at?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    achievement?: SortOrderInput | SortOrder
-    denominator?: SortOrderInput | SortOrder
-    numerator?: SortOrderInput | SortOrder
-    target_value?: SortOrderInput | SortOrder
-    indicator_id?: SortOrderInput | SortOrder
-    district_id?: SortOrder
-    facility_id?: SortOrderInput | SortOrder
-    _count?: MonthlyHealthDataCountOrderByAggregateInput
-    _avg?: MonthlyHealthDataAvgOrderByAggregateInput
-    _max?: MonthlyHealthDataMaxOrderByAggregateInput
-    _min?: MonthlyHealthDataMinOrderByAggregateInput
-    _sum?: MonthlyHealthDataSumOrderByAggregateInput
-  }
-
-  export type MonthlyHealthDataScalarWhereWithAggregatesInput = {
-    AND?: MonthlyHealthDataScalarWhereWithAggregatesInput | MonthlyHealthDataScalarWhereWithAggregatesInput[]
-    OR?: MonthlyHealthDataScalarWhereWithAggregatesInput[]
-    NOT?: MonthlyHealthDataScalarWhereWithAggregatesInput | MonthlyHealthDataScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"MonthlyHealthData"> | number
-    sub_centre_id?: IntNullableWithAggregatesFilter<"MonthlyHealthData"> | number | null
-    report_month?: StringWithAggregatesFilter<"MonthlyHealthData"> | string
-    value?: DecimalNullableWithAggregatesFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityWithAggregatesFilter<"MonthlyHealthData"> | $Enums.DataQuality
-    remarks?: StringNullableWithAggregatesFilter<"MonthlyHealthData"> | string | null
-    uploaded_by?: IntWithAggregatesFilter<"MonthlyHealthData"> | number
-    approved_by?: IntNullableWithAggregatesFilter<"MonthlyHealthData"> | number | null
-    approved_at?: DateTimeNullableWithAggregatesFilter<"MonthlyHealthData"> | Date | string | null
-    created_at?: DateTimeWithAggregatesFilter<"MonthlyHealthData"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"MonthlyHealthData"> | Date | string
-    achievement?: DecimalNullableWithAggregatesFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableWithAggregatesFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    numerator?: DecimalNullableWithAggregatesFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableWithAggregatesFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: IntNullableWithAggregatesFilter<"MonthlyHealthData"> | number | null
-    district_id?: StringWithAggregatesFilter<"MonthlyHealthData"> | string
-    facility_id?: StringNullableWithAggregatesFilter<"MonthlyHealthData"> | string | null
-  }
-
-  export type DataUploadSessionWhereInput = {
-    AND?: DataUploadSessionWhereInput | DataUploadSessionWhereInput[]
-    OR?: DataUploadSessionWhereInput[]
-    NOT?: DataUploadSessionWhereInput | DataUploadSessionWhereInput[]
-    id?: IntFilter<"DataUploadSession"> | number
-    file_name?: StringFilter<"DataUploadSession"> | string
-    report_month?: StringFilter<"DataUploadSession"> | string
-    total_records?: IntFilter<"DataUploadSession"> | number
-    success_count?: IntFilter<"DataUploadSession"> | number
-    error_count?: IntFilter<"DataUploadSession"> | number
-    status?: EnumUploadStatusFilter<"DataUploadSession"> | $Enums.UploadStatus
-    upload_summary?: JsonNullableFilter<"DataUploadSession">
-    uploaded_by?: IntFilter<"DataUploadSession"> | number
-    created_at?: DateTimeFilter<"DataUploadSession"> | Date | string
-    completed_at?: DateTimeNullableFilter<"DataUploadSession"> | Date | string | null
-    file_path?: StringNullableFilter<"DataUploadSession"> | string | null
-    uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type DataUploadSessionOrderByWithRelationInput = {
-    id?: SortOrder
-    file_name?: SortOrder
-    report_month?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    status?: SortOrder
-    upload_summary?: SortOrderInput | SortOrder
-    uploaded_by?: SortOrder
-    created_at?: SortOrder
-    completed_at?: SortOrderInput | SortOrder
-    file_path?: SortOrderInput | SortOrder
-    uploader?: UserOrderByWithRelationInput
-  }
-
-  export type DataUploadSessionWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: DataUploadSessionWhereInput | DataUploadSessionWhereInput[]
-    OR?: DataUploadSessionWhereInput[]
-    NOT?: DataUploadSessionWhereInput | DataUploadSessionWhereInput[]
-    file_name?: StringFilter<"DataUploadSession"> | string
-    report_month?: StringFilter<"DataUploadSession"> | string
-    total_records?: IntFilter<"DataUploadSession"> | number
-    success_count?: IntFilter<"DataUploadSession"> | number
-    error_count?: IntFilter<"DataUploadSession"> | number
-    status?: EnumUploadStatusFilter<"DataUploadSession"> | $Enums.UploadStatus
-    upload_summary?: JsonNullableFilter<"DataUploadSession">
-    uploaded_by?: IntFilter<"DataUploadSession"> | number
-    created_at?: DateTimeFilter<"DataUploadSession"> | Date | string
-    completed_at?: DateTimeNullableFilter<"DataUploadSession"> | Date | string | null
-    file_path?: StringNullableFilter<"DataUploadSession"> | string | null
-    uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
-
-  export type DataUploadSessionOrderByWithAggregationInput = {
-    id?: SortOrder
-    file_name?: SortOrder
-    report_month?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    status?: SortOrder
-    upload_summary?: SortOrderInput | SortOrder
-    uploaded_by?: SortOrder
-    created_at?: SortOrder
-    completed_at?: SortOrderInput | SortOrder
-    file_path?: SortOrderInput | SortOrder
-    _count?: DataUploadSessionCountOrderByAggregateInput
-    _avg?: DataUploadSessionAvgOrderByAggregateInput
-    _max?: DataUploadSessionMaxOrderByAggregateInput
-    _min?: DataUploadSessionMinOrderByAggregateInput
-    _sum?: DataUploadSessionSumOrderByAggregateInput
-  }
-
-  export type DataUploadSessionScalarWhereWithAggregatesInput = {
-    AND?: DataUploadSessionScalarWhereWithAggregatesInput | DataUploadSessionScalarWhereWithAggregatesInput[]
-    OR?: DataUploadSessionScalarWhereWithAggregatesInput[]
-    NOT?: DataUploadSessionScalarWhereWithAggregatesInput | DataUploadSessionScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"DataUploadSession"> | number
-    file_name?: StringWithAggregatesFilter<"DataUploadSession"> | string
-    report_month?: StringWithAggregatesFilter<"DataUploadSession"> | string
-    total_records?: IntWithAggregatesFilter<"DataUploadSession"> | number
-    success_count?: IntWithAggregatesFilter<"DataUploadSession"> | number
-    error_count?: IntWithAggregatesFilter<"DataUploadSession"> | number
-    status?: EnumUploadStatusWithAggregatesFilter<"DataUploadSession"> | $Enums.UploadStatus
-    upload_summary?: JsonNullableWithAggregatesFilter<"DataUploadSession">
-    uploaded_by?: IntWithAggregatesFilter<"DataUploadSession"> | number
-    created_at?: DateTimeWithAggregatesFilter<"DataUploadSession"> | Date | string
-    completed_at?: DateTimeNullableWithAggregatesFilter<"DataUploadSession"> | Date | string | null
-    file_path?: StringNullableWithAggregatesFilter<"DataUploadSession"> | string | null
-  }
-
-  export type FormulaWhereInput = {
-    AND?: FormulaWhereInput | FormulaWhereInput[]
-    OR?: FormulaWhereInput[]
-    NOT?: FormulaWhereInput | FormulaWhereInput[]
-    id?: IntFilter<"Formula"> | number
-    name?: StringFilter<"Formula"> | string
-    description?: StringNullableFilter<"Formula"> | string | null
-    structure?: JsonFilter<"Formula">
-    created_at?: DateTimeFilter<"Formula"> | Date | string
-    updated_at?: DateTimeFilter<"Formula"> | Date | string
-  }
-
-  export type FormulaOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    structure?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FormulaWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    name?: string
-    AND?: FormulaWhereInput | FormulaWhereInput[]
-    OR?: FormulaWhereInput[]
-    NOT?: FormulaWhereInput | FormulaWhereInput[]
-    description?: StringNullableFilter<"Formula"> | string | null
-    structure?: JsonFilter<"Formula">
-    created_at?: DateTimeFilter<"Formula"> | Date | string
-    updated_at?: DateTimeFilter<"Formula"> | Date | string
-  }, "id" | "name">
-
-  export type FormulaOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    structure?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: FormulaCountOrderByAggregateInput
-    _avg?: FormulaAvgOrderByAggregateInput
-    _max?: FormulaMaxOrderByAggregateInput
-    _min?: FormulaMinOrderByAggregateInput
-    _sum?: FormulaSumOrderByAggregateInput
-  }
-
-  export type FormulaScalarWhereWithAggregatesInput = {
-    AND?: FormulaScalarWhereWithAggregatesInput | FormulaScalarWhereWithAggregatesInput[]
-    OR?: FormulaScalarWhereWithAggregatesInput[]
-    NOT?: FormulaScalarWhereWithAggregatesInput | FormulaScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Formula"> | number
-    name?: StringWithAggregatesFilter<"Formula"> | string
-    description?: StringNullableWithAggregatesFilter<"Formula"> | string | null
-    structure?: JsonWithAggregatesFilter<"Formula">
-    created_at?: DateTimeWithAggregatesFilter<"Formula"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Formula"> | Date | string
   }
 
   export type IndicatorWhereInput = {
@@ -35564,8 +24233,6 @@ export namespace Prisma {
     target_field?: XOR<FieldNullableScalarRelationFilter, FieldWhereInput> | null
     remunerations?: IndicatorRemunerationListRelationFilter
     worker_allocations?: IndicatorWorkerAllocationListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
   }
 
   export type IndicatorOrderByWithRelationInput = {
@@ -35597,8 +24264,6 @@ export namespace Prisma {
     target_field?: FieldOrderByWithRelationInput
     remunerations?: IndicatorRemunerationOrderByRelationAggregateInput
     worker_allocations?: IndicatorWorkerAllocationOrderByRelationAggregateInput
-    monthly_data?: MonthlyHealthDataOrderByRelationAggregateInput
-    performance_calculations?: PerformanceCalculationOrderByRelationAggregateInput
   }
 
   export type IndicatorWhereUniqueInput = Prisma.AtLeast<{
@@ -35633,8 +24298,6 @@ export namespace Prisma {
     target_field?: XOR<FieldNullableScalarRelationFilter, FieldWhereInput> | null
     remunerations?: IndicatorRemunerationListRelationFilter
     worker_allocations?: IndicatorWorkerAllocationListRelationFilter
-    monthly_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
   }, "id" | "code">
 
   export type IndicatorOrderByWithAggregationInput = {
@@ -35712,7 +24375,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFilter<"Field"> | $Enums.UserType
     validation_rules?: JsonNullableFilter<"Field">
     field_category?: EnumFieldCategoryFilter<"Field"> | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
     facility_field_mappings?: FacilityFieldMappingListRelationFilter
     field_values?: FieldValueListRelationFilter
     denominator_for_indicators?: IndicatorListRelationFilter
@@ -35736,7 +24398,6 @@ export namespace Prisma {
     user_type?: SortOrder
     validation_rules?: SortOrderInput | SortOrder
     field_category?: SortOrder
-    facility_field_defaults?: FacilityFieldDefaultsOrderByRelationAggregateInput
     facility_field_mappings?: FacilityFieldMappingOrderByRelationAggregateInput
     field_values?: FieldValueOrderByRelationAggregateInput
     denominator_for_indicators?: IndicatorOrderByRelationAggregateInput
@@ -35763,7 +24424,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFilter<"Field"> | $Enums.UserType
     validation_rules?: JsonNullableFilter<"Field">
     field_category?: EnumFieldCategoryFilter<"Field"> | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsListRelationFilter
     facility_field_mappings?: FacilityFieldMappingListRelationFilter
     field_values?: FieldValueListRelationFilter
     denominator_for_indicators?: IndicatorListRelationFilter
@@ -35924,92 +24584,6 @@ export namespace Prisma {
     facility_id?: StringNullableWithAggregatesFilter<"FieldValue"> | string | null
   }
 
-  export type FacilityFieldDefaultsWhereInput = {
-    AND?: FacilityFieldDefaultsWhereInput | FacilityFieldDefaultsWhereInput[]
-    OR?: FacilityFieldDefaultsWhereInput[]
-    NOT?: FacilityFieldDefaultsWhereInput | FacilityFieldDefaultsWhereInput[]
-    id?: IntFilter<"FacilityFieldDefaults"> | number
-    field_id?: IntFilter<"FacilityFieldDefaults"> | number
-    string_value?: StringNullableFilter<"FacilityFieldDefaults"> | string | null
-    numeric_value?: DecimalNullableFilter<"FacilityFieldDefaults"> | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: BoolNullableFilter<"FacilityFieldDefaults"> | boolean | null
-    json_value?: JsonNullableFilter<"FacilityFieldDefaults">
-    is_active?: BoolFilter<"FacilityFieldDefaults"> | boolean
-    created_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    facility_id?: StringFilter<"FacilityFieldDefaults"> | string
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-    field?: XOR<FieldScalarRelationFilter, FieldWhereInput>
-  }
-
-  export type FacilityFieldDefaultsOrderByWithRelationInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    string_value?: SortOrderInput | SortOrder
-    numeric_value?: SortOrderInput | SortOrder
-    boolean_value?: SortOrderInput | SortOrder
-    json_value?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-    facility?: FacilityOrderByWithRelationInput
-    field?: FieldOrderByWithRelationInput
-  }
-
-  export type FacilityFieldDefaultsWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    field_id_facility_id?: FacilityFieldDefaultsField_idFacility_idCompoundUniqueInput
-    AND?: FacilityFieldDefaultsWhereInput | FacilityFieldDefaultsWhereInput[]
-    OR?: FacilityFieldDefaultsWhereInput[]
-    NOT?: FacilityFieldDefaultsWhereInput | FacilityFieldDefaultsWhereInput[]
-    field_id?: IntFilter<"FacilityFieldDefaults"> | number
-    string_value?: StringNullableFilter<"FacilityFieldDefaults"> | string | null
-    numeric_value?: DecimalNullableFilter<"FacilityFieldDefaults"> | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: BoolNullableFilter<"FacilityFieldDefaults"> | boolean | null
-    json_value?: JsonNullableFilter<"FacilityFieldDefaults">
-    is_active?: BoolFilter<"FacilityFieldDefaults"> | boolean
-    created_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    facility_id?: StringFilter<"FacilityFieldDefaults"> | string
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-    field?: XOR<FieldScalarRelationFilter, FieldWhereInput>
-  }, "id" | "field_id_facility_id">
-
-  export type FacilityFieldDefaultsOrderByWithAggregationInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    string_value?: SortOrderInput | SortOrder
-    numeric_value?: SortOrderInput | SortOrder
-    boolean_value?: SortOrderInput | SortOrder
-    json_value?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-    _count?: FacilityFieldDefaultsCountOrderByAggregateInput
-    _avg?: FacilityFieldDefaultsAvgOrderByAggregateInput
-    _max?: FacilityFieldDefaultsMaxOrderByAggregateInput
-    _min?: FacilityFieldDefaultsMinOrderByAggregateInput
-    _sum?: FacilityFieldDefaultsSumOrderByAggregateInput
-  }
-
-  export type FacilityFieldDefaultsScalarWhereWithAggregatesInput = {
-    AND?: FacilityFieldDefaultsScalarWhereWithAggregatesInput | FacilityFieldDefaultsScalarWhereWithAggregatesInput[]
-    OR?: FacilityFieldDefaultsScalarWhereWithAggregatesInput[]
-    NOT?: FacilityFieldDefaultsScalarWhereWithAggregatesInput | FacilityFieldDefaultsScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"FacilityFieldDefaults"> | number
-    field_id?: IntWithAggregatesFilter<"FacilityFieldDefaults"> | number
-    string_value?: StringNullableWithAggregatesFilter<"FacilityFieldDefaults"> | string | null
-    numeric_value?: DecimalNullableWithAggregatesFilter<"FacilityFieldDefaults"> | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: BoolNullableWithAggregatesFilter<"FacilityFieldDefaults"> | boolean | null
-    json_value?: JsonNullableWithAggregatesFilter<"FacilityFieldDefaults">
-    is_active?: BoolWithAggregatesFilter<"FacilityFieldDefaults"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"FacilityFieldDefaults"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"FacilityFieldDefaults"> | Date | string
-    facility_id?: StringWithAggregatesFilter<"FacilityFieldDefaults"> | string
-  }
-
   export type FacilityFieldMappingWhereInput = {
     AND?: FacilityFieldMappingWhereInput | FacilityFieldMappingWhereInput[]
     OR?: FacilityFieldMappingWhereInput[]
@@ -36079,69 +24653,6 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"FacilityFieldMapping"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"FacilityFieldMapping"> | Date | string
     facility_type_id?: StringWithAggregatesFilter<"FacilityFieldMapping"> | string
-  }
-
-  export type sub_centreWhereInput = {
-    AND?: sub_centreWhereInput | sub_centreWhereInput[]
-    OR?: sub_centreWhereInput[]
-    NOT?: sub_centreWhereInput | sub_centreWhereInput[]
-    id?: IntFilter<"sub_centre"> | number
-    name?: StringFilter<"sub_centre"> | string
-    created_at?: DateTimeFilter<"sub_centre"> | Date | string
-    updated_at?: DateTimeFilter<"sub_centre"> | Date | string
-    facility_id?: StringFilter<"sub_centre"> | string
-    monthly_health_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-  }
-
-  export type sub_centreOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-    monthly_health_data?: MonthlyHealthDataOrderByRelationAggregateInput
-    performance_calculations?: PerformanceCalculationOrderByRelationAggregateInput
-    facility?: FacilityOrderByWithRelationInput
-  }
-
-  export type sub_centreWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: sub_centreWhereInput | sub_centreWhereInput[]
-    OR?: sub_centreWhereInput[]
-    NOT?: sub_centreWhereInput | sub_centreWhereInput[]
-    name?: StringFilter<"sub_centre"> | string
-    created_at?: DateTimeFilter<"sub_centre"> | Date | string
-    updated_at?: DateTimeFilter<"sub_centre"> | Date | string
-    facility_id?: StringFilter<"sub_centre"> | string
-    monthly_health_data?: MonthlyHealthDataListRelationFilter
-    performance_calculations?: PerformanceCalculationListRelationFilter
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-  }, "id">
-
-  export type sub_centreOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-    _count?: sub_centreCountOrderByAggregateInput
-    _avg?: sub_centreAvgOrderByAggregateInput
-    _max?: sub_centreMaxOrderByAggregateInput
-    _min?: sub_centreMinOrderByAggregateInput
-    _sum?: sub_centreSumOrderByAggregateInput
-  }
-
-  export type sub_centreScalarWhereWithAggregatesInput = {
-    AND?: sub_centreScalarWhereWithAggregatesInput | sub_centreScalarWhereWithAggregatesInput[]
-    OR?: sub_centreScalarWhereWithAggregatesInput[]
-    NOT?: sub_centreScalarWhereWithAggregatesInput | sub_centreScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"sub_centre"> | number
-    name?: StringWithAggregatesFilter<"sub_centre"> | string
-    created_at?: DateTimeWithAggregatesFilter<"sub_centre"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"sub_centre"> | Date | string
-    facility_id?: StringWithAggregatesFilter<"sub_centre"> | string
   }
 
   export type HealthWorkerWhereInput = {
@@ -36412,7 +24923,6 @@ export namespace Prisma {
     is_active?: BoolFilter<"WorkerAllocationConfig"> | boolean
     created_at?: DateTimeFilter<"WorkerAllocationConfig"> | Date | string
     updated_at?: DateTimeFilter<"WorkerAllocationConfig"> | Date | string
-    facility_allocations?: FacilityWorkerAllocationListRelationFilter
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
   }
 
@@ -36427,7 +24937,6 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    facility_allocations?: FacilityWorkerAllocationOrderByRelationAggregateInput
     facility_type?: FacilityTypeOrderByWithRelationInput
   }
 
@@ -36446,7 +24955,6 @@ export namespace Prisma {
     is_active?: BoolFilter<"WorkerAllocationConfig"> | boolean
     created_at?: DateTimeFilter<"WorkerAllocationConfig"> | Date | string
     updated_at?: DateTimeFilter<"WorkerAllocationConfig"> | Date | string
-    facility_allocations?: FacilityWorkerAllocationListRelationFilter
     facility_type?: XOR<FacilityTypeScalarRelationFilter, FacilityTypeWhereInput>
   }, "id" | "facility_type_id_worker_type_worker_role">
 
@@ -36482,82 +24990,6 @@ export namespace Prisma {
     is_active?: BoolWithAggregatesFilter<"WorkerAllocationConfig"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"WorkerAllocationConfig"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"WorkerAllocationConfig"> | Date | string
-  }
-
-  export type FacilityWorkerAllocationWhereInput = {
-    AND?: FacilityWorkerAllocationWhereInput | FacilityWorkerAllocationWhereInput[]
-    OR?: FacilityWorkerAllocationWhereInput[]
-    NOT?: FacilityWorkerAllocationWhereInput | FacilityWorkerAllocationWhereInput[]
-    id?: IntFilter<"FacilityWorkerAllocation"> | number
-    facility_id?: StringFilter<"FacilityWorkerAllocation"> | string
-    worker_allocation_config_id?: IntFilter<"FacilityWorkerAllocation"> | number
-    worker_count?: IntFilter<"FacilityWorkerAllocation"> | number
-    total_allocated_amount?: DecimalFilter<"FacilityWorkerAllocation"> | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFilter<"FacilityWorkerAllocation"> | boolean
-    created_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-    worker_allocation_config?: XOR<WorkerAllocationConfigScalarRelationFilter, WorkerAllocationConfigWhereInput>
-  }
-
-  export type FacilityWorkerAllocationOrderByWithRelationInput = {
-    id?: SortOrder
-    facility_id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility?: FacilityOrderByWithRelationInput
-    worker_allocation_config?: WorkerAllocationConfigOrderByWithRelationInput
-  }
-
-  export type FacilityWorkerAllocationWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    facility_id_worker_allocation_config_id?: FacilityWorkerAllocationFacility_idWorker_allocation_config_idCompoundUniqueInput
-    AND?: FacilityWorkerAllocationWhereInput | FacilityWorkerAllocationWhereInput[]
-    OR?: FacilityWorkerAllocationWhereInput[]
-    NOT?: FacilityWorkerAllocationWhereInput | FacilityWorkerAllocationWhereInput[]
-    facility_id?: StringFilter<"FacilityWorkerAllocation"> | string
-    worker_allocation_config_id?: IntFilter<"FacilityWorkerAllocation"> | number
-    worker_count?: IntFilter<"FacilityWorkerAllocation"> | number
-    total_allocated_amount?: DecimalFilter<"FacilityWorkerAllocation"> | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFilter<"FacilityWorkerAllocation"> | boolean
-    created_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
-    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
-    worker_allocation_config?: XOR<WorkerAllocationConfigScalarRelationFilter, WorkerAllocationConfigWhereInput>
-  }, "id" | "facility_id_worker_allocation_config_id">
-
-  export type FacilityWorkerAllocationOrderByWithAggregationInput = {
-    id?: SortOrder
-    facility_id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: FacilityWorkerAllocationCountOrderByAggregateInput
-    _avg?: FacilityWorkerAllocationAvgOrderByAggregateInput
-    _max?: FacilityWorkerAllocationMaxOrderByAggregateInput
-    _min?: FacilityWorkerAllocationMinOrderByAggregateInput
-    _sum?: FacilityWorkerAllocationSumOrderByAggregateInput
-  }
-
-  export type FacilityWorkerAllocationScalarWhereWithAggregatesInput = {
-    AND?: FacilityWorkerAllocationScalarWhereWithAggregatesInput | FacilityWorkerAllocationScalarWhereWithAggregatesInput[]
-    OR?: FacilityWorkerAllocationScalarWhereWithAggregatesInput[]
-    NOT?: FacilityWorkerAllocationScalarWhereWithAggregatesInput | FacilityWorkerAllocationScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"FacilityWorkerAllocation"> | number
-    facility_id?: StringWithAggregatesFilter<"FacilityWorkerAllocation"> | string
-    worker_allocation_config_id?: IntWithAggregatesFilter<"FacilityWorkerAllocation"> | number
-    worker_count?: IntWithAggregatesFilter<"FacilityWorkerAllocation"> | number
-    total_allocated_amount?: DecimalWithAggregatesFilter<"FacilityWorkerAllocation"> | Decimal | DecimalJsLike | number | string
-    is_active?: BoolWithAggregatesFilter<"FacilityWorkerAllocation"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"FacilityWorkerAllocation"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"FacilityWorkerAllocation"> | Date | string
   }
 
   export type FacilityTypeRemunerationWhereInput = {
@@ -36642,10 +25074,8 @@ export namespace Prisma {
     condition_type?: StringNullableFilter<"IndicatorRemuneration"> | string | null
     created_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
     updated_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
-    remuneration_system_id?: StringNullableFilter<"IndicatorRemuneration"> | string | null
     facility_type_remuneration?: XOR<FacilityTypeRemunerationScalarRelationFilter, FacilityTypeRemunerationWhereInput>
     indicator?: XOR<IndicatorScalarRelationFilter, IndicatorWhereInput>
-    remuneration_system?: XOR<RemunerationSystemNullableScalarRelationFilter, RemunerationSystemWhereInput> | null
   }
 
   export type IndicatorRemunerationOrderByWithRelationInput = {
@@ -36657,10 +25087,8 @@ export namespace Prisma {
     condition_type?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_system_id?: SortOrderInput | SortOrder
     facility_type_remuneration?: FacilityTypeRemunerationOrderByWithRelationInput
     indicator?: IndicatorOrderByWithRelationInput
-    remuneration_system?: RemunerationSystemOrderByWithRelationInput
   }
 
   export type IndicatorRemunerationWhereUniqueInput = Prisma.AtLeast<{
@@ -36676,10 +25104,8 @@ export namespace Prisma {
     condition_type?: StringNullableFilter<"IndicatorRemuneration"> | string | null
     created_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
     updated_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
-    remuneration_system_id?: StringNullableFilter<"IndicatorRemuneration"> | string | null
     facility_type_remuneration?: XOR<FacilityTypeRemunerationScalarRelationFilter, FacilityTypeRemunerationWhereInput>
     indicator?: XOR<IndicatorScalarRelationFilter, IndicatorWhereInput>
-    remuneration_system?: XOR<RemunerationSystemNullableScalarRelationFilter, RemunerationSystemWhereInput> | null
   }, "id" | "facility_type_remuneration_id_indicator_id">
 
   export type IndicatorRemunerationOrderByWithAggregationInput = {
@@ -36691,7 +25117,6 @@ export namespace Prisma {
     condition_type?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_system_id?: SortOrderInput | SortOrder
     _count?: IndicatorRemunerationCountOrderByAggregateInput
     _avg?: IndicatorRemunerationAvgOrderByAggregateInput
     _max?: IndicatorRemunerationMaxOrderByAggregateInput
@@ -36711,101 +25136,6 @@ export namespace Prisma {
     condition_type?: StringNullableWithAggregatesFilter<"IndicatorRemuneration"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"IndicatorRemuneration"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"IndicatorRemuneration"> | Date | string
-    remuneration_system_id?: StringNullableWithAggregatesFilter<"IndicatorRemuneration"> | string | null
-  }
-
-  export type PerformanceCalculationWhereInput = {
-    AND?: PerformanceCalculationWhereInput | PerformanceCalculationWhereInput[]
-    OR?: PerformanceCalculationWhereInput[]
-    NOT?: PerformanceCalculationWhereInput | PerformanceCalculationWhereInput[]
-    id?: IntFilter<"PerformanceCalculation"> | number
-    sub_centre_id?: IntNullableFilter<"PerformanceCalculation"> | number | null
-    indicator_id?: IntFilter<"PerformanceCalculation"> | number
-    report_month?: StringFilter<"PerformanceCalculation"> | string
-    numerator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    achievement?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFilter<"PerformanceCalculation"> | Date | string
-    facility_id?: StringNullableFilter<"PerformanceCalculation"> | string | null
-    facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
-    indicator?: XOR<IndicatorScalarRelationFilter, IndicatorWhereInput>
-    sub_centre?: XOR<Sub_centreNullableScalarRelationFilter, sub_centreWhereInput> | null
-  }
-
-  export type PerformanceCalculationOrderByWithRelationInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrderInput | SortOrder
-    indicator_id?: SortOrder
-    report_month?: SortOrder
-    numerator?: SortOrderInput | SortOrder
-    denominator?: SortOrderInput | SortOrder
-    achievement?: SortOrderInput | SortOrder
-    target_value?: SortOrderInput | SortOrder
-    remuneration_amount?: SortOrderInput | SortOrder
-    calculated_at?: SortOrder
-    facility_id?: SortOrderInput | SortOrder
-    facility?: FacilityOrderByWithRelationInput
-    indicator?: IndicatorOrderByWithRelationInput
-    sub_centre?: sub_centreOrderByWithRelationInput
-  }
-
-  export type PerformanceCalculationWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    facility_id_sub_centre_id_indicator_id_report_month?: PerformanceCalculationFacility_idSub_centre_idIndicator_idReport_monthCompoundUniqueInput
-    AND?: PerformanceCalculationWhereInput | PerformanceCalculationWhereInput[]
-    OR?: PerformanceCalculationWhereInput[]
-    NOT?: PerformanceCalculationWhereInput | PerformanceCalculationWhereInput[]
-    sub_centre_id?: IntNullableFilter<"PerformanceCalculation"> | number | null
-    indicator_id?: IntFilter<"PerformanceCalculation"> | number
-    report_month?: StringFilter<"PerformanceCalculation"> | string
-    numerator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    achievement?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFilter<"PerformanceCalculation"> | Date | string
-    facility_id?: StringNullableFilter<"PerformanceCalculation"> | string | null
-    facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
-    indicator?: XOR<IndicatorScalarRelationFilter, IndicatorWhereInput>
-    sub_centre?: XOR<Sub_centreNullableScalarRelationFilter, sub_centreWhereInput> | null
-  }, "id" | "facility_id_sub_centre_id_indicator_id_report_month">
-
-  export type PerformanceCalculationOrderByWithAggregationInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrderInput | SortOrder
-    indicator_id?: SortOrder
-    report_month?: SortOrder
-    numerator?: SortOrderInput | SortOrder
-    denominator?: SortOrderInput | SortOrder
-    achievement?: SortOrderInput | SortOrder
-    target_value?: SortOrderInput | SortOrder
-    remuneration_amount?: SortOrderInput | SortOrder
-    calculated_at?: SortOrder
-    facility_id?: SortOrderInput | SortOrder
-    _count?: PerformanceCalculationCountOrderByAggregateInput
-    _avg?: PerformanceCalculationAvgOrderByAggregateInput
-    _max?: PerformanceCalculationMaxOrderByAggregateInput
-    _min?: PerformanceCalculationMinOrderByAggregateInput
-    _sum?: PerformanceCalculationSumOrderByAggregateInput
-  }
-
-  export type PerformanceCalculationScalarWhereWithAggregatesInput = {
-    AND?: PerformanceCalculationScalarWhereWithAggregatesInput | PerformanceCalculationScalarWhereWithAggregatesInput[]
-    OR?: PerformanceCalculationScalarWhereWithAggregatesInput[]
-    NOT?: PerformanceCalculationScalarWhereWithAggregatesInput | PerformanceCalculationScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"PerformanceCalculation"> | number
-    sub_centre_id?: IntNullableWithAggregatesFilter<"PerformanceCalculation"> | number | null
-    indicator_id?: IntWithAggregatesFilter<"PerformanceCalculation"> | number
-    report_month?: StringWithAggregatesFilter<"PerformanceCalculation"> | string
-    numerator?: DecimalNullableWithAggregatesFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableWithAggregatesFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    achievement?: DecimalNullableWithAggregatesFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableWithAggregatesFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: DecimalNullableWithAggregatesFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeWithAggregatesFilter<"PerformanceCalculation"> | Date | string
-    facility_id?: StringNullableWithAggregatesFilter<"PerformanceCalculation"> | string | null
   }
 
   export type FacilityTargetWhereInput = {
@@ -37081,10 +25411,7 @@ export namespace Prisma {
     last_login?: Date | string | null
     created_at?: Date | string | null
     email?: string | null
-    upload_sessions?: DataUploadSessionCreateNestedManyWithoutUploaderInput
     field_values?: FieldValueCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataCreateNestedManyWithoutUploaderInput
     facility?: FacilityCreateNestedOneWithoutUsersInput
   }
 
@@ -37098,10 +25425,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     email?: string | null
     facility_id?: string | null
-    upload_sessions?: DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput
   }
 
   export type UserUpdateInput = {
@@ -37112,10 +25436,7 @@ export namespace Prisma {
     last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUpdateManyWithoutUploaderNestedInput
     field_values?: FieldValueUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUpdateManyWithoutUploaderNestedInput
     facility?: FacilityUpdateOneWithoutUsersNestedInput
   }
 
@@ -37129,10 +25450,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -37175,7 +25493,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     facilities?: FacilityCreateNestedManyWithoutDistrictInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUncheckedCreateInput = {
@@ -37184,7 +25501,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     facilities?: FacilityUncheckedCreateNestedManyWithoutDistrictInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUpdateInput = {
@@ -37193,7 +25509,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facilities?: FacilityUpdateManyWithoutDistrictNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictUncheckedUpdateInput = {
@@ -37202,7 +25517,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facilities?: FacilityUncheckedUpdateManyWithoutDistrictNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictCreateManyInput = {
@@ -37222,73 +25536,6 @@ export namespace Prisma {
   export type DistrictUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type RemunerationSystemCreateInput = {
-    id?: string
-    name: string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    indicator_remunerations?: IndicatorRemunerationCreateNestedManyWithoutRemuneration_systemInput
-  }
-
-  export type RemunerationSystemUncheckedCreateInput = {
-    id?: string
-    name: string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    indicator_remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutRemuneration_systemInput
-  }
-
-  export type RemunerationSystemUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    indicator_remunerations?: IndicatorRemunerationUpdateManyWithoutRemuneration_systemNestedInput
-  }
-
-  export type RemunerationSystemUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    indicator_remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutRemuneration_systemNestedInput
-  }
-
-  export type RemunerationSystemCreateManyInput = {
-    id?: string
-    name: string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type RemunerationSystemUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type RemunerationSystemUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37391,15 +25638,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -37415,15 +25657,10 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -37439,15 +25676,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -37463,15 +25695,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -37509,305 +25736,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MonthlyHealthDataCreateInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataUpdateInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataCreateManyInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataUpdateManyMutationInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DataUploadSessionCreateInput = {
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
-    uploader: UserCreateNestedOneWithoutUpload_sessionsInput
-  }
-
-  export type DataUploadSessionUncheckedCreateInput = {
-    id?: number
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    uploaded_by: number
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
-  }
-
-  export type DataUploadSessionUpdateInput = {
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-    uploader?: UserUpdateOneRequiredWithoutUpload_sessionsNestedInput
-  }
-
-  export type DataUploadSessionUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DataUploadSessionCreateManyInput = {
-    id?: number
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    uploaded_by: number
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
-  }
-
-  export type DataUploadSessionUpdateManyMutationInput = {
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DataUploadSessionUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type FormulaCreateInput = {
-    name: string
-    description?: string | null
-    structure: JsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FormulaUncheckedCreateInput = {
-    id?: number
-    name: string
-    description?: string | null
-    structure: JsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FormulaUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    structure?: JsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FormulaUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    structure?: JsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FormulaCreateManyInput = {
-    id?: number
-    name: string
-    description?: string | null
-    structure: JsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FormulaUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    structure?: JsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FormulaUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    structure?: JsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type IndicatorCreateInput = {
     name: string
     description?: string | null
@@ -37833,8 +25761,6 @@ export namespace Prisma {
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateInput = {
@@ -37863,8 +25789,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUpdateInput = {
@@ -37892,8 +25816,6 @@ export namespace Prisma {
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateInput = {
@@ -37922,8 +25844,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorCreateManyInput = {
@@ -38009,7 +25929,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
     field_values?: FieldValueCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
@@ -38033,7 +25952,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
@@ -38056,7 +25974,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
@@ -38080,7 +25997,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
@@ -38254,92 +26170,6 @@ export namespace Prisma {
     facility_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type FacilityFieldDefaultsCreateInput = {
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility: FacilityCreateNestedOneWithoutFacility_field_defaultsInput
-    field: FieldCreateNestedOneWithoutFacility_field_defaultsInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedCreateInput = {
-    id?: number
-    field_id: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_id: string
-  }
-
-  export type FacilityFieldDefaultsUpdateInput = {
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneRequiredWithoutFacility_field_defaultsNestedInput
-    field?: FieldUpdateOneRequiredWithoutFacility_field_defaultsNestedInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    field_id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FacilityFieldDefaultsCreateManyInput = {
-    id?: number
-    field_id: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_id: string
-  }
-
-  export type FacilityFieldDefaultsUpdateManyMutationInput = {
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    field_id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-  }
-
   export type FacilityFieldMappingCreateInput = {
     is_required?: boolean
     display_order?: number
@@ -38403,66 +26233,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type sub_centreCreateInput = {
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    monthly_health_data?: MonthlyHealthDataCreateNestedManyWithoutSub_centreInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutSub_centreInput
-    facility: FacilityCreateNestedOneWithoutSub_centresInput
-  }
-
-  export type sub_centreUncheckedCreateInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    facility_id: string
-    monthly_health_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutSub_centreInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutSub_centreInput
-  }
-
-  export type sub_centreUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_health_data?: MonthlyHealthDataUpdateManyWithoutSub_centreNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutSub_centreNestedInput
-    facility?: FacilityUpdateOneRequiredWithoutSub_centresNestedInput
-  }
-
-  export type sub_centreUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-    monthly_health_data?: MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutSub_centreNestedInput
-  }
-
-  export type sub_centreCreateManyInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    facility_id: string
-  }
-
-  export type sub_centreUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type sub_centreUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type HealthWorkerCreateInput = {
@@ -38738,7 +26508,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    facility_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutWorker_allocation_configInput
     facility_type: FacilityTypeCreateNestedOneWithoutWorker_allocationsInput
   }
 
@@ -38753,7 +26522,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    facility_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutWorker_allocation_configInput
   }
 
   export type WorkerAllocationConfigUpdateInput = {
@@ -38765,7 +26533,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_allocations?: FacilityWorkerAllocationUpdateManyWithoutWorker_allocation_configNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutWorker_allocationsNestedInput
   }
 
@@ -38780,7 +26547,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutWorker_allocation_configNestedInput
   }
 
   export type WorkerAllocationConfigCreateManyInput = {
@@ -38815,78 +26581,6 @@ export namespace Prisma {
     max_count?: IntFieldUpdateOperationsInput | number
     allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationCreateInput = {
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility: FacilityCreateNestedOneWithoutWorker_allocationsInput
-    worker_allocation_config: WorkerAllocationConfigCreateNestedOneWithoutFacility_allocationsInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedCreateInput = {
-    id?: number
-    facility_id: string
-    worker_allocation_config_id: number
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationUpdateInput = {
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneRequiredWithoutWorker_allocationsNestedInput
-    worker_allocation_config?: WorkerAllocationConfigUpdateOneRequiredWithoutFacility_allocationsNestedInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_id?: StringFieldUpdateOperationsInput | string
-    worker_allocation_config_id?: IntFieldUpdateOperationsInput | number
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationCreateManyInput = {
-    id?: number
-    facility_id: string
-    worker_allocation_config_id: number
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationUpdateManyMutationInput = {
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_id?: StringFieldUpdateOperationsInput | string
-    worker_allocation_config_id?: IntFieldUpdateOperationsInput | number
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38970,7 +26664,6 @@ export namespace Prisma {
     updated_at?: Date | string
     facility_type_remuneration: FacilityTypeRemunerationCreateNestedOneWithoutIndicator_remunerationsInput
     indicator: IndicatorCreateNestedOneWithoutRemunerationsInput
-    remuneration_system?: RemunerationSystemCreateNestedOneWithoutIndicator_remunerationsInput
   }
 
   export type IndicatorRemunerationUncheckedCreateInput = {
@@ -38982,7 +26675,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorRemunerationUpdateInput = {
@@ -38993,7 +26685,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_remuneration?: FacilityTypeRemunerationUpdateOneRequiredWithoutIndicator_remunerationsNestedInput
     indicator?: IndicatorUpdateOneRequiredWithoutRemunerationsNestedInput
-    remuneration_system?: RemunerationSystemUpdateOneWithoutIndicator_remunerationsNestedInput
   }
 
   export type IndicatorRemunerationUncheckedUpdateInput = {
@@ -39005,7 +26696,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IndicatorRemunerationCreateManyInput = {
@@ -39017,7 +26707,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorRemunerationUpdateManyMutationInput = {
@@ -39037,99 +26726,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationCreateInput = {
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility?: FacilityCreateNestedOneWithoutPerformance_calculationsInput
-    indicator: IndicatorCreateNestedOneWithoutPerformance_calculationsInput
-    sub_centre?: sub_centreCreateNestedOneWithoutPerformance_calculationsInput
-  }
-
-  export type PerformanceCalculationUncheckedCreateInput = {
-    id?: number
-    sub_centre_id?: number | null
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationUpdateInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneWithoutPerformance_calculationsNestedInput
-    indicator?: IndicatorUpdateOneRequiredWithoutPerformance_calculationsNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutPerformance_calculationsNestedInput
-  }
-
-  export type PerformanceCalculationUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationCreateManyInput = {
-    id?: number
-    sub_centre_id?: number | null
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationUpdateManyMutationInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FacilityTargetCreateInput = {
@@ -39475,22 +27071,10 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DataUploadSessionListRelationFilter = {
-    every?: DataUploadSessionWhereInput
-    some?: DataUploadSessionWhereInput
-    none?: DataUploadSessionWhereInput
-  }
-
   export type FieldValueListRelationFilter = {
     every?: FieldValueWhereInput
     some?: FieldValueWhereInput
     none?: FieldValueWhereInput
-  }
-
-  export type MonthlyHealthDataListRelationFilter = {
-    every?: MonthlyHealthDataWhereInput
-    some?: MonthlyHealthDataWhereInput
-    none?: MonthlyHealthDataWhereInput
   }
 
   export type FacilityNullableScalarRelationFilter = {
@@ -39503,15 +27087,7 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type DataUploadSessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type FieldValueOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type MonthlyHealthDataOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39704,51 +27280,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type IndicatorRemunerationListRelationFilter = {
-    every?: IndicatorRemunerationWhereInput
-    some?: IndicatorRemunerationWhereInput
-    none?: IndicatorRemunerationWhereInput
-  }
-
-  export type IndicatorRemunerationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type RemunerationSystemCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type RemunerationSystemMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type RemunerationSystemMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type FacilityFieldMappingListRelationFilter = {
     every?: FacilityFieldMappingWhereInput
     some?: FacilityFieldMappingWhereInput
@@ -39804,6 +27335,14 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type FacilityRemunerationRecordListRelationFilter = {
     every?: FacilityRemunerationRecordWhereInput
     some?: FacilityRemunerationRecordWhereInput
@@ -39826,22 +27365,10 @@ export namespace Prisma {
     isNot?: FacilityTypeWhereInput
   }
 
-  export type FacilityFieldDefaultsListRelationFilter = {
-    every?: FacilityFieldDefaultsWhereInput
-    some?: FacilityFieldDefaultsWhereInput
-    none?: FacilityFieldDefaultsWhereInput
-  }
-
   export type FacilityTargetListRelationFilter = {
     every?: FacilityTargetWhereInput
     some?: FacilityTargetWhereInput
     none?: FacilityTargetWhereInput
-  }
-
-  export type FacilityWorkerAllocationListRelationFilter = {
-    every?: FacilityWorkerAllocationWhereInput
-    some?: FacilityWorkerAllocationWhereInput
-    none?: FacilityWorkerAllocationWhereInput
   }
 
   export type HealthWorkerListRelationFilter = {
@@ -39850,22 +27377,10 @@ export namespace Prisma {
     none?: HealthWorkerWhereInput
   }
 
-  export type PerformanceCalculationListRelationFilter = {
-    every?: PerformanceCalculationWhereInput
-    some?: PerformanceCalculationWhereInput
-    none?: PerformanceCalculationWhereInput
-  }
-
   export type RemunerationCalculationListRelationFilter = {
     every?: RemunerationCalculationWhereInput
     some?: RemunerationCalculationWhereInput
     none?: RemunerationCalculationWhereInput
-  }
-
-  export type Sub_centreListRelationFilter = {
-    every?: sub_centreWhereInput
-    some?: sub_centreWhereInput
-    none?: sub_centreWhereInput
   }
 
   export type UserListRelationFilter = {
@@ -39882,15 +27397,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type FacilityFieldDefaultsOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type FacilityTargetOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type FacilityWorkerAllocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39898,15 +27405,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type PerformanceCalculationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type RemunerationCalculationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type sub_centreOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39954,200 +27453,6 @@ export namespace Prisma {
     is_active?: SortOrder
     updated_at?: SortOrder
   }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
-  export type EnumDataQualityFilter<$PrismaModel = never> = {
-    equals?: $Enums.DataQuality | EnumDataQualityFieldRefInput<$PrismaModel>
-    in?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    not?: NestedEnumDataQualityFilter<$PrismaModel> | $Enums.DataQuality
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
-  }
-
-  export type IndicatorNullableScalarRelationFilter = {
-    is?: IndicatorWhereInput | null
-    isNot?: IndicatorWhereInput | null
-  }
-
-  export type Sub_centreNullableScalarRelationFilter = {
-    is?: sub_centreWhereInput | null
-    isNot?: sub_centreWhereInput | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type MonthlyHealthDataFacility_idSub_centre_idIndicator_idReport_monthCompoundUniqueInput = {
-    facility_id: string
-    sub_centre_id: number
-    indicator_id: number
-    report_month: string
-  }
-
-  export type MonthlyHealthDataCountOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    report_month?: SortOrder
-    value?: SortOrder
-    data_quality?: SortOrder
-    remarks?: SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrder
-    approved_at?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    achievement?: SortOrder
-    denominator?: SortOrder
-    numerator?: SortOrder
-    target_value?: SortOrder
-    indicator_id?: SortOrder
-    district_id?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type MonthlyHealthDataAvgOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    value?: SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrder
-    achievement?: SortOrder
-    denominator?: SortOrder
-    numerator?: SortOrder
-    target_value?: SortOrder
-    indicator_id?: SortOrder
-  }
-
-  export type MonthlyHealthDataMaxOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    report_month?: SortOrder
-    value?: SortOrder
-    data_quality?: SortOrder
-    remarks?: SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrder
-    approved_at?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    achievement?: SortOrder
-    denominator?: SortOrder
-    numerator?: SortOrder
-    target_value?: SortOrder
-    indicator_id?: SortOrder
-    district_id?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type MonthlyHealthDataMinOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    report_month?: SortOrder
-    value?: SortOrder
-    data_quality?: SortOrder
-    remarks?: SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrder
-    approved_at?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    achievement?: SortOrder
-    denominator?: SortOrder
-    numerator?: SortOrder
-    target_value?: SortOrder
-    indicator_id?: SortOrder
-    district_id?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type MonthlyHealthDataSumOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    value?: SortOrder
-    uploaded_by?: SortOrder
-    approved_by?: SortOrder
-    achievement?: SortOrder
-    denominator?: SortOrder
-    numerator?: SortOrder
-    target_value?: SortOrder
-    indicator_id?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
-  export type EnumDataQualityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DataQuality | EnumDataQualityFieldRefInput<$PrismaModel>
-    in?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    not?: NestedEnumDataQualityWithAggregatesFilter<$PrismaModel> | $Enums.DataQuality
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDataQualityFilter<$PrismaModel>
-    _max?: NestedEnumDataQualityFilter<$PrismaModel>
-  }
-
-  export type EnumUploadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.UploadStatus | EnumUploadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumUploadStatusFilter<$PrismaModel> | $Enums.UploadStatus
-  }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -40172,181 +27477,15 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type DataUploadSessionCountOrderByAggregateInput = {
-    id?: SortOrder
-    file_name?: SortOrder
-    report_month?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    status?: SortOrder
-    upload_summary?: SortOrder
-    uploaded_by?: SortOrder
-    created_at?: SortOrder
-    completed_at?: SortOrder
-    file_path?: SortOrder
-  }
-
-  export type DataUploadSessionAvgOrderByAggregateInput = {
-    id?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    uploaded_by?: SortOrder
-  }
-
-  export type DataUploadSessionMaxOrderByAggregateInput = {
-    id?: SortOrder
-    file_name?: SortOrder
-    report_month?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    status?: SortOrder
-    uploaded_by?: SortOrder
-    created_at?: SortOrder
-    completed_at?: SortOrder
-    file_path?: SortOrder
-  }
-
-  export type DataUploadSessionMinOrderByAggregateInput = {
-    id?: SortOrder
-    file_name?: SortOrder
-    report_month?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    status?: SortOrder
-    uploaded_by?: SortOrder
-    created_at?: SortOrder
-    completed_at?: SortOrder
-    file_path?: SortOrder
-  }
-
-  export type DataUploadSessionSumOrderByAggregateInput = {
-    id?: SortOrder
-    total_records?: SortOrder
-    success_count?: SortOrder
-    error_count?: SortOrder
-    uploaded_by?: SortOrder
-  }
-
-  export type EnumUploadStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UploadStatus | EnumUploadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumUploadStatusWithAggregatesFilter<$PrismaModel> | $Enums.UploadStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUploadStatusFilter<$PrismaModel>
-    _max?: NestedEnumUploadStatusFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type FormulaCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    structure?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FormulaAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type FormulaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FormulaMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FormulaSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type Enumformula_typeFilter<$PrismaModel = never> = {
@@ -40368,10 +27507,20 @@ export namespace Prisma {
     isNot?: FieldWhereInput | null
   }
 
+  export type IndicatorRemunerationListRelationFilter = {
+    every?: IndicatorRemunerationWhereInput
+    some?: IndicatorRemunerationWhereInput
+    none?: IndicatorRemunerationWhereInput
+  }
+
   export type IndicatorWorkerAllocationListRelationFilter = {
     every?: IndicatorWorkerAllocationWhereInput
     some?: IndicatorWorkerAllocationWhereInput
     none?: IndicatorWorkerAllocationWhereInput
+  }
+
+  export type IndicatorRemunerationOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type IndicatorWorkerAllocationOrderByRelationAggregateInput = {
@@ -40456,6 +27605,48 @@ export namespace Prisma {
     denominator_field_id?: SortOrder
     numerator_field_id?: SortOrder
     target_field_id?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type Enumformula_typeWithAggregatesFilter<$PrismaModel = never> = {
@@ -40599,9 +27790,25 @@ export namespace Prisma {
     _max?: NestedEnumFieldCategoryFilter<$PrismaModel>
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type FieldScalarRelationFilter = {
     is?: FieldWhereInput
     isNot?: FieldWhereInput
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
   export type FieldValueField_idFacility_idReport_monthCompoundUniqueInput = {
@@ -40673,63 +27880,20 @@ export namespace Prisma {
     uploaded_by?: SortOrder
   }
 
-  export type FacilityScalarRelationFilter = {
-    is?: FacilityWhereInput
-    isNot?: FacilityWhereInput
-  }
-
-  export type FacilityFieldDefaultsField_idFacility_idCompoundUniqueInput = {
-    field_id: number
-    facility_id: string
-  }
-
-  export type FacilityFieldDefaultsCountOrderByAggregateInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    string_value?: SortOrder
-    numeric_value?: SortOrder
-    boolean_value?: SortOrder
-    json_value?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type FacilityFieldDefaultsAvgOrderByAggregateInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    numeric_value?: SortOrder
-  }
-
-  export type FacilityFieldDefaultsMaxOrderByAggregateInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    string_value?: SortOrder
-    numeric_value?: SortOrder
-    boolean_value?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type FacilityFieldDefaultsMinOrderByAggregateInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    string_value?: SortOrder
-    numeric_value?: SortOrder
-    boolean_value?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type FacilityFieldDefaultsSumOrderByAggregateInput = {
-    id?: SortOrder
-    field_id?: SortOrder
-    numeric_value?: SortOrder
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type FacilityFieldMappingFacility_type_idField_idCompoundUniqueInput = {
@@ -40779,38 +27943,6 @@ export namespace Prisma {
     display_order?: SortOrder
   }
 
-  export type sub_centreCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type sub_centreAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type sub_centreMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type sub_centreMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type sub_centreSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -40820,6 +27952,11 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type FacilityScalarRelationFilter = {
+    is?: FacilityWhereInput
+    isNot?: FacilityWhereInput
   }
 
   export type HealthWorkerCountOrderByAggregateInput = {
@@ -41073,63 +28210,6 @@ export namespace Prisma {
     allocated_amount?: SortOrder
   }
 
-  export type WorkerAllocationConfigScalarRelationFilter = {
-    is?: WorkerAllocationConfigWhereInput
-    isNot?: WorkerAllocationConfigWhereInput
-  }
-
-  export type FacilityWorkerAllocationFacility_idWorker_allocation_config_idCompoundUniqueInput = {
-    facility_id: string
-    worker_allocation_config_id: number
-  }
-
-  export type FacilityWorkerAllocationCountOrderByAggregateInput = {
-    id?: SortOrder
-    facility_id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FacilityWorkerAllocationAvgOrderByAggregateInput = {
-    id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-  }
-
-  export type FacilityWorkerAllocationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    facility_id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FacilityWorkerAllocationMinOrderByAggregateInput = {
-    id?: SortOrder
-    facility_id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type FacilityWorkerAllocationSumOrderByAggregateInput = {
-    id?: SortOrder
-    worker_allocation_config_id?: SortOrder
-    worker_count?: SortOrder
-    total_allocated_amount?: SortOrder
-  }
-
   export type FacilityTypeRemunerationCountOrderByAggregateInput = {
     id?: SortOrder
     total_amount?: SortOrder
@@ -41180,11 +28260,6 @@ export namespace Prisma {
     isNot?: IndicatorWhereInput
   }
 
-  export type RemunerationSystemNullableScalarRelationFilter = {
-    is?: RemunerationSystemWhereInput | null
-    isNot?: RemunerationSystemWhereInput | null
-  }
-
   export type IndicatorRemunerationFacility_type_remuneration_idIndicator_idCompoundUniqueInput = {
     facility_type_remuneration_id: number
     indicator_id: number
@@ -41199,7 +28274,6 @@ export namespace Prisma {
     condition_type?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_system_id?: SortOrder
   }
 
   export type IndicatorRemunerationAvgOrderByAggregateInput = {
@@ -41219,7 +28293,6 @@ export namespace Prisma {
     condition_type?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_system_id?: SortOrder
   }
 
   export type IndicatorRemunerationMinOrderByAggregateInput = {
@@ -41231,7 +28304,6 @@ export namespace Prisma {
     condition_type?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    remuneration_system_id?: SortOrder
   }
 
   export type IndicatorRemunerationSumOrderByAggregateInput = {
@@ -41240,77 +28312,6 @@ export namespace Prisma {
     indicator_id?: SortOrder
     base_amount?: SortOrder
     conditional_amount?: SortOrder
-  }
-
-  export type PerformanceCalculationFacility_idSub_centre_idIndicator_idReport_monthCompoundUniqueInput = {
-    facility_id: string
-    sub_centre_id: number
-    indicator_id: number
-    report_month: string
-  }
-
-  export type PerformanceCalculationCountOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    indicator_id?: SortOrder
-    report_month?: SortOrder
-    numerator?: SortOrder
-    denominator?: SortOrder
-    achievement?: SortOrder
-    target_value?: SortOrder
-    remuneration_amount?: SortOrder
-    calculated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type PerformanceCalculationAvgOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    indicator_id?: SortOrder
-    numerator?: SortOrder
-    denominator?: SortOrder
-    achievement?: SortOrder
-    target_value?: SortOrder
-    remuneration_amount?: SortOrder
-  }
-
-  export type PerformanceCalculationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    indicator_id?: SortOrder
-    report_month?: SortOrder
-    numerator?: SortOrder
-    denominator?: SortOrder
-    achievement?: SortOrder
-    target_value?: SortOrder
-    remuneration_amount?: SortOrder
-    calculated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type PerformanceCalculationMinOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    indicator_id?: SortOrder
-    report_month?: SortOrder
-    numerator?: SortOrder
-    denominator?: SortOrder
-    achievement?: SortOrder
-    target_value?: SortOrder
-    remuneration_amount?: SortOrder
-    calculated_at?: SortOrder
-    facility_id?: SortOrder
-  }
-
-  export type PerformanceCalculationSumOrderByAggregateInput = {
-    id?: SortOrder
-    sub_centre_id?: SortOrder
-    indicator_id?: SortOrder
-    numerator?: SortOrder
-    denominator?: SortOrder
-    achievement?: SortOrder
-    target_value?: SortOrder
-    remuneration_amount?: SortOrder
   }
 
   export type FacilityTargetFacility_idIndicator_idReport_monthCompoundUniqueInput = {
@@ -41431,6 +28432,11 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type IndicatorNullableScalarRelationFilter = {
+    is?: IndicatorWhereInput | null
+    isNot?: IndicatorWhereInput | null
+  }
+
   export type FacilityRemunerationRecordFacility_idReport_monthIndicator_idCompoundUniqueInput = {
     facility_id: string
     report_month: string
@@ -41537,32 +28543,11 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type DataUploadSessionCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput> | DataUploadSessionCreateWithoutUploaderInput[] | DataUploadSessionUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: DataUploadSessionCreateOrConnectWithoutUploaderInput | DataUploadSessionCreateOrConnectWithoutUploaderInput[]
-    createMany?: DataUploadSessionCreateManyUploaderInputEnvelope
-    connect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-  }
-
   export type FieldValueCreateNestedManyWithoutUploaderInput = {
     create?: XOR<FieldValueCreateWithoutUploaderInput, FieldValueUncheckedCreateWithoutUploaderInput> | FieldValueCreateWithoutUploaderInput[] | FieldValueUncheckedCreateWithoutUploaderInput[]
     connectOrCreate?: FieldValueCreateOrConnectWithoutUploaderInput | FieldValueCreateOrConnectWithoutUploaderInput[]
     createMany?: FieldValueCreateManyUploaderInputEnvelope
     connect?: FieldValueWhereUniqueInput | FieldValueWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataCreateNestedManyWithoutApproverInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput> | MonthlyHealthDataCreateWithoutApproverInput[] | MonthlyHealthDataUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutApproverInput | MonthlyHealthDataCreateOrConnectWithoutApproverInput[]
-    createMany?: MonthlyHealthDataCreateManyApproverInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput> | MonthlyHealthDataCreateWithoutUploaderInput[] | MonthlyHealthDataUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutUploaderInput | MonthlyHealthDataCreateOrConnectWithoutUploaderInput[]
-    createMany?: MonthlyHealthDataCreateManyUploaderInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
   }
 
   export type FacilityCreateNestedOneWithoutUsersInput = {
@@ -41571,32 +28556,11 @@ export namespace Prisma {
     connect?: FacilityWhereUniqueInput
   }
 
-  export type DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput> | DataUploadSessionCreateWithoutUploaderInput[] | DataUploadSessionUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: DataUploadSessionCreateOrConnectWithoutUploaderInput | DataUploadSessionCreateOrConnectWithoutUploaderInput[]
-    createMany?: DataUploadSessionCreateManyUploaderInputEnvelope
-    connect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-  }
-
   export type FieldValueUncheckedCreateNestedManyWithoutUploaderInput = {
     create?: XOR<FieldValueCreateWithoutUploaderInput, FieldValueUncheckedCreateWithoutUploaderInput> | FieldValueCreateWithoutUploaderInput[] | FieldValueUncheckedCreateWithoutUploaderInput[]
     connectOrCreate?: FieldValueCreateOrConnectWithoutUploaderInput | FieldValueCreateOrConnectWithoutUploaderInput[]
     createMany?: FieldValueCreateManyUploaderInputEnvelope
     connect?: FieldValueWhereUniqueInput | FieldValueWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput> | MonthlyHealthDataCreateWithoutApproverInput[] | MonthlyHealthDataUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutApproverInput | MonthlyHealthDataCreateOrConnectWithoutApproverInput[]
-    createMany?: MonthlyHealthDataCreateManyApproverInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput> | MonthlyHealthDataCreateWithoutUploaderInput[] | MonthlyHealthDataUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutUploaderInput | MonthlyHealthDataCreateOrConnectWithoutUploaderInput[]
-    createMany?: MonthlyHealthDataCreateManyUploaderInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -41619,20 +28583,6 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type DataUploadSessionUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput> | DataUploadSessionCreateWithoutUploaderInput[] | DataUploadSessionUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: DataUploadSessionCreateOrConnectWithoutUploaderInput | DataUploadSessionCreateOrConnectWithoutUploaderInput[]
-    upsert?: DataUploadSessionUpsertWithWhereUniqueWithoutUploaderInput | DataUploadSessionUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: DataUploadSessionCreateManyUploaderInputEnvelope
-    set?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    disconnect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    delete?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    connect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    update?: DataUploadSessionUpdateWithWhereUniqueWithoutUploaderInput | DataUploadSessionUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: DataUploadSessionUpdateManyWithWhereWithoutUploaderInput | DataUploadSessionUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: DataUploadSessionScalarWhereInput | DataUploadSessionScalarWhereInput[]
-  }
-
   export type FieldValueUpdateManyWithoutUploaderNestedInput = {
     create?: XOR<FieldValueCreateWithoutUploaderInput, FieldValueUncheckedCreateWithoutUploaderInput> | FieldValueCreateWithoutUploaderInput[] | FieldValueUncheckedCreateWithoutUploaderInput[]
     connectOrCreate?: FieldValueCreateOrConnectWithoutUploaderInput | FieldValueCreateOrConnectWithoutUploaderInput[]
@@ -41645,34 +28595,6 @@ export namespace Prisma {
     update?: FieldValueUpdateWithWhereUniqueWithoutUploaderInput | FieldValueUpdateWithWhereUniqueWithoutUploaderInput[]
     updateMany?: FieldValueUpdateManyWithWhereWithoutUploaderInput | FieldValueUpdateManyWithWhereWithoutUploaderInput[]
     deleteMany?: FieldValueScalarWhereInput | FieldValueScalarWhereInput[]
-  }
-
-  export type MonthlyHealthDataUpdateManyWithoutApproverNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput> | MonthlyHealthDataCreateWithoutApproverInput[] | MonthlyHealthDataUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutApproverInput | MonthlyHealthDataCreateOrConnectWithoutApproverInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutApproverInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutApproverInput[]
-    createMany?: MonthlyHealthDataCreateManyApproverInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutApproverInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutApproverInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutApproverInput | MonthlyHealthDataUpdateManyWithWhereWithoutApproverInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type MonthlyHealthDataUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput> | MonthlyHealthDataCreateWithoutUploaderInput[] | MonthlyHealthDataUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutUploaderInput | MonthlyHealthDataCreateOrConnectWithoutUploaderInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutUploaderInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: MonthlyHealthDataCreateManyUploaderInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutUploaderInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutUploaderInput | MonthlyHealthDataUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
   }
 
   export type FacilityUpdateOneWithoutUsersNestedInput = {
@@ -41693,20 +28615,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput> | DataUploadSessionCreateWithoutUploaderInput[] | DataUploadSessionUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: DataUploadSessionCreateOrConnectWithoutUploaderInput | DataUploadSessionCreateOrConnectWithoutUploaderInput[]
-    upsert?: DataUploadSessionUpsertWithWhereUniqueWithoutUploaderInput | DataUploadSessionUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: DataUploadSessionCreateManyUploaderInputEnvelope
-    set?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    disconnect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    delete?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    connect?: DataUploadSessionWhereUniqueInput | DataUploadSessionWhereUniqueInput[]
-    update?: DataUploadSessionUpdateWithWhereUniqueWithoutUploaderInput | DataUploadSessionUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: DataUploadSessionUpdateManyWithWhereWithoutUploaderInput | DataUploadSessionUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: DataUploadSessionScalarWhereInput | DataUploadSessionScalarWhereInput[]
-  }
-
   export type FieldValueUncheckedUpdateManyWithoutUploaderNestedInput = {
     create?: XOR<FieldValueCreateWithoutUploaderInput, FieldValueUncheckedCreateWithoutUploaderInput> | FieldValueCreateWithoutUploaderInput[] | FieldValueUncheckedCreateWithoutUploaderInput[]
     connectOrCreate?: FieldValueCreateOrConnectWithoutUploaderInput | FieldValueCreateOrConnectWithoutUploaderInput[]
@@ -41721,34 +28629,6 @@ export namespace Prisma {
     deleteMany?: FieldValueScalarWhereInput | FieldValueScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput> | MonthlyHealthDataCreateWithoutApproverInput[] | MonthlyHealthDataUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutApproverInput | MonthlyHealthDataCreateOrConnectWithoutApproverInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutApproverInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutApproverInput[]
-    createMany?: MonthlyHealthDataCreateManyApproverInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutApproverInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutApproverInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutApproverInput | MonthlyHealthDataUpdateManyWithWhereWithoutApproverInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput> | MonthlyHealthDataCreateWithoutUploaderInput[] | MonthlyHealthDataUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutUploaderInput | MonthlyHealthDataCreateOrConnectWithoutUploaderInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutUploaderInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: MonthlyHealthDataCreateManyUploaderInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutUploaderInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutUploaderInput | MonthlyHealthDataUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
   export type FacilityCreateNestedManyWithoutDistrictInput = {
     create?: XOR<FacilityCreateWithoutDistrictInput, FacilityUncheckedCreateWithoutDistrictInput> | FacilityCreateWithoutDistrictInput[] | FacilityUncheckedCreateWithoutDistrictInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutDistrictInput | FacilityCreateOrConnectWithoutDistrictInput[]
@@ -41756,25 +28636,11 @@ export namespace Prisma {
     connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
   }
 
-  export type MonthlyHealthDataCreateNestedManyWithoutDistrictInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput> | MonthlyHealthDataCreateWithoutDistrictInput[] | MonthlyHealthDataUncheckedCreateWithoutDistrictInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutDistrictInput | MonthlyHealthDataCreateOrConnectWithoutDistrictInput[]
-    createMany?: MonthlyHealthDataCreateManyDistrictInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
   export type FacilityUncheckedCreateNestedManyWithoutDistrictInput = {
     create?: XOR<FacilityCreateWithoutDistrictInput, FacilityUncheckedCreateWithoutDistrictInput> | FacilityCreateWithoutDistrictInput[] | FacilityUncheckedCreateWithoutDistrictInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutDistrictInput | FacilityCreateOrConnectWithoutDistrictInput[]
     createMany?: FacilityCreateManyDistrictInputEnvelope
     connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutDistrictInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput> | MonthlyHealthDataCreateWithoutDistrictInput[] | MonthlyHealthDataUncheckedCreateWithoutDistrictInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutDistrictInput | MonthlyHealthDataCreateOrConnectWithoutDistrictInput[]
-    createMany?: MonthlyHealthDataCreateManyDistrictInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -41795,20 +28661,6 @@ export namespace Prisma {
     deleteMany?: FacilityScalarWhereInput | FacilityScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUpdateManyWithoutDistrictNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput> | MonthlyHealthDataCreateWithoutDistrictInput[] | MonthlyHealthDataUncheckedCreateWithoutDistrictInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutDistrictInput | MonthlyHealthDataCreateOrConnectWithoutDistrictInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutDistrictInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutDistrictInput[]
-    createMany?: MonthlyHealthDataCreateManyDistrictInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutDistrictInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutDistrictInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutDistrictInput | MonthlyHealthDataUpdateManyWithWhereWithoutDistrictInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
   export type FacilityUncheckedUpdateManyWithoutDistrictNestedInput = {
     create?: XOR<FacilityCreateWithoutDistrictInput, FacilityUncheckedCreateWithoutDistrictInput> | FacilityCreateWithoutDistrictInput[] | FacilityUncheckedCreateWithoutDistrictInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutDistrictInput | FacilityCreateOrConnectWithoutDistrictInput[]
@@ -41821,66 +28673,6 @@ export namespace Prisma {
     update?: FacilityUpdateWithWhereUniqueWithoutDistrictInput | FacilityUpdateWithWhereUniqueWithoutDistrictInput[]
     updateMany?: FacilityUpdateManyWithWhereWithoutDistrictInput | FacilityUpdateManyWithWhereWithoutDistrictInput[]
     deleteMany?: FacilityScalarWhereInput | FacilityScalarWhereInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutDistrictNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput> | MonthlyHealthDataCreateWithoutDistrictInput[] | MonthlyHealthDataUncheckedCreateWithoutDistrictInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutDistrictInput | MonthlyHealthDataCreateOrConnectWithoutDistrictInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutDistrictInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutDistrictInput[]
-    createMany?: MonthlyHealthDataCreateManyDistrictInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutDistrictInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutDistrictInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutDistrictInput | MonthlyHealthDataUpdateManyWithWhereWithoutDistrictInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type IndicatorRemunerationCreateNestedManyWithoutRemuneration_systemInput = {
-    create?: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput> | IndicatorRemunerationCreateWithoutRemuneration_systemInput[] | IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput[]
-    connectOrCreate?: IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput | IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput[]
-    createMany?: IndicatorRemunerationCreateManyRemuneration_systemInputEnvelope
-    connect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-  }
-
-  export type IndicatorRemunerationUncheckedCreateNestedManyWithoutRemuneration_systemInput = {
-    create?: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput> | IndicatorRemunerationCreateWithoutRemuneration_systemInput[] | IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput[]
-    connectOrCreate?: IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput | IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput[]
-    createMany?: IndicatorRemunerationCreateManyRemuneration_systemInputEnvelope
-    connect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type IndicatorRemunerationUpdateManyWithoutRemuneration_systemNestedInput = {
-    create?: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput> | IndicatorRemunerationCreateWithoutRemuneration_systemInput[] | IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput[]
-    connectOrCreate?: IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput | IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput[]
-    upsert?: IndicatorRemunerationUpsertWithWhereUniqueWithoutRemuneration_systemInput | IndicatorRemunerationUpsertWithWhereUniqueWithoutRemuneration_systemInput[]
-    createMany?: IndicatorRemunerationCreateManyRemuneration_systemInputEnvelope
-    set?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    disconnect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    delete?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    connect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    update?: IndicatorRemunerationUpdateWithWhereUniqueWithoutRemuneration_systemInput | IndicatorRemunerationUpdateWithWhereUniqueWithoutRemuneration_systemInput[]
-    updateMany?: IndicatorRemunerationUpdateManyWithWhereWithoutRemuneration_systemInput | IndicatorRemunerationUpdateManyWithWhereWithoutRemuneration_systemInput[]
-    deleteMany?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
-  }
-
-  export type IndicatorRemunerationUncheckedUpdateManyWithoutRemuneration_systemNestedInput = {
-    create?: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput> | IndicatorRemunerationCreateWithoutRemuneration_systemInput[] | IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput[]
-    connectOrCreate?: IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput | IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput[]
-    upsert?: IndicatorRemunerationUpsertWithWhereUniqueWithoutRemuneration_systemInput | IndicatorRemunerationUpsertWithWhereUniqueWithoutRemuneration_systemInput[]
-    createMany?: IndicatorRemunerationCreateManyRemuneration_systemInputEnvelope
-    set?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    disconnect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    delete?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    connect?: IndicatorRemunerationWhereUniqueInput | IndicatorRemunerationWhereUniqueInput[]
-    update?: IndicatorRemunerationUpdateWithWhereUniqueWithoutRemuneration_systemInput | IndicatorRemunerationUpdateWithWhereUniqueWithoutRemuneration_systemInput[]
-    updateMany?: IndicatorRemunerationUpdateManyWithWhereWithoutRemuneration_systemInput | IndicatorRemunerationUpdateManyWithWhereWithoutRemuneration_systemInput[]
-    deleteMany?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
   }
 
   export type FacilityCreateNestedManyWithoutFacility_typeInput = {
@@ -41935,6 +28727,10 @@ export namespace Prisma {
     connectOrCreate?: WorkerAllocationConfigCreateOrConnectWithoutFacility_typeInput | WorkerAllocationConfigCreateOrConnectWithoutFacility_typeInput[]
     createMany?: WorkerAllocationConfigCreateManyFacility_typeInputEnvelope
     connect?: WorkerAllocationConfigWhereUniqueInput | WorkerAllocationConfigWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type FacilityUpdateManyWithoutFacility_typeNestedInput = {
@@ -42067,25 +28863,11 @@ export namespace Prisma {
     connect?: FacilityTypeWhereUniqueInput
   }
 
-  export type FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput> | FacilityFieldDefaultsCreateWithoutFacilityInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput | FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFacilityInputEnvelope
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-  }
-
   export type FacilityTargetCreateNestedManyWithoutFacilityInput = {
     create?: XOR<FacilityTargetCreateWithoutFacilityInput, FacilityTargetUncheckedCreateWithoutFacilityInput> | FacilityTargetCreateWithoutFacilityInput[] | FacilityTargetUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityTargetCreateOrConnectWithoutFacilityInput | FacilityTargetCreateOrConnectWithoutFacilityInput[]
     createMany?: FacilityTargetCreateManyFacilityInputEnvelope
     connect?: FacilityTargetWhereUniqueInput | FacilityTargetWhereUniqueInput[]
-  }
-
-  export type FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput> | FacilityWorkerAllocationCreateWithoutFacilityInput[] | FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput | FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput[]
-    createMany?: FacilityWorkerAllocationCreateManyFacilityInputEnvelope
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
   }
 
   export type FieldValueCreateNestedManyWithoutFacilityInput = {
@@ -42102,32 +28884,11 @@ export namespace Prisma {
     connect?: HealthWorkerWhereUniqueInput | HealthWorkerWhereUniqueInput[]
   }
 
-  export type MonthlyHealthDataCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput> | MonthlyHealthDataCreateWithoutFacilityInput[] | MonthlyHealthDataUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutFacilityInput | MonthlyHealthDataCreateOrConnectWithoutFacilityInput[]
-    createMany?: MonthlyHealthDataCreateManyFacilityInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput> | PerformanceCalculationCreateWithoutFacilityInput[] | PerformanceCalculationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutFacilityInput | PerformanceCalculationCreateOrConnectWithoutFacilityInput[]
-    createMany?: PerformanceCalculationCreateManyFacilityInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-  }
-
   export type RemunerationCalculationCreateNestedManyWithoutFacilityInput = {
     create?: XOR<RemunerationCalculationCreateWithoutFacilityInput, RemunerationCalculationUncheckedCreateWithoutFacilityInput> | RemunerationCalculationCreateWithoutFacilityInput[] | RemunerationCalculationUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: RemunerationCalculationCreateOrConnectWithoutFacilityInput | RemunerationCalculationCreateOrConnectWithoutFacilityInput[]
     createMany?: RemunerationCalculationCreateManyFacilityInputEnvelope
     connect?: RemunerationCalculationWhereUniqueInput | RemunerationCalculationWhereUniqueInput[]
-  }
-
-  export type sub_centreCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput> | sub_centreCreateWithoutFacilityInput[] | sub_centreUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: sub_centreCreateOrConnectWithoutFacilityInput | sub_centreCreateOrConnectWithoutFacilityInput[]
-    createMany?: sub_centreCreateManyFacilityInputEnvelope
-    connect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
   }
 
   export type UserCreateNestedManyWithoutFacilityInput = {
@@ -42151,25 +28912,11 @@ export namespace Prisma {
     connect?: WorkerRemunerationWhereUniqueInput | WorkerRemunerationWhereUniqueInput[]
   }
 
-  export type FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput> | FacilityFieldDefaultsCreateWithoutFacilityInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput | FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFacilityInputEnvelope
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-  }
-
   export type FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput = {
     create?: XOR<FacilityTargetCreateWithoutFacilityInput, FacilityTargetUncheckedCreateWithoutFacilityInput> | FacilityTargetCreateWithoutFacilityInput[] | FacilityTargetUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityTargetCreateOrConnectWithoutFacilityInput | FacilityTargetCreateOrConnectWithoutFacilityInput[]
     createMany?: FacilityTargetCreateManyFacilityInputEnvelope
     connect?: FacilityTargetWhereUniqueInput | FacilityTargetWhereUniqueInput[]
-  }
-
-  export type FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput> | FacilityWorkerAllocationCreateWithoutFacilityInput[] | FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput | FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput[]
-    createMany?: FacilityWorkerAllocationCreateManyFacilityInputEnvelope
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
   }
 
   export type FieldValueUncheckedCreateNestedManyWithoutFacilityInput = {
@@ -42186,32 +28933,11 @@ export namespace Prisma {
     connect?: HealthWorkerWhereUniqueInput | HealthWorkerWhereUniqueInput[]
   }
 
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput> | MonthlyHealthDataCreateWithoutFacilityInput[] | MonthlyHealthDataUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutFacilityInput | MonthlyHealthDataCreateOrConnectWithoutFacilityInput[]
-    createMany?: MonthlyHealthDataCreateManyFacilityInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput> | PerformanceCalculationCreateWithoutFacilityInput[] | PerformanceCalculationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutFacilityInput | PerformanceCalculationCreateOrConnectWithoutFacilityInput[]
-    createMany?: PerformanceCalculationCreateManyFacilityInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-  }
-
   export type RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput = {
     create?: XOR<RemunerationCalculationCreateWithoutFacilityInput, RemunerationCalculationUncheckedCreateWithoutFacilityInput> | RemunerationCalculationCreateWithoutFacilityInput[] | RemunerationCalculationUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: RemunerationCalculationCreateOrConnectWithoutFacilityInput | RemunerationCalculationCreateOrConnectWithoutFacilityInput[]
     createMany?: RemunerationCalculationCreateManyFacilityInputEnvelope
     connect?: RemunerationCalculationWhereUniqueInput | RemunerationCalculationWhereUniqueInput[]
-  }
-
-  export type sub_centreUncheckedCreateNestedManyWithoutFacilityInput = {
-    create?: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput> | sub_centreCreateWithoutFacilityInput[] | sub_centreUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: sub_centreCreateOrConnectWithoutFacilityInput | sub_centreCreateOrConnectWithoutFacilityInput[]
-    createMany?: sub_centreCreateManyFacilityInputEnvelope
-    connect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
   }
 
   export type UserUncheckedCreateNestedManyWithoutFacilityInput = {
@@ -42265,20 +28991,6 @@ export namespace Prisma {
     update?: XOR<XOR<FacilityTypeUpdateToOneWithWhereWithoutFacilitiesInput, FacilityTypeUpdateWithoutFacilitiesInput>, FacilityTypeUncheckedUpdateWithoutFacilitiesInput>
   }
 
-  export type FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput> | FacilityFieldDefaultsCreateWithoutFacilityInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput | FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput[]
-    upsert?: FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFacilityInput | FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFacilityInputEnvelope
-    set?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    disconnect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    delete?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    update?: FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFacilityInput | FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: FacilityFieldDefaultsUpdateManyWithWhereWithoutFacilityInput | FacilityFieldDefaultsUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
-  }
-
   export type FacilityTargetUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<FacilityTargetCreateWithoutFacilityInput, FacilityTargetUncheckedCreateWithoutFacilityInput> | FacilityTargetCreateWithoutFacilityInput[] | FacilityTargetUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityTargetCreateOrConnectWithoutFacilityInput | FacilityTargetCreateOrConnectWithoutFacilityInput[]
@@ -42291,20 +29003,6 @@ export namespace Prisma {
     update?: FacilityTargetUpdateWithWhereUniqueWithoutFacilityInput | FacilityTargetUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: FacilityTargetUpdateManyWithWhereWithoutFacilityInput | FacilityTargetUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: FacilityTargetScalarWhereInput | FacilityTargetScalarWhereInput[]
-  }
-
-  export type FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput> | FacilityWorkerAllocationCreateWithoutFacilityInput[] | FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput | FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput[]
-    upsert?: FacilityWorkerAllocationUpsertWithWhereUniqueWithoutFacilityInput | FacilityWorkerAllocationUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: FacilityWorkerAllocationCreateManyFacilityInputEnvelope
-    set?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    disconnect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    delete?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    update?: FacilityWorkerAllocationUpdateWithWhereUniqueWithoutFacilityInput | FacilityWorkerAllocationUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: FacilityWorkerAllocationUpdateManyWithWhereWithoutFacilityInput | FacilityWorkerAllocationUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
   }
 
   export type FieldValueUpdateManyWithoutFacilityNestedInput = {
@@ -42335,34 +29033,6 @@ export namespace Prisma {
     deleteMany?: HealthWorkerScalarWhereInput | HealthWorkerScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput> | MonthlyHealthDataCreateWithoutFacilityInput[] | MonthlyHealthDataUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutFacilityInput | MonthlyHealthDataCreateOrConnectWithoutFacilityInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutFacilityInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: MonthlyHealthDataCreateManyFacilityInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutFacilityInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutFacilityInput | MonthlyHealthDataUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput> | PerformanceCalculationCreateWithoutFacilityInput[] | PerformanceCalculationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutFacilityInput | PerformanceCalculationCreateOrConnectWithoutFacilityInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutFacilityInput | PerformanceCalculationUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: PerformanceCalculationCreateManyFacilityInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutFacilityInput | PerformanceCalculationUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutFacilityInput | PerformanceCalculationUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-  }
-
   export type RemunerationCalculationUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<RemunerationCalculationCreateWithoutFacilityInput, RemunerationCalculationUncheckedCreateWithoutFacilityInput> | RemunerationCalculationCreateWithoutFacilityInput[] | RemunerationCalculationUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: RemunerationCalculationCreateOrConnectWithoutFacilityInput | RemunerationCalculationCreateOrConnectWithoutFacilityInput[]
@@ -42375,20 +29045,6 @@ export namespace Prisma {
     update?: RemunerationCalculationUpdateWithWhereUniqueWithoutFacilityInput | RemunerationCalculationUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: RemunerationCalculationUpdateManyWithWhereWithoutFacilityInput | RemunerationCalculationUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: RemunerationCalculationScalarWhereInput | RemunerationCalculationScalarWhereInput[]
-  }
-
-  export type sub_centreUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput> | sub_centreCreateWithoutFacilityInput[] | sub_centreUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: sub_centreCreateOrConnectWithoutFacilityInput | sub_centreCreateOrConnectWithoutFacilityInput[]
-    upsert?: sub_centreUpsertWithWhereUniqueWithoutFacilityInput | sub_centreUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: sub_centreCreateManyFacilityInputEnvelope
-    set?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    disconnect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    delete?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    connect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    update?: sub_centreUpdateWithWhereUniqueWithoutFacilityInput | sub_centreUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: sub_centreUpdateManyWithWhereWithoutFacilityInput | sub_centreUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: sub_centreScalarWhereInput | sub_centreScalarWhereInput[]
   }
 
   export type UserUpdateManyWithoutFacilityNestedInput = {
@@ -42433,20 +29089,6 @@ export namespace Prisma {
     deleteMany?: WorkerRemunerationScalarWhereInput | WorkerRemunerationScalarWhereInput[]
   }
 
-  export type FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput> | FacilityFieldDefaultsCreateWithoutFacilityInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput | FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput[]
-    upsert?: FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFacilityInput | FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFacilityInputEnvelope
-    set?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    disconnect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    delete?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    update?: FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFacilityInput | FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: FacilityFieldDefaultsUpdateManyWithWhereWithoutFacilityInput | FacilityFieldDefaultsUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
-  }
-
   export type FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<FacilityTargetCreateWithoutFacilityInput, FacilityTargetUncheckedCreateWithoutFacilityInput> | FacilityTargetCreateWithoutFacilityInput[] | FacilityTargetUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityTargetCreateOrConnectWithoutFacilityInput | FacilityTargetCreateOrConnectWithoutFacilityInput[]
@@ -42459,20 +29101,6 @@ export namespace Prisma {
     update?: FacilityTargetUpdateWithWhereUniqueWithoutFacilityInput | FacilityTargetUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: FacilityTargetUpdateManyWithWhereWithoutFacilityInput | FacilityTargetUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: FacilityTargetScalarWhereInput | FacilityTargetScalarWhereInput[]
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput> | FacilityWorkerAllocationCreateWithoutFacilityInput[] | FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput | FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput[]
-    upsert?: FacilityWorkerAllocationUpsertWithWhereUniqueWithoutFacilityInput | FacilityWorkerAllocationUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: FacilityWorkerAllocationCreateManyFacilityInputEnvelope
-    set?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    disconnect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    delete?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    update?: FacilityWorkerAllocationUpdateWithWhereUniqueWithoutFacilityInput | FacilityWorkerAllocationUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: FacilityWorkerAllocationUpdateManyWithWhereWithoutFacilityInput | FacilityWorkerAllocationUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
   }
 
   export type FieldValueUncheckedUpdateManyWithoutFacilityNestedInput = {
@@ -42503,34 +29131,6 @@ export namespace Prisma {
     deleteMany?: HealthWorkerScalarWhereInput | HealthWorkerScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput> | MonthlyHealthDataCreateWithoutFacilityInput[] | MonthlyHealthDataUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutFacilityInput | MonthlyHealthDataCreateOrConnectWithoutFacilityInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutFacilityInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: MonthlyHealthDataCreateManyFacilityInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutFacilityInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutFacilityInput | MonthlyHealthDataUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput> | PerformanceCalculationCreateWithoutFacilityInput[] | PerformanceCalculationUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutFacilityInput | PerformanceCalculationCreateOrConnectWithoutFacilityInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutFacilityInput | PerformanceCalculationUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: PerformanceCalculationCreateManyFacilityInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutFacilityInput | PerformanceCalculationUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutFacilityInput | PerformanceCalculationUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-  }
-
   export type RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<RemunerationCalculationCreateWithoutFacilityInput, RemunerationCalculationUncheckedCreateWithoutFacilityInput> | RemunerationCalculationCreateWithoutFacilityInput[] | RemunerationCalculationUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: RemunerationCalculationCreateOrConnectWithoutFacilityInput | RemunerationCalculationCreateOrConnectWithoutFacilityInput[]
@@ -42545,20 +29145,6 @@ export namespace Prisma {
     deleteMany?: RemunerationCalculationScalarWhereInput | RemunerationCalculationScalarWhereInput[]
   }
 
-  export type sub_centreUncheckedUpdateManyWithoutFacilityNestedInput = {
-    create?: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput> | sub_centreCreateWithoutFacilityInput[] | sub_centreUncheckedCreateWithoutFacilityInput[]
-    connectOrCreate?: sub_centreCreateOrConnectWithoutFacilityInput | sub_centreCreateOrConnectWithoutFacilityInput[]
-    upsert?: sub_centreUpsertWithWhereUniqueWithoutFacilityInput | sub_centreUpsertWithWhereUniqueWithoutFacilityInput[]
-    createMany?: sub_centreCreateManyFacilityInputEnvelope
-    set?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    disconnect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    delete?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    connect?: sub_centreWhereUniqueInput | sub_centreWhereUniqueInput[]
-    update?: sub_centreUpdateWithWhereUniqueWithoutFacilityInput | sub_centreUpdateWithWhereUniqueWithoutFacilityInput[]
-    updateMany?: sub_centreUpdateManyWithWhereWithoutFacilityInput | sub_centreUpdateManyWithWhereWithoutFacilityInput[]
-    deleteMany?: sub_centreScalarWhereInput | sub_centreScalarWhereInput[]
-  }
-
   export type UserUncheckedUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<UserCreateWithoutFacilityInput, UserUncheckedCreateWithoutFacilityInput> | UserCreateWithoutFacilityInput[] | UserUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: UserCreateOrConnectWithoutFacilityInput | UserCreateOrConnectWithoutFacilityInput[]
@@ -42571,136 +29157,6 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutFacilityInput | UserUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: UserUpdateManyWithWhereWithoutFacilityInput | UserUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
-  export type UserCreateNestedOneWithoutApproved_dataInput = {
-    create?: XOR<UserCreateWithoutApproved_dataInput, UserUncheckedCreateWithoutApproved_dataInput>
-    connectOrCreate?: UserCreateOrConnectWithoutApproved_dataInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type DistrictCreateNestedOneWithoutMonthly_dataInput = {
-    create?: XOR<DistrictCreateWithoutMonthly_dataInput, DistrictUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: DistrictCreateOrConnectWithoutMonthly_dataInput
-    connect?: DistrictWhereUniqueInput
-  }
-
-  export type FacilityCreateNestedOneWithoutMonthly_dataInput = {
-    create?: XOR<FacilityCreateWithoutMonthly_dataInput, FacilityUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutMonthly_dataInput
-    connect?: FacilityWhereUniqueInput
-  }
-
-  export type IndicatorCreateNestedOneWithoutMonthly_dataInput = {
-    create?: XOR<IndicatorCreateWithoutMonthly_dataInput, IndicatorUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: IndicatorCreateOrConnectWithoutMonthly_dataInput
-    connect?: IndicatorWhereUniqueInput
-  }
-
-  export type sub_centreCreateNestedOneWithoutMonthly_health_dataInput = {
-    create?: XOR<sub_centreCreateWithoutMonthly_health_dataInput, sub_centreUncheckedCreateWithoutMonthly_health_dataInput>
-    connectOrCreate?: sub_centreCreateOrConnectWithoutMonthly_health_dataInput
-    connect?: sub_centreWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutUploaded_dataInput = {
-    create?: XOR<UserCreateWithoutUploaded_dataInput, UserUncheckedCreateWithoutUploaded_dataInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUploaded_dataInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
-  export type EnumDataQualityFieldUpdateOperationsInput = {
-    set?: $Enums.DataQuality
-  }
-
-  export type UserUpdateOneWithoutApproved_dataNestedInput = {
-    create?: XOR<UserCreateWithoutApproved_dataInput, UserUncheckedCreateWithoutApproved_dataInput>
-    connectOrCreate?: UserCreateOrConnectWithoutApproved_dataInput
-    upsert?: UserUpsertWithoutApproved_dataInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApproved_dataInput, UserUpdateWithoutApproved_dataInput>, UserUncheckedUpdateWithoutApproved_dataInput>
-  }
-
-  export type DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput = {
-    create?: XOR<DistrictCreateWithoutMonthly_dataInput, DistrictUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: DistrictCreateOrConnectWithoutMonthly_dataInput
-    upsert?: DistrictUpsertWithoutMonthly_dataInput
-    connect?: DistrictWhereUniqueInput
-    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutMonthly_dataInput, DistrictUpdateWithoutMonthly_dataInput>, DistrictUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type FacilityUpdateOneWithoutMonthly_dataNestedInput = {
-    create?: XOR<FacilityCreateWithoutMonthly_dataInput, FacilityUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutMonthly_dataInput
-    upsert?: FacilityUpsertWithoutMonthly_dataInput
-    disconnect?: FacilityWhereInput | boolean
-    delete?: FacilityWhereInput | boolean
-    connect?: FacilityWhereUniqueInput
-    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutMonthly_dataInput, FacilityUpdateWithoutMonthly_dataInput>, FacilityUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type IndicatorUpdateOneWithoutMonthly_dataNestedInput = {
-    create?: XOR<IndicatorCreateWithoutMonthly_dataInput, IndicatorUncheckedCreateWithoutMonthly_dataInput>
-    connectOrCreate?: IndicatorCreateOrConnectWithoutMonthly_dataInput
-    upsert?: IndicatorUpsertWithoutMonthly_dataInput
-    disconnect?: IndicatorWhereInput | boolean
-    delete?: IndicatorWhereInput | boolean
-    connect?: IndicatorWhereUniqueInput
-    update?: XOR<XOR<IndicatorUpdateToOneWithWhereWithoutMonthly_dataInput, IndicatorUpdateWithoutMonthly_dataInput>, IndicatorUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type sub_centreUpdateOneWithoutMonthly_health_dataNestedInput = {
-    create?: XOR<sub_centreCreateWithoutMonthly_health_dataInput, sub_centreUncheckedCreateWithoutMonthly_health_dataInput>
-    connectOrCreate?: sub_centreCreateOrConnectWithoutMonthly_health_dataInput
-    upsert?: sub_centreUpsertWithoutMonthly_health_dataInput
-    disconnect?: sub_centreWhereInput | boolean
-    delete?: sub_centreWhereInput | boolean
-    connect?: sub_centreWhereUniqueInput
-    update?: XOR<XOR<sub_centreUpdateToOneWithWhereWithoutMonthly_health_dataInput, sub_centreUpdateWithoutMonthly_health_dataInput>, sub_centreUncheckedUpdateWithoutMonthly_health_dataInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutUploaded_dataNestedInput = {
-    create?: XOR<UserCreateWithoutUploaded_dataInput, UserUncheckedCreateWithoutUploaded_dataInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUploaded_dataInput
-    upsert?: UserUpsertWithoutUploaded_dataInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploaded_dataInput, UserUpdateWithoutUploaded_dataInput>, UserUncheckedUpdateWithoutUploaded_dataInput>
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type UserCreateNestedOneWithoutUpload_sessionsInput = {
-    create?: XOR<UserCreateWithoutUpload_sessionsInput, UserUncheckedCreateWithoutUpload_sessionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUpload_sessionsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type EnumUploadStatusFieldUpdateOperationsInput = {
-    set?: $Enums.UploadStatus
-  }
-
-  export type UserUpdateOneRequiredWithoutUpload_sessionsNestedInput = {
-    create?: XOR<UserCreateWithoutUpload_sessionsInput, UserUncheckedCreateWithoutUpload_sessionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUpload_sessionsInput
-    upsert?: UserUpsertWithoutUpload_sessionsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUpload_sessionsInput, UserUpdateWithoutUpload_sessionsInput>, UserUncheckedUpdateWithoutUpload_sessionsInput>
   }
 
   export type FacilityRemunerationRecordCreateNestedManyWithoutIndicatorInput = {
@@ -42749,20 +29205,6 @@ export namespace Prisma {
     connect?: IndicatorWorkerAllocationWhereUniqueInput | IndicatorWorkerAllocationWhereUniqueInput[]
   }
 
-  export type MonthlyHealthDataCreateNestedManyWithoutIndicatorInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput> | MonthlyHealthDataCreateWithoutIndicatorInput[] | MonthlyHealthDataUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutIndicatorInput | MonthlyHealthDataCreateOrConnectWithoutIndicatorInput[]
-    createMany?: MonthlyHealthDataCreateManyIndicatorInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationCreateNestedManyWithoutIndicatorInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput> | PerformanceCalculationCreateWithoutIndicatorInput[] | PerformanceCalculationUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutIndicatorInput | PerformanceCalculationCreateOrConnectWithoutIndicatorInput[]
-    createMany?: PerformanceCalculationCreateManyIndicatorInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-  }
-
   export type FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput = {
     create?: XOR<FacilityRemunerationRecordCreateWithoutIndicatorInput, FacilityRemunerationRecordUncheckedCreateWithoutIndicatorInput> | FacilityRemunerationRecordCreateWithoutIndicatorInput[] | FacilityRemunerationRecordUncheckedCreateWithoutIndicatorInput[]
     connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutIndicatorInput | FacilityRemunerationRecordCreateOrConnectWithoutIndicatorInput[]
@@ -42789,20 +29231,6 @@ export namespace Prisma {
     connectOrCreate?: IndicatorWorkerAllocationCreateOrConnectWithoutIndicatorInput | IndicatorWorkerAllocationCreateOrConnectWithoutIndicatorInput[]
     createMany?: IndicatorWorkerAllocationCreateManyIndicatorInputEnvelope
     connect?: IndicatorWorkerAllocationWhereUniqueInput | IndicatorWorkerAllocationWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput> | MonthlyHealthDataCreateWithoutIndicatorInput[] | MonthlyHealthDataUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutIndicatorInput | MonthlyHealthDataCreateOrConnectWithoutIndicatorInput[]
-    createMany?: MonthlyHealthDataCreateManyIndicatorInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput> | PerformanceCalculationCreateWithoutIndicatorInput[] | PerformanceCalculationUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutIndicatorInput | PerformanceCalculationCreateOrConnectWithoutIndicatorInput[]
-    createMany?: PerformanceCalculationCreateManyIndicatorInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
   }
 
   export type Enumformula_typeFieldUpdateOperationsInput = {
@@ -42899,32 +29327,12 @@ export namespace Prisma {
     deleteMany?: IndicatorWorkerAllocationScalarWhereInput | IndicatorWorkerAllocationScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput> | MonthlyHealthDataCreateWithoutIndicatorInput[] | MonthlyHealthDataUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutIndicatorInput | MonthlyHealthDataCreateOrConnectWithoutIndicatorInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutIndicatorInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutIndicatorInput[]
-    createMany?: MonthlyHealthDataCreateManyIndicatorInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutIndicatorInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutIndicatorInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutIndicatorInput | MonthlyHealthDataUpdateManyWithWhereWithoutIndicatorInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUpdateManyWithoutIndicatorNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput> | PerformanceCalculationCreateWithoutIndicatorInput[] | PerformanceCalculationUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutIndicatorInput | PerformanceCalculationCreateOrConnectWithoutIndicatorInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutIndicatorInput | PerformanceCalculationUpsertWithWhereUniqueWithoutIndicatorInput[]
-    createMany?: PerformanceCalculationCreateManyIndicatorInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutIndicatorInput | PerformanceCalculationUpdateWithWhereUniqueWithoutIndicatorInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutIndicatorInput | PerformanceCalculationUpdateManyWithWhereWithoutIndicatorInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput = {
@@ -42983,41 +29391,6 @@ export namespace Prisma {
     deleteMany?: IndicatorWorkerAllocationScalarWhereInput | IndicatorWorkerAllocationScalarWhereInput[]
   }
 
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput> | MonthlyHealthDataCreateWithoutIndicatorInput[] | MonthlyHealthDataUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutIndicatorInput | MonthlyHealthDataCreateOrConnectWithoutIndicatorInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutIndicatorInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutIndicatorInput[]
-    createMany?: MonthlyHealthDataCreateManyIndicatorInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutIndicatorInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutIndicatorInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutIndicatorInput | MonthlyHealthDataUpdateManyWithWhereWithoutIndicatorInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput> | PerformanceCalculationCreateWithoutIndicatorInput[] | PerformanceCalculationUncheckedCreateWithoutIndicatorInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutIndicatorInput | PerformanceCalculationCreateOrConnectWithoutIndicatorInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutIndicatorInput | PerformanceCalculationUpsertWithWhereUniqueWithoutIndicatorInput[]
-    createMany?: PerformanceCalculationCreateManyIndicatorInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutIndicatorInput | PerformanceCalculationUpdateWithWhereUniqueWithoutIndicatorInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutIndicatorInput | PerformanceCalculationUpdateManyWithWhereWithoutIndicatorInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-  }
-
-  export type FacilityFieldDefaultsCreateNestedManyWithoutFieldInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput> | FacilityFieldDefaultsCreateWithoutFieldInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFieldInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFieldInput | FacilityFieldDefaultsCreateOrConnectWithoutFieldInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFieldInputEnvelope
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-  }
-
   export type FacilityFieldMappingCreateNestedManyWithoutFieldInput = {
     create?: XOR<FacilityFieldMappingCreateWithoutFieldInput, FacilityFieldMappingUncheckedCreateWithoutFieldInput> | FacilityFieldMappingCreateWithoutFieldInput[] | FacilityFieldMappingUncheckedCreateWithoutFieldInput[]
     connectOrCreate?: FacilityFieldMappingCreateOrConnectWithoutFieldInput | FacilityFieldMappingCreateOrConnectWithoutFieldInput[]
@@ -43051,13 +29424,6 @@ export namespace Prisma {
     connectOrCreate?: IndicatorCreateOrConnectWithoutTarget_fieldInput | IndicatorCreateOrConnectWithoutTarget_fieldInput[]
     createMany?: IndicatorCreateManyTarget_fieldInputEnvelope
     connect?: IndicatorWhereUniqueInput | IndicatorWhereUniqueInput[]
-  }
-
-  export type FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput> | FacilityFieldDefaultsCreateWithoutFieldInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFieldInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFieldInput | FacilityFieldDefaultsCreateOrConnectWithoutFieldInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFieldInputEnvelope
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
   }
 
   export type FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput = {
@@ -43105,20 +29471,6 @@ export namespace Prisma {
 
   export type EnumFieldCategoryFieldUpdateOperationsInput = {
     set?: $Enums.FieldCategory
-  }
-
-  export type FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput> | FacilityFieldDefaultsCreateWithoutFieldInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFieldInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFieldInput | FacilityFieldDefaultsCreateOrConnectWithoutFieldInput[]
-    upsert?: FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFieldInput | FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFieldInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFieldInputEnvelope
-    set?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    disconnect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    delete?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    update?: FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFieldInput | FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFieldInput[]
-    updateMany?: FacilityFieldDefaultsUpdateManyWithWhereWithoutFieldInput | FacilityFieldDefaultsUpdateManyWithWhereWithoutFieldInput[]
-    deleteMany?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
   }
 
   export type FacilityFieldMappingUpdateManyWithoutFieldNestedInput = {
@@ -43189,20 +29541,6 @@ export namespace Prisma {
     update?: IndicatorUpdateWithWhereUniqueWithoutTarget_fieldInput | IndicatorUpdateWithWhereUniqueWithoutTarget_fieldInput[]
     updateMany?: IndicatorUpdateManyWithWhereWithoutTarget_fieldInput | IndicatorUpdateManyWithWhereWithoutTarget_fieldInput[]
     deleteMany?: IndicatorScalarWhereInput | IndicatorScalarWhereInput[]
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput = {
-    create?: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput> | FacilityFieldDefaultsCreateWithoutFieldInput[] | FacilityFieldDefaultsUncheckedCreateWithoutFieldInput[]
-    connectOrCreate?: FacilityFieldDefaultsCreateOrConnectWithoutFieldInput | FacilityFieldDefaultsCreateOrConnectWithoutFieldInput[]
-    upsert?: FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFieldInput | FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFieldInput[]
-    createMany?: FacilityFieldDefaultsCreateManyFieldInputEnvelope
-    set?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    disconnect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    delete?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    connect?: FacilityFieldDefaultsWhereUniqueInput | FacilityFieldDefaultsWhereUniqueInput[]
-    update?: FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFieldInput | FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFieldInput[]
-    updateMany?: FacilityFieldDefaultsUpdateManyWithWhereWithoutFieldInput | FacilityFieldDefaultsUpdateManyWithWhereWithoutFieldInput[]
-    deleteMany?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
   }
 
   export type FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput = {
@@ -43293,6 +29631,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type FacilityUpdateOneWithoutField_valuesNestedInput = {
     create?: XOR<FacilityCreateWithoutField_valuesInput, FacilityUncheckedCreateWithoutField_valuesInput>
     connectOrCreate?: FacilityCreateOrConnectWithoutField_valuesInput
@@ -43317,34 +29663,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutField_valuesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutField_valuesInput, UserUpdateWithoutField_valuesInput>, UserUncheckedUpdateWithoutField_valuesInput>
-  }
-
-  export type FacilityCreateNestedOneWithoutFacility_field_defaultsInput = {
-    create?: XOR<FacilityCreateWithoutFacility_field_defaultsInput, FacilityUncheckedCreateWithoutFacility_field_defaultsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutFacility_field_defaultsInput
-    connect?: FacilityWhereUniqueInput
-  }
-
-  export type FieldCreateNestedOneWithoutFacility_field_defaultsInput = {
-    create?: XOR<FieldCreateWithoutFacility_field_defaultsInput, FieldUncheckedCreateWithoutFacility_field_defaultsInput>
-    connectOrCreate?: FieldCreateOrConnectWithoutFacility_field_defaultsInput
-    connect?: FieldWhereUniqueInput
-  }
-
-  export type FacilityUpdateOneRequiredWithoutFacility_field_defaultsNestedInput = {
-    create?: XOR<FacilityCreateWithoutFacility_field_defaultsInput, FacilityUncheckedCreateWithoutFacility_field_defaultsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutFacility_field_defaultsInput
-    upsert?: FacilityUpsertWithoutFacility_field_defaultsInput
-    connect?: FacilityWhereUniqueInput
-    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutFacility_field_defaultsInput, FacilityUpdateWithoutFacility_field_defaultsInput>, FacilityUncheckedUpdateWithoutFacility_field_defaultsInput>
-  }
-
-  export type FieldUpdateOneRequiredWithoutFacility_field_defaultsNestedInput = {
-    create?: XOR<FieldCreateWithoutFacility_field_defaultsInput, FieldUncheckedCreateWithoutFacility_field_defaultsInput>
-    connectOrCreate?: FieldCreateOrConnectWithoutFacility_field_defaultsInput
-    upsert?: FieldUpsertWithoutFacility_field_defaultsInput
-    connect?: FieldWhereUniqueInput
-    update?: XOR<XOR<FieldUpdateToOneWithWhereWithoutFacility_field_defaultsInput, FieldUpdateWithoutFacility_field_defaultsInput>, FieldUncheckedUpdateWithoutFacility_field_defaultsInput>
   }
 
   export type FacilityTypeCreateNestedOneWithoutField_mappingsInput = {
@@ -43373,104 +29691,6 @@ export namespace Prisma {
     upsert?: FieldUpsertWithoutFacility_field_mappingsInput
     connect?: FieldWhereUniqueInput
     update?: XOR<XOR<FieldUpdateToOneWithWhereWithoutFacility_field_mappingsInput, FieldUpdateWithoutFacility_field_mappingsInput>, FieldUncheckedUpdateWithoutFacility_field_mappingsInput>
-  }
-
-  export type MonthlyHealthDataCreateNestedManyWithoutSub_centreInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput> | MonthlyHealthDataCreateWithoutSub_centreInput[] | MonthlyHealthDataUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutSub_centreInput | MonthlyHealthDataCreateOrConnectWithoutSub_centreInput[]
-    createMany?: MonthlyHealthDataCreateManySub_centreInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationCreateNestedManyWithoutSub_centreInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput> | PerformanceCalculationCreateWithoutSub_centreInput[] | PerformanceCalculationUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutSub_centreInput | PerformanceCalculationCreateOrConnectWithoutSub_centreInput[]
-    createMany?: PerformanceCalculationCreateManySub_centreInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-  }
-
-  export type FacilityCreateNestedOneWithoutSub_centresInput = {
-    create?: XOR<FacilityCreateWithoutSub_centresInput, FacilityUncheckedCreateWithoutSub_centresInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutSub_centresInput
-    connect?: FacilityWhereUniqueInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateNestedManyWithoutSub_centreInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput> | MonthlyHealthDataCreateWithoutSub_centreInput[] | MonthlyHealthDataUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutSub_centreInput | MonthlyHealthDataCreateOrConnectWithoutSub_centreInput[]
-    createMany?: MonthlyHealthDataCreateManySub_centreInputEnvelope
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-  }
-
-  export type PerformanceCalculationUncheckedCreateNestedManyWithoutSub_centreInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput> | PerformanceCalculationCreateWithoutSub_centreInput[] | PerformanceCalculationUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutSub_centreInput | PerformanceCalculationCreateOrConnectWithoutSub_centreInput[]
-    createMany?: PerformanceCalculationCreateManySub_centreInputEnvelope
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-  }
-
-  export type MonthlyHealthDataUpdateManyWithoutSub_centreNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput> | MonthlyHealthDataCreateWithoutSub_centreInput[] | MonthlyHealthDataUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutSub_centreInput | MonthlyHealthDataCreateOrConnectWithoutSub_centreInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutSub_centreInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutSub_centreInput[]
-    createMany?: MonthlyHealthDataCreateManySub_centreInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutSub_centreInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutSub_centreInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutSub_centreInput | MonthlyHealthDataUpdateManyWithWhereWithoutSub_centreInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUpdateManyWithoutSub_centreNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput> | PerformanceCalculationCreateWithoutSub_centreInput[] | PerformanceCalculationUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutSub_centreInput | PerformanceCalculationCreateOrConnectWithoutSub_centreInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutSub_centreInput | PerformanceCalculationUpsertWithWhereUniqueWithoutSub_centreInput[]
-    createMany?: PerformanceCalculationCreateManySub_centreInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutSub_centreInput | PerformanceCalculationUpdateWithWhereUniqueWithoutSub_centreInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutSub_centreInput | PerformanceCalculationUpdateManyWithWhereWithoutSub_centreInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-  }
-
-  export type FacilityUpdateOneRequiredWithoutSub_centresNestedInput = {
-    create?: XOR<FacilityCreateWithoutSub_centresInput, FacilityUncheckedCreateWithoutSub_centresInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutSub_centresInput
-    upsert?: FacilityUpsertWithoutSub_centresInput
-    connect?: FacilityWhereUniqueInput
-    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutSub_centresInput, FacilityUpdateWithoutSub_centresInput>, FacilityUncheckedUpdateWithoutSub_centresInput>
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreNestedInput = {
-    create?: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput> | MonthlyHealthDataCreateWithoutSub_centreInput[] | MonthlyHealthDataUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: MonthlyHealthDataCreateOrConnectWithoutSub_centreInput | MonthlyHealthDataCreateOrConnectWithoutSub_centreInput[]
-    upsert?: MonthlyHealthDataUpsertWithWhereUniqueWithoutSub_centreInput | MonthlyHealthDataUpsertWithWhereUniqueWithoutSub_centreInput[]
-    createMany?: MonthlyHealthDataCreateManySub_centreInputEnvelope
-    set?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    disconnect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    delete?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    connect?: MonthlyHealthDataWhereUniqueInput | MonthlyHealthDataWhereUniqueInput[]
-    update?: MonthlyHealthDataUpdateWithWhereUniqueWithoutSub_centreInput | MonthlyHealthDataUpdateWithWhereUniqueWithoutSub_centreInput[]
-    updateMany?: MonthlyHealthDataUpdateManyWithWhereWithoutSub_centreInput | MonthlyHealthDataUpdateManyWithWhereWithoutSub_centreInput[]
-    deleteMany?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutSub_centreNestedInput = {
-    create?: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput> | PerformanceCalculationCreateWithoutSub_centreInput[] | PerformanceCalculationUncheckedCreateWithoutSub_centreInput[]
-    connectOrCreate?: PerformanceCalculationCreateOrConnectWithoutSub_centreInput | PerformanceCalculationCreateOrConnectWithoutSub_centreInput[]
-    upsert?: PerformanceCalculationUpsertWithWhereUniqueWithoutSub_centreInput | PerformanceCalculationUpsertWithWhereUniqueWithoutSub_centreInput[]
-    createMany?: PerformanceCalculationCreateManySub_centreInputEnvelope
-    set?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    disconnect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    delete?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    connect?: PerformanceCalculationWhereUniqueInput | PerformanceCalculationWhereUniqueInput[]
-    update?: PerformanceCalculationUpdateWithWhereUniqueWithoutSub_centreInput | PerformanceCalculationUpdateWithWhereUniqueWithoutSub_centreInput[]
-    updateMany?: PerformanceCalculationUpdateManyWithWhereWithoutSub_centreInput | PerformanceCalculationUpdateManyWithWhereWithoutSub_centreInput[]
-    deleteMany?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
   }
 
   export type FacilityCreateNestedOneWithoutHealth_workersInput = {
@@ -43579,38 +29799,10 @@ export namespace Prisma {
     update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutWorker_remunerationsInput, FacilityUpdateWithoutWorker_remunerationsInput>, FacilityUncheckedUpdateWithoutWorker_remunerationsInput>
   }
 
-  export type FacilityWorkerAllocationCreateNestedManyWithoutWorker_allocation_configInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput> | FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput[] | FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput | FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput[]
-    createMany?: FacilityWorkerAllocationCreateManyWorker_allocation_configInputEnvelope
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-  }
-
   export type FacilityTypeCreateNestedOneWithoutWorker_allocationsInput = {
     create?: XOR<FacilityTypeCreateWithoutWorker_allocationsInput, FacilityTypeUncheckedCreateWithoutWorker_allocationsInput>
     connectOrCreate?: FacilityTypeCreateOrConnectWithoutWorker_allocationsInput
     connect?: FacilityTypeWhereUniqueInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedCreateNestedManyWithoutWorker_allocation_configInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput> | FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput[] | FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput | FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput[]
-    createMany?: FacilityWorkerAllocationCreateManyWorker_allocation_configInputEnvelope
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-  }
-
-  export type FacilityWorkerAllocationUpdateManyWithoutWorker_allocation_configNestedInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput> | FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput[] | FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput | FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput[]
-    upsert?: FacilityWorkerAllocationUpsertWithWhereUniqueWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpsertWithWhereUniqueWithoutWorker_allocation_configInput[]
-    createMany?: FacilityWorkerAllocationCreateManyWorker_allocation_configInputEnvelope
-    set?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    disconnect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    delete?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    update?: FacilityWorkerAllocationUpdateWithWhereUniqueWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpdateWithWhereUniqueWithoutWorker_allocation_configInput[]
-    updateMany?: FacilityWorkerAllocationUpdateManyWithWhereWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpdateManyWithWhereWithoutWorker_allocation_configInput[]
-    deleteMany?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
   }
 
   export type FacilityTypeUpdateOneRequiredWithoutWorker_allocationsNestedInput = {
@@ -43619,48 +29811,6 @@ export namespace Prisma {
     upsert?: FacilityTypeUpsertWithoutWorker_allocationsInput
     connect?: FacilityTypeWhereUniqueInput
     update?: XOR<XOR<FacilityTypeUpdateToOneWithWhereWithoutWorker_allocationsInput, FacilityTypeUpdateWithoutWorker_allocationsInput>, FacilityTypeUncheckedUpdateWithoutWorker_allocationsInput>
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateManyWithoutWorker_allocation_configNestedInput = {
-    create?: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput> | FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput[] | FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput[]
-    connectOrCreate?: FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput | FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput[]
-    upsert?: FacilityWorkerAllocationUpsertWithWhereUniqueWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpsertWithWhereUniqueWithoutWorker_allocation_configInput[]
-    createMany?: FacilityWorkerAllocationCreateManyWorker_allocation_configInputEnvelope
-    set?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    disconnect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    delete?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    connect?: FacilityWorkerAllocationWhereUniqueInput | FacilityWorkerAllocationWhereUniqueInput[]
-    update?: FacilityWorkerAllocationUpdateWithWhereUniqueWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpdateWithWhereUniqueWithoutWorker_allocation_configInput[]
-    updateMany?: FacilityWorkerAllocationUpdateManyWithWhereWithoutWorker_allocation_configInput | FacilityWorkerAllocationUpdateManyWithWhereWithoutWorker_allocation_configInput[]
-    deleteMany?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
-  }
-
-  export type FacilityCreateNestedOneWithoutWorker_allocationsInput = {
-    create?: XOR<FacilityCreateWithoutWorker_allocationsInput, FacilityUncheckedCreateWithoutWorker_allocationsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutWorker_allocationsInput
-    connect?: FacilityWhereUniqueInput
-  }
-
-  export type WorkerAllocationConfigCreateNestedOneWithoutFacility_allocationsInput = {
-    create?: XOR<WorkerAllocationConfigCreateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedCreateWithoutFacility_allocationsInput>
-    connectOrCreate?: WorkerAllocationConfigCreateOrConnectWithoutFacility_allocationsInput
-    connect?: WorkerAllocationConfigWhereUniqueInput
-  }
-
-  export type FacilityUpdateOneRequiredWithoutWorker_allocationsNestedInput = {
-    create?: XOR<FacilityCreateWithoutWorker_allocationsInput, FacilityUncheckedCreateWithoutWorker_allocationsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutWorker_allocationsInput
-    upsert?: FacilityUpsertWithoutWorker_allocationsInput
-    connect?: FacilityWhereUniqueInput
-    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutWorker_allocationsInput, FacilityUpdateWithoutWorker_allocationsInput>, FacilityUncheckedUpdateWithoutWorker_allocationsInput>
-  }
-
-  export type WorkerAllocationConfigUpdateOneRequiredWithoutFacility_allocationsNestedInput = {
-    create?: XOR<WorkerAllocationConfigCreateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedCreateWithoutFacility_allocationsInput>
-    connectOrCreate?: WorkerAllocationConfigCreateOrConnectWithoutFacility_allocationsInput
-    upsert?: WorkerAllocationConfigUpsertWithoutFacility_allocationsInput
-    connect?: WorkerAllocationConfigWhereUniqueInput
-    update?: XOR<XOR<WorkerAllocationConfigUpdateToOneWithWhereWithoutFacility_allocationsInput, WorkerAllocationConfigUpdateWithoutFacility_allocationsInput>, WorkerAllocationConfigUncheckedUpdateWithoutFacility_allocationsInput>
   }
 
   export type FacilityTypeCreateNestedOneWithoutRemunerationsInput = {
@@ -43731,12 +29881,6 @@ export namespace Prisma {
     connect?: IndicatorWhereUniqueInput
   }
 
-  export type RemunerationSystemCreateNestedOneWithoutIndicator_remunerationsInput = {
-    create?: XOR<RemunerationSystemCreateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedCreateWithoutIndicator_remunerationsInput>
-    connectOrCreate?: RemunerationSystemCreateOrConnectWithoutIndicator_remunerationsInput
-    connect?: RemunerationSystemWhereUniqueInput
-  }
-
   export type FacilityTypeRemunerationUpdateOneRequiredWithoutIndicator_remunerationsNestedInput = {
     create?: XOR<FacilityTypeRemunerationCreateWithoutIndicator_remunerationsInput, FacilityTypeRemunerationUncheckedCreateWithoutIndicator_remunerationsInput>
     connectOrCreate?: FacilityTypeRemunerationCreateOrConnectWithoutIndicator_remunerationsInput
@@ -43751,62 +29895,6 @@ export namespace Prisma {
     upsert?: IndicatorUpsertWithoutRemunerationsInput
     connect?: IndicatorWhereUniqueInput
     update?: XOR<XOR<IndicatorUpdateToOneWithWhereWithoutRemunerationsInput, IndicatorUpdateWithoutRemunerationsInput>, IndicatorUncheckedUpdateWithoutRemunerationsInput>
-  }
-
-  export type RemunerationSystemUpdateOneWithoutIndicator_remunerationsNestedInput = {
-    create?: XOR<RemunerationSystemCreateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedCreateWithoutIndicator_remunerationsInput>
-    connectOrCreate?: RemunerationSystemCreateOrConnectWithoutIndicator_remunerationsInput
-    upsert?: RemunerationSystemUpsertWithoutIndicator_remunerationsInput
-    disconnect?: RemunerationSystemWhereInput | boolean
-    delete?: RemunerationSystemWhereInput | boolean
-    connect?: RemunerationSystemWhereUniqueInput
-    update?: XOR<XOR<RemunerationSystemUpdateToOneWithWhereWithoutIndicator_remunerationsInput, RemunerationSystemUpdateWithoutIndicator_remunerationsInput>, RemunerationSystemUncheckedUpdateWithoutIndicator_remunerationsInput>
-  }
-
-  export type FacilityCreateNestedOneWithoutPerformance_calculationsInput = {
-    create?: XOR<FacilityCreateWithoutPerformance_calculationsInput, FacilityUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutPerformance_calculationsInput
-    connect?: FacilityWhereUniqueInput
-  }
-
-  export type IndicatorCreateNestedOneWithoutPerformance_calculationsInput = {
-    create?: XOR<IndicatorCreateWithoutPerformance_calculationsInput, IndicatorUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: IndicatorCreateOrConnectWithoutPerformance_calculationsInput
-    connect?: IndicatorWhereUniqueInput
-  }
-
-  export type sub_centreCreateNestedOneWithoutPerformance_calculationsInput = {
-    create?: XOR<sub_centreCreateWithoutPerformance_calculationsInput, sub_centreUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: sub_centreCreateOrConnectWithoutPerformance_calculationsInput
-    connect?: sub_centreWhereUniqueInput
-  }
-
-  export type FacilityUpdateOneWithoutPerformance_calculationsNestedInput = {
-    create?: XOR<FacilityCreateWithoutPerformance_calculationsInput, FacilityUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: FacilityCreateOrConnectWithoutPerformance_calculationsInput
-    upsert?: FacilityUpsertWithoutPerformance_calculationsInput
-    disconnect?: FacilityWhereInput | boolean
-    delete?: FacilityWhereInput | boolean
-    connect?: FacilityWhereUniqueInput
-    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutPerformance_calculationsInput, FacilityUpdateWithoutPerformance_calculationsInput>, FacilityUncheckedUpdateWithoutPerformance_calculationsInput>
-  }
-
-  export type IndicatorUpdateOneRequiredWithoutPerformance_calculationsNestedInput = {
-    create?: XOR<IndicatorCreateWithoutPerformance_calculationsInput, IndicatorUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: IndicatorCreateOrConnectWithoutPerformance_calculationsInput
-    upsert?: IndicatorUpsertWithoutPerformance_calculationsInput
-    connect?: IndicatorWhereUniqueInput
-    update?: XOR<XOR<IndicatorUpdateToOneWithWhereWithoutPerformance_calculationsInput, IndicatorUpdateWithoutPerformance_calculationsInput>, IndicatorUncheckedUpdateWithoutPerformance_calculationsInput>
-  }
-
-  export type sub_centreUpdateOneWithoutPerformance_calculationsNestedInput = {
-    create?: XOR<sub_centreCreateWithoutPerformance_calculationsInput, sub_centreUncheckedCreateWithoutPerformance_calculationsInput>
-    connectOrCreate?: sub_centreCreateOrConnectWithoutPerformance_calculationsInput
-    upsert?: sub_centreUpsertWithoutPerformance_calculationsInput
-    disconnect?: sub_centreWhereInput | boolean
-    delete?: sub_centreWhereInput | boolean
-    connect?: sub_centreWhereUniqueInput
-    update?: XOR<XOR<sub_centreUpdateToOneWithWhereWithoutPerformance_calculationsInput, sub_centreUpdateWithoutPerformance_calculationsInput>, sub_centreUncheckedUpdateWithoutPerformance_calculationsInput>
   }
 
   export type FacilityCreateNestedOneWithoutFacility_targetsInput = {
@@ -44101,22 +30189,41 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  export type NestedEnumformula_typeFilter<$PrismaModel = never> = {
+    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
+    not?: NestedEnumformula_typeFilter<$PrismaModel> | $Enums.formula_type
   }
 
-  export type NestedEnumDataQualityFilter<$PrismaModel = never> = {
-    equals?: $Enums.DataQuality | EnumDataQualityFieldRefInput<$PrismaModel>
-    in?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    not?: NestedEnumDataQualityFilter<$PrismaModel> | $Enums.DataQuality
+  export type NestedEnumTargetTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TargetType | EnumTargetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTargetTypeFilter<$PrismaModel> | $Enums.TargetType
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -44144,109 +30251,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumDataQualityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DataQuality | EnumDataQualityFieldRefInput<$PrismaModel>
-    in?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DataQuality[] | ListEnumDataQualityFieldRefInput<$PrismaModel>
-    not?: NestedEnumDataQualityWithAggregatesFilter<$PrismaModel> | $Enums.DataQuality
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDataQualityFilter<$PrismaModel>
-    _max?: NestedEnumDataQualityFilter<$PrismaModel>
-  }
-
-  export type NestedEnumUploadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.UploadStatus | EnumUploadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumUploadStatusFilter<$PrismaModel> | $Enums.UploadStatus
-  }
-
-  export type NestedEnumUploadStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UploadStatus | EnumUploadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UploadStatus[] | ListEnumUploadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumUploadStatusWithAggregatesFilter<$PrismaModel> | $Enums.UploadStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUploadStatusFilter<$PrismaModel>
-    _max?: NestedEnumUploadStatusFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedEnumformula_typeFilter<$PrismaModel = never> = {
-    equals?: $Enums.formula_type | Enumformula_typeFieldRefInput<$PrismaModel>
-    in?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.formula_type[] | ListEnumformula_typeFieldRefInput<$PrismaModel>
-    not?: NestedEnumformula_typeFilter<$PrismaModel> | $Enums.formula_type
-  }
-
-  export type NestedEnumTargetTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.TargetType | EnumTargetTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TargetType[] | ListEnumTargetTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTargetTypeFilter<$PrismaModel> | $Enums.TargetType
   }
 
   export type NestedEnumformula_typeWithAggregatesFilter<$PrismaModel = never> = {
@@ -44320,6 +30324,33 @@ export namespace Prisma {
     _max?: NestedEnumFieldCategoryFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -44379,43 +30410,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type DataUploadSessionCreateWithoutUploaderInput = {
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
-  }
-
-  export type DataUploadSessionUncheckedCreateWithoutUploaderInput = {
-    id?: number
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
-  }
-
-  export type DataUploadSessionCreateOrConnectWithoutUploaderInput = {
-    where: DataUploadSessionWhereUniqueInput
-    create: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput>
-  }
-
-  export type DataUploadSessionCreateManyUploaderInputEnvelope = {
-    data: DataUploadSessionCreateManyUploaderInput | DataUploadSessionCreateManyUploaderInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FieldValueCreateWithoutUploaderInput = {
     report_month: string
     string_value?: string | null
@@ -44457,104 +30451,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MonthlyHealthDataCreateWithoutApproverInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutApproverInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutApproverInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput>
-  }
-
-  export type MonthlyHealthDataCreateManyApproverInputEnvelope = {
-    data: MonthlyHealthDataCreateManyApproverInput | MonthlyHealthDataCreateManyApproverInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MonthlyHealthDataCreateWithoutUploaderInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutUploaderInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutUploaderInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput>
-  }
-
-  export type MonthlyHealthDataCreateManyUploaderInputEnvelope = {
-    data: MonthlyHealthDataCreateManyUploaderInput | MonthlyHealthDataCreateManyUploaderInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FacilityCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -44567,15 +30463,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutUsersInput = {
@@ -44590,54 +30481,15 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutUsersInput = {
     where: FacilityWhereUniqueInput
     create: XOR<FacilityCreateWithoutUsersInput, FacilityUncheckedCreateWithoutUsersInput>
-  }
-
-  export type DataUploadSessionUpsertWithWhereUniqueWithoutUploaderInput = {
-    where: DataUploadSessionWhereUniqueInput
-    update: XOR<DataUploadSessionUpdateWithoutUploaderInput, DataUploadSessionUncheckedUpdateWithoutUploaderInput>
-    create: XOR<DataUploadSessionCreateWithoutUploaderInput, DataUploadSessionUncheckedCreateWithoutUploaderInput>
-  }
-
-  export type DataUploadSessionUpdateWithWhereUniqueWithoutUploaderInput = {
-    where: DataUploadSessionWhereUniqueInput
-    data: XOR<DataUploadSessionUpdateWithoutUploaderInput, DataUploadSessionUncheckedUpdateWithoutUploaderInput>
-  }
-
-  export type DataUploadSessionUpdateManyWithWhereWithoutUploaderInput = {
-    where: DataUploadSessionScalarWhereInput
-    data: XOR<DataUploadSessionUpdateManyMutationInput, DataUploadSessionUncheckedUpdateManyWithoutUploaderInput>
-  }
-
-  export type DataUploadSessionScalarWhereInput = {
-    AND?: DataUploadSessionScalarWhereInput | DataUploadSessionScalarWhereInput[]
-    OR?: DataUploadSessionScalarWhereInput[]
-    NOT?: DataUploadSessionScalarWhereInput | DataUploadSessionScalarWhereInput[]
-    id?: IntFilter<"DataUploadSession"> | number
-    file_name?: StringFilter<"DataUploadSession"> | string
-    report_month?: StringFilter<"DataUploadSession"> | string
-    total_records?: IntFilter<"DataUploadSession"> | number
-    success_count?: IntFilter<"DataUploadSession"> | number
-    error_count?: IntFilter<"DataUploadSession"> | number
-    status?: EnumUploadStatusFilter<"DataUploadSession"> | $Enums.UploadStatus
-    upload_summary?: JsonNullableFilter<"DataUploadSession">
-    uploaded_by?: IntFilter<"DataUploadSession"> | number
-    created_at?: DateTimeFilter<"DataUploadSession"> | Date | string
-    completed_at?: DateTimeNullableFilter<"DataUploadSession"> | Date | string | null
-    file_path?: StringNullableFilter<"DataUploadSession"> | string | null
   }
 
   export type FieldValueUpsertWithWhereUniqueWithoutUploaderInput = {
@@ -44676,62 +30528,6 @@ export namespace Prisma {
     facility_id?: StringNullableFilter<"FieldValue"> | string | null
   }
 
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutApproverInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutApproverInput, MonthlyHealthDataUncheckedUpdateWithoutApproverInput>
-    create: XOR<MonthlyHealthDataCreateWithoutApproverInput, MonthlyHealthDataUncheckedCreateWithoutApproverInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutApproverInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutApproverInput, MonthlyHealthDataUncheckedUpdateWithoutApproverInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutApproverInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutApproverInput>
-  }
-
-  export type MonthlyHealthDataScalarWhereInput = {
-    AND?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-    OR?: MonthlyHealthDataScalarWhereInput[]
-    NOT?: MonthlyHealthDataScalarWhereInput | MonthlyHealthDataScalarWhereInput[]
-    id?: IntFilter<"MonthlyHealthData"> | number
-    sub_centre_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    report_month?: StringFilter<"MonthlyHealthData"> | string
-    value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFilter<"MonthlyHealthData"> | $Enums.DataQuality
-    remarks?: StringNullableFilter<"MonthlyHealthData"> | string | null
-    uploaded_by?: IntFilter<"MonthlyHealthData"> | number
-    approved_by?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    approved_at?: DateTimeNullableFilter<"MonthlyHealthData"> | Date | string | null
-    created_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    updated_at?: DateTimeFilter<"MonthlyHealthData"> | Date | string
-    achievement?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    numerator?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"MonthlyHealthData"> | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: IntNullableFilter<"MonthlyHealthData"> | number | null
-    district_id?: StringFilter<"MonthlyHealthData"> | string
-    facility_id?: StringNullableFilter<"MonthlyHealthData"> | string | null
-  }
-
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutUploaderInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutUploaderInput, MonthlyHealthDataUncheckedUpdateWithoutUploaderInput>
-    create: XOR<MonthlyHealthDataCreateWithoutUploaderInput, MonthlyHealthDataUncheckedCreateWithoutUploaderInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutUploaderInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutUploaderInput, MonthlyHealthDataUncheckedUpdateWithoutUploaderInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutUploaderInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutUploaderInput>
-  }
-
   export type FacilityUpsertWithoutUsersInput = {
     update: XOR<FacilityUpdateWithoutUsersInput, FacilityUncheckedUpdateWithoutUsersInput>
     create: XOR<FacilityCreateWithoutUsersInput, FacilityUncheckedCreateWithoutUsersInput>
@@ -44755,15 +30551,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutUsersInput = {
@@ -44778,15 +30569,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateWithoutDistrictInput = {
@@ -44800,15 +30586,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -44823,15 +30604,10 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -44842,55 +30618,6 @@ export namespace Prisma {
 
   export type FacilityCreateManyDistrictInputEnvelope = {
     data: FacilityCreateManyDistrictInput | FacilityCreateManyDistrictInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MonthlyHealthDataCreateWithoutDistrictInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutDistrictInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutDistrictInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput>
-  }
-
-  export type MonthlyHealthDataCreateManyDistrictInputEnvelope = {
-    data: MonthlyHealthDataCreateManyDistrictInput | MonthlyHealthDataCreateManyDistrictInput[]
     skipDuplicates?: boolean
   }
 
@@ -44925,84 +30652,6 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Facility"> | Date | string
   }
 
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutDistrictInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutDistrictInput, MonthlyHealthDataUncheckedUpdateWithoutDistrictInput>
-    create: XOR<MonthlyHealthDataCreateWithoutDistrictInput, MonthlyHealthDataUncheckedCreateWithoutDistrictInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutDistrictInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutDistrictInput, MonthlyHealthDataUncheckedUpdateWithoutDistrictInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutDistrictInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutDistrictInput>
-  }
-
-  export type IndicatorRemunerationCreateWithoutRemuneration_systemInput = {
-    base_amount: Decimal | DecimalJsLike | number | string
-    conditional_amount?: Decimal | DecimalJsLike | number | string | null
-    condition_type?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_type_remuneration: FacilityTypeRemunerationCreateNestedOneWithoutIndicator_remunerationsInput
-    indicator: IndicatorCreateNestedOneWithoutRemunerationsInput
-  }
-
-  export type IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput = {
-    id?: number
-    facility_type_remuneration_id: number
-    indicator_id: number
-    base_amount: Decimal | DecimalJsLike | number | string
-    conditional_amount?: Decimal | DecimalJsLike | number | string | null
-    condition_type?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type IndicatorRemunerationCreateOrConnectWithoutRemuneration_systemInput = {
-    where: IndicatorRemunerationWhereUniqueInput
-    create: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput>
-  }
-
-  export type IndicatorRemunerationCreateManyRemuneration_systemInputEnvelope = {
-    data: IndicatorRemunerationCreateManyRemuneration_systemInput | IndicatorRemunerationCreateManyRemuneration_systemInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type IndicatorRemunerationUpsertWithWhereUniqueWithoutRemuneration_systemInput = {
-    where: IndicatorRemunerationWhereUniqueInput
-    update: XOR<IndicatorRemunerationUpdateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedUpdateWithoutRemuneration_systemInput>
-    create: XOR<IndicatorRemunerationCreateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedCreateWithoutRemuneration_systemInput>
-  }
-
-  export type IndicatorRemunerationUpdateWithWhereUniqueWithoutRemuneration_systemInput = {
-    where: IndicatorRemunerationWhereUniqueInput
-    data: XOR<IndicatorRemunerationUpdateWithoutRemuneration_systemInput, IndicatorRemunerationUncheckedUpdateWithoutRemuneration_systemInput>
-  }
-
-  export type IndicatorRemunerationUpdateManyWithWhereWithoutRemuneration_systemInput = {
-    where: IndicatorRemunerationScalarWhereInput
-    data: XOR<IndicatorRemunerationUpdateManyMutationInput, IndicatorRemunerationUncheckedUpdateManyWithoutRemuneration_systemInput>
-  }
-
-  export type IndicatorRemunerationScalarWhereInput = {
-    AND?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
-    OR?: IndicatorRemunerationScalarWhereInput[]
-    NOT?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
-    id?: IntFilter<"IndicatorRemuneration"> | number
-    facility_type_remuneration_id?: IntFilter<"IndicatorRemuneration"> | number
-    indicator_id?: IntFilter<"IndicatorRemuneration"> | number
-    base_amount?: DecimalFilter<"IndicatorRemuneration"> | Decimal | DecimalJsLike | number | string
-    conditional_amount?: DecimalNullableFilter<"IndicatorRemuneration"> | Decimal | DecimalJsLike | number | string | null
-    condition_type?: StringNullableFilter<"IndicatorRemuneration"> | string | null
-    created_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
-    updated_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
-    remuneration_system_id?: StringNullableFilter<"IndicatorRemuneration"> | string | null
-  }
-
   export type FacilityCreateWithoutFacility_typeInput = {
     id?: string
     name: string
@@ -45014,15 +30663,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -45037,15 +30681,10 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -45119,7 +30758,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    facility_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutWorker_allocation_configInput
   }
 
   export type WorkerAllocationConfigUncheckedCreateWithoutFacility_typeInput = {
@@ -45132,7 +30770,6 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    facility_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutWorker_allocation_configInput
   }
 
   export type WorkerAllocationConfigCreateOrConnectWithoutFacility_typeInput = {
@@ -45338,7 +30975,6 @@ export namespace Prisma {
     name: string
     created_at?: Date | string
     updated_at?: Date | string
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUncheckedCreateWithoutFacilitiesInput = {
@@ -45346,7 +30982,6 @@ export namespace Prisma {
     name: string
     created_at?: Date | string
     updated_at?: Date | string
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictCreateOrConnectWithoutFacilitiesInput = {
@@ -45385,39 +31020,6 @@ export namespace Prisma {
     create: XOR<FacilityTypeCreateWithoutFacilitiesInput, FacilityTypeUncheckedCreateWithoutFacilitiesInput>
   }
 
-  export type FacilityFieldDefaultsCreateWithoutFacilityInput = {
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    field: FieldCreateNestedOneWithoutFacility_field_defaultsInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput = {
-    id?: number
-    field_id: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityFieldDefaultsCreateOrConnectWithoutFacilityInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    create: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type FacilityFieldDefaultsCreateManyFacilityInputEnvelope = {
-    data: FacilityFieldDefaultsCreateManyFacilityInput | FacilityFieldDefaultsCreateManyFacilityInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FacilityTargetCreateWithoutFacilityInput = {
     report_month: string
     target_value: Decimal | DecimalJsLike | number | string
@@ -45446,35 +31048,6 @@ export namespace Prisma {
 
   export type FacilityTargetCreateManyFacilityInputEnvelope = {
     data: FacilityTargetCreateManyFacilityInput | FacilityTargetCreateManyFacilityInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FacilityWorkerAllocationCreateWithoutFacilityInput = {
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    worker_allocation_config: WorkerAllocationConfigCreateNestedOneWithoutFacility_allocationsInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput = {
-    id?: number
-    worker_allocation_config_id: number
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationCreateOrConnectWithoutFacilityInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    create: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type FacilityWorkerAllocationCreateManyFacilityInputEnvelope = {
-    data: FacilityWorkerAllocationCreateManyFacilityInput | FacilityWorkerAllocationCreateManyFacilityInput[]
     skipDuplicates?: boolean
   }
 
@@ -45554,90 +31127,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MonthlyHealthDataCreateWithoutFacilityInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutFacilityInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutFacilityInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type MonthlyHealthDataCreateManyFacilityInputEnvelope = {
-    data: MonthlyHealthDataCreateManyFacilityInput | MonthlyHealthDataCreateManyFacilityInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PerformanceCalculationCreateWithoutFacilityInput = {
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    indicator: IndicatorCreateNestedOneWithoutPerformance_calculationsInput
-    sub_centre?: sub_centreCreateNestedOneWithoutPerformance_calculationsInput
-  }
-
-  export type PerformanceCalculationUncheckedCreateWithoutFacilityInput = {
-    id?: number
-    sub_centre_id?: number | null
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-  }
-
-  export type PerformanceCalculationCreateOrConnectWithoutFacilityInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    create: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type PerformanceCalculationCreateManyFacilityInputEnvelope = {
-    data: PerformanceCalculationCreateManyFacilityInput | PerformanceCalculationCreateManyFacilityInput[]
-    skipDuplicates?: boolean
-  }
-
   export type RemunerationCalculationCreateWithoutFacilityInput = {
     report_month: string
     performance_percentage: Decimal | DecimalJsLike | number | string
@@ -45671,33 +31160,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type sub_centreCreateWithoutFacilityInput = {
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    monthly_health_data?: MonthlyHealthDataCreateNestedManyWithoutSub_centreInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutSub_centreInput
-  }
-
-  export type sub_centreUncheckedCreateWithoutFacilityInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    monthly_health_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutSub_centreInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutSub_centreInput
-  }
-
-  export type sub_centreCreateOrConnectWithoutFacilityInput = {
-    where: sub_centreWhereUniqueInput
-    create: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type sub_centreCreateManyFacilityInputEnvelope = {
-    data: sub_centreCreateManyFacilityInput | sub_centreCreateManyFacilityInput[]
-    skipDuplicates?: boolean
-  }
-
   export type UserCreateWithoutFacilityInput = {
     username: string
     password_hash: string
@@ -45706,10 +31168,7 @@ export namespace Prisma {
     last_login?: Date | string | null
     created_at?: Date | string | null
     email?: string | null
-    upload_sessions?: DataUploadSessionCreateNestedManyWithoutUploaderInput
     field_values?: FieldValueCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataCreateNestedManyWithoutUploaderInput
   }
 
   export type UserUncheckedCreateWithoutFacilityInput = {
@@ -45721,10 +31180,7 @@ export namespace Prisma {
     last_login?: Date | string | null
     created_at?: Date | string | null
     email?: string | null
-    upload_sessions?: DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput
   }
 
   export type UserCreateOrConnectWithoutFacilityInput = {
@@ -45824,7 +31280,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictUncheckedUpdateWithoutFacilitiesInput = {
@@ -45832,7 +31287,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutDistrictNestedInput
   }
 
   export type FacilityTypeUpsertWithoutFacilitiesInput = {
@@ -45872,38 +31326,6 @@ export namespace Prisma {
     worker_allocations?: WorkerAllocationConfigUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
-  export type FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFacilityInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    update: XOR<FacilityFieldDefaultsUpdateWithoutFacilityInput, FacilityFieldDefaultsUncheckedUpdateWithoutFacilityInput>
-    create: XOR<FacilityFieldDefaultsCreateWithoutFacilityInput, FacilityFieldDefaultsUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFacilityInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    data: XOR<FacilityFieldDefaultsUpdateWithoutFacilityInput, FacilityFieldDefaultsUncheckedUpdateWithoutFacilityInput>
-  }
-
-  export type FacilityFieldDefaultsUpdateManyWithWhereWithoutFacilityInput = {
-    where: FacilityFieldDefaultsScalarWhereInput
-    data: XOR<FacilityFieldDefaultsUpdateManyMutationInput, FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityInput>
-  }
-
-  export type FacilityFieldDefaultsScalarWhereInput = {
-    AND?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
-    OR?: FacilityFieldDefaultsScalarWhereInput[]
-    NOT?: FacilityFieldDefaultsScalarWhereInput | FacilityFieldDefaultsScalarWhereInput[]
-    id?: IntFilter<"FacilityFieldDefaults"> | number
-    field_id?: IntFilter<"FacilityFieldDefaults"> | number
-    string_value?: StringNullableFilter<"FacilityFieldDefaults"> | string | null
-    numeric_value?: DecimalNullableFilter<"FacilityFieldDefaults"> | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: BoolNullableFilter<"FacilityFieldDefaults"> | boolean | null
-    json_value?: JsonNullableFilter<"FacilityFieldDefaults">
-    is_active?: BoolFilter<"FacilityFieldDefaults"> | boolean
-    created_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityFieldDefaults"> | Date | string
-    facility_id?: StringFilter<"FacilityFieldDefaults"> | string
-  }
-
   export type FacilityTargetUpsertWithWhereUniqueWithoutFacilityInput = {
     where: FacilityTargetWhereUniqueInput
     update: XOR<FacilityTargetUpdateWithoutFacilityInput, FacilityTargetUncheckedUpdateWithoutFacilityInput>
@@ -45933,36 +31355,6 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"FacilityTarget"> | Date | string
     updated_at?: DateTimeFilter<"FacilityTarget"> | Date | string
     facility_id?: StringFilter<"FacilityTarget"> | string
-  }
-
-  export type FacilityWorkerAllocationUpsertWithWhereUniqueWithoutFacilityInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    update: XOR<FacilityWorkerAllocationUpdateWithoutFacilityInput, FacilityWorkerAllocationUncheckedUpdateWithoutFacilityInput>
-    create: XOR<FacilityWorkerAllocationCreateWithoutFacilityInput, FacilityWorkerAllocationUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type FacilityWorkerAllocationUpdateWithWhereUniqueWithoutFacilityInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    data: XOR<FacilityWorkerAllocationUpdateWithoutFacilityInput, FacilityWorkerAllocationUncheckedUpdateWithoutFacilityInput>
-  }
-
-  export type FacilityWorkerAllocationUpdateManyWithWhereWithoutFacilityInput = {
-    where: FacilityWorkerAllocationScalarWhereInput
-    data: XOR<FacilityWorkerAllocationUpdateManyMutationInput, FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityInput>
-  }
-
-  export type FacilityWorkerAllocationScalarWhereInput = {
-    AND?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
-    OR?: FacilityWorkerAllocationScalarWhereInput[]
-    NOT?: FacilityWorkerAllocationScalarWhereInput | FacilityWorkerAllocationScalarWhereInput[]
-    id?: IntFilter<"FacilityWorkerAllocation"> | number
-    facility_id?: StringFilter<"FacilityWorkerAllocation"> | string
-    worker_allocation_config_id?: IntFilter<"FacilityWorkerAllocation"> | number
-    worker_count?: IntFilter<"FacilityWorkerAllocation"> | number
-    total_allocated_amount?: DecimalFilter<"FacilityWorkerAllocation"> | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFilter<"FacilityWorkerAllocation"> | boolean
-    created_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
-    updated_at?: DateTimeFilter<"FacilityWorkerAllocation"> | Date | string
   }
 
   export type FieldValueUpsertWithWhereUniqueWithoutFacilityInput = {
@@ -46013,55 +31405,6 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"HealthWorker"> | Date | string
   }
 
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutFacilityInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutFacilityInput, MonthlyHealthDataUncheckedUpdateWithoutFacilityInput>
-    create: XOR<MonthlyHealthDataCreateWithoutFacilityInput, MonthlyHealthDataUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutFacilityInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutFacilityInput, MonthlyHealthDataUncheckedUpdateWithoutFacilityInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutFacilityInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutFacilityInput>
-  }
-
-  export type PerformanceCalculationUpsertWithWhereUniqueWithoutFacilityInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    update: XOR<PerformanceCalculationUpdateWithoutFacilityInput, PerformanceCalculationUncheckedUpdateWithoutFacilityInput>
-    create: XOR<PerformanceCalculationCreateWithoutFacilityInput, PerformanceCalculationUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type PerformanceCalculationUpdateWithWhereUniqueWithoutFacilityInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    data: XOR<PerformanceCalculationUpdateWithoutFacilityInput, PerformanceCalculationUncheckedUpdateWithoutFacilityInput>
-  }
-
-  export type PerformanceCalculationUpdateManyWithWhereWithoutFacilityInput = {
-    where: PerformanceCalculationScalarWhereInput
-    data: XOR<PerformanceCalculationUpdateManyMutationInput, PerformanceCalculationUncheckedUpdateManyWithoutFacilityInput>
-  }
-
-  export type PerformanceCalculationScalarWhereInput = {
-    AND?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-    OR?: PerformanceCalculationScalarWhereInput[]
-    NOT?: PerformanceCalculationScalarWhereInput | PerformanceCalculationScalarWhereInput[]
-    id?: IntFilter<"PerformanceCalculation"> | number
-    sub_centre_id?: IntNullableFilter<"PerformanceCalculation"> | number | null
-    indicator_id?: IntFilter<"PerformanceCalculation"> | number
-    report_month?: StringFilter<"PerformanceCalculation"> | string
-    numerator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    denominator?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    achievement?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    target_value?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: DecimalNullableFilter<"PerformanceCalculation"> | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFilter<"PerformanceCalculation"> | Date | string
-    facility_id?: StringNullableFilter<"PerformanceCalculation"> | string | null
-  }
-
   export type RemunerationCalculationUpsertWithWhereUniqueWithoutFacilityInput = {
     where: RemunerationCalculationWhereUniqueInput
     update: XOR<RemunerationCalculationUpdateWithoutFacilityInput, RemunerationCalculationUncheckedUpdateWithoutFacilityInput>
@@ -46094,33 +31437,6 @@ export namespace Prisma {
     calculated_at?: DateTimeFilter<"RemunerationCalculation"> | Date | string
   }
 
-  export type sub_centreUpsertWithWhereUniqueWithoutFacilityInput = {
-    where: sub_centreWhereUniqueInput
-    update: XOR<sub_centreUpdateWithoutFacilityInput, sub_centreUncheckedUpdateWithoutFacilityInput>
-    create: XOR<sub_centreCreateWithoutFacilityInput, sub_centreUncheckedCreateWithoutFacilityInput>
-  }
-
-  export type sub_centreUpdateWithWhereUniqueWithoutFacilityInput = {
-    where: sub_centreWhereUniqueInput
-    data: XOR<sub_centreUpdateWithoutFacilityInput, sub_centreUncheckedUpdateWithoutFacilityInput>
-  }
-
-  export type sub_centreUpdateManyWithWhereWithoutFacilityInput = {
-    where: sub_centreScalarWhereInput
-    data: XOR<sub_centreUpdateManyMutationInput, sub_centreUncheckedUpdateManyWithoutFacilityInput>
-  }
-
-  export type sub_centreScalarWhereInput = {
-    AND?: sub_centreScalarWhereInput | sub_centreScalarWhereInput[]
-    OR?: sub_centreScalarWhereInput[]
-    NOT?: sub_centreScalarWhereInput | sub_centreScalarWhereInput[]
-    id?: IntFilter<"sub_centre"> | number
-    name?: StringFilter<"sub_centre"> | string
-    created_at?: DateTimeFilter<"sub_centre"> | Date | string
-    updated_at?: DateTimeFilter<"sub_centre"> | Date | string
-    facility_id?: StringFilter<"sub_centre"> | string
-  }
-
   export type UserUpsertWithWhereUniqueWithoutFacilityInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutFacilityInput, UserUncheckedUpdateWithoutFacilityInput>
@@ -46150,564 +31466,6 @@ export namespace Prisma {
     created_at?: DateTimeNullableFilter<"User"> | Date | string | null
     email?: StringNullableFilter<"User"> | string | null
     facility_id?: StringNullableFilter<"User"> | string | null
-  }
-
-  export type UserCreateWithoutApproved_dataInput = {
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    upload_sessions?: DataUploadSessionCreateNestedManyWithoutUploaderInput
-    field_values?: FieldValueCreateNestedManyWithoutUploaderInput
-    uploaded_data?: MonthlyHealthDataCreateNestedManyWithoutUploaderInput
-    facility?: FacilityCreateNestedOneWithoutUsersInput
-  }
-
-  export type UserUncheckedCreateWithoutApproved_dataInput = {
-    id?: number
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    facility_id?: string | null
-    upload_sessions?: DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutUploaderInput
-    uploaded_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput
-  }
-
-  export type UserCreateOrConnectWithoutApproved_dataInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutApproved_dataInput, UserUncheckedCreateWithoutApproved_dataInput>
-  }
-
-  export type DistrictCreateWithoutMonthly_dataInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    updated_at?: Date | string
-    facilities?: FacilityCreateNestedManyWithoutDistrictInput
-  }
-
-  export type DistrictUncheckedCreateWithoutMonthly_dataInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    updated_at?: Date | string
-    facilities?: FacilityUncheckedCreateNestedManyWithoutDistrictInput
-  }
-
-  export type DistrictCreateOrConnectWithoutMonthly_dataInput = {
-    where: DistrictWhereUniqueInput
-    create: XOR<DistrictCreateWithoutMonthly_dataInput, DistrictUncheckedCreateWithoutMonthly_dataInput>
-  }
-
-  export type FacilityCreateWithoutMonthly_dataInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
-    district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
-    users?: UserCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityUncheckedCreateWithoutMonthly_dataInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    district_id: string
-    facility_type_id: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
-    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityCreateOrConnectWithoutMonthly_dataInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutMonthly_dataInput, FacilityUncheckedCreateWithoutMonthly_dataInput>
-  }
-
-  export type IndicatorCreateWithoutMonthly_dataInput = {
-    name: string
-    description?: string | null
-    type: string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-    code: string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: string | null
-    denominator_label?: string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: $Enums.formula_type
-    numerator_label?: string | null
-    target_formula?: string | null
-    target_type?: $Enums.TargetType
-    target_value?: string | null
-    source_of_verification?: string | null
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutIndicatorInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutIndicatorInput
-    denominator_field?: FieldCreateNestedOneWithoutDenominator_for_indicatorsInput
-    numerator_field?: FieldCreateNestedOneWithoutNumerator_for_indicatorsInput
-    target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
-    remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
-    worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
-  }
-
-  export type IndicatorUncheckedCreateWithoutMonthly_dataInput = {
-    id?: number
-    name: string
-    description?: string | null
-    type: string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-    code: string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: string | null
-    denominator_field_id?: number | null
-    denominator_label?: string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: $Enums.formula_type
-    numerator_field_id?: number | null
-    numerator_label?: string | null
-    target_formula?: string | null
-    target_type?: $Enums.TargetType
-    target_value?: string | null
-    target_field_id?: number | null
-    source_of_verification?: string | null
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
-    remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
-    worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
-  }
-
-  export type IndicatorCreateOrConnectWithoutMonthly_dataInput = {
-    where: IndicatorWhereUniqueInput
-    create: XOR<IndicatorCreateWithoutMonthly_dataInput, IndicatorUncheckedCreateWithoutMonthly_dataInput>
-  }
-
-  export type sub_centreCreateWithoutMonthly_health_dataInput = {
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutSub_centreInput
-    facility: FacilityCreateNestedOneWithoutSub_centresInput
-  }
-
-  export type sub_centreUncheckedCreateWithoutMonthly_health_dataInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    facility_id: string
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutSub_centreInput
-  }
-
-  export type sub_centreCreateOrConnectWithoutMonthly_health_dataInput = {
-    where: sub_centreWhereUniqueInput
-    create: XOR<sub_centreCreateWithoutMonthly_health_dataInput, sub_centreUncheckedCreateWithoutMonthly_health_dataInput>
-  }
-
-  export type UserCreateWithoutUploaded_dataInput = {
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    upload_sessions?: DataUploadSessionCreateNestedManyWithoutUploaderInput
-    field_values?: FieldValueCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataCreateNestedManyWithoutApproverInput
-    facility?: FacilityCreateNestedOneWithoutUsersInput
-  }
-
-  export type UserUncheckedCreateWithoutUploaded_dataInput = {
-    id?: number
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    facility_id?: string | null
-    upload_sessions?: DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type UserCreateOrConnectWithoutUploaded_dataInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutUploaded_dataInput, UserUncheckedCreateWithoutUploaded_dataInput>
-  }
-
-  export type UserUpsertWithoutApproved_dataInput = {
-    update: XOR<UserUpdateWithoutApproved_dataInput, UserUncheckedUpdateWithoutApproved_dataInput>
-    create: XOR<UserCreateWithoutApproved_dataInput, UserUncheckedCreateWithoutApproved_dataInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutApproved_dataInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutApproved_dataInput, UserUncheckedUpdateWithoutApproved_dataInput>
-  }
-
-  export type UserUpdateWithoutApproved_dataInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUpdateManyWithoutUploaderNestedInput
-    field_values?: FieldValueUpdateManyWithoutUploaderNestedInput
-    uploaded_data?: MonthlyHealthDataUpdateManyWithoutUploaderNestedInput
-    facility?: FacilityUpdateOneWithoutUsersNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutApproved_dataInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutUploaderNestedInput
-    uploaded_data?: MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput
-  }
-
-  export type DistrictUpsertWithoutMonthly_dataInput = {
-    update: XOR<DistrictUpdateWithoutMonthly_dataInput, DistrictUncheckedUpdateWithoutMonthly_dataInput>
-    create: XOR<DistrictCreateWithoutMonthly_dataInput, DistrictUncheckedCreateWithoutMonthly_dataInput>
-    where?: DistrictWhereInput
-  }
-
-  export type DistrictUpdateToOneWithWhereWithoutMonthly_dataInput = {
-    where?: DistrictWhereInput
-    data: XOR<DistrictUpdateWithoutMonthly_dataInput, DistrictUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type DistrictUpdateWithoutMonthly_dataInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facilities?: FacilityUpdateManyWithoutDistrictNestedInput
-  }
-
-  export type DistrictUncheckedUpdateWithoutMonthly_dataInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facilities?: FacilityUncheckedUpdateManyWithoutDistrictNestedInput
-  }
-
-  export type FacilityUpsertWithoutMonthly_dataInput = {
-    update: XOR<FacilityUpdateWithoutMonthly_dataInput, FacilityUncheckedUpdateWithoutMonthly_dataInput>
-    create: XOR<FacilityCreateWithoutMonthly_dataInput, FacilityUncheckedCreateWithoutMonthly_dataInput>
-    where?: FacilityWhereInput
-  }
-
-  export type FacilityUpdateToOneWithWhereWithoutMonthly_dataInput = {
-    where?: FacilityWhereInput
-    data: XOR<FacilityUpdateWithoutMonthly_dataInput, FacilityUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type FacilityUpdateWithoutMonthly_dataInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
-    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
-    users?: UserUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityUncheckedUpdateWithoutMonthly_dataInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
-    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type IndicatorUpsertWithoutMonthly_dataInput = {
-    update: XOR<IndicatorUpdateWithoutMonthly_dataInput, IndicatorUncheckedUpdateWithoutMonthly_dataInput>
-    create: XOR<IndicatorCreateWithoutMonthly_dataInput, IndicatorUncheckedCreateWithoutMonthly_dataInput>
-    where?: IndicatorWhereInput
-  }
-
-  export type IndicatorUpdateToOneWithWhereWithoutMonthly_dataInput = {
-    where?: IndicatorWhereInput
-    data: XOR<IndicatorUpdateWithoutMonthly_dataInput, IndicatorUncheckedUpdateWithoutMonthly_dataInput>
-  }
-
-  export type IndicatorUpdateWithoutMonthly_dataInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    code?: StringFieldUpdateOperationsInput | string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: NullableStringFieldUpdateOperationsInput | string | null
-    denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
-    numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    target_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
-    target_value?: NullableStringFieldUpdateOperationsInput | string | null
-    source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutIndicatorNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutIndicatorNestedInput
-    denominator_field?: FieldUpdateOneWithoutDenominator_for_indicatorsNestedInput
-    numerator_field?: FieldUpdateOneWithoutNumerator_for_indicatorsNestedInput
-    target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
-    remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
-    worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type IndicatorUncheckedUpdateWithoutMonthly_dataInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    code?: StringFieldUpdateOperationsInput | string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: NullableStringFieldUpdateOperationsInput | string | null
-    denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
-    numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    target_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
-    target_value?: NullableStringFieldUpdateOperationsInput | string | null
-    target_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
-    remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
-    worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type sub_centreUpsertWithoutMonthly_health_dataInput = {
-    update: XOR<sub_centreUpdateWithoutMonthly_health_dataInput, sub_centreUncheckedUpdateWithoutMonthly_health_dataInput>
-    create: XOR<sub_centreCreateWithoutMonthly_health_dataInput, sub_centreUncheckedCreateWithoutMonthly_health_dataInput>
-    where?: sub_centreWhereInput
-  }
-
-  export type sub_centreUpdateToOneWithWhereWithoutMonthly_health_dataInput = {
-    where?: sub_centreWhereInput
-    data: XOR<sub_centreUpdateWithoutMonthly_health_dataInput, sub_centreUncheckedUpdateWithoutMonthly_health_dataInput>
-  }
-
-  export type sub_centreUpdateWithoutMonthly_health_dataInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutSub_centreNestedInput
-    facility?: FacilityUpdateOneRequiredWithoutSub_centresNestedInput
-  }
-
-  export type sub_centreUncheckedUpdateWithoutMonthly_health_dataInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutSub_centreNestedInput
-  }
-
-  export type UserUpsertWithoutUploaded_dataInput = {
-    update: XOR<UserUpdateWithoutUploaded_dataInput, UserUncheckedUpdateWithoutUploaded_dataInput>
-    create: XOR<UserCreateWithoutUploaded_dataInput, UserUncheckedCreateWithoutUploaded_dataInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutUploaded_dataInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutUploaded_dataInput, UserUncheckedUpdateWithoutUploaded_dataInput>
-  }
-
-  export type UserUpdateWithoutUploaded_dataInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUpdateManyWithoutUploaderNestedInput
-    field_values?: FieldValueUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUpdateManyWithoutApproverNestedInput
-    facility?: FacilityUpdateOneWithoutUsersNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutUploaded_dataInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
-  export type UserCreateWithoutUpload_sessionsInput = {
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    field_values?: FieldValueCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataCreateNestedManyWithoutUploaderInput
-    facility?: FacilityCreateNestedOneWithoutUsersInput
-  }
-
-  export type UserUncheckedCreateWithoutUpload_sessionsInput = {
-    id?: number
-    username: string
-    password_hash: string
-    role?: $Enums.UserRole
-    is_active?: boolean | null
-    last_login?: Date | string | null
-    created_at?: Date | string | null
-    email?: string | null
-    facility_id?: string | null
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput
-  }
-
-  export type UserCreateOrConnectWithoutUpload_sessionsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutUpload_sessionsInput, UserUncheckedCreateWithoutUpload_sessionsInput>
-  }
-
-  export type UserUpsertWithoutUpload_sessionsInput = {
-    update: XOR<UserUpdateWithoutUpload_sessionsInput, UserUncheckedUpdateWithoutUpload_sessionsInput>
-    create: XOR<UserCreateWithoutUpload_sessionsInput, UserUncheckedCreateWithoutUpload_sessionsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutUpload_sessionsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutUpload_sessionsInput, UserUncheckedUpdateWithoutUpload_sessionsInput>
-  }
-
-  export type UserUpdateWithoutUpload_sessionsInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    field_values?: FieldValueUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUpdateManyWithoutUploaderNestedInput
-    facility?: FacilityUpdateOneWithoutUsersNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutUpload_sessionsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    username?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-    field_values?: FieldValueUncheckedUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput
   }
 
   export type FacilityRemunerationRecordCreateWithoutIndicatorInput = {
@@ -46804,7 +31562,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
     field_values?: FieldValueCreateNestedManyWithoutFieldInput
     numerator_for_indicators?: IndicatorCreateNestedManyWithoutNumerator_fieldInput
@@ -46827,7 +31584,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
     numerator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
@@ -46854,7 +31610,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
     field_values?: FieldValueCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
@@ -46877,7 +31632,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
@@ -46904,7 +31658,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
     field_values?: FieldValueCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
@@ -46927,7 +31680,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
@@ -46946,7 +31698,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     facility_type_remuneration: FacilityTypeRemunerationCreateNestedOneWithoutIndicator_remunerationsInput
-    remuneration_system?: RemunerationSystemCreateNestedOneWithoutIndicator_remunerationsInput
   }
 
   export type IndicatorRemunerationUncheckedCreateWithoutIndicatorInput = {
@@ -46957,7 +31708,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorRemunerationCreateOrConnectWithoutIndicatorInput = {
@@ -46993,90 +31743,6 @@ export namespace Prisma {
 
   export type IndicatorWorkerAllocationCreateManyIndicatorInputEnvelope = {
     data: IndicatorWorkerAllocationCreateManyIndicatorInput | IndicatorWorkerAllocationCreateManyIndicatorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MonthlyHealthDataCreateWithoutIndicatorInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    sub_centre?: sub_centreCreateNestedOneWithoutMonthly_health_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutIndicatorInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutIndicatorInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput>
-  }
-
-  export type MonthlyHealthDataCreateManyIndicatorInputEnvelope = {
-    data: MonthlyHealthDataCreateManyIndicatorInput | MonthlyHealthDataCreateManyIndicatorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PerformanceCalculationCreateWithoutIndicatorInput = {
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility?: FacilityCreateNestedOneWithoutPerformance_calculationsInput
-    sub_centre?: sub_centreCreateNestedOneWithoutPerformance_calculationsInput
-  }
-
-  export type PerformanceCalculationUncheckedCreateWithoutIndicatorInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationCreateOrConnectWithoutIndicatorInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    create: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput>
-  }
-
-  export type PerformanceCalculationCreateManyIndicatorInputEnvelope = {
-    data: PerformanceCalculationCreateManyIndicatorInput | PerformanceCalculationCreateManyIndicatorInput[]
     skipDuplicates?: boolean
   }
 
@@ -47138,7 +31804,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUpdateManyWithoutFieldNestedInput
     numerator_for_indicators?: IndicatorUpdateManyWithoutNumerator_fieldNestedInput
@@ -47161,7 +31826,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
     numerator_for_indicators?: IndicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
@@ -47194,7 +31858,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
@@ -47217,7 +31880,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
@@ -47250,7 +31912,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
@@ -47273,7 +31934,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
@@ -47294,6 +31954,20 @@ export namespace Prisma {
   export type IndicatorRemunerationUpdateManyWithWhereWithoutIndicatorInput = {
     where: IndicatorRemunerationScalarWhereInput
     data: XOR<IndicatorRemunerationUpdateManyMutationInput, IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorInput>
+  }
+
+  export type IndicatorRemunerationScalarWhereInput = {
+    AND?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
+    OR?: IndicatorRemunerationScalarWhereInput[]
+    NOT?: IndicatorRemunerationScalarWhereInput | IndicatorRemunerationScalarWhereInput[]
+    id?: IntFilter<"IndicatorRemuneration"> | number
+    facility_type_remuneration_id?: IntFilter<"IndicatorRemuneration"> | number
+    indicator_id?: IntFilter<"IndicatorRemuneration"> | number
+    base_amount?: DecimalFilter<"IndicatorRemuneration"> | Decimal | DecimalJsLike | number | string
+    conditional_amount?: DecimalNullableFilter<"IndicatorRemuneration"> | Decimal | DecimalJsLike | number | string | null
+    condition_type?: StringNullableFilter<"IndicatorRemuneration"> | string | null
+    created_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
+    updated_at?: DateTimeFilter<"IndicatorRemuneration"> | Date | string
   }
 
   export type IndicatorWorkerAllocationUpsertWithWhereUniqueWithoutIndicatorInput = {
@@ -47322,71 +31996,6 @@ export namespace Prisma {
     allocated_amount?: IntFilter<"IndicatorWorkerAllocation"> | number
     created_at?: DateTimeFilter<"IndicatorWorkerAllocation"> | Date | string
     updated_at?: DateTimeFilter<"IndicatorWorkerAllocation"> | Date | string
-  }
-
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutIndicatorInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutIndicatorInput, MonthlyHealthDataUncheckedUpdateWithoutIndicatorInput>
-    create: XOR<MonthlyHealthDataCreateWithoutIndicatorInput, MonthlyHealthDataUncheckedCreateWithoutIndicatorInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutIndicatorInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutIndicatorInput, MonthlyHealthDataUncheckedUpdateWithoutIndicatorInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutIndicatorInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorInput>
-  }
-
-  export type PerformanceCalculationUpsertWithWhereUniqueWithoutIndicatorInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    update: XOR<PerformanceCalculationUpdateWithoutIndicatorInput, PerformanceCalculationUncheckedUpdateWithoutIndicatorInput>
-    create: XOR<PerformanceCalculationCreateWithoutIndicatorInput, PerformanceCalculationUncheckedCreateWithoutIndicatorInput>
-  }
-
-  export type PerformanceCalculationUpdateWithWhereUniqueWithoutIndicatorInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    data: XOR<PerformanceCalculationUpdateWithoutIndicatorInput, PerformanceCalculationUncheckedUpdateWithoutIndicatorInput>
-  }
-
-  export type PerformanceCalculationUpdateManyWithWhereWithoutIndicatorInput = {
-    where: PerformanceCalculationScalarWhereInput
-    data: XOR<PerformanceCalculationUpdateManyMutationInput, PerformanceCalculationUncheckedUpdateManyWithoutIndicatorInput>
-  }
-
-  export type FacilityFieldDefaultsCreateWithoutFieldInput = {
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility: FacilityCreateNestedOneWithoutFacility_field_defaultsInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedCreateWithoutFieldInput = {
-    id?: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_id: string
-  }
-
-  export type FacilityFieldDefaultsCreateOrConnectWithoutFieldInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    create: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput>
-  }
-
-  export type FacilityFieldDefaultsCreateManyFieldInputEnvelope = {
-    data: FacilityFieldDefaultsCreateManyFieldInput | FacilityFieldDefaultsCreateManyFieldInput[]
-    skipDuplicates?: boolean
   }
 
   export type FacilityFieldMappingCreateWithoutFieldInput = {
@@ -47481,8 +32090,6 @@ export namespace Prisma {
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutDenominator_fieldInput = {
@@ -47510,8 +32117,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutDenominator_fieldInput = {
@@ -47548,8 +32153,6 @@ export namespace Prisma {
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutNumerator_fieldInput = {
@@ -47577,8 +32180,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutNumerator_fieldInput = {
@@ -47615,8 +32216,6 @@ export namespace Prisma {
     numerator_field?: FieldCreateNestedOneWithoutNumerator_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutTarget_fieldInput = {
@@ -47644,8 +32243,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutTarget_fieldInput = {
@@ -47656,22 +32253,6 @@ export namespace Prisma {
   export type IndicatorCreateManyTarget_fieldInputEnvelope = {
     data: IndicatorCreateManyTarget_fieldInput | IndicatorCreateManyTarget_fieldInput[]
     skipDuplicates?: boolean
-  }
-
-  export type FacilityFieldDefaultsUpsertWithWhereUniqueWithoutFieldInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    update: XOR<FacilityFieldDefaultsUpdateWithoutFieldInput, FacilityFieldDefaultsUncheckedUpdateWithoutFieldInput>
-    create: XOR<FacilityFieldDefaultsCreateWithoutFieldInput, FacilityFieldDefaultsUncheckedCreateWithoutFieldInput>
-  }
-
-  export type FacilityFieldDefaultsUpdateWithWhereUniqueWithoutFieldInput = {
-    where: FacilityFieldDefaultsWhereUniqueInput
-    data: XOR<FacilityFieldDefaultsUpdateWithoutFieldInput, FacilityFieldDefaultsUncheckedUpdateWithoutFieldInput>
-  }
-
-  export type FacilityFieldDefaultsUpdateManyWithWhereWithoutFieldInput = {
-    where: FacilityFieldDefaultsScalarWhereInput
-    data: XOR<FacilityFieldDefaultsUpdateManyMutationInput, FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldInput>
   }
 
   export type FacilityFieldMappingUpsertWithWhereUniqueWithoutFieldInput = {
@@ -47793,14 +32374,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -47816,14 +32392,9 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -47847,7 +32418,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
     numerator_for_indicators?: IndicatorCreateNestedManyWithoutNumerator_fieldInput
@@ -47870,7 +32440,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     numerator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
@@ -47890,9 +32459,6 @@ export namespace Prisma {
     last_login?: Date | string | null
     created_at?: Date | string | null
     email?: string | null
-    upload_sessions?: DataUploadSessionCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataCreateNestedManyWithoutUploaderInput
     facility?: FacilityCreateNestedOneWithoutUsersInput
   }
 
@@ -47906,9 +32472,6 @@ export namespace Prisma {
     created_at?: Date | string | null
     email?: string | null
     facility_id?: string | null
-    upload_sessions?: DataUploadSessionUncheckedCreateNestedManyWithoutUploaderInput
-    approved_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutApproverInput
-    uploaded_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutUploaderInput
   }
 
   export type UserCreateOrConnectWithoutField_valuesInput = {
@@ -47939,14 +32502,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -47962,14 +32520,9 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -47999,7 +32552,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
     numerator_for_indicators?: IndicatorUpdateManyWithoutNumerator_fieldNestedInput
@@ -48022,7 +32574,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     numerator_for_indicators?: IndicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
@@ -48048,9 +32599,6 @@ export namespace Prisma {
     last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUpdateManyWithoutUploaderNestedInput
     facility?: FacilityUpdateOneWithoutUsersNestedInput
   }
 
@@ -48064,223 +32612,6 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput
-  }
-
-  export type FacilityCreateWithoutFacility_field_defaultsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
-    district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
-    users?: UserCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityUncheckedCreateWithoutFacility_field_defaultsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    district_id: string
-    facility_type_id: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
-    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityCreateOrConnectWithoutFacility_field_defaultsInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutFacility_field_defaultsInput, FacilityUncheckedCreateWithoutFacility_field_defaultsInput>
-  }
-
-  export type FieldCreateWithoutFacility_field_defaultsInput = {
-    code: string
-    name: string
-    description?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    calculation_formula?: string | null
-    default_value?: string | null
-    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
-    field_type: $Enums.FieldType
-    is_active?: boolean
-    sort_order?: number
-    user_type: $Enums.UserType
-    validation_rules?: NullableJsonNullValueInput | InputJsonValue
-    field_category?: $Enums.FieldCategory
-    facility_field_mappings?: FacilityFieldMappingCreateNestedManyWithoutFieldInput
-    field_values?: FieldValueCreateNestedManyWithoutFieldInput
-    denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
-    numerator_for_indicators?: IndicatorCreateNestedManyWithoutNumerator_fieldInput
-    target_for_indicators?: IndicatorCreateNestedManyWithoutTarget_fieldInput
-  }
-
-  export type FieldUncheckedCreateWithoutFacility_field_defaultsInput = {
-    id?: number
-    code: string
-    name: string
-    description?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    calculation_formula?: string | null
-    default_value?: string | null
-    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
-    field_type: $Enums.FieldType
-    is_active?: boolean
-    sort_order?: number
-    user_type: $Enums.UserType
-    validation_rules?: NullableJsonNullValueInput | InputJsonValue
-    field_category?: $Enums.FieldCategory
-    facility_field_mappings?: FacilityFieldMappingUncheckedCreateNestedManyWithoutFieldInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
-    denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
-    numerator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
-    target_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
-  }
-
-  export type FieldCreateOrConnectWithoutFacility_field_defaultsInput = {
-    where: FieldWhereUniqueInput
-    create: XOR<FieldCreateWithoutFacility_field_defaultsInput, FieldUncheckedCreateWithoutFacility_field_defaultsInput>
-  }
-
-  export type FacilityUpsertWithoutFacility_field_defaultsInput = {
-    update: XOR<FacilityUpdateWithoutFacility_field_defaultsInput, FacilityUncheckedUpdateWithoutFacility_field_defaultsInput>
-    create: XOR<FacilityCreateWithoutFacility_field_defaultsInput, FacilityUncheckedCreateWithoutFacility_field_defaultsInput>
-    where?: FacilityWhereInput
-  }
-
-  export type FacilityUpdateToOneWithWhereWithoutFacility_field_defaultsInput = {
-    where?: FacilityWhereInput
-    data: XOR<FacilityUpdateWithoutFacility_field_defaultsInput, FacilityUncheckedUpdateWithoutFacility_field_defaultsInput>
-  }
-
-  export type FacilityUpdateWithoutFacility_field_defaultsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
-    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
-    users?: UserUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityUncheckedUpdateWithoutFacility_field_defaultsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
-    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FieldUpsertWithoutFacility_field_defaultsInput = {
-    update: XOR<FieldUpdateWithoutFacility_field_defaultsInput, FieldUncheckedUpdateWithoutFacility_field_defaultsInput>
-    create: XOR<FieldCreateWithoutFacility_field_defaultsInput, FieldUncheckedCreateWithoutFacility_field_defaultsInput>
-    where?: FieldWhereInput
-  }
-
-  export type FieldUpdateToOneWithWhereWithoutFacility_field_defaultsInput = {
-    where?: FieldWhereInput
-    data: XOR<FieldUpdateWithoutFacility_field_defaultsInput, FieldUncheckedUpdateWithoutFacility_field_defaultsInput>
-  }
-
-  export type FieldUpdateWithoutFacility_field_defaultsInput = {
-    code?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    default_value?: NullableStringFieldUpdateOperationsInput | string | null
-    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
-    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    sort_order?: IntFieldUpdateOperationsInput | number
-    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-    validation_rules?: NullableJsonNullValueInput | InputJsonValue
-    field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_mappings?: FacilityFieldMappingUpdateManyWithoutFieldNestedInput
-    field_values?: FieldValueUpdateManyWithoutFieldNestedInput
-    denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
-    numerator_for_indicators?: IndicatorUpdateManyWithoutNumerator_fieldNestedInput
-    target_for_indicators?: IndicatorUpdateManyWithoutTarget_fieldNestedInput
-  }
-
-  export type FieldUncheckedUpdateWithoutFacility_field_defaultsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    default_value?: NullableStringFieldUpdateOperationsInput | string | null
-    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
-    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    sort_order?: IntFieldUpdateOperationsInput | number
-    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
-    validation_rules?: NullableJsonNullValueInput | InputJsonValue
-    field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFieldNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
-    denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
-    numerator_for_indicators?: IndicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
-    target_for_indicators?: IndicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
   }
 
   export type FacilityTypeCreateWithoutField_mappingsInput = {
@@ -48329,7 +32660,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFieldInput
     field_values?: FieldValueCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorCreateNestedManyWithoutDenominator_fieldInput
     numerator_for_indicators?: IndicatorCreateNestedManyWithoutNumerator_fieldInput
@@ -48352,7 +32682,6 @@ export namespace Prisma {
     user_type: $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFieldInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFieldInput
     denominator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     numerator_for_indicators?: IndicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
@@ -48427,7 +32756,6 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUpdateManyWithoutDenominator_fieldNestedInput
     numerator_for_indicators?: IndicatorUpdateManyWithoutNumerator_fieldNestedInput
@@ -48450,235 +32778,10 @@ export namespace Prisma {
     user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
     validation_rules?: NullableJsonNullValueInput | InputJsonValue
     field_category?: EnumFieldCategoryFieldUpdateOperationsInput | $Enums.FieldCategory
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFieldNestedInput
     denominator_for_indicators?: IndicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     numerator_for_indicators?: IndicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
     target_for_indicators?: IndicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
-  }
-
-  export type MonthlyHealthDataCreateWithoutSub_centreInput = {
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    approver?: UserCreateNestedOneWithoutApproved_dataInput
-    district: DistrictCreateNestedOneWithoutMonthly_dataInput
-    facility?: FacilityCreateNestedOneWithoutMonthly_dataInput
-    indicator?: IndicatorCreateNestedOneWithoutMonthly_dataInput
-    uploader: UserCreateNestedOneWithoutUploaded_dataInput
-  }
-
-  export type MonthlyHealthDataUncheckedCreateWithoutSub_centreInput = {
-    id?: number
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateOrConnectWithoutSub_centreInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    create: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput>
-  }
-
-  export type MonthlyHealthDataCreateManySub_centreInputEnvelope = {
-    data: MonthlyHealthDataCreateManySub_centreInput | MonthlyHealthDataCreateManySub_centreInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PerformanceCalculationCreateWithoutSub_centreInput = {
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility?: FacilityCreateNestedOneWithoutPerformance_calculationsInput
-    indicator: IndicatorCreateNestedOneWithoutPerformance_calculationsInput
-  }
-
-  export type PerformanceCalculationUncheckedCreateWithoutSub_centreInput = {
-    id?: number
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationCreateOrConnectWithoutSub_centreInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    create: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput>
-  }
-
-  export type PerformanceCalculationCreateManySub_centreInputEnvelope = {
-    data: PerformanceCalculationCreateManySub_centreInput | PerformanceCalculationCreateManySub_centreInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FacilityCreateWithoutSub_centresInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
-    district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    users?: UserCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityUncheckedCreateWithoutSub_centresInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    district_id: string
-    facility_type_id: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityCreateOrConnectWithoutSub_centresInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutSub_centresInput, FacilityUncheckedCreateWithoutSub_centresInput>
-  }
-
-  export type MonthlyHealthDataUpsertWithWhereUniqueWithoutSub_centreInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    update: XOR<MonthlyHealthDataUpdateWithoutSub_centreInput, MonthlyHealthDataUncheckedUpdateWithoutSub_centreInput>
-    create: XOR<MonthlyHealthDataCreateWithoutSub_centreInput, MonthlyHealthDataUncheckedCreateWithoutSub_centreInput>
-  }
-
-  export type MonthlyHealthDataUpdateWithWhereUniqueWithoutSub_centreInput = {
-    where: MonthlyHealthDataWhereUniqueInput
-    data: XOR<MonthlyHealthDataUpdateWithoutSub_centreInput, MonthlyHealthDataUncheckedUpdateWithoutSub_centreInput>
-  }
-
-  export type MonthlyHealthDataUpdateManyWithWhereWithoutSub_centreInput = {
-    where: MonthlyHealthDataScalarWhereInput
-    data: XOR<MonthlyHealthDataUpdateManyMutationInput, MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreInput>
-  }
-
-  export type PerformanceCalculationUpsertWithWhereUniqueWithoutSub_centreInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    update: XOR<PerformanceCalculationUpdateWithoutSub_centreInput, PerformanceCalculationUncheckedUpdateWithoutSub_centreInput>
-    create: XOR<PerformanceCalculationCreateWithoutSub_centreInput, PerformanceCalculationUncheckedCreateWithoutSub_centreInput>
-  }
-
-  export type PerformanceCalculationUpdateWithWhereUniqueWithoutSub_centreInput = {
-    where: PerformanceCalculationWhereUniqueInput
-    data: XOR<PerformanceCalculationUpdateWithoutSub_centreInput, PerformanceCalculationUncheckedUpdateWithoutSub_centreInput>
-  }
-
-  export type PerformanceCalculationUpdateManyWithWhereWithoutSub_centreInput = {
-    where: PerformanceCalculationScalarWhereInput
-    data: XOR<PerformanceCalculationUpdateManyMutationInput, PerformanceCalculationUncheckedUpdateManyWithoutSub_centreInput>
-  }
-
-  export type FacilityUpsertWithoutSub_centresInput = {
-    update: XOR<FacilityUpdateWithoutSub_centresInput, FacilityUncheckedUpdateWithoutSub_centresInput>
-    create: XOR<FacilityCreateWithoutSub_centresInput, FacilityUncheckedCreateWithoutSub_centresInput>
-    where?: FacilityWhereInput
-  }
-
-  export type FacilityUpdateToOneWithWhereWithoutSub_centresInput = {
-    where?: FacilityWhereInput
-    data: XOR<FacilityUpdateWithoutSub_centresInput, FacilityUncheckedUpdateWithoutSub_centresInput>
-  }
-
-  export type FacilityUpdateWithoutSub_centresInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
-    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    users?: UserUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityUncheckedUpdateWithoutSub_centresInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateWithoutHealth_workersInput = {
@@ -48693,14 +32796,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -48716,14 +32814,9 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -48788,14 +32881,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -48811,14 +32899,9 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -48850,14 +32933,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -48873,14 +32951,9 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -48912,14 +32985,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -48935,14 +33003,9 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -48987,15 +33050,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -49010,15 +33068,10 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -49085,15 +33138,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -49108,45 +33156,11 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput = {
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility: FacilityCreateNestedOneWithoutWorker_allocationsInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput = {
-    id?: number
-    facility_id: string
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationCreateOrConnectWithoutWorker_allocation_configInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    create: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput>
-  }
-
-  export type FacilityWorkerAllocationCreateManyWorker_allocation_configInputEnvelope = {
-    data: FacilityWorkerAllocationCreateManyWorker_allocation_configInput | FacilityWorkerAllocationCreateManyWorker_allocation_configInput[]
-    skipDuplicates?: boolean
   }
 
   export type FacilityTypeCreateWithoutWorker_allocationsInput = {
@@ -49178,22 +33192,6 @@ export namespace Prisma {
   export type FacilityTypeCreateOrConnectWithoutWorker_allocationsInput = {
     where: FacilityTypeWhereUniqueInput
     create: XOR<FacilityTypeCreateWithoutWorker_allocationsInput, FacilityTypeUncheckedCreateWithoutWorker_allocationsInput>
-  }
-
-  export type FacilityWorkerAllocationUpsertWithWhereUniqueWithoutWorker_allocation_configInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    update: XOR<FacilityWorkerAllocationUpdateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedUpdateWithoutWorker_allocation_configInput>
-    create: XOR<FacilityWorkerAllocationCreateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedCreateWithoutWorker_allocation_configInput>
-  }
-
-  export type FacilityWorkerAllocationUpdateWithWhereUniqueWithoutWorker_allocation_configInput = {
-    where: FacilityWorkerAllocationWhereUniqueInput
-    data: XOR<FacilityWorkerAllocationUpdateWithoutWorker_allocation_configInput, FacilityWorkerAllocationUncheckedUpdateWithoutWorker_allocation_configInput>
-  }
-
-  export type FacilityWorkerAllocationUpdateManyWithWhereWithoutWorker_allocation_configInput = {
-    where: FacilityWorkerAllocationScalarWhereInput
-    data: XOR<FacilityWorkerAllocationUpdateManyMutationInput, FacilityWorkerAllocationUncheckedUpdateManyWithoutWorker_allocation_configInput>
   }
 
   export type FacilityTypeUpsertWithoutWorker_allocationsInput = {
@@ -49231,180 +33229,6 @@ export namespace Prisma {
     facilities?: FacilityUncheckedUpdateManyWithoutFacility_typeNestedInput
     field_mappings?: FacilityFieldMappingUncheckedUpdateManyWithoutFacility_typeNestedInput
     remunerations?: FacilityTypeRemunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
-  }
-
-  export type FacilityCreateWithoutWorker_allocationsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
-    district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
-    users?: UserCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityUncheckedCreateWithoutWorker_allocationsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    district_id: string
-    facility_type_id: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
-    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityCreateOrConnectWithoutWorker_allocationsInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutWorker_allocationsInput, FacilityUncheckedCreateWithoutWorker_allocationsInput>
-  }
-
-  export type WorkerAllocationConfigCreateWithoutFacility_allocationsInput = {
-    worker_type: string
-    worker_role: string
-    max_count?: number
-    allocated_amount: Decimal | DecimalJsLike | number | string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_type: FacilityTypeCreateNestedOneWithoutWorker_allocationsInput
-  }
-
-  export type WorkerAllocationConfigUncheckedCreateWithoutFacility_allocationsInput = {
-    id?: number
-    facility_type_id: string
-    worker_type: string
-    worker_role: string
-    max_count?: number
-    allocated_amount: Decimal | DecimalJsLike | number | string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type WorkerAllocationConfigCreateOrConnectWithoutFacility_allocationsInput = {
-    where: WorkerAllocationConfigWhereUniqueInput
-    create: XOR<WorkerAllocationConfigCreateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedCreateWithoutFacility_allocationsInput>
-  }
-
-  export type FacilityUpsertWithoutWorker_allocationsInput = {
-    update: XOR<FacilityUpdateWithoutWorker_allocationsInput, FacilityUncheckedUpdateWithoutWorker_allocationsInput>
-    create: XOR<FacilityCreateWithoutWorker_allocationsInput, FacilityUncheckedCreateWithoutWorker_allocationsInput>
-    where?: FacilityWhereInput
-  }
-
-  export type FacilityUpdateToOneWithWhereWithoutWorker_allocationsInput = {
-    where?: FacilityWhereInput
-    data: XOR<FacilityUpdateWithoutWorker_allocationsInput, FacilityUncheckedUpdateWithoutWorker_allocationsInput>
-  }
-
-  export type FacilityUpdateWithoutWorker_allocationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
-    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
-    users?: UserUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityUncheckedUpdateWithoutWorker_allocationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
-    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type WorkerAllocationConfigUpsertWithoutFacility_allocationsInput = {
-    update: XOR<WorkerAllocationConfigUpdateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedUpdateWithoutFacility_allocationsInput>
-    create: XOR<WorkerAllocationConfigCreateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedCreateWithoutFacility_allocationsInput>
-    where?: WorkerAllocationConfigWhereInput
-  }
-
-  export type WorkerAllocationConfigUpdateToOneWithWhereWithoutFacility_allocationsInput = {
-    where?: WorkerAllocationConfigWhereInput
-    data: XOR<WorkerAllocationConfigUpdateWithoutFacility_allocationsInput, WorkerAllocationConfigUncheckedUpdateWithoutFacility_allocationsInput>
-  }
-
-  export type WorkerAllocationConfigUpdateWithoutFacility_allocationsInput = {
-    worker_type?: StringFieldUpdateOperationsInput | string
-    worker_role?: StringFieldUpdateOperationsInput | string
-    max_count?: IntFieldUpdateOperationsInput | number
-    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutWorker_allocationsNestedInput
-  }
-
-  export type WorkerAllocationConfigUncheckedUpdateWithoutFacility_allocationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    worker_type?: StringFieldUpdateOperationsInput | string
-    worker_role?: StringFieldUpdateOperationsInput | string
-    max_count?: IntFieldUpdateOperationsInput | number
-    allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FacilityTypeCreateWithoutRemunerationsInput = {
@@ -49445,7 +33269,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     indicator: IndicatorCreateNestedOneWithoutRemunerationsInput
-    remuneration_system?: RemunerationSystemCreateNestedOneWithoutIndicator_remunerationsInput
   }
 
   export type IndicatorRemunerationUncheckedCreateWithoutFacility_type_remunerationInput = {
@@ -49456,7 +33279,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorRemunerationCreateOrConnectWithoutFacility_type_remunerationInput = {
@@ -49570,8 +33392,6 @@ export namespace Prisma {
     numerator_field?: FieldCreateNestedOneWithoutNumerator_for_indicatorsInput
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutRemunerationsInput = {
@@ -49599,36 +33419,11 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutRemunerationsInput = {
     where: IndicatorWhereUniqueInput
     create: XOR<IndicatorCreateWithoutRemunerationsInput, IndicatorUncheckedCreateWithoutRemunerationsInput>
-  }
-
-  export type RemunerationSystemCreateWithoutIndicator_remunerationsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type RemunerationSystemUncheckedCreateWithoutIndicator_remunerationsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type RemunerationSystemCreateOrConnectWithoutIndicator_remunerationsInput = {
-    where: RemunerationSystemWhereUniqueInput
-    create: XOR<RemunerationSystemCreateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedCreateWithoutIndicator_remunerationsInput>
   }
 
   export type FacilityTypeRemunerationUpsertWithoutIndicator_remunerationsInput = {
@@ -49696,8 +33491,6 @@ export namespace Prisma {
     numerator_field?: FieldUpdateOneWithoutNumerator_for_indicatorsNestedInput
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutRemunerationsInput = {
@@ -49725,325 +33518,6 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type RemunerationSystemUpsertWithoutIndicator_remunerationsInput = {
-    update: XOR<RemunerationSystemUpdateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedUpdateWithoutIndicator_remunerationsInput>
-    create: XOR<RemunerationSystemCreateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedCreateWithoutIndicator_remunerationsInput>
-    where?: RemunerationSystemWhereInput
-  }
-
-  export type RemunerationSystemUpdateToOneWithWhereWithoutIndicator_remunerationsInput = {
-    where?: RemunerationSystemWhereInput
-    data: XOR<RemunerationSystemUpdateWithoutIndicator_remunerationsInput, RemunerationSystemUncheckedUpdateWithoutIndicator_remunerationsInput>
-  }
-
-  export type RemunerationSystemUpdateWithoutIndicator_remunerationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type RemunerationSystemUncheckedUpdateWithoutIndicator_remunerationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityCreateWithoutPerformance_calculationsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
-    district: DistrictCreateNestedOneWithoutFacilitiesInput
-    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
-    users?: UserCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityUncheckedCreateWithoutPerformance_calculationsInput = {
-    id?: string
-    name: string
-    created_at?: Date | string
-    description?: string | null
-    display_name: string
-    district_id: string
-    facility_type_id: string
-    is_active?: boolean
-    updated_at?: Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
-    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
-    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
-    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
-    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
-  }
-
-  export type FacilityCreateOrConnectWithoutPerformance_calculationsInput = {
-    where: FacilityWhereUniqueInput
-    create: XOR<FacilityCreateWithoutPerformance_calculationsInput, FacilityUncheckedCreateWithoutPerformance_calculationsInput>
-  }
-
-  export type IndicatorCreateWithoutPerformance_calculationsInput = {
-    name: string
-    description?: string | null
-    type: string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-    code: string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: string | null
-    denominator_label?: string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: $Enums.formula_type
-    numerator_label?: string | null
-    target_formula?: string | null
-    target_type?: $Enums.TargetType
-    target_value?: string | null
-    source_of_verification?: string | null
-    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutIndicatorInput
-    facility_targets?: FacilityTargetCreateNestedManyWithoutIndicatorInput
-    denominator_field?: FieldCreateNestedOneWithoutDenominator_for_indicatorsInput
-    numerator_field?: FieldCreateNestedOneWithoutNumerator_for_indicatorsInput
-    target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
-    remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
-    worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-  }
-
-  export type IndicatorUncheckedCreateWithoutPerformance_calculationsInput = {
-    id?: number
-    name: string
-    description?: string | null
-    type: string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-    code: string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: string | null
-    denominator_field_id?: number | null
-    denominator_label?: string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: $Enums.formula_type
-    numerator_field_id?: number | null
-    numerator_label?: string | null
-    target_formula?: string | null
-    target_type?: $Enums.TargetType
-    target_value?: string | null
-    target_field_id?: number | null
-    source_of_verification?: string | null
-    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput
-    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
-    remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
-    worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-  }
-
-  export type IndicatorCreateOrConnectWithoutPerformance_calculationsInput = {
-    where: IndicatorWhereUniqueInput
-    create: XOR<IndicatorCreateWithoutPerformance_calculationsInput, IndicatorUncheckedCreateWithoutPerformance_calculationsInput>
-  }
-
-  export type sub_centreCreateWithoutPerformance_calculationsInput = {
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    monthly_health_data?: MonthlyHealthDataCreateNestedManyWithoutSub_centreInput
-    facility: FacilityCreateNestedOneWithoutSub_centresInput
-  }
-
-  export type sub_centreUncheckedCreateWithoutPerformance_calculationsInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
-    facility_id: string
-    monthly_health_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutSub_centreInput
-  }
-
-  export type sub_centreCreateOrConnectWithoutPerformance_calculationsInput = {
-    where: sub_centreWhereUniqueInput
-    create: XOR<sub_centreCreateWithoutPerformance_calculationsInput, sub_centreUncheckedCreateWithoutPerformance_calculationsInput>
-  }
-
-  export type FacilityUpsertWithoutPerformance_calculationsInput = {
-    update: XOR<FacilityUpdateWithoutPerformance_calculationsInput, FacilityUncheckedUpdateWithoutPerformance_calculationsInput>
-    create: XOR<FacilityCreateWithoutPerformance_calculationsInput, FacilityUncheckedCreateWithoutPerformance_calculationsInput>
-    where?: FacilityWhereInput
-  }
-
-  export type FacilityUpdateToOneWithWhereWithoutPerformance_calculationsInput = {
-    where?: FacilityWhereInput
-    data: XOR<FacilityUpdateWithoutPerformance_calculationsInput, FacilityUncheckedUpdateWithoutPerformance_calculationsInput>
-  }
-
-  export type FacilityUpdateWithoutPerformance_calculationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
-    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
-    users?: UserUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type FacilityUncheckedUpdateWithoutPerformance_calculationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    display_name?: StringFieldUpdateOperationsInput | string
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_type_id?: StringFieldUpdateOperationsInput | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
-    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
-    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
-    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
-  }
-
-  export type IndicatorUpsertWithoutPerformance_calculationsInput = {
-    update: XOR<IndicatorUpdateWithoutPerformance_calculationsInput, IndicatorUncheckedUpdateWithoutPerformance_calculationsInput>
-    create: XOR<IndicatorCreateWithoutPerformance_calculationsInput, IndicatorUncheckedCreateWithoutPerformance_calculationsInput>
-    where?: IndicatorWhereInput
-  }
-
-  export type IndicatorUpdateToOneWithWhereWithoutPerformance_calculationsInput = {
-    where?: IndicatorWhereInput
-    data: XOR<IndicatorUpdateWithoutPerformance_calculationsInput, IndicatorUncheckedUpdateWithoutPerformance_calculationsInput>
-  }
-
-  export type IndicatorUpdateWithoutPerformance_calculationsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    code?: StringFieldUpdateOperationsInput | string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: NullableStringFieldUpdateOperationsInput | string | null
-    denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
-    numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    target_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
-    target_value?: NullableStringFieldUpdateOperationsInput | string | null
-    source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
-    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutIndicatorNestedInput
-    facility_targets?: FacilityTargetUpdateManyWithoutIndicatorNestedInput
-    denominator_field?: FieldUpdateOneWithoutDenominator_for_indicatorsNestedInput
-    numerator_field?: FieldUpdateOneWithoutNumerator_for_indicatorsNestedInput
-    target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
-    remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
-    worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type IndicatorUncheckedUpdateWithoutPerformance_calculationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    structure?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    code?: StringFieldUpdateOperationsInput | string
-    applicable_facility_types?: NullableJsonNullValueInput | InputJsonValue
-    conditions?: NullableStringFieldUpdateOperationsInput | string | null
-    denominator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    denominator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    formula_config?: NullableJsonNullValueInput | InputJsonValue
-    formula_type?: Enumformula_typeFieldUpdateOperationsInput | $Enums.formula_type
-    numerator_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    numerator_label?: NullableStringFieldUpdateOperationsInput | string | null
-    target_formula?: NullableStringFieldUpdateOperationsInput | string | null
-    target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
-    target_value?: NullableStringFieldUpdateOperationsInput | string | null
-    target_field_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
-    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput
-    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
-    remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
-    worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type sub_centreUpsertWithoutPerformance_calculationsInput = {
-    update: XOR<sub_centreUpdateWithoutPerformance_calculationsInput, sub_centreUncheckedUpdateWithoutPerformance_calculationsInput>
-    create: XOR<sub_centreCreateWithoutPerformance_calculationsInput, sub_centreUncheckedCreateWithoutPerformance_calculationsInput>
-    where?: sub_centreWhereInput
-  }
-
-  export type sub_centreUpdateToOneWithWhereWithoutPerformance_calculationsInput = {
-    where?: sub_centreWhereInput
-    data: XOR<sub_centreUpdateWithoutPerformance_calculationsInput, sub_centreUncheckedUpdateWithoutPerformance_calculationsInput>
-  }
-
-  export type sub_centreUpdateWithoutPerformance_calculationsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_health_data?: MonthlyHealthDataUpdateManyWithoutSub_centreNestedInput
-    facility?: FacilityUpdateOneRequiredWithoutSub_centresNestedInput
-  }
-
-  export type sub_centreUncheckedUpdateWithoutPerformance_calculationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-    monthly_health_data?: MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreNestedInput
   }
 
   export type FacilityCreateWithoutFacility_targetsInput = {
@@ -50058,14 +33532,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -50081,14 +33550,9 @@ export namespace Prisma {
     updated_at?: Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -50121,8 +33585,6 @@ export namespace Prisma {
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutFacility_targetsInput = {
@@ -50150,8 +33612,6 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutFacility_targetsInput = {
@@ -50182,14 +33642,9 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -50205,14 +33660,9 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -50251,8 +33701,6 @@ export namespace Prisma {
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutFacility_targetsInput = {
@@ -50280,8 +33728,6 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorCreateWithoutWorker_allocationsInput = {
@@ -50308,8 +33754,6 @@ export namespace Prisma {
     numerator_field?: FieldCreateNestedOneWithoutNumerator_for_indicatorsInput
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutWorker_allocationsInput = {
@@ -50337,8 +33781,6 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutIndicatorInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutWorker_allocationsInput = {
@@ -50381,8 +33823,6 @@ export namespace Prisma {
     numerator_field?: FieldUpdateOneWithoutNumerator_for_indicatorsNestedInput
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutWorker_allocationsInput = {
@@ -50410,8 +33850,6 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutIndicatorNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type FacilityCreateWithoutRemuneration_recordsInput = {
@@ -50425,15 +33863,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
-    facility_field_defaults?: FacilityFieldDefaultsCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
   }
 
@@ -50448,15 +33881,10 @@ export namespace Prisma {
     is_active?: boolean
     updated_at?: Date | string
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutFacilityInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
-    sub_centres?: sub_centreUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
   }
 
@@ -50489,8 +33917,6 @@ export namespace Prisma {
     target_field?: FieldCreateNestedOneWithoutTarget_for_indicatorsInput
     remunerations?: IndicatorRemunerationCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorUncheckedCreateWithoutRemuneration_recordsInput = {
@@ -50518,8 +33944,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutIndicatorInput
     remunerations?: IndicatorRemunerationUncheckedCreateNestedManyWithoutIndicatorInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedCreateNestedManyWithoutIndicatorInput
-    monthly_data?: MonthlyHealthDataUncheckedCreateNestedManyWithoutIndicatorInput
-    performance_calculations?: PerformanceCalculationUncheckedCreateNestedManyWithoutIndicatorInput
   }
 
   export type IndicatorCreateOrConnectWithoutRemuneration_recordsInput = {
@@ -50549,15 +33973,10 @@ export namespace Prisma {
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -50572,15 +33991,10 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -50619,8 +34033,6 @@ export namespace Prisma {
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutRemuneration_recordsInput = {
@@ -50648,22 +34060,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
-  }
-
-  export type DataUploadSessionCreateManyUploaderInput = {
-    id?: number
-    file_name: string
-    report_month: string
-    total_records: number
-    success_count?: number
-    error_count?: number
-    status?: $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    completed_at?: Date | string | null
-    file_path?: string | null
   }
 
   export type FieldValueCreateManyUploaderInput = {
@@ -50680,87 +34076,6 @@ export namespace Prisma {
     is_override?: boolean
     override_reason?: string | null
     facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateManyApproverInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataCreateManyUploaderInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type DataUploadSessionUpdateWithoutUploaderInput = {
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DataUploadSessionUncheckedUpdateWithoutUploaderInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DataUploadSessionUncheckedUpdateManyWithoutUploaderInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    file_name?: StringFieldUpdateOperationsInput | string
-    report_month?: StringFieldUpdateOperationsInput | string
-    total_records?: IntFieldUpdateOperationsInput | number
-    success_count?: IntFieldUpdateOperationsInput | number
-    error_count?: IntFieldUpdateOperationsInput | number
-    status?: EnumUploadStatusFieldUpdateOperationsInput | $Enums.UploadStatus
-    upload_summary?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FieldValueUpdateWithoutUploaderInput = {
@@ -50810,124 +34125,6 @@ export namespace Prisma {
     facility_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type MonthlyHealthDataUpdateWithoutApproverInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutApproverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutApproverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUpdateWithoutUploaderInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutUploaderInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutUploaderInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type FacilityCreateManyDistrictInput = {
     id?: string
     name: string
@@ -50937,26 +34134,6 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
-  }
-
-  export type MonthlyHealthDataCreateManyDistrictInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    facility_id?: string | null
   }
 
   export type FacilityUpdateWithoutDistrictInput = {
@@ -50970,15 +34147,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -50993,15 +34165,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -51013,108 +34180,6 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonthlyHealthDataUpdateWithoutDistrictInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutDistrictInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutDistrictInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type IndicatorRemunerationCreateManyRemuneration_systemInput = {
-    id?: number
-    facility_type_remuneration_id: number
-    indicator_id: number
-    base_amount: Decimal | DecimalJsLike | number | string
-    conditional_amount?: Decimal | DecimalJsLike | number | string | null
-    condition_type?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type IndicatorRemunerationUpdateWithoutRemuneration_systemInput = {
-    base_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    conditional_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    condition_type?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_type_remuneration?: FacilityTypeRemunerationUpdateOneRequiredWithoutIndicator_remunerationsNestedInput
-    indicator?: IndicatorUpdateOneRequiredWithoutRemunerationsNestedInput
-  }
-
-  export type IndicatorRemunerationUncheckedUpdateWithoutRemuneration_systemInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_type_remuneration_id?: IntFieldUpdateOperationsInput | number
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    base_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    conditional_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    condition_type?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type IndicatorRemunerationUncheckedUpdateManyWithoutRemuneration_systemInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_type_remuneration_id?: IntFieldUpdateOperationsInput | number
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    base_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    conditional_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    condition_type?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -51161,15 +34226,10 @@ export namespace Prisma {
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
   }
 
@@ -51184,15 +34244,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
-    facility_field_defaults?: FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
-    worker_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutFacilityNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
-    sub_centres?: sub_centreUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
@@ -51242,7 +34297,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_allocations?: FacilityWorkerAllocationUpdateManyWithoutWorker_allocation_configNestedInput
   }
 
   export type WorkerAllocationConfigUncheckedUpdateWithoutFacility_typeInput = {
@@ -51255,7 +34309,6 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_allocations?: FacilityWorkerAllocationUncheckedUpdateManyWithoutWorker_allocation_configNestedInput
   }
 
   export type WorkerAllocationConfigUncheckedUpdateManyWithoutFacility_typeInput = {
@@ -51301,18 +34354,6 @@ export namespace Prisma {
     calculated_at?: Date | string
   }
 
-  export type FacilityFieldDefaultsCreateManyFacilityInput = {
-    id?: number
-    field_id: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
   export type FacilityTargetCreateManyFacilityInput = {
     id?: number
     indicator_id: number
@@ -51320,16 +34361,6 @@ export namespace Prisma {
     target_value: Decimal | DecimalJsLike | number | string
     numerator_label: string
     denominator_label: string
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationCreateManyFacilityInput = {
-    id?: number
-    worker_allocation_config_id: number
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -51362,39 +34393,6 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
-  export type MonthlyHealthDataCreateManyFacilityInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-  }
-
-  export type PerformanceCalculationCreateManyFacilityInput = {
-    id?: number
-    sub_centre_id?: number | null
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-  }
-
   export type RemunerationCalculationCreateManyFacilityInput = {
     id?: number
     report_month: string
@@ -51405,13 +34403,6 @@ export namespace Prisma {
     health_workers_count?: number
     asha_workers_count?: number
     calculated_at?: Date | string
-  }
-
-  export type sub_centreCreateManyFacilityInput = {
-    id?: number
-    name: string
-    created_at?: Date | string
-    updated_at: Date | string
   }
 
   export type UserCreateManyFacilityInput = {
@@ -51517,41 +34508,6 @@ export namespace Prisma {
     calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityFieldDefaultsUpdateWithoutFacilityInput = {
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    field?: FieldUpdateOneRequiredWithoutFacility_field_defaultsNestedInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    field_id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateManyWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    field_id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type FacilityTargetUpdateWithoutFacilityInput = {
     report_month?: StringFieldUpdateOperationsInput | string
     target_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -51580,35 +34536,6 @@ export namespace Prisma {
     target_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     numerator_label?: StringFieldUpdateOperationsInput | string
     denominator_label?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationUpdateWithoutFacilityInput = {
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker_allocation_config?: WorkerAllocationConfigUpdateOneRequiredWithoutFacility_allocationsNestedInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    worker_allocation_config_id?: IntFieldUpdateOperationsInput | number
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateManyWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    worker_allocation_config_id?: IntFieldUpdateOperationsInput | number
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51697,103 +34624,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MonthlyHealthDataUpdateWithoutFacilityInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PerformanceCalculationUpdateWithoutFacilityInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    indicator?: IndicatorUpdateOneRequiredWithoutPerformance_calculationsNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutPerformance_calculationsNestedInput
-  }
-
-  export type PerformanceCalculationUncheckedUpdateWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type RemunerationCalculationUpdateWithoutFacilityInput = {
     report_month?: StringFieldUpdateOperationsInput | string
     performance_percentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -51829,30 +34659,6 @@ export namespace Prisma {
     calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type sub_centreUpdateWithoutFacilityInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_health_data?: MonthlyHealthDataUpdateManyWithoutSub_centreNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutSub_centreNestedInput
-  }
-
-  export type sub_centreUncheckedUpdateWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    monthly_health_data?: MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutSub_centreNestedInput
-  }
-
-  export type sub_centreUncheckedUpdateManyWithoutFacilityInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type UserUpdateWithoutFacilityInput = {
     username?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
@@ -51861,10 +34667,7 @@ export namespace Prisma {
     last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUpdateManyWithoutUploaderNestedInput
     field_values?: FieldValueUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUpdateManyWithoutUploaderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilityInput = {
@@ -51876,10 +34679,7 @@ export namespace Prisma {
     last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    upload_sessions?: DataUploadSessionUncheckedUpdateManyWithoutUploaderNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutUploaderNestedInput
-    approved_data?: MonthlyHealthDataUncheckedUpdateManyWithoutApproverNestedInput
-    uploaded_data?: MonthlyHealthDataUncheckedUpdateManyWithoutUploaderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutFacilityInput = {
@@ -51931,7 +34731,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorWorkerAllocationCreateManyIndicatorInput = {
@@ -51940,39 +34739,6 @@ export namespace Prisma {
     allocated_amount: number
     created_at?: Date | string
     updated_at?: Date | string
-  }
-
-  export type MonthlyHealthDataCreateManyIndicatorInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationCreateManyIndicatorInput = {
-    id?: number
-    sub_centre_id?: number | null
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
   }
 
   export type FacilityRemunerationRecordUpdateWithoutIndicatorInput = {
@@ -52071,7 +34837,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_remuneration?: FacilityTypeRemunerationUpdateOneRequiredWithoutIndicator_remunerationsNestedInput
-    remuneration_system?: RemunerationSystemUpdateOneWithoutIndicator_remunerationsNestedInput
   }
 
   export type IndicatorRemunerationUncheckedUpdateWithoutIndicatorInput = {
@@ -52082,7 +34847,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorInput = {
@@ -52093,7 +34857,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IndicatorWorkerAllocationUpdateWithoutIndicatorInput = {
@@ -52118,115 +34881,6 @@ export namespace Prisma {
     allocated_amount?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonthlyHealthDataUpdateWithoutIndicatorInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutMonthly_health_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutIndicatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationUpdateWithoutIndicatorInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneWithoutPerformance_calculationsNestedInput
-    sub_centre?: sub_centreUpdateOneWithoutPerformance_calculationsNestedInput
-  }
-
-  export type PerformanceCalculationUncheckedUpdateWithoutIndicatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutIndicatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    sub_centre_id?: NullableIntFieldUpdateOperationsInput | number | null
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type FacilityFieldDefaultsCreateManyFieldInput = {
-    id?: number
-    string_value?: string | null
-    numeric_value?: Decimal | DecimalJsLike | number | string | null
-    boolean_value?: boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    facility_id: string
   }
 
   export type FacilityFieldMappingCreateManyFieldInput = {
@@ -52321,41 +34975,6 @@ export namespace Prisma {
     target_type?: $Enums.TargetType
     target_value?: string | null
     source_of_verification?: string | null
-  }
-
-  export type FacilityFieldDefaultsUpdateWithoutFieldInput = {
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneRequiredWithoutFacility_field_defaultsNestedInput
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateWithoutFieldInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FacilityFieldDefaultsUncheckedUpdateManyWithoutFieldInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    string_value?: NullableStringFieldUpdateOperationsInput | string | null
-    numeric_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    boolean_value?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    json_value?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type FacilityFieldMappingUpdateWithoutFieldInput = {
@@ -52455,8 +35074,6 @@ export namespace Prisma {
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutDenominator_fieldInput = {
@@ -52484,8 +35101,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateManyWithoutDenominator_fieldInput = {
@@ -52535,8 +35150,6 @@ export namespace Prisma {
     target_field?: FieldUpdateOneWithoutTarget_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutNumerator_fieldInput = {
@@ -52564,8 +35177,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateManyWithoutNumerator_fieldInput = {
@@ -52615,8 +35226,6 @@ export namespace Prisma {
     numerator_field?: FieldUpdateOneWithoutNumerator_for_indicatorsNestedInput
     remunerations?: IndicatorRemunerationUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateWithoutTarget_fieldInput = {
@@ -52644,8 +35253,6 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
-    monthly_data?: MonthlyHealthDataUncheckedUpdateManyWithoutIndicatorNestedInput
-    performance_calculations?: PerformanceCalculationUncheckedUpdateManyWithoutIndicatorNestedInput
   }
 
   export type IndicatorUncheckedUpdateManyWithoutTarget_fieldInput = {
@@ -52669,136 +35276,6 @@ export namespace Prisma {
     target_type?: EnumTargetTypeFieldUpdateOperationsInput | $Enums.TargetType
     target_value?: NullableStringFieldUpdateOperationsInput | string | null
     source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataCreateManySub_centreInput = {
-    id?: number
-    report_month: string
-    value?: Decimal | DecimalJsLike | number | string | null
-    data_quality?: $Enums.DataQuality
-    remarks?: string | null
-    uploaded_by: number
-    approved_by?: number | null
-    approved_at?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    indicator_id?: number | null
-    district_id: string
-    facility_id?: string | null
-  }
-
-  export type PerformanceCalculationCreateManySub_centreInput = {
-    id?: number
-    indicator_id: number
-    report_month: string
-    numerator?: Decimal | DecimalJsLike | number | string | null
-    denominator?: Decimal | DecimalJsLike | number | string | null
-    achievement?: Decimal | DecimalJsLike | number | string | null
-    target_value?: Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: Decimal | DecimalJsLike | number | string | null
-    calculated_at?: Date | string
-    facility_id?: string | null
-  }
-
-  export type MonthlyHealthDataUpdateWithoutSub_centreInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    approver?: UserUpdateOneWithoutApproved_dataNestedInput
-    district?: DistrictUpdateOneRequiredWithoutMonthly_dataNestedInput
-    facility?: FacilityUpdateOneWithoutMonthly_dataNestedInput
-    indicator?: IndicatorUpdateOneWithoutMonthly_dataNestedInput
-    uploader?: UserUpdateOneRequiredWithoutUploaded_dataNestedInput
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateWithoutSub_centreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type MonthlyHealthDataUncheckedUpdateManyWithoutSub_centreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    data_quality?: EnumDataQualityFieldUpdateOperationsInput | $Enums.DataQuality
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    uploaded_by?: IntFieldUpdateOperationsInput | number
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    indicator_id?: NullableIntFieldUpdateOperationsInput | number | null
-    district_id?: StringFieldUpdateOperationsInput | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationUpdateWithoutSub_centreInput = {
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneWithoutPerformance_calculationsNestedInput
-    indicator?: IndicatorUpdateOneRequiredWithoutPerformance_calculationsNestedInput
-  }
-
-  export type PerformanceCalculationUncheckedUpdateWithoutSub_centreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PerformanceCalculationUncheckedUpdateManyWithoutSub_centreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    indicator_id?: IntFieldUpdateOperationsInput | number
-    report_month?: StringFieldUpdateOperationsInput | string
-    numerator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    denominator?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    achievement?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    target_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    remuneration_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WorkerRemunerationCreateManyHealth_workerInput = {
@@ -52848,45 +35325,6 @@ export namespace Prisma {
     calculated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FacilityWorkerAllocationCreateManyWorker_allocation_configInput = {
-    id?: number
-    facility_id: string
-    worker_count?: number
-    total_allocated_amount: Decimal | DecimalJsLike | number | string
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type FacilityWorkerAllocationUpdateWithoutWorker_allocation_configInput = {
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    facility?: FacilityUpdateOneRequiredWithoutWorker_allocationsNestedInput
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateWithoutWorker_allocation_configInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_id?: StringFieldUpdateOperationsInput | string
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FacilityWorkerAllocationUncheckedUpdateManyWithoutWorker_allocation_configInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    facility_id?: StringFieldUpdateOperationsInput | string
-    worker_count?: IntFieldUpdateOperationsInput | number
-    total_allocated_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type IndicatorRemunerationCreateManyFacility_type_remunerationInput = {
     id?: number
     indicator_id: number
@@ -52895,7 +35333,6 @@ export namespace Prisma {
     condition_type?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    remuneration_system_id?: string | null
   }
 
   export type IndicatorRemunerationUpdateWithoutFacility_type_remunerationInput = {
@@ -52905,7 +35342,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     indicator?: IndicatorUpdateOneRequiredWithoutRemunerationsNestedInput
-    remuneration_system?: RemunerationSystemUpdateOneWithoutIndicator_remunerationsNestedInput
   }
 
   export type IndicatorRemunerationUncheckedUpdateWithoutFacility_type_remunerationInput = {
@@ -52916,7 +35352,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IndicatorRemunerationUncheckedUpdateManyWithoutFacility_type_remunerationInput = {
@@ -52927,7 +35362,6 @@ export namespace Prisma {
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    remuneration_system_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 
