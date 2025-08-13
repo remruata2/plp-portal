@@ -32,7 +32,7 @@ interface HealthDataSubmission {
 	totalFootfall?: number;
 	wellnessSessions?: number;
 	tbScreened?: number;
-	patientSatisfactionScore?: number;
+	patientSatisfactionScore?: number; // deprecated in UI
 	fieldCount?: number;
 }
 
@@ -173,6 +173,51 @@ export default function HealthDataPage() {
 
 	const handleSubmissionUpdated = async () => {
 		await loadSubmissions(); // Reload the submissions list
+	};
+
+	// Lazy small component to fetch performance percentage for a facility/month
+	const PerformanceStat = ({
+		facilityId,
+		reportMonth,
+	}: {
+		facilityId: number;
+		reportMonth: string;
+	}) => {
+		const [value, setValue] = useState<number | null>(null);
+		const [error, setError] = useState<boolean>(false);
+		useEffect(() => {
+			let cancelled = false;
+			async function fetchPerf() {
+				try {
+					const res = await fetch(
+						`/api/admin/performance-reports/${String(
+							facilityId
+						)}/${reportMonth}`
+					);
+					if (!res.ok) {
+						setError(true);
+						return;
+					}
+					const data = await res.json();
+					if (!cancelled) setValue(Number(data.performancePercentage || 0));
+				} catch {
+					if (!cancelled) setError(true);
+				}
+			}
+			if (facilityId && reportMonth) fetchPerf();
+			return () => {
+				cancelled = true;
+			};
+		}, [facilityId, reportMonth]);
+
+		if (error) return null;
+		if (value === null) return null;
+		return (
+			<div>
+				<span className="text-gray-500">Performance:</span>
+				<p className="font-medium text-green-600">{value.toFixed(1)}%</p>
+			</div>
+		);
 	};
 
 	const getFormComponent = () => {
@@ -382,13 +427,13 @@ export default function HealthDataPage() {
 													<Edit className="h-3 w-3" />
 												</Button>
 												<Button
-													variant="outline"
+													variant="destructive"
 													size="sm"
 													onClick={(e) => {
 														e.stopPropagation();
 														handleDeleteSubmission(submission.id);
 													}}
-													className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+													className="h-8 w-8 p-0"
 												>
 													<Trash2 className="h-3 w-3" />
 												</Button>
@@ -426,16 +471,11 @@ export default function HealthDataPage() {
 												<p className="font-medium">{submission.tbScreened}</p>
 											</div>
 										)}
-										{submission.patientSatisfactionScore && (
-											<div>
-												<span className="text-gray-500">
-													Satisfaction Score:
-												</span>
-												<p className="font-medium">
-													{submission.patientSatisfactionScore}%
-												</p>
-											</div>
-										)}
+										{/* Replace ambiguous Satisfaction Score with actual performance percentage */}
+										<PerformanceStat
+											facilityId={submission.facilityId}
+											reportMonth={submission.reportMonth}
+										/>
 									</div>
 								</div>
 							))}

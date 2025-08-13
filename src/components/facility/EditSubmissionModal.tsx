@@ -433,7 +433,7 @@ export default function EditSubmissionModal({
 							onClick={handleDelete}
 							variant="destructive"
 							disabled={saving || !submission.canEdit}
-							className="flex items-center justify-center gap-2 bg-red-700 hover:bg-red-800 text-white w-full sm:w-auto"
+							className="flex items-center justify-center gap-2 w-full sm:w-auto"
 						>
 							{saving ? (
 								<Loader2 className="h-4 w-4 animate-spin" />

@@ -624,10 +624,9 @@ export default function FacilityWorkersPage() {
 														<Edit className="h-4 w-4" />
 													</Button>
 													<Button
-														variant="outline"
+														variant="destructive"
 														size="sm"
 														onClick={() => handleDeleteWorker(worker)}
-														className="text-red-600 hover:text-red-700 hover:bg-red-50"
 													>
 														<Trash2 className="h-4 w-4" />
 													</Button>
@@ -903,7 +902,7 @@ export default function FacilityWorkersPage() {
 						<AlertDialogCancel>Cancel</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={confirmDelete}
-							className="bg-red-600 hover:bg-red-700"
+							className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
 						>
 							Delete
 						</AlertDialogAction>

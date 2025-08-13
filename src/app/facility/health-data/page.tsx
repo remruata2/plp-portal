@@ -433,7 +433,7 @@ export default function FacilityHealthDataPage() {
 															}
 															variant="destructive"
 															size="sm"
-															className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
+															className="w-full sm:w-auto"
 														>
 															<Trash2 className="mr-2 h-4 w-4" />
 															Delete
