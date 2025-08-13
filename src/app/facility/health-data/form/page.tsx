@@ -5,9 +5,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, FileText } from "lucide-react";
+import { Loader2, FileText, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
-import BackToHome from "@/components/ui/back-to-home";
 
 // Import dynamic form component
 import DynamicHealthDataForm from "@/components/forms/DynamicHealthDataForm";
@@ -154,11 +153,14 @@ export default function HealthDataFormPage() {
 					</p>
 				</div>
 				<div className="flex justify-end">
-					<BackToHome
-						href="/facility/health-data"
-						text="Back to PLP Report"
+					<Button
 						variant="outline"
-					/>
+						onClick={() => router.back()}
+						className="hidden md:flex"
+					>
+						<ArrowLeft className="h-4 w-4 mr-2" />
+						Go Back
+					</Button>
 				</div>
 			</div>
 

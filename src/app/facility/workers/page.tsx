@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -39,9 +40,8 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Users, Plus, Edit, Trash2, Search } from "lucide-react";
+import { Users, Plus, Edit, Trash2, Search, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import BackToHome from "@/components/ui/back-to-home";
 
 interface Facility {
 	id: string;
@@ -80,6 +80,7 @@ interface AddWorkerFormData {
 
 export default function FacilityWorkersPage() {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 	const [facility, setFacility] = useState<Facility | null>(null);
 	const [workers, setWorkers] = useState<Worker[]>([]);
 	const [allocationConfig, setAllocationConfig] = useState<
@@ -428,12 +429,15 @@ export default function FacilityWorkersPage() {
 			<div className="space-y-6">
 				{/* Back Button */}
 				<div className="flex justify-start">
-					<BackToHome
-						href="/facility/health-data"
-						text="Back to PLP Report"
+					<Button
 						variant="outline"
 						size="sm"
-					/>
+						onClick={() => router.back()}
+						className="hidden md:flex"
+					>
+						<ArrowLeft className="h-4 w-4 mr-2" />
+						Go Back
+					</Button>
 				</div>
 
 				{/* Title and Add Button */}

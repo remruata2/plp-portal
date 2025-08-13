@@ -2,61 +2,32 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import BackToHome from "@/components/ui/back-to-home";
 
-interface FacilityInfo {
-	id: string;
-	name: string;
-	display_name: string;
-	facility_type: {
-		id: string;
-		name: string;
-		display_name: string;
-	};
-	district: {
-		id: string;
-		name: string;
-	};
-}
-
 export default function FacilityProfilePage() {
-	const { data: session } = useSession();
-	const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const { data: session, status } = useSession();
 
-	useEffect(() => {
-		if (session?.user) {
-			fetchFacilityInfo();
-		}
-	}, [session]);
+	// No need for loading state or API calls - use session data directly
+	if (status === "loading") {
+		return (
+			<div className="max-w-7xl mx-auto p-6">
+				<div className="flex items-center justify-center py-8">
+					<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+					<span className="ml-3 text-gray-600">Loading session...</span>
+				</div>
+			</div>
+		);
+	}
 
-	const fetchFacilityInfo = async () => {
-		try {
-			setLoading(true);
-			setError(null);
-
-			const response = await fetch("/api/facility/my-facility", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (!response.ok) {
-				throw new Error("Failed to fetch facility information");
-			}
-
-			const data = await response.json();
-			setFacilityInfo(data.facility);
-		} catch (error) {
-			console.error("Error fetching facility info:", error);
-			setError("Failed to load facility information");
-		} finally {
-			setLoading(false);
-		}
-	};
+	if (!session?.user) {
+		return (
+			<div className="max-w-7xl mx-auto p-6">
+				<div className="text-center py-8 text-gray-500">
+					No session data available
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="max-w-7xl mx-auto p-6">
@@ -117,74 +88,30 @@ export default function FacilityProfilePage() {
 				</CardContent>
 			</Card>
 
-			{/* Facility Information */}
+			{/* Session Data Display */}
 			<Card className="mt-6">
 				<CardHeader>
-					<CardTitle>Facility Information</CardTitle>
+					<CardTitle>Session Information</CardTitle>
 				</CardHeader>
 				<CardContent>
-					{loading ? (
-						<div className="flex items-center justify-center py-8">
-							<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
-							<span className="ml-3 text-gray-600">
-								Loading facility information...
-							</span>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<label className="text-sm font-medium text-gray-700">
+								Facility ID
+							</label>
+							<p className="text-lg font-semibold text-gray-900 font-mono text-sm">
+								{session.user.facility_id || "N/A"}
+							</p>
 						</div>
-					) : error ? (
-						<div className="bg-red-50 border-l-4 border-red-400 p-4">
-							<div className="flex">
-								<div>
-									<p className="text-red-700">{error}</p>
-									<button
-										onClick={fetchFacilityInfo}
-										className="mt-2 text-red-600 hover:text-red-800 underline"
-									>
-										Try again
-									</button>
-								</div>
-							</div>
+						<div>
+							<label className="text-sm font-medium text-gray-700">
+								Session Status
+							</label>
+							<p className="text-lg font-semibold text-gray-900">
+								{status}
+							</p>
 						</div>
-					) : facilityInfo ? (
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div>
-								<label className="text-sm font-medium text-gray-700">
-									Facility Name
-								</label>
-								<p className="text-lg font-semibold text-gray-900">
-									{facilityInfo.display_name || facilityInfo.name}
-								</p>
-							</div>
-							<div>
-								<label className="text-sm font-medium text-gray-700">
-									Facility Type
-								</label>
-								<p className="text-lg font-semibold text-gray-900">
-									{facilityInfo.facility_type.display_name ||
-										facilityInfo.facility_type.name}
-								</p>
-							</div>
-							<div>
-								<label className="text-sm font-medium text-gray-700">
-									District
-								</label>
-								<p className="text-lg font-semibold text-gray-900">
-									{facilityInfo.district.name}
-								</p>
-							</div>
-							<div>
-								<label className="text-sm font-medium text-gray-700">
-									Facility ID
-								</label>
-								<p className="text-lg font-semibold text-gray-900">
-									{facilityInfo.id}
-								</p>
-							</div>
-						</div>
-					) : (
-						<div className="text-center py-8 text-gray-500">
-							No facility information available
-						</div>
-					)}
+					</div>
 				</CardContent>
 			</Card>
 		</div>

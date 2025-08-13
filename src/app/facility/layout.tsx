@@ -26,7 +26,7 @@ export default function FacilityLayout({
 	}
 
 	if (!session?.user || session.user.role !== "facility") {
-		redirect("/auth/signin");
+		redirect("/login");
 	}
 
 	const handleBack = () => {

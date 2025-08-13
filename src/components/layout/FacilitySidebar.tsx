@@ -20,7 +20,7 @@ export default function FacilitySidebar({
 	const { data: session } = useSession();
 
 	const baseLinkClasses =
-		"flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors";
+		"flex items-center px-3 py-3 text-lg md:text-sm font-medium rounded-md transition-colors";
 	const activeLinkClasses = "bg-gray-700 text-white";
 	const inactiveLinkClasses =
 		"text-gray-300 hover:text-white hover:bg-gray-600";
@@ -30,22 +30,22 @@ export default function FacilitySidebar({
 			{/* User Profile Section */}
 			<div className="p-4 border-b border-gray-800">
 				<div className="flex items-center space-x-3">
-					<div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-						<span className="text-white text-sm font-medium">
+					<div className="w-10 h-10 md:w-8 md:h-8 bg-blue-600 rounded-full flex items-center justify-center">
+						<span className="text-white text-lg md:text-sm font-medium">
 							{session?.user?.username?.charAt(0).toUpperCase() || "F"}
 						</span>
 					</div>
 					<div>
-						<p className="text-sm font-medium text-white">
+						<p className="text-lg md:text-sm font-medium text-white">
 							{session?.user?.username || "Facility User"}
 						</p>
-						<p className="text-xs text-gray-400">Facility Staff</p>
+						<p className="text-base md:text-xs text-gray-400">Facility Staff</p>
 					</div>
 				</div>
 			</div>
 
 			{/* Navigation Links */}
-			<nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+			<nav className="flex-1 px-3 py-4 space-y-2 md:space-y-1 overflow-y-auto">
 				<Link
 					href="/facility/dashboard"
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
@@ -56,7 +56,7 @@ export default function FacilitySidebar({
 					}`}
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -87,7 +87,7 @@ export default function FacilitySidebar({
 					}`}
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -112,7 +112,7 @@ export default function FacilitySidebar({
 					}`}
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -124,7 +124,7 @@ export default function FacilitySidebar({
 							d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
 						/>
 					</svg>
-					Facility Employees
+					Manage Employees
 				</Link>
 
 				<Link
@@ -137,7 +137,7 @@ export default function FacilitySidebar({
 					}`}
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -146,10 +146,10 @@ export default function FacilitySidebar({
 							strokeLinecap="round"
 							strokeLinejoin="round"
 							strokeWidth={2}
-							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2V9a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2z"
+							d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
 						/>
 					</svg>
-					Performance Reports
+					Incentive Reports
 				</Link>
 
 				<Link
@@ -162,7 +162,7 @@ export default function FacilitySidebar({
 					}`}
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -183,10 +183,10 @@ export default function FacilitySidebar({
 				<Button
 					variant="ghost"
 					onClick={() => signOut()}
-					className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-700"
+					className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-700 text-lg md:text-sm"
 				>
 					<svg
-						className="mr-3 h-5 w-5 text-gray-400"
+						className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"

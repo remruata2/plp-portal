@@ -15,13 +15,16 @@ model User {
   role          UserRole     @default(facility)
   is_active     Boolean?     @default(true)
   last_login    DateTime?    @db.Timestamptz(6)
-  created_at    DateTime?    @default(now()) @db.Timestamptz(6)
+  created_at    DateTime?    @db.Timestamptz(6)
   email         String?      @unique @db.VarChar(255)
   facility_id   String?
   field_values  FieldValue[]
   facility      Facility?    @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 
   @@index([facility_id])
+  @@index([role, is_active])
+  @@index([email])
+  @@index([last_login])
   @@map("user")
 }
 
@@ -74,6 +77,9 @@ model Facility {
   @@unique([name, district_id])
   @@index([district_id])
   @@index([facility_type_id])
+  @@index([is_active])
+  @@index([district_id, is_active])
+  @@index([facility_type_id, is_active])
   @@map("facility")
 }
 
@@ -107,6 +113,13 @@ model Indicator {
   remunerations             IndicatorRemuneration[]
   worker_allocations        IndicatorWorkerAllocation[]
 
+  @@index([type])
+  @@index([formula_type])
+  @@index([target_type])
+  @@index([denominator_field_id])
+  @@index([numerator_field_id])
+  @@index([target_field_id])
+  @@index([created_at])
   @@map("indicator")
 }
 
@@ -132,6 +145,11 @@ model Field {
   numerator_for_indicators   Indicator[]            @relation("NumeratorField")
   target_for_indicators      Indicator[]            @relation("TargetField")
 
+  @@index([field_type])
+  @@index([is_active])
+  @@index([user_type])
+  @@index([field_category])
+  @@index([sort_order])
   @@map("field")
 }
 
@@ -155,6 +173,12 @@ model FieldValue {
   uploader        User      @relation(fields: [uploaded_by], references: [id])
 
   @@unique([field_id, facility_id, report_month])
+  @@index([facility_id, report_month])
+  @@index([field_id, report_month])
+  @@index([uploaded_by])
+  @@index([created_at])
+  @@index([facility_id, field_id])
+  @@index([report_month, is_override])
   @@map("field_value")
 }
 
@@ -170,6 +194,10 @@ model FacilityFieldMapping {
   field            Field        @relation(fields: [field_id], references: [id], onDelete: Cascade)
 
   @@unique([facility_type_id, field_id])
+  @@index([field_id])
+  @@index([facility_type_id])
+  @@index([is_required])
+  @@index([display_order])
   @@map("facility_field_mapping")
 }
 
@@ -187,6 +215,9 @@ model HealthWorker {
   facility                  Facility             @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   remuneration_calculations WorkerRemuneration[]
 
+  @@index([facility_id])
+  @@index([worker_type])
+  @@index([is_active])
   @@map("health_workers")
 }
 
@@ -204,6 +235,9 @@ model RemunerationCalculation {
   facility                  Facility @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 
   @@unique([facility_id, report_month])
+  @@index([facility_id])
+  @@index([report_month])
+  @@index([calculated_at])
   @@map("remuneration_calculations")
 }
 
@@ -243,6 +277,11 @@ model WorkerAllocationConfig {
   facility_type    FacilityType @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
 
   @@unique([facility_type_id, worker_type, worker_role])
+  @@index([facility_type_id])
+  @@index([worker_type])
+  @@index([worker_role])
+  @@index([is_active])
+  @@index([facility_type_id, is_active])
   @@map("worker_allocation_config")
 }
 
@@ -273,6 +312,9 @@ model IndicatorRemuneration {
   indicator                     Indicator                @relation(fields: [indicator_id], references: [id])
 
   @@unique([facility_type_remuneration_id, indicator_id])
+  @@index([facility_type_remuneration_id])
+  @@index([indicator_id])
+  @@index([condition_type])
   @@map("indicator_remuneration")
 }
 
@@ -290,6 +332,9 @@ model FacilityTarget {
   indicator         Indicator @relation(fields: [indicator_id], references: [id])
 
   @@unique([facility_id, indicator_id, report_month])
+  @@index([facility_id, report_month])
+  @@index([indicator_id, report_month])
+  @@index([created_at])
   @@map("facility_target")
 }
 
@@ -303,6 +348,8 @@ model IndicatorWorkerAllocation {
   indicator        Indicator @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
 
   @@unique([indicator_id, worker_type])
+  @@index([indicator_id])
+  @@index([worker_type])
   @@map("indicator_worker_allocation")
 }
 
@@ -341,6 +388,9 @@ model FacilityRemunerationRecord {
   @@index([report_month])
   @@index([indicator_id])
   @@index([calculation_version])
+  @@index([status])
+  @@index([calculation_date])
+  @@index([facility_id, status])
 }
 
 model SystemSetting {

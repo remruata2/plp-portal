@@ -312,7 +312,7 @@ export default function FacilityReportsPage() {
 				<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
 					<div className="flex-1">
 						<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-							Performance Reports
+							Incentive Reports
 						</h1>
 						<p className="text-gray-600 mt-2 text-sm sm:text-base">
 							{report ? (
