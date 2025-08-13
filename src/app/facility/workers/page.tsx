@@ -427,19 +427,6 @@ export default function FacilityWorkersPage() {
 		<div className="max-w-7xl mx-auto p-6 space-y-6">
 			{/* Header */}
 			<div className="space-y-6">
-				{/* Back Button */}
-				<div className="flex justify-start">
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => router.back()}
-						className="hidden md:flex"
-					>
-						<ArrowLeft className="h-4 w-4 mr-2" />
-						Go Back
-					</Button>
-				</div>
-
 				{/* Title and Add Button */}
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 					<div>
@@ -448,10 +435,24 @@ export default function FacilityWorkersPage() {
 						</h1>
 						<p className="text-gray-600 mt-1">{facility.name}</p>
 					</div>
-					<Button onClick={handleAddWorker} className="flex items-center gap-2">
-						<Plus className="h-4 w-4" />
-						Add Employee
-					</Button>
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => router.back()}
+							className="hidden md:flex"
+						>
+							<ArrowLeft className="h-4 w-4 mr-2" />
+							Go Back
+						</Button>
+						<Button
+							onClick={handleAddWorker}
+							className="flex items-center gap-2"
+						>
+							<Plus className="h-4 w-4" />
+							Add Employee
+						</Button>
+					</div>
 				</div>
 			</div>
 

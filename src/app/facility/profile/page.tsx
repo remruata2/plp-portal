@@ -1,11 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
-import BackToHome from "@/components/ui/back-to-home";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
 export default function FacilityProfilePage() {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 
 	// No need for loading state or API calls - use session data directly
 	if (status === "loading") {
@@ -33,19 +36,24 @@ export default function FacilityProfilePage() {
 		<div className="max-w-7xl mx-auto p-6">
 			{/* Page Header */}
 			<div className="mb-6 space-y-4">
-				<div className="flex justify-start">
-					<BackToHome
-						href="/facility/dashboard"
-						text="Back to Dashboard"
-						variant="outline"
-						size="sm"
-					/>
-				</div>
-				<div>
-					<h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-					<p className="text-gray-600 mt-2">
-						Manage your facility profile and settings
-					</p>
+				<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+					<div className="flex-1">
+						<h1 className="text-3xl font-bold text-gray-900">Profile</h1>
+						<p className="text-gray-600 mt-2">
+							Manage your facility profile and settings
+						</p>
+					</div>
+					<div className="flex justify-end">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => router.back()}
+							className="hidden md:flex"
+						>
+							<ArrowLeft className="h-4 w-4 mr-2" />
+							Go Back
+						</Button>
+					</div>
 				</div>
 			</div>
 
@@ -107,9 +115,7 @@ export default function FacilityProfilePage() {
 							<label className="text-sm font-medium text-gray-700">
 								Session Status
 							</label>
-							<p className="text-lg font-semibold text-gray-900">
-								{status}
-							</p>
+							<p className="text-lg font-semibold text-gray-900">{status}</p>
 						</div>
 					</div>
 				</CardContent>

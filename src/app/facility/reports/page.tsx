@@ -33,7 +33,8 @@ import {
 } from "lucide-react";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
 import { CalculationDetailsModal } from "@/components/calculation-details-modal";
-import BackToHome from "@/components/ui/back-to-home";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
 interface PerformanceIndicator {
 	id: number;
@@ -108,6 +109,7 @@ interface MonthlyReport {
 
 export default function FacilityReportsPage() {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [selectedYear, setSelectedYear] = useState<string | null>(null);
 	const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
@@ -301,14 +303,6 @@ export default function FacilityReportsPage() {
 		<div className="max-w-7xl mx-auto p-4 sm:p-6">
 			{/* Page Header */}
 			<div className="space-y-4 mb-6">
-				<div className="flex justify-start">
-					<BackToHome
-						href="/facility/dashboard"
-						text="Back to Dashboard"
-						variant="outline"
-						size="sm"
-					/>
-				</div>
 				<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
 					<div className="flex-1">
 						<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
@@ -328,61 +322,74 @@ export default function FacilityReportsPage() {
 							)}
 						</p>
 					</div>
-					<div className="flex items-center gap-2 sm:gap-4">
-						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-							<div className="flex items-center gap-2">
-								<Calendar className="h-5 w-5 text-gray-500" />
-								<span className="text-sm font-medium text-gray-700 hidden sm:block">
-									Select Period:
-								</span>
-							</div>
-							<div className="flex items-center gap-3">
-								<Select
-									value={selectedYear || undefined}
-									onValueChange={(year) => {
-										setSelectedYear(year);
-										setSelectedMonth(null); // Reset month when year changes
-									}}
-								>
-									<SelectTrigger className="w-24 sm:w-28 h-10 sm:h-11 text-sm sm:text-base">
-										<SelectValue placeholder="Year" />
-									</SelectTrigger>
-									<SelectContent>
-										{availableYears.map((year) => (
-											<SelectItem key={year} value={year}>
-												{year}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<Select
-									value={selectedMonth || undefined}
-									onValueChange={setSelectedMonth}
-									disabled={!selectedYear}
-								>
-									<SelectTrigger className="w-28 sm:w-32 h-10 sm:h-11 text-sm sm:text-base">
-										<SelectValue
-											placeholder={selectedYear ? "Month" : "Select year first"}
-										/>
-									</SelectTrigger>
-									<SelectContent>
-										{selectedYear ? (
-											getAvailableMonthsForYear(selectedYear).map((month) => (
-												<SelectItem key={month} value={month}>
-													{new Date(
-														`${selectedYear}-${month}-01`
-													).toLocaleDateString("en-US", {
-														month: "long",
-													})}
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => router.back()}
+							className="hidden md:flex"
+						>
+							<ArrowLeft className="h-4 w-4 mr-2" />
+							Go Back
+						</Button>
+						<div className="flex items-center gap-2 sm:gap-4">
+							<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+								<div className="flex items-center gap-2">
+									<Calendar className="h-5 w-5 text-gray-500" />
+									<span className="text-sm font-medium text-gray-700 hidden sm:block">
+										Select Period:
+									</span>
+								</div>
+								<div className="flex items-center gap-3">
+									<Select
+										value={selectedYear || undefined}
+										onValueChange={(year) => {
+											setSelectedYear(year);
+											setSelectedMonth(null); // Reset month when year changes
+										}}
+									>
+										<SelectTrigger className="w-24 sm:w-28 h-10 sm:h-11 text-sm sm:text-base">
+											<SelectValue placeholder="Year" />
+										</SelectTrigger>
+										<SelectContent>
+											{availableYears.map((year) => (
+												<SelectItem key={year} value={year}>
+													{year}
 												</SelectItem>
-											))
-										) : (
-											<SelectItem value="no-year" disabled>
-												Select year first
-											</SelectItem>
-										)}
-									</SelectContent>
-								</Select>
+											))}
+										</SelectContent>
+									</Select>
+									<Select
+										value={selectedMonth || undefined}
+										onValueChange={setSelectedMonth}
+										disabled={!selectedYear}
+									>
+										<SelectTrigger className="w-28 sm:w-32 h-10 sm:h-11 text-sm sm:text-base">
+											<SelectValue
+												placeholder={
+													selectedYear ? "Month" : "Select year first"
+												}
+											/>
+										</SelectTrigger>
+										<SelectContent>
+											{selectedYear ? (
+												getAvailableMonthsForYear(selectedYear).map((month) => (
+													<SelectItem key={month} value={month}>
+														{new Date(
+															`${selectedYear}-${month}-01`
+														).toLocaleDateString("en-US", {
+															month: "long",
+														})}
+													</SelectItem>
+												))
+											) : (
+												<SelectItem value="no-year" disabled>
+													Select year first
+												</SelectItem>
+											)}
+										</SelectContent>
+									</Select>
+								</div>
 							</div>
 						</div>
 					</div>

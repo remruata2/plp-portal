@@ -6,9 +6,16 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, FileText, Upload, Edit, Trash2, Info } from "lucide-react";
+import {
+	Loader2,
+	FileText,
+	Upload,
+	Edit,
+	Trash2,
+	Info,
+	ArrowLeft,
+} from "lucide-react";
 import { toast } from "sonner";
-import BackToHome from "@/components/ui/back-to-home";
 import EditSubmissionModal from "@/components/facility/EditSubmissionModal";
 
 interface Facility {
@@ -260,27 +267,33 @@ export default function FacilityHealthDataPage() {
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Header Section */}
 				<div className="space-y-4">
-					<BackToHome />
-
-					<div className="text-center sm:text-left">
-						<h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-							PLP Report Submission
-						</h1>
-						<p className="mt-2 text-gray-600">
-							Submit monthly PLP indicators for your facility.
-						</p>
-					</div>
-
-					{/* Action Buttons */}
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-						<Button
-							onClick={() => router.push("/facility/health-data/form")}
-							className="w-full bg-black hover:bg-gray-800 sm:w-auto"
-							size="lg"
-						>
-							<Upload className="mr-2 h-5 w-5" />
-							Submit Report
-						</Button>
+					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+						<div className="flex-1">
+							<h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+								PLP Report Submission
+							</h1>
+							<p className="mt-2 text-gray-600">
+								Submit monthly PLP indicators for your facility.
+							</p>
+						</div>
+						<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+							<Button
+								variant="outline"
+								onClick={() => router.back()}
+								className="hidden md:flex"
+							>
+								<ArrowLeft className="h-4 w-4 mr-2" />
+								Go Back
+							</Button>
+							<Button
+								onClick={() => router.push("/facility/health-data/form")}
+								className="w-full bg-black hover:bg-gray-800 sm:w-auto"
+								size="lg"
+							>
+								<Upload className="mr-2 h-5 w-5" />
+								Submit Report
+							</Button>
+						</div>
 					</div>
 				</div>
 
