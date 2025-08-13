@@ -58,7 +58,12 @@ export default function DynamicHealthDataForm({
 	onSubmissionSuccess,
 }: DynamicHealthDataFormProps) {
 	const { data: session, status } = useSession();
-	const { toast } = useToast();
+    const { toast } = useToast();
+    // Hide dev-only helpers in production builds
+    const isProduction =
+        process.env.NEXT_PUBLIC_APP_ENV === "production" ||
+        process.env.NODE_ENV === "production" ||
+        process.env.VERCEL_ENV === "production";
 	const [formData, setFormData] = useState<Record<string, any>>({});
 	const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
 	const [indicatorGroups, setIndicatorGroups] = useState<IndicatorGroup[]>([]);
@@ -1336,13 +1341,15 @@ export default function DynamicHealthDataForm({
 		<Card>
 			<CardHeader className="pb-4">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-					<CardTitle className="text-lg sm:text-xl">
+                    <CardTitle className="text-lg sm:text-xl">
 						{facilityType} PLP Report Form
 					</CardTitle>
-					<FillAllFieldsButton
-						onFill={handleFillAllFields}
-						disabled={submitting}
-					/>
+                    {!isProduction && (
+                        <FillAllFieldsButton
+                            onFill={handleFillAllFields}
+                            disabled={submitting}
+                        />
+                    )}
 				</div>
 			</CardHeader>
 			<CardContent className="p-4 sm:p-6">
