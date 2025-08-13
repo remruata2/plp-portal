@@ -332,7 +332,9 @@ export default function FacilityReportsPage() {
 						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
 							<div className="flex items-center gap-2">
 								<Calendar className="h-5 w-5 text-gray-500" />
-								<span className="text-sm font-medium text-gray-700 hidden sm:block">Select Period:</span>
+								<span className="text-sm font-medium text-gray-700 hidden sm:block">
+									Select Period:
+								</span>
 							</div>
 							<div className="flex items-center gap-3">
 								<Select
