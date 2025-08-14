@@ -667,14 +667,7 @@ export function validateWorkerSelection(
 		});
 	}
 
-	// Validate maximum workers
-	if (rules.maximumWorkers && selectedWorkers.length > rules.maximumWorkers) {
-		errors.push({
-			field: "workers",
-			message: `${facilityType} cannot have more than ${rules.maximumWorkers} workers`,
-			type: "worker_error",
-		});
-	}
+	// No maximum worker ceiling enforcement
 
 	// Validate mandatory worker types
 	if (rules.mandatoryWorkerTypes && availableWorkers.length > 0) {
