@@ -58,13 +58,12 @@ export default function DynamicHealthDataForm({
 	onSubmissionSuccess,
 }: DynamicHealthDataFormProps) {
 	const { data: session, status } = useSession();
-    const { toast } = useToast();
-    // Hide dev-only helpers in production builds
-    const isProduction =
-        process.env.NEXT_PUBLIC_APP_ENV === "production" ||
-        process.env.NODE_ENV === "production" ||
-        process.env.VERCEL_ENV === "production";
+	const { toast } = useToast();
 	const [formData, setFormData] = useState<Record<string, any>>({});
+	// UI-only Yes/No answers per indicator. Not stored in formData or submitted.
+	const [indicatorAnswers, setIndicatorAnswers] = useState<
+		Record<string, "yes" | "no" | null>
+	>({});
 	const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
 	const [indicatorGroups, setIndicatorGroups] = useState<IndicatorGroup[]>([]);
 	const [selectedWorkers, setSelectedWorkers] = useState<number[]>([]);
@@ -178,11 +177,10 @@ export default function DynamicHealthDataForm({
 					initialData[mapping.formFieldName] = "";
 				});
 
-				// Add Yes/No question fields for conditional indicators - using correct field names from source files
-				initialData.pulmonary_tb_patients = ""; // For CT001 - "Are there any patients with Pulmonary TB in your catchment area?"
-				initialData.total_tb_patients = ""; // For DC001 - "Are there any patients with any type of TB?"
-
 				setFormData(initialData);
+
+				// Reset UI-only answers
+				setIndicatorAnswers({});
 
 				console.log("=== Field mapping fetch completed ===");
 				setLoading(false);
@@ -600,7 +598,23 @@ export default function DynamicHealthDataForm({
 	// Full form validation
 	const validateFullForm = (): FormValidationResult => {
 		const result = validateForm(
-			formData,
+			// Filter out fields that belong to conditional indicators answered "no"
+			(() => {
+				const data: Record<string, any> = {};
+				Object.keys(formData).forEach((key) => {
+					// Map of indicator to its dependent field names
+					const indicatorForField: Record<string, string> = {
+						tb_contact_tracing_households: "CT001",
+						tb_differentiated_care_visits: "DC001",
+					};
+					const ind = indicatorForField[key];
+					if (ind && indicatorAnswers[ind] === "no") {
+						return; // Skip hidden field
+					}
+					data[key] = (formData as any)[key];
+				});
+				return data;
+			})(),
 			fieldMappings,
 			facilityType,
 			selectedWorkers,
@@ -819,19 +833,25 @@ export default function DynamicHealthDataForm({
 		);
 	};
 
-	const handleYesNoAnswer = (indicatorCode: string, answer: "yes" | "no") => {
-		if (indicatorCode === "CT001") {
-			// For TB contact tracing - use pulmonary_tb_patients field
-			setFormData((prev) => ({
-				...prev,
-				pulmonary_tb_patients: answer === "yes" ? "1" : "0",
-			}));
-		} else if (indicatorCode === "DC001") {
-			// For TB differentiated care - use total_tb_patients field
-			setFormData((prev) => ({
-				...prev,
-				total_tb_patients: answer === "yes" ? "1" : "0",
-			}));
+	const handleYesNoAnswer = (
+		indicatorCode: string,
+		answer: "yes" | "no" | null
+	) => {
+		// Store only in UI state
+		setIndicatorAnswers((prev) => ({ ...prev, [indicatorCode]: answer }));
+
+		// When "No" or user clicks Change Answer (null), clear dependent numeric fields so they won't validate/submit
+		if (answer === "no" || answer === null) {
+			setFormData((prev) => {
+				const next = { ...prev };
+				if (indicatorCode === "CT001") {
+					next.tb_contact_tracing_households = "";
+				}
+				if (indicatorCode === "DC001") {
+					next.tb_differentiated_care_visits = "";
+				}
+				return next;
+			});
 		}
 	};
 
@@ -1341,15 +1361,13 @@ export default function DynamicHealthDataForm({
 		<Card>
 			<CardHeader className="pb-4">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <CardTitle className="text-lg sm:text-xl">
+					<CardTitle className="text-lg sm:text-xl">
 						{facilityType} PLP Report Form
 					</CardTitle>
-                    {!isProduction && (
-                        <FillAllFieldsButton
-                            onFill={handleFillAllFields}
-                            disabled={submitting}
-                        />
-                    )}
+					<FillAllFieldsButton
+						onFill={handleFillAllFields}
+						disabled={submitting}
+					/>
 				</div>
 			</CardHeader>
 			<CardContent className="p-4 sm:p-6">
@@ -1483,43 +1501,7 @@ export default function DynamicHealthDataForm({
 								group.indicatorCode === "CT001" ||
 								group.indicatorCode === "DC001";
 
-							// Build fieldValues object for conditional checking
-							const fieldValues: { [key: string]: number } = {};
-
-							// Add only non-empty form data to fieldValues
-							Object.keys(formData).forEach((key) => {
-								const value = formData[key];
-								// Only add to fieldValues if the user has actually entered a value
-								if (value !== undefined && value !== "" && value !== null) {
-									const numericValue = parseFloat(value);
-									if (!isNaN(numericValue)) {
-										fieldValues[key] = numericValue;
-									}
-								}
-							});
-
-							// Add specific conditional fields only if they exist in formData
-							if (group.indicatorCode === "CT001") {
-								// For TB contact tracing, check pulmonary TB patients
-								// Field name: pulmonary_tb_patients (from source files)
-								if (
-									formData.pulmonary_tb_patients !== undefined &&
-									formData.pulmonary_tb_patients !== ""
-								) {
-									fieldValues.pulmonary_tb_patients_present =
-										parseFloat(formData.pulmonary_tb_patients) || 0;
-								}
-							} else if (group.indicatorCode === "DC001") {
-								// For TB differentiated care, check total TB patients
-								// Field name: total_tb_patients (from source files)
-								if (
-									formData.total_tb_patients !== undefined &&
-									formData.total_tb_patients !== ""
-								) {
-									fieldValues.tb_patients_present =
-										parseFloat(formData.total_tb_patients) || 0;
-								}
-							}
+							// No need to derive anything from formData for gating
 
 							return (
 								<div
@@ -1537,7 +1519,8 @@ export default function DynamicHealthDataForm({
 												target_formula: group.target_formula,
 												target_value: group.target_value,
 											}}
-											fieldValues={fieldValues}
+											// UI-only gating: pass external answer
+											answer={indicatorAnswers[group.indicatorCode] ?? null}
 											onConditionChange={(conditionMet) => {
 												// Handle condition change if needed
 												console.log(
@@ -1546,30 +1529,42 @@ export default function DynamicHealthDataForm({
 												);
 											}}
 											onYesNoChange={(answer) => {
-												// Handle Yes/No answer change
-												if (answer !== null) {
-													handleYesNoAnswer(group.indicatorCode, answer);
-												}
+												// Handle Yes/No answer change or reset (null)
+												handleYesNoAnswer(group.indicatorCode, answer);
 											}}
 										>
 											{/* Render fields inside conditional component - only shown when "Yes" is selected */}
 											<div className="grid grid-cols-1 gap-4 mt-3 sm:mt-4">
-												{group.fields.map((mapping, fieldIndex) => (
-													<div
-														key={mapping.databaseFieldId}
-														className="space-y-2"
-													>
-														<Label
-															htmlFor={mapping.formFieldName}
-															className="text-sm font-medium"
+												{group.fields
+													.filter((mapping) => {
+														const indicatorForField: Record<string, string> = {
+															tb_contact_tracing_households: "CT001",
+															tb_differentiated_care_visits: "DC001",
+														};
+														const ind =
+															indicatorForField[mapping.formFieldName];
+														return !(ind && indicatorAnswers[ind] === "no");
+													})
+													.map((mapping, fieldIndex) => (
+														<div
+															key={mapping.databaseFieldId}
+															className="space-y-2"
 														>
-															{groupIndex + 1}
-															{String.fromCharCode(97 + fieldIndex)}.{" "}
-															{mapping.description}
-														</Label>
-														{renderFieldInput(mapping, groupIndex, fieldIndex)}
-													</div>
-												))}
+															<Label
+																htmlFor={mapping.formFieldName}
+																className="text-sm font-medium"
+															>
+																{groupIndex + 1}
+																{String.fromCharCode(97 + fieldIndex)}.{" "}
+																{mapping.description}
+															</Label>
+															{renderFieldInput(
+																mapping,
+																groupIndex,
+																fieldIndex
+															)}
+														</div>
+													))}
 											</div>
 										</ConditionalIndicatorDisplay>
 									) : (
@@ -1586,22 +1581,36 @@ export default function DynamicHealthDataForm({
 
 											{/* Fields for this indicator */}
 											<div className="grid grid-cols-1 gap-4 mt-3 sm:mt-4">
-												{group.fields.map((mapping, fieldIndex) => (
-													<div
-														key={mapping.databaseFieldId}
-														className="space-y-2"
-													>
-														<Label
-															htmlFor={mapping.formFieldName}
-															className="text-sm font-medium"
+												{group.fields
+													.filter((mapping) => {
+														const indicatorForField: Record<string, string> = {
+															tb_contact_tracing_households: "CT001",
+															tb_differentiated_care_visits: "DC001",
+														};
+														const ind =
+															indicatorForField[mapping.formFieldName];
+														return !(ind && indicatorAnswers[ind] === "no");
+													})
+													.map((mapping, fieldIndex) => (
+														<div
+															key={mapping.databaseFieldId}
+															className="space-y-2"
 														>
-															{groupIndex + 1}
-															{String.fromCharCode(97 + fieldIndex)}.{" "}
-															{mapping.description}
-														</Label>
-														{renderFieldInput(mapping, groupIndex, fieldIndex)}
-													</div>
-												))}
+															<Label
+																htmlFor={mapping.formFieldName}
+																className="text-sm font-medium"
+															>
+																{groupIndex + 1}
+																{String.fromCharCode(97 + fieldIndex)}.{" "}
+																{mapping.description}
+															</Label>
+															{renderFieldInput(
+																mapping,
+																groupIndex,
+																fieldIndex
+															)}
+														</div>
+													))}
 											</div>
 										</>
 									)}
