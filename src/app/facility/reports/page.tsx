@@ -228,7 +228,7 @@ export default function FacilityReportsPage() {
 		try {
 			setLoading(true);
 			console.log("Loading report for month:", month);
-			const response = await fetch(`/api/facility/reports/${month}`);
+			const response = await fetch(`/api/facility/reports/service/${month}`);
 			console.log("Report response status:", response.status);
 
 			if (response.ok) {
@@ -477,14 +477,7 @@ export default function FacilityReportsPage() {
 														w.worker_type.toLowerCase()
 													)
 												).length
-										  } performance-based workers (${report.workers
-												.filter((w) =>
-													["hw", "asha", "colocated_sc_hw"].includes(
-														w.worker_type.toLowerCase()
-													)
-												)
-												.map((w) => w.worker_type.toUpperCase())
-												.join(", ")})`}
+										  } performance-based workers`}
 								</p>
 							</CardContent>
 						</Card>
@@ -501,7 +494,7 @@ export default function FacilityReportsPage() {
 									₹{report.totalRemuneration.toFixed(2)}
 								</div>
 								<p className="text-xs text-muted-foreground mt-1">
-									Incentive + Worker remuneration
+									Facility + Employee remuneration
 								</p>
 							</CardContent>
 						</Card>
@@ -611,9 +604,18 @@ export default function FacilityReportsPage() {
 													className="border-b hover:bg-gray-50"
 												>
 													<td className="py-2 sm:py-3 px-2 sm:px-4 text-center">
-														<span className="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 rounded-full border border-blue-200">
-															{indicatorNumber}
-														</span>
+														<div className="inline-flex flex-col items-center justify-center w-7 h-12 sm:w-8 sm:h-14 text-blue-700 bg-blue-50 rounded-md border border-blue-200">
+															<span className="text-xs sm:text-sm font-semibold leading-none">
+																{indicatorNumber}
+															</span>
+															<span className="mt-1 text-[10px] sm:text-xs leading-none">
+																{indicator.status === "achieved"
+																	? "A"
+																	: indicator.status === "partial"
+																	? "P"
+																	: "N"}
+															</span>
+														</div>
 													</td>
 													<td className="py-2 sm:py-3 px-2 sm:px-4 font-medium">
 														<div className="flex flex-col">

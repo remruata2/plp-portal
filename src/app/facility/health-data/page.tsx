@@ -264,7 +264,7 @@ export default function FacilityHealthDataPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-50 p-4">
-			<div className="mx-auto max-w-4xl space-y-6">
+			<div className="mx-auto max-w-7xl space-y-6">
 				{/* Header Section */}
 				<div className="space-y-4">
 					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
@@ -351,31 +351,23 @@ export default function FacilityHealthDataPage() {
 								</p>
 							</div>
 						) : (
-							<div className="space-y-4">
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 								{submissions.map((submission, index) => (
 									<div
 										key={index}
-										className="bg-white rounded-lg border border-gray-200 p-4 space-y-3"
+										className="bg-white rounded-lg border border-gray-200 p-5 flex flex-col min-h-[240px] shadow-sm"
 									>
 										{/* Submission Header */}
-										<div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-											<div className="flex-1 space-y-2">
-												<div className="flex items-center gap-2">
-													<h3 className="font-semibold text-gray-900">
-														{new Date(
-															submission.report_month + "-01"
-														).toLocaleDateString("en-US", {
-															year: "numeric",
-															month: "long",
-														})}
-													</h3>
-													<Badge
-														variant="secondary"
-														className="bg-green-100 text-green-800"
-													>
-														Data Submitted
-													</Badge>
-												</div>
+										<div className="flex items-start justify-between gap-3">
+											<div className="flex-1 space-y-1">
+												<h3 className="text-lg font-semibold text-gray-900">
+													{new Date(
+														submission.report_month + "-01"
+													).toLocaleDateString("en-US", {
+														year: "numeric",
+														month: "long",
+													})}
+												</h3>
 												<p className="text-sm text-gray-600">
 													Submitted on{" "}
 													{new Date(
@@ -383,6 +375,12 @@ export default function FacilityHealthDataPage() {
 													).toLocaleDateString()}
 												</p>
 											</div>
+											<Badge
+												variant="secondary"
+												className="bg-green-100 text-green-800"
+											>
+												Data Submitted
+											</Badge>
 										</div>
 
 										{/* Editability Status */}
@@ -396,7 +394,7 @@ export default function FacilityHealthDataPage() {
 										)}
 
 										{/* Action Buttons */}
-										<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+										<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mt-auto pt-3">
 											<div className="flex flex-col gap-2 sm:flex-row">
 												<Button
 													onClick={() =>

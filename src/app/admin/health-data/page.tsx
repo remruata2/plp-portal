@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 
 // Import dynamic form component
 import DynamicHealthDataForm from "@/components/forms/DynamicHealthDataForm";
-import EditSubmissionModal from "@/components/admin/EditSubmissionModal";
 
 interface Facility {
 	id: number;
@@ -28,12 +27,18 @@ interface HealthDataSubmission {
 	facilityType: string;
 	reportMonth: string;
 	submittedAt: string;
-	status: "submitted" | "pending" | "approved" | "rejected";
+	status: "pending" | "approved" | "rejected";
 	totalFootfall?: number;
 	wellnessSessions?: number;
 	tbScreened?: number;
 	patientSatisfactionScore?: number; // deprecated in UI
 	fieldCount?: number;
+	// New pre-aggregated fields from API for faster cards
+	performancePercentage?: number;
+	achievedCount?: number;
+	partialCount?: number;
+	achievedOrPartialCount?: number;
+	totalIndicators?: number;
 }
 
 export default function HealthDataPage() {
@@ -44,11 +49,7 @@ export default function HealthDataPage() {
 	const [submissions, setSubmissions] = useState<HealthDataSubmission[]>([]);
 	const [loadingSubmissions, setLoadingSubmissions] = useState(false);
 
-	// Edit modal state
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [selectedSubmissionId, setSelectedSubmissionId] = useState<
-		string | null
-	>(null);
+	// No modal; we'll route to the edit page directly
 
 	const router = useRouter();
 
@@ -111,8 +112,7 @@ export default function HealthDataPage() {
 	};
 
 	const handleEditSubmission = (submissionId: string) => {
-		setSelectedSubmissionId(submissionId);
-		setIsEditModalOpen(true);
+		router.push(`/admin/health-data/submissions/${submissionId}/edit`);
 	};
 
 	const handleViewSubmission = (submissionId: string) => {
@@ -171,51 +171,37 @@ export default function HealthDataPage() {
 		}
 	};
 
-	const handleSubmissionUpdated = async () => {
-		await loadSubmissions(); // Reload the submissions list
-	};
+	// No modal callbacks required
 
-	// Lazy small component to fetch performance percentage for a facility/month
-	const PerformanceStat = ({
-		facilityId,
-		reportMonth,
-	}: {
-		facilityId: number;
-		reportMonth: string;
-	}) => {
-		const [value, setValue] = useState<number | null>(null);
-		const [error, setError] = useState<boolean>(false);
-		useEffect(() => {
-			let cancelled = false;
-			async function fetchPerf() {
-				try {
-					const res = await fetch(
-						`/api/admin/performance-reports/${String(
-							facilityId
-						)}/${reportMonth}`
-					);
-					if (!res.ok) {
-						setError(true);
-						return;
-					}
-					const data = await res.json();
-					if (!cancelled) setValue(Number(data.performancePercentage || 0));
-				} catch {
-					if (!cancelled) setError(true);
-				}
-			}
-			if (facilityId && reportMonth) fetchPerf();
-			return () => {
-				cancelled = true;
-			};
-		}, [facilityId, reportMonth]);
-
-		if (error) return null;
-		if (value === null) return null;
+	// Lazy small components to fetch quick stats for a facility/month
+	const PerformanceStat = ({ value }: { value?: number }) => {
+		if (value === undefined || value === null) return null;
 		return (
 			<div>
-				<span className="text-gray-500">Performance:</span>
-				<p className="font-medium text-green-600">{value.toFixed(1)}%</p>
+				<span className="text-gray-600 text-xs sm:text-sm">Performance</span>
+				<p className="font-semibold text-green-600 text-sm sm:text-base">
+					{Number(value).toFixed(1)}%
+				</p>
+			</div>
+		);
+	};
+
+	// Show how many indicators were submitted out of total applicable
+	const IndicatorsStat = ({
+		achievedOrPartial,
+		total,
+	}: {
+		achievedOrPartial?: number;
+		total?: number;
+	}) => {
+		if (achievedOrPartial === undefined || total === undefined || total === 0)
+			return null;
+		return (
+			<div>
+				<span className="text-gray-600 text-xs sm:text-sm">Indicators</span>
+				<p className="font-semibold text-sm sm:text-base">
+					{achievedOrPartial}/{total}
+				</p>
 			</div>
 		);
 	};
@@ -272,14 +258,12 @@ export default function HealthDataPage() {
 
 	const getStatusBadge = (status: string) => {
 		const statusConfig = {
-			submitted: { variant: "default" as const, text: "Submitted" },
 			pending: { variant: "secondary" as const, text: "Pending" },
 			approved: { variant: "default" as const, text: "Approved" },
 			rejected: { variant: "destructive" as const, text: "Rejected" },
 		};
-		const config =
-			statusConfig[status as keyof typeof statusConfig] ||
-			statusConfig.submitted;
+		const config = statusConfig[status as keyof typeof statusConfig];
+		if (!config) return null;
 		return <Badge variant={config.variant}>{config.text}</Badge>;
 	};
 
@@ -315,7 +299,7 @@ export default function HealthDataPage() {
 	}
 
 	return (
-		<div className="max-w-4xl mx-auto p-6 space-y-6">
+		<div className="max-w-7xl mx-auto p-6 space-y-6">
 			<div className="flex items-center justify-between">
 				<div>
 					<h1 className="text-2xl font-bold text-gray-900">
@@ -380,41 +364,46 @@ export default function HealthDataPage() {
 							<span>Loading submissions...</span>
 						</div>
 					) : submissions.length > 0 ? (
-						<div className="space-y-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 							{submissions.map((submission) => (
 								<div
 									key={submission.id}
-									className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+									className="border rounded-lg p-4 sm:p-5 hover:bg-gray-50 transition-colors flex flex-col min-h-[200px] shadow-sm cursor-pointer"
+									onClick={() => handleViewSubmission(submission.id)}
 								>
-									<div className="flex items-center justify-between">
-										<div
-											className="flex-1 cursor-pointer"
-											onClick={() => handleViewSubmission(submission.id)}
-										>
-											<h3 className="font-medium text-gray-900">
-												{submission.facilityName} -{" "}
-												{new Date(
-													submission.reportMonth + "-01"
-												).toLocaleDateString("en-US", {
-													year: "numeric",
-													month: "long",
-												})}
+									<div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+										<div className="flex-1 min-w-0">
+											<h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+												{submission.facilityName}
 											</h3>
-											<p className="text-sm text-gray-500">
-												{submission.facilityType} • Submitted on{" "}
+											<div className="text-xs sm:text-sm text-gray-500 flex items-center gap-2">
+												<span>
+													{new Date(
+														submission.reportMonth + "-01"
+													).toLocaleDateString("en-US", {
+														year: "numeric",
+														month: "long",
+													})}
+												</span>
+												<span className="hidden sm:inline">•</span>
+												<Badge
+													variant="outline"
+													className="px-1.5 py-0.5 text-[10px] sm:text-xs"
+												>
+													{submission.facilityType}
+												</Badge>
+											</div>
+											<p className="text-[11px] sm:text-xs text-gray-400 mt-0.5">
+												Updated on{" "}
 												{new Date(submission.submittedAt).toLocaleDateString(
 													"en-US",
-													{
-														year: "numeric",
-														month: "short",
-														day: "numeric",
-													}
+													{ year: "numeric", month: "short", day: "numeric" }
 												)}
 											</p>
 										</div>
-										<div className="flex items-center gap-2">
+										<div className="flex items-center sm:items-start gap-2 sm:gap-3">
 											{getStatusBadge(submission.status)}
-											<div className="flex items-center gap-1">
+											<div className="flex items-center gap-1.5">
 												<Button
 													variant="outline"
 													size="sm"
@@ -422,9 +411,9 @@ export default function HealthDataPage() {
 														e.stopPropagation();
 														handleEditSubmission(submission.id);
 													}}
-													className="h-8 w-8 p-0"
+													className="h-7 w-7 sm:h-8 sm:w-8 p-0"
 												>
-													<Edit className="h-3 w-3" />
+													<Edit className="h-3.5 w-3.5" />
 												</Button>
 												<Button
 													variant="destructive"
@@ -433,49 +422,51 @@ export default function HealthDataPage() {
 														e.stopPropagation();
 														handleDeleteSubmission(submission.id);
 													}}
-													className="h-8 w-8 p-0"
+													className="h-7 w-7 sm:h-8 sm:w-8 p-0"
 												>
-													<Trash2 className="h-3 w-3" />
+													<Trash2 className="h-3.5 w-3.5" />
 												</Button>
 											</div>
 										</div>
 									</div>
-									<div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+									<div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-sm">
 										<div>
-											<span className="text-gray-500">Fields Submitted:</span>
-											<p className="font-medium">
-												{submission.fieldCount || 0}
-											</p>
+											<IndicatorsStat
+												achievedOrPartial={submission.achievedOrPartialCount}
+												total={submission.totalIndicators}
+											/>
 										</div>
 										{submission.totalFootfall && (
 											<div>
-												<span className="text-gray-500">Total Footfall:</span>
-												<p className="font-medium">
+												<span className="text-xs sm:text-sm text-gray-500">
+													Total Footfall
+												</span>
+												<p className="font-semibold text-sm sm:text-base">
 													{submission.totalFootfall.toLocaleString()}
 												</p>
 											</div>
 										)}
 										{submission.wellnessSessions && (
 											<div>
-												<span className="text-gray-500">
-													Wellness Sessions:
+												<span className="text-xs sm:text-sm text-gray-500">
+													Wellness Sessions
 												</span>
-												<p className="font-medium">
+												<p className="font-semibold text-sm sm:text-base">
 													{submission.wellnessSessions}
 												</p>
 											</div>
 										)}
 										{submission.tbScreened && (
 											<div>
-												<span className="text-gray-500">TB Screened:</span>
-												<p className="font-medium">{submission.tbScreened}</p>
+												<span className="text-xs sm:text-sm text-gray-500">
+													TB Screened
+												</span>
+												<p className="font-semibold text-sm sm:text-base">
+													{submission.tbScreened}
+												</p>
 											</div>
 										)}
-										{/* Replace ambiguous Satisfaction Score with actual performance percentage */}
-										<PerformanceStat
-											facilityId={submission.facilityId}
-											reportMonth={submission.reportMonth}
-										/>
+										<PerformanceStat value={submission.performancePercentage} />
 									</div>
 								</div>
 							))}
@@ -495,16 +486,7 @@ export default function HealthDataPage() {
 				</CardContent>
 			</Card>
 
-			{/* Edit Submission Modal */}
-			<EditSubmissionModal
-				isOpen={isEditModalOpen}
-				onClose={() => {
-					setIsEditModalOpen(false);
-					setSelectedSubmissionId(null);
-				}}
-				submissionId={selectedSubmissionId}
-				onSubmissionUpdated={handleSubmissionUpdated}
-			/>
+			{/* Modal removed; edit uses dedicated page */}
 		</div>
 	);
 }
