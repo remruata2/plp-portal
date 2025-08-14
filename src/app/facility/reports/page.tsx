@@ -150,21 +150,17 @@ export default function FacilityReportsPage() {
 	};
 
 	useEffect(() => {
-		console.log("Session status:", status);
-		console.log("Session data:", session);
+    
 
 		if (status === "loading") {
 			return; // Still loading session
 		}
 
-		if (session?.user?.facility_id) {
-			console.log("User has facility_id:", session.user.facility_id);
+        if (session?.user?.facility_id) {
 			loadAvailableMonths();
-		} else if (status === "unauthenticated") {
-			console.log("User is unauthenticated");
+        } else if (status === "unauthenticated") {
 			setLoading(false);
-		} else {
-			console.log("User authenticated but no facility_id");
+        } else {
 			setLoading(false);
 		}
 	}, [session, status]);
@@ -185,14 +181,12 @@ export default function FacilityReportsPage() {
 	}, [selectedYear, selectedMonth, session, status, availableMonths]);
 
 	const loadAvailableMonths = async () => {
-		try {
-			console.log("Loading available months...");
+        try {
 			const response = await fetch("/api/facility/reports/available-months");
-			console.log("Available months response status:", response.status);
+            
 
 			if (response.ok) {
-				const data = await response.json();
-				console.log("Available months data:", data);
+                const data = await response.json();
 				const months = data.months || [];
 				setAvailableMonths(months);
 
@@ -203,14 +197,10 @@ export default function FacilityReportsPage() {
 				// Set the latest available month and year as default
 				if (months.length > 0) {
 					const { month, year } = getLatestAvailableMonthAndYear(months);
-					console.log("Setting latest available month and year as default:", {
-						month,
-						year,
-					});
+                    
 					setSelectedYear(year);
 					setSelectedMonth(month);
-				} else {
-					console.log("No available months found");
+                } else {
 					setLoading(false);
 				}
 			} else {
@@ -225,15 +215,12 @@ export default function FacilityReportsPage() {
 	};
 
 	const loadReport = async (month: string) => {
-		try {
-			setLoading(true);
-			console.log("Loading report for month:", month);
-			const response = await fetch(`/api/facility/reports/service/${month}`);
-			console.log("Report response status:", response.status);
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/facility/reports/service/${month}`);
 
 			if (response.ok) {
-				const data = await response.json();
-				console.log("Report data:", data);
+                const data = await response.json();
 				setReport(data);
 			} else {
 				const errorData = await response.json();

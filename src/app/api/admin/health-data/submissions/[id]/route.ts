@@ -38,30 +38,29 @@ export async function GET(
 	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
-		console.log("GET request received for submission");
+    
 
 		const session = await getServerSession(authOptions);
 
 		if (!session?.user) {
-			console.log("No session found");
+      
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		if (session.user.role !== "admin") {
-			console.log("User is not admin:", session.user.role);
+      
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
 		const { id } = await params;
-		console.log("Received ID:", id);
+    
 
 		// Handle the case where the ID contains facility_id-report_month format
 		// The format is: facility_id-report_month (e.g., cmdxyc98q000x1fnnunjuj8nv-2025-08)
 		// We need to find the last occurrence of YYYY-MM pattern
 		const match = id.match(/^(.*)-(\d{4}-\d{2})$/);
 
-		if (!match) {
-			console.log("Invalid submission ID format - no YYYY-MM pattern found");
+    if (!match) {
 			return NextResponse.json(
 				{ error: "Invalid submission ID" },
 				{ status: 400 }
@@ -71,22 +70,17 @@ export async function GET(
 		const facilityId = match[1];
 		const reportMonth = match[2];
 
-		console.log("Parsed facilityId and reportMonth:", {
-			facilityId,
-			reportMonth,
-		});
+    
 
 		if (!facilityId || !reportMonth) {
-			console.log(
-				"Invalid submission ID format - missing facilityId or reportMonth"
-			);
+      
 			return NextResponse.json(
 				{ error: "Invalid submission ID" },
 				{ status: 400 }
 			);
 		}
 
-		console.log("Looking for submission:", { facilityId, reportMonth });
+    
 
 		// Get all field values for this facility and report month
 		const fieldValues = await prisma.fieldValue.findMany({
@@ -111,15 +105,7 @@ export async function GET(
 			],
 		});
 
-		console.log("Found field values:", fieldValues.length);
-		if (fieldValues.length > 0) {
-			console.log("First field value:", {
-				id: fieldValues[0].id,
-				facility_id: fieldValues[0].facility_id,
-				report_month: fieldValues[0].report_month,
-				field_code: fieldValues[0].field.code,
-			});
-		}
+    
 
 		if (fieldValues.length === 0) {
 			// Let's check if the facility exists
@@ -347,14 +333,14 @@ export async function DELETE(
 		});
 
 		if (!facility) {
-			console.log(`  ❌ Facility ${facilityId} not found`);
+      
 			return NextResponse.json(
 				{ error: "Facility not found" },
 				{ status: 404 }
 			);
 		}
 
-		console.log(`  🏥 Deleting submission for facility: ${facility.name}`);
+    
 
 		// Use a transaction to ensure all deletions succeed or fail together
 		const deleteResult = await prisma.$transaction(async (tx) => {
@@ -370,7 +356,7 @@ export async function DELETE(
 			});
 			totalDeletedCount += fieldValueResult.count;
 			breakdown.fieldValues = fieldValueResult.count;
-			console.log(`  📊 Deleted ${fieldValueResult.count} field values`);
+      
 
 			// 2. Delete remuneration calculations for this facility and report month
 			const remunerationCalculationResult =
@@ -382,9 +368,7 @@ export async function DELETE(
 				});
 			totalDeletedCount += remunerationCalculationResult.count;
 			breakdown.remunerationCalculations = remunerationCalculationResult.count;
-			console.log(
-				`  💰 Deleted ${remunerationCalculationResult.count} remuneration calculations`
-			);
+      
 
 			// 3. Delete worker remunerations for this facility and report month
 			const workerRemunerationResult = await tx.workerRemuneration.deleteMany({
@@ -395,9 +379,7 @@ export async function DELETE(
 			});
 			totalDeletedCount += workerRemunerationResult.count;
 			breakdown.workerRemunerations = workerRemunerationResult.count;
-			console.log(
-				`  👥 Deleted ${workerRemunerationResult.count} worker remunerations`
-			);
+      
 
 			// 4. Delete facility remuneration records for this facility and report month
 			const facilityRemunerationResult =
@@ -409,9 +391,7 @@ export async function DELETE(
 				});
 			totalDeletedCount += facilityRemunerationResult.count;
 			breakdown.facilityRemunerationRecords = facilityRemunerationResult.count;
-			console.log(
-				`  🏥 Deleted ${facilityRemunerationResult.count} facility remuneration records`
-			);
+      
 
 			// 5. Delete facility targets for this facility and report month
 			const facilityTargetResult = await tx.facilityTarget.deleteMany({
@@ -422,9 +402,7 @@ export async function DELETE(
 			});
 			totalDeletedCount += facilityTargetResult.count;
 			breakdown.facilityTargets = facilityTargetResult.count;
-			console.log(
-				`  🎯 Deleted ${facilityTargetResult.count} facility targets`
-			);
+      
 
 			// 6. Try to delete from additional tables that might exist in enhanced schemas
 			// These are wrapped in try-catch blocks in case the tables don't exist in the current database
@@ -433,16 +411,14 @@ export async function DELETE(
 			// For now, we'll skip these enhanced schema tables to ensure stable deletion
 			// The core tables (field_value, remuneration_calculation, etc.) are sufficient for most use cases
 
-			console.log(
-				`  ℹ️ Enhanced schema tables (monthly_health_data, population_data, performance_calculation) skipped for stability`
-			);
+      
 			breakdown.monthlyHealthData = 0;
 			breakdown.populationData = 0;
 			breakdown.performanceCalculations = 0;
 
 			// Note: Post-deletion verification was removed to prevent transaction issues
 			// The transaction itself ensures atomicity - if any deletion fails, all changes are rolled back
-			console.log(`  ✅ All deletion operations completed successfully`);
+      
 
 			return {
 				totalDeletedCount,
@@ -451,22 +427,14 @@ export async function DELETE(
 		});
 
 		if (deleteResult.totalDeletedCount === 0) {
-			console.log(
-				`  ❌ No records found to delete for facility ${facilityId}, month ${reportMonth}`
-			);
+      
 			return NextResponse.json(
 				{ error: "Submission not found" },
 				{ status: 404 }
 			);
 		}
 
-		console.log(
-			`  ✅ Successfully deleted ${deleteResult.totalDeletedCount} total records`
-		);
-		console.log(`  📋 Breakdown:`, deleteResult.breakdown);
-		console.log(
-			`  🎯 Deletion completed for ${facility.name} - ${reportMonth}`
-		);
+    
 
 		return NextResponse.json({
 			message: "Submission and all associated records deleted successfully",

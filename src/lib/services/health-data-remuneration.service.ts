@@ -27,9 +27,6 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
-			console.log(
-				`🚀 Processing remuneration for facility ${facilityId}, month ${reportMonth}`
-			);
 
 			// Get facility information
 			const facility = await tx.facility.findUnique({
@@ -44,9 +41,7 @@ export class HealthDataRemunerationService {
 				throw new Error(`Facility not found: ${facilityId}`);
 			}
 
-			console.log(
-				`📍 Processing facility: ${facility.name} (${facility.facility_type.name})`
-			);
+
 
 			// Get indicators for this facility type
 			const indicators = await tx.indicator.findMany({
@@ -71,9 +66,7 @@ export class HealthDataRemunerationService {
 				orderBy: { code: "asc" },
 			});
 
-			console.log(
-				`📊 Found ${indicators.length} indicators for facility type ${facility.facility_type.name}`
-			);
+
 
 			// Get field values for this facility and month - EXACT SAME AS PERFORMANCE REPORT
 			const dbFieldValues = await tx.fieldValue.findMany({
@@ -98,9 +91,7 @@ export class HealthDataRemunerationService {
 			for (const indicator of indicators) {
 				const remuneration = indicator.remunerations[0];
 				if (!remuneration) {
-					console.log(
-						`⚠️ Skipping indicator ${indicator.code} - no remuneration configuration found`
-					);
+
 					continue;
 				}
 
@@ -111,26 +102,18 @@ export class HealthDataRemunerationService {
 				if (indicator.code === "ES001") {
 					// ES001 is a Yes/No field - let's first check what value we actually get
 					const rawValue = fieldValueMap.get(indicator.numerator_field_id);
-					console.log(
-						`🔍 Debug ES001: Raw value from fieldValueMap = ${rawValue} (type: ${typeof rawValue})`
-					);
+
 
 					// ES001 is a Yes/No field - form uses "1" for Yes, "0" for No
 					if (rawValue === "1" || rawValue === 1 || rawValue === true) {
 						actualValue = 1; // "1" = Yes = achieved
-						console.log(
-							`🎯 Boolean indicator ${indicator.code}: Value is "1"/Yes, treating as achieved (100%)`
-						);
+
 					} else if (rawValue === "0" || rawValue === 0 || rawValue === false) {
 						actualValue = 0; // "0" = No = not achieved
-						console.log(
-							`🎯 Boolean indicator ${indicator.code}: Value is "0"/No, treating as not achieved (0%)`
-						);
+
 					} else {
 						actualValue = 0; // Default to not achieved for any other value
-						console.log(
-							`🎯 Boolean indicator ${indicator.code}: Unexpected value "${rawValue}", treating as not achieved (0%)`
-						);
+
 					}
 				}
 
@@ -142,9 +125,7 @@ export class HealthDataRemunerationService {
 				// Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
 				if (indicator.code === "PS001") {
 					denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
-					console.log(
-						`🎯 PS001: Using fixed denominator value of 5 for satisfaction scale`
-					);
+
 				}
 				// For binary indicators, use target value as denominator when missing
 				else if (denominatorValue === undefined || denominatorValue === null) {
@@ -167,28 +148,20 @@ export class HealthDataRemunerationService {
 								A_HWC: 4,
 							};
 							denominatorValue = clinicTargets[facilityTypeName] || 4;
-							console.log(
-								`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`
-							);
+
 						} else if (indicator.code === "JM001") {
 							// JAS Meeting - always 1
 							denominatorValue = 1;
-							console.log(
-								`🎯 Binary indicator ${indicator.code}: Using target value 1 as denominator`
-							);
+
 						} else if (indicator.code === "RS001") {
 							// RI sessions held - use RI sessions planned as denominator (same as performance report)
 							if (indicator.denominator_field_id) {
 								denominatorValue =
 									fieldValueMap.get(indicator.denominator_field_id) || 1;
-								console.log(
-									`🎯 RI sessions indicator ${indicator.code}: Using denominator field value (${denominatorValue}) as denominator`
-								);
+
 							} else {
 								denominatorValue = 1;
-								console.log(
-									`⚠️ No denominator field configured for ${indicator.code}, using 1 as denominator`
-								);
+
 							}
 						} else if (indicator.code === "DI001") {
 							// DVDMS Issues - facility-specific targets
@@ -200,15 +173,11 @@ export class HealthDataRemunerationService {
 								A_HWC: 100,
 							};
 							denominatorValue = dvdmsTargets[facilityTypeName] || 50;
-							console.log(
-								`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`
-							);
+
 						} else {
 							// Other binary indicators default to 1
 							denominatorValue = 1;
-							console.log(
-								`🎯 Binary indicator ${indicator.code}: Using default target value 1 as denominator`
-							);
+
 						}
 					} else {
 						// For non-binary indicators, use facility-type based population defaults
@@ -227,9 +196,7 @@ export class HealthDataRemunerationService {
 						denominatorValue =
 							defaultPopulationValues[facilityTypeName] || 5000;
 
-						console.log(
-							`⚠️ Missing denominator value for non-binary indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`
-						);
+
 					}
 				}
 
@@ -353,10 +320,7 @@ export class HealthDataRemunerationService {
 								rangeData = { min: parsedRange.min, max: parsedRange.max };
 							}
 						} catch (error) {
-							console.warn(
-								`Error parsing JSON range from target_value "${targetValueStr}":`,
-								error
-							);
+							// ignore JSON parse errors
 						}
 					}
 					// Try parsing string range like "3-5"
@@ -449,57 +413,26 @@ export class HealthDataRemunerationService {
 					rangeData?.min &&
 					rangeData?.max
 				) {
-					console.log(
-						`🔍 Debug ${
-							indicator.code
-						}: Range target detected - achievementPercentage: ${achievementPercentage.toFixed(
-							2
-						)}%, rangeData:`,
-						rangeData
-					);
+
 
 					// For percentage range targets (e.g., TF001_SC: 3-5%), check if actual percentage is within or above range
 					// Calculate actual percentage from the raw values (not the achievement percentage which is relative to max)
 					const actualPercentage = (actualValue / denominatorValue) * 100;
-					console.log(
-						`🔍 Debug ${
-							indicator.code
-						}: Actual percentage = (${actualValue}/${denominatorValue}) * 100 = ${actualPercentage.toFixed(
-							2
-						)}%`
-					);
+
 
 					if (actualPercentage >= rangeData.min) {
 						// If actual percentage meets the minimum target, store 100% (achieved)
 						displayPercentage = 100;
-						console.log(
-							`🎯 Range target ${
-								indicator.code
-							}: Actual ${actualPercentage.toFixed(2)}% >= min ${
-								rangeData.min
-							}%, storing 100% (achieved)`
-						);
+
 					} else {
 						// If below minimum target, store the actual achievement percentage relative to minimum
 						displayPercentage = (actualPercentage / rangeData.min) * 100;
-						console.log(
-							`🎯 Range target ${
-								indicator.code
-							}: Actual ${actualPercentage.toFixed(2)}% < min ${
-								rangeData.min
-							}%, storing ${displayPercentage.toFixed(2)}% (relative to min)`
-						);
+
 					}
 				} else {
 					// For other indicators, cap at 100% to match performance report display
 					displayPercentage = Math.min(achievementPercentage, 100);
-					console.log(
-						`🎯 Non-range indicator ${
-							indicator.code
-						}: Capping at 100% - ${achievementPercentage.toFixed(
-							2
-						)}% → ${displayPercentage.toFixed(2)}%`
-					);
+
 				}
 
 				// Convert actualValue to number for database storage (boolean -> number conversion)
@@ -514,16 +447,7 @@ export class HealthDataRemunerationService {
 
 				// Store in FacilityRemunerationRecord
 				try {
-					console.log(
-						`💾 Storing FacilityRemunerationRecord for indicator ${indicator.code}:`
-					);
-					console.log(`   - Facility ID: ${facilityId}`);
-					console.log(`   - Indicator ID: ${indicator.id}`);
-					console.log(`   - Report Month: ${reportMonth}`);
-					console.log(`   - Actual Value: ${actualValueForDB}`);
-					console.log(`   - Target Value: ${targetValue}`);
-					console.log(`   - Percentage: ${displayPercentage}%`);
-					console.log(`   - Incentive Amount: ₹${incentiveAmount}`);
+
 
 					const record = await tx.facilityRemunerationRecord.upsert({
 						where: {
@@ -579,28 +503,17 @@ export class HealthDataRemunerationService {
 				}
 			}
 
-			console.log(
-				`✅ Stored ${indicatorRecords.length} indicator performance records`
-			);
+
 
 			// Use the sum of individual indicator incentives as facility remuneration
 			// (totalIncentive was calculated by summing all indicator incentives above)
 			let facilityRemuneration = totalIncentive;
 
-			console.log(
-				`💰 Facility remuneration (sum of indicator incentives): ₹${facilityRemuneration.toFixed(
-					2
-				)}`
-			);
+
 
 			// Calculate overall performance percentage for worker incentives
 			// Cap individual indicator percentages at 100% for overall calculation (matches performance report)
-			console.log(
-				`🔍 DEBUG SERVICE: Calculating overall performance percentage:`
-			);
-			console.log(
-				`🔍 DEBUG SERVICE: Total indicators in calculation: ${indicatorRecords.length}`
-			);
+
 
 			// Exclude TB-related indicators (CT001/DC001) from performance when total TB is zero
 			const totalTbFieldPerf = dbFieldValues.find(
@@ -624,13 +537,7 @@ export class HealthDataRemunerationService {
 			indicatorsForPerformance.forEach((record: any, index: number) => {
 				const originalPercentage = record.percentage_achieved || 0;
 				const cappedPercentage = Math.min(originalPercentage, 100);
-				console.log(
-					`🔍 DEBUG SERVICE: ${index + 1}. ${
-						record.indicator_code
-					}: ${originalPercentage.toFixed(2)}% → ${cappedPercentage.toFixed(
-						2
-					)}% (capped)`
-				);
+
 				totalPercentage += cappedPercentage;
 			});
 			const performancePercentage =
@@ -638,24 +545,7 @@ export class HealthDataRemunerationService {
 					? totalPercentage / indicatorsForPerformance.length
 					: 0;
 
-			console.log(
-				`🔍 DEBUG SERVICE: Total percentage sum: ${totalPercentage.toFixed(2)}%`
-			);
-			console.log(
-				`🔍 DEBUG SERVICE: Number of indicators: ${indicatorRecords.length}`
-			);
-			console.log(
-				`🔍 DEBUG SERVICE: Final performance percentage: ${performancePercentage.toFixed(
-					2
-				)}% (${totalPercentage.toFixed(2)} / ${indicatorRecords.length})`
-			);
-			console.log(
-				`🔍 DEBUG SERVICE: Manual verification: ${totalPercentage.toFixed(
-					2
-				)} ÷ ${indicatorRecords.length} = ${(
-					totalPercentage / indicatorRecords.length
-				).toFixed(2)}%`
-			);
+
 
 			// Get health workers for this facility
 			const healthWorkers = await tx.healthWorker.findMany({
@@ -682,17 +572,7 @@ export class HealthDataRemunerationService {
 					totalWorkerRemuneration += workerIncentive;
 
 					// Store in WorkerRemuneration table
-					console.log(
-						`💾 Storing worker remuneration for worker ${worker.id}:`,
-						{
-							worker_type: worker.worker_type,
-							worker_role: (worker.worker_type || "UNKNOWN")
-								.substring(0, 50)
-								.toUpperCase(),
-							facility_id: facilityId,
-							report_month: reportMonth.substring(0, 7), // Truncate to 7 chars (VarChar(7) in schema)
-						}
-					);
+
 
 					const workerRecord = await tx.workerRemuneration.upsert({
 						where: {
@@ -731,9 +611,7 @@ export class HealthDataRemunerationService {
 				}
 			}
 
-			console.log(
-				`✅ Stored ${workerRecords.length} worker remuneration records`
-			);
+
 
 			// Store remuneration calculation summary
 			const remunerationCalculation = await tx.remunerationCalculation.upsert({
@@ -773,21 +651,7 @@ export class HealthDataRemunerationService {
 				},
 			});
 
-			console.log(`✅ Stored remuneration calculation summary`);
-			console.log(
-				`📊 Performance: ${remunerationCalculation.performance_percentage}%`
-			);
-			console.log(
-				`💰 Facility Remuneration: ₹${facilityRemuneration.toFixed(2)}`
-			);
-			console.log(
-				`💰 Worker Remuneration: ₹${totalWorkerRemuneration.toFixed(2)}`
-			);
-			console.log(
-				`💰 Total Remuneration: ₹${remunerationCalculation.total_remuneration.toFixed(
-					2
-				)}`
-			);
+
 
 			const healthWorkersCount = healthWorkers.filter(
 				(w: any) => w.worker_type === "hw"
