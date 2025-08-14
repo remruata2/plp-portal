@@ -197,6 +197,7 @@ export default function CreateUserForm() {
 										onChange={handleInputChange}
 										required
 										className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+									className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>
 							</div>
@@ -216,7 +217,7 @@ export default function CreateUserForm() {
 										value={formData.password}
 										onChange={handleInputChange}
 										required
-										className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+								className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>
 							</div>
@@ -234,7 +235,7 @@ export default function CreateUserForm() {
 										name="role"
 										value={formData.role}
 										onChange={handleInputChange}
-										className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+									className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 									>
 										<option value="admin">Admin</option>
 										<option value="facility">Facility</option>
@@ -257,7 +258,7 @@ export default function CreateUserForm() {
 												name="district_id"
 												value={formData.district_id}
 												onChange={handleInputChange}
-												className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+										className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 											>
 												<option value="">Select district</option>
 												{districts.map((d) => (
@@ -282,7 +283,7 @@ export default function CreateUserForm() {
 												name="facility_type_filter_id"
 												value={formData.facility_type_filter_id}
 												onChange={handleInputChange}
-												className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+										className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 											>
 												<option value="">All types</option>
 												{facilityTypes.map((t) => (
@@ -307,7 +308,7 @@ export default function CreateUserForm() {
 												name="facility_id"
 												value={formData.facility_id}
 												onChange={handleInputChange}
-												className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+										className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 											>
 												<option value="">Select facility</option>
 												{facilities.map((f) => (

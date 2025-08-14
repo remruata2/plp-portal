@@ -199,7 +199,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 										value={formData.username}
 										onChange={handleInputChange}
 										required
-										className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+								className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>
 							</div>
@@ -218,7 +218,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 										id="password"
 										value={formData.password}
 										onChange={handleInputChange}
-										className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+								className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>
 							</div>
@@ -236,7 +236,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 										name="role"
 										value={formData.role}
 										onChange={handleInputChange}
-										className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+								className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 									>
 										<option value={UserRole.facility}>Facility</option>
 										<option value={UserRole.admin}>Admin</option>
@@ -259,7 +259,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 												name="district_id"
 												value={formData.district_id}
 												onChange={handleInputChange}
-												className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+									className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 											>
 												<option value="">Select district</option>
 												{districts.map((d) => (
@@ -284,7 +284,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 												name="facility_type_filter_id"
 												value={formData.facility_type_filter_id}
 												onChange={handleInputChange}
-												className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+									className="block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 											>
 												<option value="">All types</option>
 												{facilityTypes.map((t) => (

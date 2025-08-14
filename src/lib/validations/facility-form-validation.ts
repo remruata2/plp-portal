@@ -113,18 +113,6 @@ export const FACILITY_VALIDATION_RULES: Record<
 		},
 		anc_footfall: {
 			required: true,
-			customValidator: (value, formData) => {
-				const ancFootfall = Number(value);
-				const ancDue = Number(formData.anc_due_list || 0);
-				if (ancDue > 0 && ancFootfall > ancDue) {
-					return {
-						field: "anc_footfall",
-						message: "ANC footfall cannot exceed ANC due list",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 		anc_due_list: {
 			required: true,
