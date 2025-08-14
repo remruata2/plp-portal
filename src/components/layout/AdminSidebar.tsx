@@ -16,9 +16,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 	const [expandedSections, setExpandedSections] = useState<{
 		[key: string]: boolean;
 	}>({
-		indicators:
-			pathname.startsWith("/admin/indicators") ||
-			pathname.startsWith("/admin/fields"),
+		indicators: pathname.startsWith("/admin/indicators"),
 	});
 
 	const baseLinkClasses =
@@ -148,6 +146,32 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 						/>
 					</svg>
 					Field Mappings
+				</Link>
+
+				{/* Fields Management (top-level) */}
+				<Link
+					href="/admin/fields"
+					onClick={() => setSidebarOpen && setSidebarOpen(false)}
+					className={`${baseLinkClasses} ${
+						pathname.startsWith("/admin/fields")
+							? activeLinkClasses
+							: inactiveLinkClasses
+					}`}
+				>
+					<svg
+						className="mr-3 h-5 w-5 text-gray-500"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M12 6v12m6-6H6"
+						/>
+					</svg>
+					Fields
 				</Link>
 
 				{session?.user.role === UserRole.admin && (
@@ -354,8 +378,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 							<button
 								onClick={() => toggleSection("indicators")}
 								className={`${baseLinkClasses} w-full justify-between ${
-									pathname.startsWith("/admin/indicators") ||
-									pathname.startsWith("/admin/fields")
+									pathname.startsWith("/admin/indicators")
 										? activeLinkClasses
 										: inactiveLinkClasses
 								}`}
