@@ -38,29 +38,24 @@ export async function GET(
 	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
-    
-
 		const session = await getServerSession(authOptions);
 
 		if (!session?.user) {
-      
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		if (session.user.role !== "admin") {
-      
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
 		const { id } = await params;
-    
 
 		// Handle the case where the ID contains facility_id-report_month format
 		// The format is: facility_id-report_month (e.g., cmdxyc98q000x1fnnunjuj8nv-2025-08)
 		// We need to find the last occurrence of YYYY-MM pattern
 		const match = id.match(/^(.*)-(\d{4}-\d{2})$/);
 
-    if (!match) {
+		if (!match) {
 			return NextResponse.json(
 				{ error: "Invalid submission ID" },
 				{ status: 400 }
@@ -70,17 +65,12 @@ export async function GET(
 		const facilityId = match[1];
 		const reportMonth = match[2];
 
-    
-
 		if (!facilityId || !reportMonth) {
-      
 			return NextResponse.json(
 				{ error: "Invalid submission ID" },
 				{ status: 400 }
 			);
 		}
-
-    
 
 		// Get all field values for this facility and report month
 		const fieldValues = await prisma.fieldValue.findMany({
@@ -104,8 +94,6 @@ export async function GET(
 				{ field: { name: "asc" } },
 			],
 		});
-
-    
 
 		if (fieldValues.length === 0) {
 			// Let's check if the facility exists
@@ -333,14 +321,11 @@ export async function DELETE(
 		});
 
 		if (!facility) {
-      
 			return NextResponse.json(
 				{ error: "Facility not found" },
 				{ status: 404 }
 			);
 		}
-
-    
 
 		// Use a transaction to ensure all deletions succeed or fail together
 		const deleteResult = await prisma.$transaction(async (tx) => {
@@ -356,7 +341,6 @@ export async function DELETE(
 			});
 			totalDeletedCount += fieldValueResult.count;
 			breakdown.fieldValues = fieldValueResult.count;
-      
 
 			// 2. Delete remuneration calculations for this facility and report month
 			const remunerationCalculationResult =
@@ -368,7 +352,6 @@ export async function DELETE(
 				});
 			totalDeletedCount += remunerationCalculationResult.count;
 			breakdown.remunerationCalculations = remunerationCalculationResult.count;
-      
 
 			// 3. Delete worker remunerations for this facility and report month
 			const workerRemunerationResult = await tx.workerRemuneration.deleteMany({
@@ -379,7 +362,6 @@ export async function DELETE(
 			});
 			totalDeletedCount += workerRemunerationResult.count;
 			breakdown.workerRemunerations = workerRemunerationResult.count;
-      
 
 			// 4. Delete facility remuneration records for this facility and report month
 			const facilityRemunerationResult =
@@ -391,7 +373,6 @@ export async function DELETE(
 				});
 			totalDeletedCount += facilityRemunerationResult.count;
 			breakdown.facilityRemunerationRecords = facilityRemunerationResult.count;
-      
 
 			// 5. Delete facility targets for this facility and report month
 			const facilityTargetResult = await tx.facilityTarget.deleteMany({
@@ -402,7 +383,6 @@ export async function DELETE(
 			});
 			totalDeletedCount += facilityTargetResult.count;
 			breakdown.facilityTargets = facilityTargetResult.count;
-      
 
 			// 6. Try to delete from additional tables that might exist in enhanced schemas
 			// These are wrapped in try-catch blocks in case the tables don't exist in the current database
@@ -411,14 +391,12 @@ export async function DELETE(
 			// For now, we'll skip these enhanced schema tables to ensure stable deletion
 			// The core tables (field_value, remuneration_calculation, etc.) are sufficient for most use cases
 
-      
 			breakdown.monthlyHealthData = 0;
 			breakdown.populationData = 0;
 			breakdown.performanceCalculations = 0;
 
 			// Note: Post-deletion verification was removed to prevent transaction issues
 			// The transaction itself ensures atomicity - if any deletion fails, all changes are rolled back
-      
 
 			return {
 				totalDeletedCount,
@@ -427,14 +405,11 @@ export async function DELETE(
 		});
 
 		if (deleteResult.totalDeletedCount === 0) {
-      
 			return NextResponse.json(
 				{ error: "Submission not found" },
 				{ status: 404 }
 			);
 		}
-
-    
 
 		return NextResponse.json({
 			message: "Submission and all associated records deleted successfully",

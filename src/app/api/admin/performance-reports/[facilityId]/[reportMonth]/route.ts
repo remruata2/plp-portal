@@ -52,10 +52,7 @@ export async function GET(
 				prisma
 			);
 		} catch (e) {
-			console.warn(
-				"HealthDataRemunerationService returned an error (continuing):",
-				e
-			);
+			// ignore and continue
 		}
 
 		// Get performance data from FacilityRemunerationRecord for this facility/month
@@ -153,7 +150,7 @@ export async function GET(
 					targetDisplay = rawTarget;
 				}
 			}
-			// Fallbacks when description and parsing are missing
+
 			if (!targetDisplay || targetDisplay === "N/A") {
 				if (typeof indicatorAny?.target_value === "string") {
 					targetDisplay = indicatorAny.target_value;
@@ -161,7 +158,6 @@ export async function GET(
 					perf.target_value !== null &&
 					perf.target_value !== undefined
 				) {
-					// If we only have a numeric target from record, render smartly based on type
 					if (targetType === "PERCENTAGE_RANGE" || targetType === "BINARY") {
 						targetDisplay = `${Number(perf.target_value)}%`;
 					} else {
@@ -197,24 +193,24 @@ export async function GET(
 				formula_config: (perf.indicator as any)?.formula_config || undefined,
 				numerator_field: perf.indicator?.numerator_field
 					? {
-							id: perf.indicator.numerator_field.id,
-							code: perf.indicator.numerator_field.code,
-							name: perf.indicator.numerator_field.name,
-					  }
+						id: perf.indicator.numerator_field.id,
+						code: perf.indicator.numerator_field.code,
+						name: perf.indicator.numerator_field.name,
+					}
 					: null,
 				denominator_field: perf.indicator?.denominator_field
 					? {
-							id: perf.indicator.denominator_field.id,
-							code: perf.indicator.denominator_field.code,
-							name: perf.indicator.denominator_field.name,
-					  }
+						id: perf.indicator.denominator_field.id,
+						code: perf.indicator.denominator_field.code,
+						name: perf.indicator.denominator_field.name,
+					}
 					: null,
 				target_field: perf.indicator?.target_field
 					? {
-							id: perf.indicator.target_field.id,
-							code: perf.indicator.target_field.code,
-							name: perf.indicator.target_field.name,
-					  }
+						id: perf.indicator.target_field.id,
+						code: perf.indicator.target_field.code,
+						name: perf.indicator.target_field.name,
+					}
 					: null,
 			};
 		});

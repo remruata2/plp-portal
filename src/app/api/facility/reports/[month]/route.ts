@@ -41,10 +41,6 @@ export async function GET(
 			);
 		}
 
-		console.log(
-			`🔄 Calculating remuneration for facility ${facilityId}, month ${month}`
-		);
-
 		// Get all indicators for this facility type
 		const indicators = await prisma.indicator.findMany({
 			where: {
@@ -103,9 +99,6 @@ export async function GET(
 
 			// Skip indicators without remuneration configuration for now
 			if (!remuneration) {
-				console.log(
-					`Skipping indicator ${indicator.code} - no remuneration configured`
-				);
 				continue;
 			}
 
@@ -115,37 +108,9 @@ export async function GET(
 			// Get denominator value - use proper population defaults instead of fallback to 1
 			let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
 
-			// Debug: Log field value lookup for CB001
-			if (indicator.code === "CB001") {
-				console.log(`🔍 CB001 Debug:`);
-				console.log(`  Numerator Field ID: ${indicator.numerator_field_id}`);
-				console.log(
-					`  Denominator Field ID: ${indicator.denominator_field_id}`
-				);
-				console.log(
-					`  Field Value Map Keys: ${Array.from(fieldValueMap.keys()).join(
-						", "
-					)}`
-				);
-				console.log(`  Numerator Value: ${actualValue}`);
-				console.log(`  Denominator Value: ${denominatorValue}`);
-				console.log(`  Field Values Count: ${fieldValues.length}`);
-				fieldValues.forEach((fv) => {
-					if (fv.field_id === indicator.denominator_field_id) {
-						console.log(
-							`  ✅ Found denominator field value: ${fv.field_id} = ${
-								fv.string_value || fv.numeric_value || fv.boolean_value
-							}`
-						);
-					}
-				});
-			}
 			// Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
 			if (indicator.code === "PS001") {
 				denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
-				console.log(
-					`🎯 PS001: Using fixed denominator value of 5 for satisfaction scale`
-				);
 			}
 			// For binary indicators, use target value as denominator when missing
 			else if (denominatorValue === undefined || denominatorValue === null) {
@@ -168,15 +133,9 @@ export async function GET(
 							A_HWC: 4,
 						};
 						denominatorValue = clinicTargets[facilityTypeName] || 4;
-						console.log(
-							`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`
-						);
 					} else if (indicator.code === "JM001") {
 						// JAS Meeting - always 1
 						denominatorValue = 1;
-						console.log(
-							`🎯 Binary indicator ${indicator.code}: Using target value 1 as denominator`
-						);
 					} else if (indicator.code === "DI001") {
 						// DVDMS Issues - facility-specific targets
 						const dvdmsTargets: Record<string, number> = {
@@ -187,15 +146,9 @@ export async function GET(
 							A_HWC: 100,
 						};
 						denominatorValue = dvdmsTargets[facilityTypeName] || 50;
-						console.log(
-							`🎯 Binary indicator ${indicator.code}: Using target value ${denominatorValue} as denominator for ${facilityTypeName}`
-						);
 					} else {
 						// Other binary indicators default to 1
 						denominatorValue = 1;
-						console.log(
-							`🎯 Binary indicator ${indicator.code}: Using default target value 1 as denominator`
-						);
 					}
 				} else {
 					// For non-binary indicators, use facility-type based population defaults
@@ -212,10 +165,6 @@ export async function GET(
 
 					// Use default based on facility type, or a reasonable fallback
 					denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
-
-					console.log(
-						`⚠️ Missing denominator value for non-binary indicator ${indicator.code}, using facility-type default: ${denominatorValue} (${facilityTypeName})`
-					);
 				}
 			}
 
@@ -389,10 +338,7 @@ export async function GET(
 							rangeData = { min: parsedRange.min, max: parsedRange.max };
 						}
 					} catch (error) {
-						console.warn(
-							`Error parsing JSON range from target_value "${targetValueStr}":`,
-							error
-						);
+						// ignore parse error
 					}
 				}
 				// Try parsing string range like "3-5"
@@ -465,23 +411,9 @@ export async function GET(
 				if (actualPercentage >= rangeData.min) {
 					// If actual percentage meets the minimum target, store 100% (achieved)
 					displayPercentage = 100;
-					console.log(
-						`🎯 Range target ${
-							indicator.code
-						}: Actual ${actualPercentage.toFixed(2)}% >= min ${
-							rangeData.min
-						}%, storing 100% (achieved)`
-					);
 				} else {
 					// If below minimum target, store the actual achievement percentage relative to minimum
 					displayPercentage = (actualPercentage / rangeData.min) * 100;
-					console.log(
-						`🎯 Range target ${
-							indicator.code
-						}: Actual ${actualPercentage.toFixed(2)}% < min ${
-							rangeData.min
-						}%, storing ${displayPercentage.toFixed(2)}% (relative to min)`
-					);
 				}
 			} else {
 				// For other indicators, cap at 100% to match service behavior
@@ -505,16 +437,6 @@ export async function GET(
 				denominator_value: (() => {
 					const finalDenominatorValue =
 						indicator.target_type === "RANGE" ? targetValue : denominatorValue;
-
-					// Debug: Log CB001 denominator value assignment
-					if (indicator.code === "CB001") {
-						console.log(`🔍 CB001 denominator_value assignment:`);
-						console.log(`  target_type: ${indicator.target_type}`);
-						console.log(`  targetValue: ${targetValue}`);
-						console.log(`  denominatorValue: ${denominatorValue}`);
-						console.log(`  final denominator_value: ${finalDenominatorValue}`);
-					}
-
 					return finalDenominatorValue;
 				})(),
 				formula_config: indicator.formula_config,
@@ -553,16 +475,6 @@ export async function GET(
 			},
 		});
 
-		// Debug: Log worker types to understand what's in the database
-		console.log(
-			"Facility workers:",
-			workers.map((w) => ({
-				name: w.name,
-				type: w.worker_type,
-				allocated: w.allocated_amount,
-			}))
-		);
-
 		// Get worker allocation config to map worker types to roles
 		const workerConfigs = await prisma.workerAllocationConfig.findMany({
 			where: {
@@ -578,17 +490,6 @@ export async function GET(
 
 		// Calculate worker remuneration based on facility performance
 		// Use the same weighted average calculation as overall performance
-		console.log(
-			`🔍 DEBUG REPORT: About to calculate overall performance with ${performanceIndicators.length} indicators:`
-		);
-		performanceIndicators.forEach((ind, index) => {
-			console.log(
-				`🔍 DEBUG REPORT PRE-CALC: ${index + 1}. ${ind.indicator_code}: ${
-					ind.percentage
-				}%`
-			);
-		});
-
 		const performancePercentage = calculateOverallPerformance(
 			totalTbZero
 				? performanceIndicators.filter(
@@ -663,11 +564,6 @@ export async function GET(
 					calculatedAmount =
 						(Number(worker.allocated_amount) * performancePercentage) / 100;
 				}
-
-				// Debug: Log worker remuneration calculation
-				console.log(
-					`Worker ${worker.name} (${workerType}): allocated=${worker.allocated_amount}, performance=${performancePercentage}%, calculated=${calculatedAmount}`
-				);
 
 				return {
 					id: worker.id,
@@ -775,38 +671,12 @@ async function calculateSummary(indicators: any[]) {
 function calculateOverallPerformance(indicators: any[]) {
 	if (indicators.length === 0) return 0;
 
-	console.log(`🔍 DEBUG REPORT: Calculating overall performance percentage:`);
-	console.log(
-		`🔍 DEBUG REPORT: Total indicators in calculation: ${indicators.length}`
-	);
-
 	let totalPercentage = 0;
-	indicators.forEach((ind, index) => {
+	indicators.forEach((ind) => {
 		const percentage = ind.percentage || 0;
-		console.log(
-			`🔍 DEBUG REPORT: ${index + 1}. ${
-				ind.indicator_code
-			}: ${percentage.toFixed(2)}%`
-		);
 		totalPercentage += percentage;
 	});
 
 	const performancePercentage = totalPercentage / indicators.length;
-
-	console.log(
-		`🔍 DEBUG REPORT: Total percentage sum: ${totalPercentage.toFixed(2)}%`
-	);
-	console.log(`🔍 DEBUG REPORT: Number of indicators: ${indicators.length}`);
-	console.log(
-		`🔍 DEBUG REPORT: Final performance percentage: ${performancePercentage.toFixed(
-			2
-		)}% (${totalPercentage.toFixed(2)} / ${indicators.length})`
-	);
-	console.log(
-		`🔍 DEBUG REPORT: Manual verification: ${totalPercentage.toFixed(2)} ÷ ${
-			indicators.length
-		} = ${(totalPercentage / indicators.length).toFixed(2)}%`
-	);
-
 	return performancePercentage;
 }

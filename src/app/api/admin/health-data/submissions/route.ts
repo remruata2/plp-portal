@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
 
 		fieldValues.forEach((fieldValue) => {
 			// Skip field values without facility_id
-      if (!fieldValue.facility_id) {
-        return;
-      }
+			if (!fieldValue.facility_id) {
+				return;
+			}
 
 			const key = `${fieldValue.facility_id}-${fieldValue.report_month}`;
 

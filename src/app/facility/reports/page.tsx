@@ -150,17 +150,15 @@ export default function FacilityReportsPage() {
 	};
 
 	useEffect(() => {
-    
-
 		if (status === "loading") {
 			return; // Still loading session
 		}
 
-        if (session?.user?.facility_id) {
+		if (session?.user?.facility_id) {
 			loadAvailableMonths();
-        } else if (status === "unauthenticated") {
+		} else if (status === "unauthenticated") {
 			setLoading(false);
-        } else {
+		} else {
 			setLoading(false);
 		}
 	}, [session, status]);
@@ -181,12 +179,11 @@ export default function FacilityReportsPage() {
 	}, [selectedYear, selectedMonth, session, status, availableMonths]);
 
 	const loadAvailableMonths = async () => {
-        try {
+		try {
 			const response = await fetch("/api/facility/reports/available-months");
-            
 
 			if (response.ok) {
-                const data = await response.json();
+				const data = await response.json();
 				const months = data.months || [];
 				setAvailableMonths(months);
 
@@ -197,10 +194,10 @@ export default function FacilityReportsPage() {
 				// Set the latest available month and year as default
 				if (months.length > 0) {
 					const { month, year } = getLatestAvailableMonthAndYear(months);
-                    
+
 					setSelectedYear(year);
 					setSelectedMonth(month);
-                } else {
+				} else {
 					setLoading(false);
 				}
 			} else {
@@ -215,12 +212,12 @@ export default function FacilityReportsPage() {
 	};
 
 	const loadReport = async (month: string) => {
-        try {
-            setLoading(true);
-            const response = await fetch(`/api/facility/reports/service/${month}`);
+		try {
+			setLoading(true);
+			const response = await fetch(`/api/facility/reports/service/${month}`);
 
 			if (response.ok) {
-                const data = await response.json();
+				const data = await response.json();
 				setReport(data);
 			} else {
 				const errorData = await response.json();
