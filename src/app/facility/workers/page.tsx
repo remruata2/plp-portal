@@ -737,14 +737,14 @@ export default function FacilityWorkersPage() {
 											// For other facilities, allow all worker types
 											return true;
 										})
-                                        .map((config) => (
-                                            <SelectItem
-                                                key={config.worker_type}
-                                                value={config.worker_type}
-                                            >
-                                                {config.worker_role}
-                                            </SelectItem>
-                                        ))}
+										.map((config) => (
+											<SelectItem
+												key={config.worker_type}
+												value={config.worker_type}
+											>
+												{config.worker_role}
+											</SelectItem>
+										))}
 								</SelectContent>
 							</Select>
 						</div>

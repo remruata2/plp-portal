@@ -85,79 +85,12 @@ export const FACILITY_VALIDATION_RULES: Record<
 		},
 		population_30_plus: {
 			required: true,
-			customValidator: (value, formData) => {
-				const totalPop = Number(formData.total_population || 0);
-				const pop30Plus = Number(value);
-
-				if (totalPop > 0) {
-					// Check if 30+ population is too low (should be at least 20% of total population)
-					if (pop30Plus < totalPop * 0.2) {
-						return {
-							field: "population_30_plus",
-							message:
-								"30+ population seems too low. Should be at least 20% of total population",
-							type: "logic_error" as const,
-						};
-					}
-
-					// Check if 30+ population is too high (should not exceed 80% of total population)
-					if (pop30Plus > totalPop * 0.8) {
-						return {
-							field: "population_30_plus",
-							message: "30+ population cannot exceed 80% of total population",
-							type: "logic_error" as const,
-						};
-					}
-				}
-
-				return null;
-			},
 		},
 		population_30_plus_female: {
 			required: true,
-			customValidator: (value, formData) => {
-				const pop30Plus = Number(formData.population_30_plus || 0);
-				const femalePop = Number(value);
-
-				if (pop30Plus > 0) {
-					// Check if female population is too low (should be at least 35% of 30+ population)
-					if (femalePop < pop30Plus * 0.35) {
-						return {
-							field: "population_30_plus_female",
-							message:
-								"Female 30+ population seems too low. Should be at least 35% of total 30+ population",
-							type: "logic_error" as const,
-						};
-					}
-
-					// Check if female population is too high (should not exceed 70% of 30+ population)
-					if (femalePop > pop30Plus * 0.7) {
-						return {
-							field: "population_30_plus_female",
-							message:
-								"Female 30+ population seems too high compared to total 30+ population",
-							type: "logic_error" as const,
-						};
-					}
-				}
-
-				return null;
-			},
 		},
 		population_18_plus: {
 			required: true,
-			customValidator: (value, formData) => {
-				const totalPop = Number(formData.total_population || 0);
-				const pop18Plus = Number(value);
-				if (totalPop > 0 && pop18Plus > totalPop * 0.9) {
-					return {
-						field: "population_18_plus",
-						message: "18+ population cannot exceed 90% of total population",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 
 		// Service delivery validation
@@ -165,33 +98,11 @@ export const FACILITY_VALIDATION_RULES: Record<
 			required: true,
 			minValue: 1,
 			maxValue: 5,
-			customValidator: (value, formData) => {
-				const score = Number(value);
-				if (score < 3) {
-					return {
-						field: "patient_satisfaction_score",
-						message: "Patient satisfaction score below 3 needs action plan",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 
 		// Administrative validation
 		jas_meetings_conducted: {
 			required: true,
-			customValidator: (value, formData) => {
-				const meetings = Number(value);
-				if (meetings === 0) {
-					return {
-						field: "jas_meetings_conducted",
-						message: "No JAS meetings conducted this month - is this correct?",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 	},
 
@@ -199,30 +110,6 @@ export const FACILITY_VALIDATION_RULES: Record<
 	PHC: {
 		total_footfall_phc_colocated_sc: {
 			required: true,
-			customValidator: (value, formData) => {
-				const footfall = Number(value);
-				const population = Number(formData.total_population || 0);
-				if (population > 0) {
-					const percentage = (footfall / population) * 100;
-					if (percentage < 2) {
-						return {
-							field: "total_footfall_phc_colocated_sc",
-							message:
-								"Monthly footfall seems low for the catchment population",
-							type: "logic_error" as const,
-						};
-					}
-					if (percentage > 15) {
-						return {
-							field: "total_footfall_phc_colocated_sc",
-							message:
-								"Monthly footfall seems unusually high for the catchment population",
-							type: "logic_error" as const,
-						};
-					}
-				}
-				return null;
-			},
 		},
 		anc_footfall: {
 			required: true,
@@ -244,57 +131,12 @@ export const FACILITY_VALIDATION_RULES: Record<
 		},
 		ncd_diagnosed_tx_completed: {
 			required: true,
-			customValidator: (value, formData) => {
-				const completed = Number(value);
-				const referred = Number(formData.ncd_referred_from_sc || 0);
-				if (referred > 0 && completed > referred) {
-					return {
-						field: "ncd_diagnosed_tx_completed",
-						message: "NCD treatment completed cannot exceed referrals received",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 		elderly_support_group_formed: {
 			required: false,
-			customValidator: (value, formData) => {
-				const groupFormed = value === "1" || value === true;
-				const activity = formData.elderly_support_group_activity;
-				if (groupFormed && (!activity || activity === "" || activity === "0")) {
-					return {
-						field: "elderly_support_group_activity",
-						message:
-							"If support group is formed, some activities should be conducted",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 		elderly_support_group_activity: {
 			required: false, // Only required when elderly support group is formed
-			customValidator: (value, formData) => {
-				const groupFormed =
-					formData.elderly_support_group_formed === "1" ||
-					formData.elderly_support_group_formed === true;
-
-				// Only validate if group is formed
-				if (groupFormed) {
-					// If group is formed, activity count should be provided
-					if (!value || value === "" || value === "0") {
-						return {
-							field: "elderly_support_group_activity",
-							message:
-								"If Yes, any activity conducted during the month is required",
-							type: "logic_error" as const,
-						};
-					}
-				}
-
-				return null;
-			},
 		},
 	},
 
@@ -302,60 +144,12 @@ export const FACILITY_VALIDATION_RULES: Record<
 	SC_HWC: {
 		total_footfall_sc_clinic: {
 			required: true,
-			customValidator: (value, formData) => {
-				const footfall = Number(value);
-				const population = Number(formData.total_population || 0);
-				if (population > 0) {
-					const percentage = (footfall / population) * 100;
-					if (percentage < 1) {
-						return {
-							field: "total_footfall_sc_clinic",
-							message: "Monthly footfall seems low for SC-HWC",
-							type: "logic_error" as const,
-						};
-					}
-				}
-				return null;
-			},
 		},
 		elderly_support_group_formed: {
 			required: false,
-			customValidator: (value, formData) => {
-				const groupFormed = value === "1" || value === true;
-				const activity = formData.elderly_support_group_activity;
-				if (groupFormed && (!activity || activity === "" || activity === "0")) {
-					return {
-						field: "elderly_support_group_activity",
-						message:
-							"If support group is formed, some activities should be conducted",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 		elderly_support_group_activity: {
 			required: false, // Only required when elderly support group is formed
-			customValidator: (value, formData) => {
-				const groupFormed =
-					formData.elderly_support_group_formed === "1" ||
-					formData.elderly_support_group_formed === true;
-
-				// Only validate if group is formed
-				if (groupFormed) {
-					// If group is formed, activity count should be provided
-					if (!value || value === "" || value === "0") {
-						return {
-							field: "elderly_support_group_activity",
-							message:
-								"If Yes, any activity conducted during the month is required",
-							type: "logic_error" as const,
-						};
-					}
-				}
-
-				return null;
-			},
 		},
 	},
 
@@ -363,21 +157,6 @@ export const FACILITY_VALIDATION_RULES: Record<
 	U_HWC: {
 		total_footfall_uhwc: {
 			required: true,
-			customValidator: (value, formData) => {
-				const footfall = Number(value);
-				const population = Number(formData.total_population || 0);
-				if (population > 0) {
-					const percentage = (footfall / population) * 100;
-					if (percentage < 0.5) {
-						return {
-							field: "total_footfall_uhwc",
-							message: "Monthly footfall seems low for urban setting",
-							type: "logic_error" as const,
-						};
-					}
-				}
-				return null;
-			},
 		},
 	},
 
@@ -385,21 +164,6 @@ export const FACILITY_VALIDATION_RULES: Record<
 	UPHC: {
 		total_footfall_phc_colocated_sc: {
 			required: true,
-			customValidator: (value, formData) => {
-				const footfall = Number(value);
-				const population = Number(formData.total_population || 0);
-				if (population > 0) {
-					const percentage = (footfall / population) * 100;
-					if (percentage < 1) {
-						return {
-							field: "total_footfall_phc_colocated_sc",
-							message: "Monthly footfall seems low for urban PHC",
-							type: "logic_error" as const,
-						};
-					}
-				}
-				return null;
-			},
 		},
 	},
 
@@ -410,60 +174,12 @@ export const FACILITY_VALIDATION_RULES: Record<
 		},
 		prakriti_parikshan_conducted: {
 			required: true,
-			customValidator: (value, formData) => {
-				const conducted = Number(value);
-				const pop18Plus = Number(formData.population_18_plus || 0);
-				if (pop18Plus > 0) {
-					const monthlyTarget = pop18Plus / 12;
-					if (conducted > monthlyTarget * 2) {
-						return {
-							field: "prakriti_parikshan_conducted",
-							message: "Prakriti Parikshan count seems high for monthly target",
-							type: "logic_error" as const,
-						};
-					}
-				}
-				return null;
-			},
 		},
 		elderly_support_group_formed: {
 			required: true,
-			customValidator: (value, formData) => {
-				const groupFormed = value === "1" || value === true;
-				const activity = formData.elderly_support_group_activity;
-				if (groupFormed && (!activity || activity === "" || activity === "0")) {
-					return {
-						field: "elderly_support_group_activity",
-						message:
-							"If support group is formed, some activities should be conducted",
-						type: "logic_error" as const,
-					};
-				}
-				return null;
-			},
 		},
 		elderly_support_group_activity: {
 			required: false, // Only required when elderly support group is formed
-			customValidator: (value, formData) => {
-				const groupFormed =
-					formData.elderly_support_group_formed === "1" ||
-					formData.elderly_support_group_formed === true;
-
-				// Only validate if group is formed
-				if (groupFormed) {
-					// If group is formed, activity count should be provided
-					if (!value || value === "" || value === "0") {
-						return {
-							field: "elderly_support_group_activity",
-							message:
-								"If Yes, any activity conducted during the month is required",
-							type: "logic_error" as const,
-						};
-					}
-				}
-
-				return null;
-			},
 		},
 	},
 };
@@ -484,21 +200,21 @@ export const WORKER_VALIDATION_RULES: Record<
 	PHC: {
 		requiresWorkers: true,
 		minimumWorkers: 1,
-		maximumWorkers: 7,
+		maximumWorkers: 20,
 		allowedWorkerTypes: ["mo", "colocated_sc_hw", "asha"],
 		mandatoryWorkerTypes: ["mo"], // MO is mandatory for PHC
 	},
 	SC_HWC: {
 		requiresWorkers: true,
 		minimumWorkers: 1,
-		maximumWorkers: 9,
+		maximumWorkers: 20,
 		allowedWorkerTypes: ["hwo", "hw", "asha"],
 		mandatoryWorkerTypes: ["hwo"], // HWO is mandatory for SC_HWC
 	},
 	A_HWC: {
 		requiresWorkers: true,
 		minimumWorkers: 1,
-		maximumWorkers: 7,
+		maximumWorkers: 20,
 		allowedWorkerTypes: ["ayush_mo", "hw", "asha"],
 		mandatoryWorkerTypes: ["ayush_mo"], // AYUSH MO is mandatory for A_HWC
 	},
@@ -771,15 +487,7 @@ function validateCrossFieldLogic(
 		});
 	}
 
-	// Wellness sessions validation
-	const wellnessSessions = Number(formData.wellness_sessions_conducted || 0);
-	if (wellnessSessions > 15) {
-		errors.push({
-			field: "wellness_sessions_conducted",
-			message: "Wellness sessions seem unusually high for one month",
-			type: "logic_error",
-		});
-	}
+	// Removed subjective wellness sessions upper-bound check
 
 	// RI validation
 	const riPlanned = Number(formData.ri_sessions_planned || 0);
@@ -803,44 +511,7 @@ function generateWarnings(
 	formData: Record<string, any>,
 	facilityType: string
 ): ValidationWarning[] {
-	const warnings: ValidationWarning[] = [];
-
-	// Check for zero values in key indicators
-	const keyIndicators = [
-		"total_footfall_phc_colocated_sc",
-		"total_footfall_sc_clinic",
-		"total_footfall_uhwc",
-		"wellness_sessions_conducted",
-		"teleconsultation_conducted",
-	];
-
-	keyIndicators.forEach((indicator) => {
-		if (
-			formData[indicator] !== undefined &&
-			Number(formData[indicator]) === 0
-		) {
-			warnings.push({
-				field: indicator,
-				message: "Zero value reported - please confirm this is accurate",
-				type: "suspicious_value",
-			});
-		}
-	});
-
-	// Facility-specific warnings
-	if (facilityType === "PHC" || facilityType === "UPHC") {
-		const ancFootfall = Number(formData.anc_footfall || 0);
-		if (ancFootfall === 0) {
-			warnings.push({
-				field: "anc_footfall",
-				message:
-					"No ANC visits reported - is this facility providing ANC services?",
-				type: "suspicious_value",
-			});
-		}
-	}
-
-	return warnings;
+	return [];
 }
 
 /**
