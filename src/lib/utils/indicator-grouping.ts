@@ -122,6 +122,8 @@ export function groupFieldsByIndicators(mappings: FieldMapping[]): IndicatorGrou
     'TF001_UPHC',  // 1. Total Footfall (M&F) - UPHC
     'WS001',  // 2. Total Wellness sessions
     'TC001',  // 3. Teleconsultation
+    'TC001_SC',  // 3a. Teleconsultation - SC-HWC
+    'TC001_AHWC',  // 3b. Teleconsultation - A-HWC
     // ANC Footfall - facility-specific
     'AF001_PHC',  // 4. Total ANC footfall - PHC
     'AF001_SC',  // 4. Total ANC footfall - SC-HWC

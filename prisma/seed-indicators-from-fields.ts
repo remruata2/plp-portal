@@ -194,7 +194,7 @@ async function seedFinalCorrectedIndicators() {
     },
 
     // =================== TELECONSULTATION ===================
-    // All use "25-50 calls" → RANGE
+    // Split targets by facility: PHC/UPHC/U-HWC use 25-50; SC-HWC and A-HWC use 10-25
     {
       code: "TC001",
       name: "Teleconsultation",
@@ -207,7 +207,7 @@ async function seedFinalCorrectedIndicators() {
       target_value: JSON.stringify({ min: 25, max: 50 }),
       target_formula: "25-50 calls",
       conditions: "Monthly target achievement",
-      applicable_facility_types: ["PHC", "UPHC", "U_HWC", "SC_HWC", "A_HWC"],
+      applicable_facility_types: ["PHC", "UPHC", "U_HWC"],
       source_of_verification: "e-Sanjeevani",
       formula_config: {
         calculationFormula: "(A/B)*100",
@@ -215,7 +215,54 @@ async function seedFinalCorrectedIndicators() {
       },
       worker_allocation: {
         mo: 1000,      // PHC: 1000
-        hwo: 2000,     // SC-HWC: 2000, UPHC: 2000, U-HWC: 3000
+        hwo: 2000,     // UPHC: 2000, U-HWC: 3000
+      },
+    },
+
+    // SC-HWC specific Teleconsultation with 10-25 calls target
+    {
+      code: "TC001_SC",
+      name: "Teleconsultation - SC-HWC",
+      description: "Teleconsultation against target for SC-HWC",
+      numerator_field_code: "teleconsultation_conducted",
+      denominator_field_code: "target_teleconsultation",
+      numerator_label: "Teleconsultation Conducted",
+      denominator_label: "Target Teleconsultation",
+      target_type: "RANGE" as const,
+      target_value: JSON.stringify({ min: 10, max: 25 }),
+      target_formula: "10-25 calls",
+      conditions: "Monthly target achievement",
+      applicable_facility_types: ["SC_HWC"],
+      source_of_verification: "e-Sanjeevani",
+      formula_config: {
+        calculationFormula: "(A/B)*100",
+        description: "Teleconsultation calls conducted / Target calls × 100"
+      },
+      worker_allocation: {
+        hwo: 2000,     // SC-HWC: 2000
+      },
+    },
+
+    // A-HWC specific Teleconsultation with 10-25 calls target
+    {
+      code: "TC001_AHWC",
+      name: "Teleconsultation - A-HWC",
+      description: "Teleconsultation against target for A-HWC",
+      numerator_field_code: "teleconsultation_conducted",
+      denominator_field_code: "target_teleconsultation",
+      numerator_label: "Teleconsultation Conducted",
+      denominator_label: "Target Teleconsultation",
+      target_type: "RANGE" as const,
+      target_value: JSON.stringify({ min: 10, max: 25 }),
+      target_formula: "10-25 calls",
+      conditions: "Monthly target achievement",
+      applicable_facility_types: ["A_HWC"],
+      source_of_verification: "e-Sanjeevani",
+      formula_config: {
+        calculationFormula: "(A/B)*100",
+        description: "Teleconsultation calls conducted / Target calls × 100"
+      },
+      worker_allocation: {
         ayush_mo: 2500, // A-HWC: 2500 (with TB), 2000 (without)
       },
     },
