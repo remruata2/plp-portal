@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -63,7 +63,6 @@ export async function GET(request: NextRequest) {
       is_active: user.is_active || false,
       last_login: user.last_login?.toISOString() || null,
       created_at: user.created_at?.toISOString() || new Date().toISOString(),
-      updated_at: user.updated_at?.toISOString() || new Date().toISOString(),
       facility: user.facility
         ? {
             id: user.facility.id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -23,6 +23,11 @@ import {
 	Edit,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  groupFieldsByIndicators,
+  type IndicatorGroup as MappingIndicatorGroup,
+  type FieldMapping as MappingField,
+} from "@/lib/utils/indicator-grouping";
 
 interface FieldValue {
 	id: number;
@@ -66,6 +71,8 @@ export default function EditSubmissionModal({
 	const [saving, setSaving] = useState(false);
 	const [fieldValues, setFieldValues] = useState<FieldValue[]>([]);
 	const [error, setError] = useState<string | null>(null);
+  const [indicatorGroups, setIndicatorGroups] = useState<MappingIndicatorGroup[]>([]);
+  const [fieldMappings, setFieldMappings] = useState<MappingField[]>([]);
 
 	useEffect(() => {
 		if (isOpen && submissionId) {
@@ -92,6 +99,25 @@ export default function EditSubmissionModal({
 			const data = await response.json();
 			setSubmission(data.submission);
 			setFieldValues(data.submission.fieldValues);
+
+			// After we know facility type, fetch field mappings to determine indicator grouping/order
+			try {
+				if (data.submission?.facilityType) {
+					const mapRes = await fetch(
+						`/api/health-data/field-mappings/${encodeURIComponent(
+							data.submission.facilityType
+						)}`
+					);
+					if (mapRes.ok) {
+						const mapJson = await mapRes.json();
+						const mappings: MappingField[] = mapJson.mappings || [];
+						setFieldMappings(mappings);
+						setIndicatorGroups(groupFieldsByIndicators(mappings));
+					}
+				}
+			} catch (e) {
+				console.warn("Failed to load field mappings for indicator grouping", e);
+			}
 		} catch (error) {
 			console.error("Error loading submission:", error);
 			setError(
@@ -248,14 +274,47 @@ export default function EditSubmissionModal({
 		return null;
 	}
 
-	// Group field values by category
-	const fieldValuesByCategory = fieldValues.reduce((acc, field) => {
-		if (!acc[field.fieldCategory]) {
-			acc[field.fieldCategory] = [];
-		}
-		acc[field.fieldCategory].push(field);
-		return acc;
-	}, {} as Record<string, FieldValue[]>);
+  // Build indicator-based grouping for field values using mappings.
+  // Matches mapping.databaseFieldId with fieldValues.fieldId to get values per indicator, in the same sorted order.
+  const groupedFieldValues = useMemo(() => {
+    if (!indicatorGroups.length || !fieldMappings.length) {
+      // Fallback: show all fields in a single group to avoid empty UI before mappings load
+      return [
+        { code: "ALL", name: "All Fields", fields: fieldValues },
+      ] as { code: string; name: string; fields: FieldValue[] }[];
+    }
+
+    const byId = new Map<number, FieldValue>();
+    for (const fv of fieldValues) byId.set(fv.fieldId, fv);
+
+    const groups: { code: string; name: string; fields: FieldValue[] }[] = [];
+    const seen = new Set<number>();
+
+    for (const grp of indicatorGroups) {
+      const fields: FieldValue[] = [];
+      for (const mapping of grp.fields) {
+        const fv = byId.get(mapping.databaseFieldId);
+        if (fv) {
+          fields.push(fv);
+          seen.add(fv.fieldId);
+        }
+      }
+      if (fields.length) {
+        groups.push({ code: grp.indicatorCode, name: grp.indicatorName, fields });
+      }
+    }
+
+    // Any remaining field values not present in mappings go to "Other"
+    const leftovers: FieldValue[] = [];
+    for (const fv of fieldValues) {
+      if (!seen.has(fv.fieldId)) leftovers.push(fv);
+    }
+    if (leftovers.length) {
+      groups.push({ code: "OTHER", name: "Other Fields", fields: leftovers });
+    }
+
+    return groups;
+  }, [indicatorGroups, fieldMappings, fieldValues]);
 
 	const getInputType = (fieldType: string) => {
 		switch (fieldType.toLowerCase()) {
@@ -385,18 +444,18 @@ export default function EditSubmissionModal({
 					</CardContent>
 				</Card>
 
-				{/* Field Values */}
+				{/* Field Values grouped by indicators (same order as create form) */}
 				<div className="space-y-6">
-					{Object.entries(fieldValuesByCategory).map(([category, fields]) => (
-						<Card key={category}>
+					{(groupedFieldValues || []).map((grp) => (
+						<Card key={grp.code}>
 							<CardHeader className="pb-3">
-								<CardTitle className="text-lg capitalize">
-									{category.replace(/_/g, " ")}
+								<CardTitle className="text-lg">
+									{grp.name}
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-6">
-									{fields.map((field, index) => (
+									{grp.fields.map((field) => (
 										<div
 											key={field.id}
 											className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start border-b border-gray-100 pb-4 last:border-b-0"

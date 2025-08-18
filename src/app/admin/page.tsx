@@ -45,6 +45,13 @@ export default function AdminPage() {
 	});
 	const [loading, setLoading] = useState(true);
 
+	// Derive explicit previous month label (e.g., "July 2025") for card subtitles
+	const prevMonthLabel = (() => {
+		const now = new Date();
+		const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+		return prev.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+	})();
+
 	useEffect(() => {
 		fetchStats();
 	}, []);
@@ -109,7 +116,7 @@ export default function AdminPage() {
 		{
 			title: "Submitted",
 			value: stats.submittedThisMonth,
-			subtitle: "This Month",
+			subtitle: `for ${prevMonthLabel}`,
 			icon: CheckCircle,
 			color: "text-green-600",
 			bgColor: "bg-green-50",
@@ -118,7 +125,7 @@ export default function AdminPage() {
 		{
 			title: "Pending",
 			value: stats.notSubmittedThisMonth,
-			subtitle: "This Month",
+			subtitle: `for ${prevMonthLabel}`,
 			icon: Clock,
 			color: "text-yellow-600",
 			bgColor: "bg-yellow-50",

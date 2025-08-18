@@ -35,7 +35,7 @@ async function seedWorkerAllocationConfig() {
         workerType: "asha",
         workerRole: "ASHA",
         maxCount: 5, // Multiple ASHA workers allowed
-        allocatedAmount: 1500,
+        allocatedAmount: 1000,
         description:
           "ASHA Workers - Multiple positions allowed, total allocation 1500",
       },

@@ -1,7 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
-
-const prisma = new PrismaClient();
 
 export interface PerformanceCalculationResult {
   facility_id: string;
@@ -15,11 +13,9 @@ export interface PerformanceCalculationResult {
 }
 
 export class FacilityPerformanceCalculator {
-  private prisma: PrismaClient;
   private formulaCalculator: FormulaCalculator;
 
   constructor() {
-    this.prisma = new PrismaClient();
     this.formulaCalculator = new FormulaCalculator();
   }
 
@@ -189,13 +185,18 @@ export class FacilityPerformanceCalculator {
           calculationFormula: field.formula_config.calculationFormula || "(A/B)*100",
         };
 
+        // Note: We don't have indicator-level max remuneration in this context.
+        // Pass 0 to indicate no remuneration budget available here.
+        const maxRemuneration = 0;
+
         const incentiveCalculation = FormulaCalculator.calculateRemuneration(
-          numerator,
-          target_value,
+          Number(numerator || 0),
+          Number(target_value || 0),
+          maxRemuneration,
           formulaConfig
         );
 
-        remuneration_amount = incentiveCalculation.incentiveAmount;
+        remuneration_amount = incentiveCalculation.remuneration;
       } catch (error) {
         console.error("Error calculating remuneration:", error);
         remuneration_amount = null;

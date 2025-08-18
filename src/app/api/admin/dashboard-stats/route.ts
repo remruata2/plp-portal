@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,22 +13,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get current month
+    // Get previous month (current month - 1) in YYYY-MM
     const now = new Date();
-    const currentMonth = `${now.getFullYear()}-${String(
-      now.getMonth() + 1
-    ).padStart(2, "0")}`;
+    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const previousMonth = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, "0")}`;
 
     // Get total facilities
     const totalFacilities = await prisma.facility.count({
       where: { is_active: true },
     });
 
-    // Get facilities that have submitted data this month
+    // Get facilities that have submitted data in the previous month
     const submittedThisMonth = await prisma.fieldValue.groupBy({
       by: ["facility_id"],
       where: {
-        report_month: currentMonth,
+        report_month: previousMonth,
       },
       _count: {
         facility_id: true,

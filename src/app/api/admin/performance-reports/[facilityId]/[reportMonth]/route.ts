@@ -193,24 +193,24 @@ export async function GET(
 				formula_config: (perf.indicator as any)?.formula_config || undefined,
 				numerator_field: perf.indicator?.numerator_field
 					? {
-						id: perf.indicator.numerator_field.id,
-						code: perf.indicator.numerator_field.code,
-						name: perf.indicator.numerator_field.name,
-					}
+							id: perf.indicator.numerator_field.id,
+							code: perf.indicator.numerator_field.code,
+							name: perf.indicator.numerator_field.name,
+					  }
 					: null,
 				denominator_field: perf.indicator?.denominator_field
 					? {
-						id: perf.indicator.denominator_field.id,
-						code: perf.indicator.denominator_field.code,
-						name: perf.indicator.denominator_field.name,
-					}
+							id: perf.indicator.denominator_field.id,
+							code: perf.indicator.denominator_field.code,
+							name: perf.indicator.denominator_field.name,
+					  }
 					: null,
 				target_field: perf.indicator?.target_field
 					? {
-						id: perf.indicator.target_field.id,
-						code: perf.indicator.target_field.code,
-						name: perf.indicator.target_field.name,
-					}
+							id: perf.indicator.target_field.id,
+							code: perf.indicator.target_field.code,
+							name: perf.indicator.target_field.name,
+					  }
 					: null,
 			};
 		});

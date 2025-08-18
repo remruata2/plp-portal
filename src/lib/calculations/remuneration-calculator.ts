@@ -1,8 +1,7 @@
-import { PrismaClient } from "../../generated/prisma";
+import prisma from "@/lib/prisma";
 import { ConfigurationSnapshot } from "./configuration-snapshot";
 import { FormulaCalculator } from "./formula-calculator";
 
-const prisma = new PrismaClient();
 
 export interface RemunerationCalculation {
   facilityId: string;
@@ -1089,14 +1088,17 @@ export class RemunerationCalculator {
             });
 
             // Get the actual value for this indicator (same as reports)
-            const actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
+            const rawNumerator = fieldValueMap.get(indicator.numerator_field_id);
+            const actualValue = rawNumerator == null ? 0 : Number(rawNumerator) || 0;
             
             // Get denominator value with proper defaults (same as reports)
-            let denominatorValue: number | undefined = fieldValueMap.get(indicator.denominator_field_id);
-            if (denominatorValue === null) denominatorValue = undefined;
+            const rawDenominator = fieldValueMap.get(indicator.denominator_field_id);
+            let denominatorValue: number | undefined =
+              rawDenominator == null ? undefined : Number(rawDenominator);
+            if (Number.isNaN(denominatorValue as number)) denominatorValue = undefined;
             
             // Handle denominator defaults (same logic as reports)
-            if (denominatorValue === null || denominatorValue === undefined) {
+            if (denominatorValue === undefined) {
               // Get denominator field info
               const denominatorField = await prisma.field.findUnique({
                 where: { id: indicator.denominator_field_id },
@@ -1150,8 +1152,11 @@ export class RemunerationCalculator {
             }
 
             // Get target value (same logic as reports)
-            let targetValue = fieldValueMap.get(indicator.target_field_id) || undefined;
-            if (targetValue === null || targetValue === undefined) {
+            const rawTarget = fieldValueMap.get(indicator.target_field_id);
+            let targetValue: number | undefined =
+              rawTarget == null ? undefined : Number(rawTarget);
+            if (Number.isNaN(targetValue as number)) targetValue = undefined;
+            if (targetValue === undefined) {
               if (indicator.target_value) {
                 try {
                   const targetData = JSON.parse(indicator.target_value);

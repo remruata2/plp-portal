@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,6 +91,41 @@ export default function DynamicHealthDataForm({
 	const [selectedMonth, setSelectedMonth] = useState<string>("");
 	const [selectedYear, setSelectedYear] = useState<string>("");
 
+	// Compute previous month/year once per render cycle
+	const { prevMonth, prevYear } = useMemo(() => {
+		const now = new Date();
+		// previous month relative to now
+		const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+		const m = String(prev.getMonth() + 1).padStart(2, "0");
+		const y = String(prev.getFullYear());
+		return { prevMonth: m, prevYear: y };
+	}, []);
+
+	// Human-readable previous month name for display
+	const prevMonthName = useMemo(() => {
+		const names = [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		];
+		const idx = Math.max(0, parseInt(prevMonth, 10) - 1);
+		return names[idx] ?? prevMonth;
+	}, [prevMonth]);
+
+	// Whether the previous month's submission already exists
+	const alreadySubmittedForPrev = useMemo(() => {
+		return existingSubmissions.includes(`${prevYear}-${prevMonth}`);
+	}, [existingSubmissions, prevYear, prevMonth]);
+
 	// Debug logging for props
 	console.log("DynamicHealthDataForm props:", {
 		facilityType,
@@ -107,15 +142,11 @@ export default function DynamicHealthDataForm({
 		);
 	}, [session]);
 
-	// Initialize month and year with current values
+	// Initialize month and year with the PREVIOUS month
 	useEffect(() => {
-		const now = new Date();
-		const currentMonth = String(now.getMonth() + 1).padStart(2, "0");
-		const currentYear = String(now.getFullYear());
-
-		setSelectedMonth(currentMonth);
-		setSelectedYear(currentYear);
-	}, []);
+		setSelectedMonth(prevMonth);
+		setSelectedYear(prevYear);
+	}, [prevMonth, prevYear]);
 
 	// Cleanup timeout on unmount
 	useEffect(() => {
@@ -1126,6 +1157,17 @@ export default function DynamicHealthDataForm({
 				return;
 			}
 
+			// Enforce previous month restriction even if UI is tampered
+			if (selectedMonth !== prevMonth || selectedYear !== prevYear) {
+				toast({
+					title: "Invalid reporting period",
+					description: `Reporting is restricted to ${prevMonthName} ${prevYear}.`,
+					variant: "destructive",
+				});
+				setSubmitting(false);
+				return;
+			}
+
 			// Mark that submit has been attempted (this will trigger validation displays)
 			setHasAttemptedSubmit(true);
 
@@ -1387,6 +1429,46 @@ export default function DynamicHealthDataForm({
 							</p>
 						</div>
 					</div>
+				) : checkingSubmissions ? (
+					<div className="text-center py-8 text-sm text-gray-600">
+						Checking existing submissions...
+					</div>
+				) : existingSubmissions.includes(`${prevYear}-${prevMonth}`) ? (
+					<div className="text-center py-8">
+						<h3 className="text-lg font-semibold text-gray-900">
+							Submission already completed
+						</h3>
+						<p className="mt-2 text-gray-600">
+							You have already submitted data for {prevMonthName} {prevYear}. The form is closed for this period.
+						</p>
+						{existingSubmissions.length > 0 && (
+							<div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md inline-block text-left">
+								<h4 className="text-sm font-medium text-blue-800 mb-2">
+									Previous Submissions ({existingSubmissions.length})
+								</h4>
+								<div className="flex flex-wrap gap-2">
+									{existingSubmissions.slice(-6).map((month) => (
+										<span
+											key={month}
+											className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded"
+										>
+											{month}
+										</span>
+									))}
+									{existingSubmissions.length > 6 && (
+										<span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
+											+{existingSubmissions.length - 6} more
+										</span>
+									)}
+								</div>
+							</div>
+						)}
+						<div className="mt-6">
+							<Button type="button" onClick={() => history.back()} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+								Go Back
+							</Button>
+						</div>
+					</div>
 				) : (
 					<form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
 						{/* Month and Year Selection */}
@@ -1399,26 +1481,12 @@ export default function DynamicHealthDataForm({
 									<Label htmlFor="month-select" className="text-sm">
 										Month
 									</Label>
-									<Select
-										value={selectedMonth}
-										onValueChange={setSelectedMonth}
-									>
+									<Select value={selectedMonth} onValueChange={setSelectedMonth} disabled>
 										<SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 h-10 sm:h-11">
-											<SelectValue placeholder="Select month" />
+											<SelectValue placeholder={prevMonthName} />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="01">January</SelectItem>
-											<SelectItem value="02">February</SelectItem>
-											<SelectItem value="03">March</SelectItem>
-											<SelectItem value="04">April</SelectItem>
-											<SelectItem value="05">May</SelectItem>
-											<SelectItem value="06">June</SelectItem>
-											<SelectItem value="07">July</SelectItem>
-											<SelectItem value="08">August</SelectItem>
-											<SelectItem value="09">September</SelectItem>
-											<SelectItem value="10">October</SelectItem>
-											<SelectItem value="11">November</SelectItem>
-											<SelectItem value="12">December</SelectItem>
+											<SelectItem value={prevMonth}>{prevMonthName}</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
@@ -1426,19 +1494,12 @@ export default function DynamicHealthDataForm({
 									<Label htmlFor="year-select" className="text-sm">
 										Year
 									</Label>
-									<Select value={selectedYear} onValueChange={setSelectedYear}>
+									<Select value={selectedYear} onValueChange={setSelectedYear} disabled>
 										<SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 h-10 sm:h-11">
-											<SelectValue placeholder="Select year" />
+											<SelectValue placeholder={prevYear} />
 										</SelectTrigger>
 										<SelectContent>
-											{Array.from({ length: 10 }, (_, i) => {
-												const year = new Date().getFullYear() - i;
-												return (
-													<SelectItem key={year} value={year.toString()}>
-														{year}
-													</SelectItem>
-												);
-											})}
+											<SelectItem value={prevYear}>{prevYear}</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
@@ -1491,7 +1552,7 @@ export default function DynamicHealthDataForm({
 							)}
 
 							<p className="text-sm text-gray-500 mt-2 sm:mt-3">
-								Select the month and year for which you are submitting data.
+								Reporting is restricted to {prevMonthName} {prevYear}.
 							</p>
 						</div>
 

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient, UserRole } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
+import { UserRole } from "@/generated/prisma";
 
-const prisma = new PrismaClient();
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,6 +30,7 @@ export async function GET(request: NextRequest) {
 
     // Get query parameters for filtering
     const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
     const districtId = searchParams.get("districtId");
     const facilityTypeId = searchParams.get("facilityTypeId");
     const searchQuery = searchParams.get("search");
@@ -38,6 +40,24 @@ export async function GET(request: NextRequest) {
       facilityTypeId,
       searchQuery,
     });
+
+    // If an explicit ID is provided, return that single facility
+    if (id) {
+      console.log("Facilities API: Fetch by id:", id);
+      const facility = await prisma.facility.findUnique({
+        where: { id },
+        include: {
+          facility_type: true,
+          district: true,
+        },
+      });
+
+      if (!facility) {
+        return NextResponse.json({ error: "Facility not found" }, { status: 404 });
+      }
+
+      return NextResponse.json({ success: true, data: facility });
+    }
 
     // Build where clause for filtering
     const where: any = {};

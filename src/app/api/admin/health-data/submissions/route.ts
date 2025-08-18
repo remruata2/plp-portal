@@ -18,18 +18,44 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
+		// Parse filters
+		const { searchParams } = new URL(request.url);
+		const districtId = searchParams.get("districtId");
+		const facilityTypeId = searchParams.get("facilityTypeId");
+		const searchQuery = searchParams.get("search");
+
+		// Build where clause for FieldValue using related Facility filters
+		const where: any = {
+			field: {
+				is_active: true,
+			},
+		};
+
+		if (districtId || facilityTypeId || searchQuery) {
+			where.facility = {} as any;
+			if (districtId) {
+				(where.facility as any).district_id = districtId;
+			}
+			if (facilityTypeId) {
+				(where.facility as any).facility_type_id = facilityTypeId;
+			}
+			if (searchQuery) {
+				(where.facility as any).name = {
+					contains: searchQuery,
+					mode: "insensitive",
+				};
+			}
+		}
+
 		// Get all field values grouped by facility and report month
 		const fieldValues = await prisma.fieldValue.findMany({
-			where: {
-				field: {
-					is_active: true,
-				},
-			},
+			where,
 			include: {
 				field: true,
 				facility: {
 					include: {
 						facility_type: true,
+						district: true,
 					},
 				},
 			},

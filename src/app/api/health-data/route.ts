@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { RemunerationCalculator } from "@/lib/calculations/remuneration-calculator";
 
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {

@@ -32,20 +32,29 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
-import {
-  RemunerationCalculator,
-  RemunerationCalculation,
-} from "@/lib/calculations/remuneration-calculator";
+
+// Local type matching the API response from `/api/admin/remuneration-report`
+type RemunerationRow = {
+  facilityId: string;
+  facilityName: string;
+  facilityType: string;
+  districtName: string;
+  reportMonth: string;
+  performancePercentage: number;
+  totalAllocatedAmount: number;
+  facilityRemuneration: number;
+  totalRemuneration: number;
+  // Derived fields for table/UI
+  healthWorkers: Array<{ id: number; calculatedAmount: number }>;
+  ashaWorkers: Array<{ id: number; calculatedAmount: number }>;
+  totalWorkerRemuneration: number;
+};
 
 export default function RemunerationPage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
-  const [calculations, setCalculations] = useState<RemunerationCalculation[]>(
-    []
-  );
-  const [filteredCalculations, setFilteredCalculations] = useState<
-    RemunerationCalculation[]
-  >([]);
+  const [calculations, setCalculations] = useState<RemunerationRow[]>([]);
+  const [filteredCalculations, setFilteredCalculations] = useState<RemunerationRow[]>([]);
   const [reportMonth, setReportMonth] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
@@ -79,10 +88,21 @@ export default function RemunerationPage() {
   const loadRemunerationData = async () => {
     try {
       setLoading(true);
-      const data = await RemunerationCalculator.getRemunerationReport(
-        reportMonth
+      const res = await fetch(
+        `/api/admin/remuneration-report?reportMonth=${encodeURIComponent(reportMonth)}`,
+        { cache: "no-store" }
       );
-      setCalculations(data);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `Request failed with ${res.status}`);
+      }
+      const body = (await res.json()) as {
+        success: boolean;
+        data: RemunerationRow[];
+        error?: string;
+      };
+      if (!body.success) throw new Error(body.error || "Unknown error");
+      setCalculations(body.data || []);
     } catch (error) {
       console.error("Error loading incentives data:", error);
       toast.error("Failed to load incentives data");

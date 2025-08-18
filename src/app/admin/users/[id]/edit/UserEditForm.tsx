@@ -55,6 +55,38 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 		}));
 	}, [user]);
 
+	// When editing an existing facility user, preselect district and facility type
+	useEffect(() => {
+		const initFromFacility = async () => {
+			try {
+				if (user.role !== UserRole.facility) return;
+				const currentFacilityId = (user as any).facility_id as string | undefined;
+				if (!currentFacilityId) return;
+				// Avoid refetch if already initialized
+				if (formData.district_id && formData.facility_type_filter_id) return;
+
+				const res = await fetch(`/api/facilities?id=${encodeURIComponent(currentFacilityId)}`);
+				if (!res.ok) return;
+				const json = await res.json();
+				const facility = json?.data;
+				if (!facility) return;
+
+				setFormData((prev) => ({
+					...prev,
+					// keep existing username/password/role/is_active
+					facility_id: currentFacilityId,
+					district_id: facility.district_id || "",
+					facility_type_filter_id: facility.facility_type_id || "",
+				}));
+			} catch (_) {
+				// noop
+			}
+		};
+		initFromFacility();
+		// Only run on mount or when switching to a different user id
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user.id]);
+
 	// Load reference lists
 	useEffect(() => {
 		(async () => {
@@ -148,9 +180,8 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 
 		if (result.success && result.user) {
 			toast.success("User updated successfully.");
-			// router.push(`/admin/users/${result.user.id}`); // Redirect to user detail page
-			// OR, stay on the edit page but show success. For now, let's redirect to details.
-			router.push(`/admin/users/${result.user.id}`);
+			// Redirect to the user list page after save for consistency
+			router.push(`/admin/users`);
 			// Optionally, if staying on the page, you might want to refresh data or clear password field:
 			// setFormData(prev => ({ ...prev, password: '' }));
 		} else {
@@ -164,7 +195,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 			<div className="flex justify-between items-center mb-6">
 				<div className="flex items-center">
 					<Link
-						href={`/admin/users/${user.id}`}
+						href={`/admin/users`}
 						className="mr-4 text-gray-500 hover:text-gray-700"
 					>
 						<ArrowLeft className="h-5 w-5" />
@@ -345,7 +376,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 					</div>
 					<div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
 						<Link
-							href={`/admin/users/${user.id}`}
+							href={`/admin/users`}
 							className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3"
 						>
 							Cancel

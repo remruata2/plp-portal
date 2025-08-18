@@ -63,47 +63,47 @@ export async function checkSubmissionAllowed(): Promise<SubmissionDeadlineStatus
 		const currentMonth = now.getMonth();
 		const currentYear = now.getFullYear();
 
-		// Calculate the deadline for the current month
-		const currentMonthDeadline = new Date(
-			currentYear,
-			currentMonth,
-			deadlineDay
-		);
+		// Reporting is for the PREVIOUS month; the submission window is from the 1st to deadlineDay of the CURRENT month.
+		// Example: On August 1-15, facilities submit July data. After Aug 15, submissions are closed until Sept 1 (for August data).
 
-		// If we're past the deadline this month, submissions are closed
+		// Deadline for the current window (current month, deadlineDay)
+		const windowDeadline = new Date(currentYear, currentMonth, deadlineDay);
+
+		// Derive previous month label for messaging
+		const prev = new Date(currentYear, currentMonth - 1, 1);
+		const prevMonthName = prev.toLocaleString("default", { month: "long" });
+		const prevYear = prev.getFullYear();
+
 		if (currentDay > deadlineDay) {
-			// Calculate next month's deadline
-			const nextMonthDeadline = new Date(
-				currentYear,
-				currentMonth + 1,
-				deadlineDay
-			);
+			// After deadline: closed; next window opens on the 1st of next month up to its deadline
+			const nextWindowStart = new Date(currentYear, currentMonth + 1, 1);
+			const nextWindowDeadline = new Date(currentYear, currentMonth + 1, deadlineDay);
+			const nextPrevForMsg = new Date(currentYear, currentMonth, 1); // the month that will be reported next window
+			const nextPrevMonthName = nextPrevForMsg.toLocaleString("default", { month: "long" });
+			const nextPrevYear = nextPrevForMsg.getFullYear();
 
 			return {
 				isSubmissionAllowed: false,
 				deadlineDay,
 				currentDay,
 				daysRemaining: 0,
-				nextDeadline: nextMonthDeadline,
-				reason: `Submissions for ${now.toLocaleString("default", {
-					month: "long",
-				})} are closed. Next deadline: ${nextMonthDeadline.toLocaleDateString()}`,
+				nextDeadline: nextWindowDeadline,
+				reason: `Submissions for ${prevMonthName} ${prevYear} are closed. Next submission window: ${nextWindowStart.toLocaleDateString()} - ${nextWindowDeadline.toLocaleDateString()} (for ${nextPrevMonthName} ${nextPrevYear}).`,
 			};
 		}
 
-		// Calculate days remaining until deadline
+		// Within window: open
 		const daysRemaining = deadlineDay - currentDay;
-
 		return {
 			isSubmissionAllowed: true,
 			deadlineDay,
 			currentDay,
 			daysRemaining,
-			nextDeadline: currentMonthDeadline,
+			nextDeadline: windowDeadline,
 			reason:
 				daysRemaining === 0
-					? "Today is the deadline for submissions"
-					: `Submissions open until ${currentMonthDeadline.toLocaleDateString()} (${daysRemaining} days remaining)`,
+					? `Today is the deadline for ${prevMonthName} ${prevYear} submissions`
+					: `Submissions for ${prevMonthName} ${prevYear} are open until ${windowDeadline.toLocaleDateString()} (${daysRemaining} days remaining).`,
 		};
 	} catch (error) {
 		console.error("Error checking submission status:", error);
@@ -178,8 +178,9 @@ export async function canFacilityEditSubmission(reportMonth: string): Promise<{
 			};
 		}
 
-		// Calculate the deadline for this report month
-		const deadlineDate = new Date(year, month - 1, deadlineDay);
+		// Calculate the deadline for this report month: deadline is on the deadlineDay of the FOLLOWING month
+    // Example: report_month=2025-07 -> edit deadline is 2025-08-[deadlineDay]
+    const deadlineDate = new Date(year, month, deadlineDay);
 
 		// If the current date is past the deadline for this report month, editing is not allowed
 		if (currentDate > deadlineDate) {
