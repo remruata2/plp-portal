@@ -92,8 +92,24 @@ const remunerationConfig = {
   TC001: {
     PHC: 1000,
     UPHC: 2000,
-    SC_HWC: 2000,
+    SC_HWC: 0, // moved to TC001_SC
     U_HWC: 3000,
+    A_HWC: 0, // moved to TC001_AHWC
+  },
+  // Teleconsultation - SC-HWC specific (new: 10-25 target band)
+  TC001_SC: {
+    PHC: 0, // Not applicable
+    UPHC: 0, // Not applicable
+    SC_HWC: 2000,
+    U_HWC: 0, // Not applicable
+    A_HWC: 0, // Not applicable
+  },
+  // Teleconsultation - A-HWC specific (new: 10-25 target band)
+  TC001_AHWC: {
+    PHC: 0, // Not applicable
+    UPHC: 0, // Not applicable
+    SC_HWC: 0, // Not applicable
+    U_HWC: 0, // Not applicable
     A_HWC: 1500,
   },
   // ANC Footfall - upto 50% only
