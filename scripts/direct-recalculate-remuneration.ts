@@ -14,42 +14,50 @@ async function directRecalculateRemuneration() {
     
     console.log("✅ Cleared all old remuneration data");
     
-    // Get all facilities
-    const facilities = await prisma.facility.findMany({
-      include: {
-        facility_type: true,
-      },
-    });
-    
-    console.log(`📋 Found ${facilities.length} facilities to recalculate`);
-    
-    // Get all available report months
-    const fieldValues = await prisma.fieldValue.findMany({
+    // Build the set of facility-month pairs that actually have submissions.
+    // We derive this from fieldValue to avoid creating zero rows for facilities without data.
+    const fvPairsRaw = await prisma.fieldValue.findMany({
       select: {
+        facility_id: true,
         report_month: true,
       },
-      distinct: ['report_month'],
+      distinct: ["facility_id", "report_month"],
     });
-    
-    const reportMonths = [...new Set(fieldValues.map(fv => fv.report_month))];
-    console.log(`📅 Found ${reportMonths.length} report months: ${reportMonths.join(', ')}`);
-    
-    // Recalculate for each facility and month combination
-    for (const facility of facilities) {
-      for (const month of reportMonths) {
-        try {
-          console.log(`\n🔄 Recalculating for ${facility.name} - ${month}`);
-          
-          // Directly call the remuneration calculation
-          await RemunerationCalculator.triggerRemunerationCalculation(
-            facility.id,
-            month
-          );
-          
-          console.log(`✅ Successfully recalculated for ${facility.name} - ${month}`);
-        } catch (error) {
-          console.log(`❌ Error recalculating for ${facility.name} - ${month}: ${error}`);
-        }
+
+    const fvPairs = fvPairsRaw.filter(
+      (p) => typeof p.facility_id === "string" && !!p.facility_id && !!p.report_month
+    );
+
+    // Optionally ensure facilities exist and are active
+    const facilityIds = Array.from(new Set(fvPairs.map((p) => p.facility_id!)));
+    const facilitiesById = new Map<string, { id: string; name: string }>();
+    const facilities = await prisma.facility.findMany({
+      where: { id: { in: facilityIds } },
+      select: { id: true, name: true, is_active: true },
+    });
+    for (const f of facilities) {
+      if (f.is_active) facilitiesById.set(f.id, { id: f.id, name: f.name });
+    }
+
+    console.log(`📋 Found ${facilitiesById.size} facilities with submissions`);
+    console.log(`📦 Found ${fvPairs.length} facility-month pairs with data`);
+
+    for (const pair of fvPairs) {
+      const fac = facilitiesById.get(pair.facility_id!);
+      if (!fac) continue; // skip inactive or missing facilities
+      const month = pair.report_month!;
+
+      try {
+        console.log(`\n🔄 Recalculating for ${fac.name} - ${month}`);
+
+        await RemunerationCalculator.triggerRemunerationCalculation(
+          fac.id,
+          month
+        );
+
+        console.log(`✅ Successfully recalculated for ${fac.name} - ${month}`);
+      } catch (error) {
+        console.log(`❌ Error recalculating for ${fac?.name ?? pair.facility_id} - ${month}: ${error}`);
       }
     }
     

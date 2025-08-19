@@ -252,13 +252,14 @@ export default function HealthDataPage() {
     achievedOrPartial?: number;
     total?: number;
   }) => {
-    if (achievedOrPartial === undefined || total === undefined || total === 0)
-      return null;
+    // Render as 0/total instead of hiding when achievedOrPartial is undefined or total is 0
+    if (total === undefined) return null;
+    const achieved = achievedOrPartial ?? 0;
     return (
       <div>
         <span className="text-gray-600 text-xs sm:text-sm">Indicators</span>
         <p className="font-semibold text-sm sm:text-base">
-          {achievedOrPartial}/{total}
+          {achieved}/{total}
         </p>
       </div>
     );
