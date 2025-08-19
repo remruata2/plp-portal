@@ -130,6 +130,8 @@ export default function AdminPerformanceReportsPage() {
 	const [facilityTypes, setFacilityTypes] = useState<FacilityType[]>([]);
 	const [availableMonths, setAvailableMonths] = useState<string[]>([]);
 	const [availableYears, setAvailableYears] = useState<string[]>([]);
+	const [selectedYear, setSelectedYear] = useState<string>("");
+	const [selectedMonth, setSelectedMonth] = useState<string>("");
 	const [reports, setReports] = useState<FacilityReport[]>([]);
 	const [filteredReports, setFilteredReports] = useState<FacilityReport[]>([]);
 
@@ -204,9 +206,13 @@ export default function AdminPerformanceReportsPage() {
 					new Set(months.map((m: string) => m.split("-")[0]))
 				).sort((a, b) => b.localeCompare(a));
 				setAvailableYears(years);
-				// default to latest month
-				if (!filters.reportMonth && months.length > 0) {
-					handleFilterChange("reportMonth", months[0]);
+				// default to latest month and trigger initial load after setting
+				if (months.length > 0) {
+					const defaultMonth = months[0]; // already sorted (server returns desc)
+					const [yr, mo] = defaultMonth.split("-");
+					setSelectedYear(yr);
+					setSelectedMonth(mo);
+					handleFilterChange("reportMonth", defaultMonth);
 				}
 			}
 		} catch (error) {
@@ -472,13 +478,12 @@ export default function AdminPerformanceReportsPage() {
 						<div>
 							<Label>Year</Label>
 							<Select
-								value={
-									filters.reportMonth ? filters.reportMonth.split("-")[0] : ""
-								}
+								value={selectedYear}
 								onValueChange={(year) => {
-									const month = filters.reportMonth?.split("-")[1] || "";
-									const next = year && month ? `${year}-${month}` : "";
+									setSelectedYear(year);
+									const next = year && selectedMonth ? `${year}-${selectedMonth}` : "";
 									handleFilterChange("reportMonth", next);
+									if (next) loadReports();
 								}}
 							>
 								<SelectTrigger>
@@ -496,16 +501,13 @@ export default function AdminPerformanceReportsPage() {
 						<div>
 							<Label>Month</Label>
 							<Select
-								value={
-									filters.reportMonth ? filters.reportMonth.split("-")[1] : ""
-								}
+								value={selectedMonth}
 								onValueChange={(month) => {
-									const year =
-										filters.reportMonth?.split("-")[0] ||
-										availableYears[0] ||
-										"";
+									setSelectedMonth(month);
+									const year = selectedYear || availableYears[0] || "";
 									const next = year && month ? `${year}-${month}` : "";
 									handleFilterChange("reportMonth", next);
+									if (next) loadReports();
 								}}
 								disabled={availableYears.length === 0}
 							>
@@ -518,13 +520,7 @@ export default function AdminPerformanceReportsPage() {
 								</SelectTrigger>
 								<SelectContent>
 									{availableMonths
-										.filter((m) =>
-											filters.reportMonth
-												? m.startsWith(
-														(filters.reportMonth.split("-")[0] || "") + "-"
-												  )
-												: true
-										)
+										.filter((m) => (selectedYear ? m.startsWith(selectedYear + "-") : true))
 										.map((m) => m.split("-")[1])
 										.filter((v, i, arr) => arr.indexOf(v) === i)
 										.sort((a, b) => a.localeCompare(b))
