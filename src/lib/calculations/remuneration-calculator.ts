@@ -1267,7 +1267,12 @@ export class RemunerationCalculator {
               },
               update: {
                 actual_value: actualValueForDB,
-                target_value: indicator.target_value ? JSON.parse(indicator.target_value) : null,
+                // In some environments target_value is already an object; only parse if it's a string
+                target_value: indicator.target_value
+                  ? (typeof indicator.target_value === 'string'
+                      ? (() => { try { return JSON.parse(indicator.target_value as any); } catch { return indicator.target_value; } })()
+                      : (indicator.target_value as any))
+                  : null,
                 percentage_achieved: percentageAchieved,
                 status: status,
                 incentive_amount: incentiveAmount,
@@ -1280,7 +1285,12 @@ export class RemunerationCalculator {
                 report_month: reportMonth,
                 indicator_id: indicator.id,
                 actual_value: actualValueForDB,
-                target_value: indicator.target_value ? JSON.parse(indicator.target_value) : null,
+                // Match update branch: only parse when string, else use as-is
+                target_value: indicator.target_value
+                  ? (typeof indicator.target_value === 'string'
+                      ? (() => { try { return JSON.parse(indicator.target_value as any); } catch { return indicator.target_value; } })()
+                      : (indicator.target_value as any))
+                  : null,
                 percentage_achieved: percentageAchieved,
                 status: status,
                 incentive_amount: incentiveAmount,
