@@ -17,34 +17,31 @@ export async function GET(_request: NextRequest) {
 		}
 
 		// Prefer remunerationCalculation months, but include performance and raw submissions months too
-		const rcMonths = await prisma.remunerationCalculation.findMany({
-			select: { report_month: true },
-			where: { report_month: { not: null } },
-			distinct: ["report_month"],
-			orderBy: { report_month: "desc" },
-			take: 120,
-		});
+		    const rcMonths = await prisma.remunerationCalculation.findMany({
+        select: { report_month: true },
+        distinct: ["report_month"],
+        orderBy: { report_month: "desc" },
+        take: 120,
+    });
 
-		const frMonths = await prisma.facilityRemunerationRecord.findMany({
-			select: { report_month: true },
-			where: { report_month: { not: null } },
-			distinct: ["report_month"],
-			orderBy: { report_month: "desc" },
-			take: 120,
-		});
-		const fvMonths = await prisma.fieldValue.findMany({
-			select: { report_month: true },
-			where: { report_month: { not: null } },
-			distinct: ["report_month"],
-			orderBy: { report_month: "desc" },
-			take: 120,
-		});
+		    const frMonths = await prisma.facilityRemunerationRecord.findMany({
+        select: { report_month: true },
+        distinct: ["report_month"],
+        orderBy: { report_month: "desc" },
+        take: 120,
+    });
+		    const fvMonths = await prisma.fieldValue.findMany({
+        select: { report_month: true },
+        distinct: ["report_month"],
+        orderBy: { report_month: "desc" },
+        take: 120,
+    });
 
-		let months = rcMonths
-			.map((r) => r.report_month as string)
-			.concat(frMonths.map((r) => r.report_month as string))
-			.concat(fvMonths.map((r) => r.report_month as string))
-			.filter(Boolean);
+		        let months = rcMonths
+            .map((r) => r.report_month as string)
+            .concat(frMonths.map((r) => r.report_month as string))
+            .concat(fvMonths.map((r) => r.report_month as string))
+            .filter((m): m is string => typeof m === "string" && m.length > 0);
 
 		// Ensure sorted unique list (desc)
 		const unique = Array.from(new Set(months)).sort((a, b) =>
