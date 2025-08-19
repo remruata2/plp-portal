@@ -16,6 +16,8 @@ export function sortIndicatorsBySourceOrder(indicators: any[]) {
     
     // 3. Teleconsultation - All facility types
     ['TC001', 3],
+    ['TC001_SC', 3],    // SC-HWC specific Teleconsultation
+    ['TC001_AHWC', 3],  // A-HWC specific Teleconsultation
     
     // 4. Total ANC footfall - SC-HWC, PHC, A-HWC
     ['AF001_SC', 4],     // SC-HWC
@@ -124,6 +126,8 @@ export function getIndicatorNumber(indicator: any): number {
     
     // 3. Teleconsultation - All facility types
     ['TC001', 3],
+    ['TC001_SC', 3],    // SC-HWC specific Teleconsultation
+    ['TC001_AHWC', 3],  // A-HWC specific Teleconsultation
     
     // 4. Total ANC footfall - SC-HWC, PHC, A-HWC
     ['AF001_SC', 4],     // SC-HWC
