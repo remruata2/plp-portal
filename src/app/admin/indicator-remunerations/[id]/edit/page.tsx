@@ -6,25 +6,37 @@ import { UserRole } from "@/generated/prisma";
 import IndicatorRemunerationForm from "../../IndicatorRemunerationForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import prisma from "@/lib/prisma";
 
 async function getRemuneration(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/admin/indicator-remunerations/${id}`, {
-    // Server fetch; avoid caching to reflect latest values
-    cache: "no-store",
+  const numericId = Number(id);
+  if (!Number.isFinite(numericId)) return null;
+  const item = await prisma.indicatorRemuneration.findUnique({
+    where: { id: numericId },
+    include: {
+      indicator: { select: { id: true, name: true, code: true } },
+      facility_type_remuneration: {
+        select: {
+          id: true,
+          facility_type_id: true,
+          facility_type: { select: { id: true, name: true, display_name: true } },
+        },
+      },
+    },
   });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`Failed to load remuneration ${id}`);
-  const data = await res.json();
-  return data.remuneration as any;
+  return item as any;
 }
 
-export default async function EditIndicatorRemunerationPage({ params }: { params: { id: string } }) {
+export default async function EditIndicatorRemunerationPage(
+  props: { params: Promise<{ id: string }> }
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user || session.user.role !== UserRole.admin) {
     redirect("/unauthorized");
   }
 
-  const remuneration = await getRemuneration(params.id).catch(() => null);
+  const { id } = await props.params;
+  const remuneration = await getRemuneration(id).catch(() => null);
   if (!remuneration) return notFound();
 
   const initialValues = {
@@ -43,7 +55,7 @@ export default async function EditIndicatorRemunerationPage({ params }: { params
           <Link href="/admin/indicator-remunerations">Back</Link>
         </Button>
       </div>
-      <IndicatorRemunerationForm mode="edit" id={Number(params.id)} initialValues={initialValues} />
+      <IndicatorRemunerationForm mode="edit" id={Number(id)} initialValues={initialValues} />
     </div>
   );
 }
