@@ -46,8 +46,8 @@ export default function IndicatorRemunerationListClient() {
   const [indicators, setIndicators] = useState<Indicator[]>([]);
   const [items, setItems] = useState<IndicatorRemuneration[]>([]);
   const [filters, setFilters] = useState<{ facilityTypeId: string; indicatorId: string; q: string }>({
-    facilityTypeId: "",
-    indicatorId: "",
+    facilityTypeId: "all",
+    indicatorId: "all",
     q: "",
   });
 
@@ -105,8 +105,12 @@ export default function IndicatorRemunerationListClient() {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      if (filters.facilityTypeId) params.set("facilityTypeId", filters.facilityTypeId);
-      if (filters.indicatorId) params.set("indicatorId", filters.indicatorId);
+      if (filters.facilityTypeId && filters.facilityTypeId !== "all") {
+        params.set("facilityTypeId", filters.facilityTypeId);
+      }
+      if (filters.indicatorId && filters.indicatorId !== "all") {
+        params.set("indicatorId", filters.indicatorId);
+      }
       const res = await fetch(`/api/admin/indicator-remunerations?${params.toString()}`, { cache: "no-store" });
       if (!res.ok) throw new Error(String(res.status));
       const body = await res.json();
@@ -156,7 +160,7 @@ export default function IndicatorRemunerationListClient() {
                 <SelectValue placeholder="All facility types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 {facilityTypes.map((ft) => (
                   <SelectItem key={ft.id} value={String(ft.id)}>
                     {ft.display_name || ft.name}
@@ -176,7 +180,7 @@ export default function IndicatorRemunerationListClient() {
                 <SelectValue placeholder="All indicators" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 {indicators.map((ind) => (
                   <SelectItem key={ind.id} value={String(ind.id)}>
                     {ind.code} - {ind.name}
@@ -200,7 +204,7 @@ export default function IndicatorRemunerationListClient() {
           </div>
 
           <div>
-            <Button variant="outline" onClick={() => setFilters({ facilityTypeId: "", indicatorId: "", q: "" })}>
+            <Button variant="outline" onClick={() => setFilters({ facilityTypeId: "all", indicatorId: "all", q: "" })}>
               Reset
             </Button>
           </div>
