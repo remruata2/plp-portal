@@ -536,6 +536,31 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 							</svg>
 							Incentives
 						</Link>
+
+						<Link
+							href="/admin/indicator-remunerations"
+							onClick={() => setSidebarOpen && setSidebarOpen(false)}
+							className={`${baseLinkClasses} ${
+								pathname.startsWith("/admin/indicator-remunerations")
+									? activeLinkClasses
+									: inactiveLinkClasses
+							}`}
+						>
+							<svg
+								className="mr-3 h-5 w-5 text-gray-500"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M3 10h18M7 15h10M5 7h14"
+								/>
+							</svg>
+							Indicator Remunerations
+						</Link>
 					</>
 				)}
 			</nav>

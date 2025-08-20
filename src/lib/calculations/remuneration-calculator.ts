@@ -203,6 +203,14 @@ export class RemunerationCalculator {
         console.log(`💰 Fallback facility remuneration (percentage-based): ₹${facilityRemuneration.toFixed(2)}`);
       }
 
+      // If no per-indicator incentives were added (common when submittedFieldValues not provided),
+      // fallback to percentage-based calculation to avoid storing zero facility remuneration.
+      if (facilityRemuneration === 0 && facilityIncentive > 0 && performancePercentage > 0) {
+        const fallbackAmount = (facilityIncentive * performancePercentage) / 100;
+        console.log(`💡 Applying fallback facility remuneration as ${performancePercentage.toFixed(2)}% of ₹${facilityIncentive.toFixed(2)} = ₹${fallbackAmount.toFixed(2)}`);
+        facilityRemuneration = fallbackAmount;
+      }
+
       const workersRemuneration: WorkerRemuneration[] = [];
 
       // Calculate for individual-based workers (HWO, AYUSH MO)
