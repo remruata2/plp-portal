@@ -696,9 +696,9 @@ export default function FacilitiesPage() {
                         <p>Contact: {facility.contact_number}</p>
                       )}
                       {facility.email && <p>Email: {facility.email}</p>}
-                      <p>
-                        Status: {getStatusBadge(facility.is_active)}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <span>Status:</span> {getStatusBadge(facility.is_active)}
+                      </div>
                       <p>
                         Created:{" "}
                         {new Date(facility.created_at).toLocaleDateString()}
