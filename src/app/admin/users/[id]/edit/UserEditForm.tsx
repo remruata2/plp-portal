@@ -11,6 +11,7 @@ import { toast } from "sonner";
 export type UserEditData = {
 	id: number;
 	username: string;
+	email?: string | null;
 	role: UserRole;
 	is_active: boolean;
 	// Dates are not directly edited here but could be displayed if needed
@@ -23,6 +24,7 @@ interface UserEditFormProps {
 export default function UserEditForm({ user }: UserEditFormProps) {
 	const [formData, setFormData] = useState({
 		username: user.username,
+		email: user.email ?? "",
 		password: "", // New password, optional
 		role: user.role,
 		is_active: user.is_active,
@@ -48,6 +50,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 		setFormData((prev) => ({
 			...prev,
 			username: user.username,
+			email: user.email ?? "",
 			password: "",
 			role: user.role,
 			is_active: user.is_active,
@@ -170,6 +173,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 		// If role is facility, allow updating facility_id
 		const result = await updateUserAction(user.id, {
 			username: formData.username,
+			email: formData.email || undefined,
 			password: formData.password || undefined,
 			role: formData.role as any,
 			is_active: formData.is_active,
@@ -230,6 +234,25 @@ export default function UserEditForm({ user }: UserEditFormProps) {
 										value={formData.username}
 										onChange={handleInputChange}
 										required
+										className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
+									/>
+								</div>
+							</div>
+
+							<div className="sm:col-span-4">
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Email (optional)
+								</label>
+								<div className="mt-1">
+									<input
+										type="email"
+										name="email"
+										id="email"
+										value={formData.email}
+										onChange={handleInputChange}
 										className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>

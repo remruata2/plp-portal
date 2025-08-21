@@ -30,6 +30,7 @@ export async function getUserById(id: number) {
 		select: {
 			id: true,
 			username: true,
+			email: true,
 			role: true,
 			is_active: true,
 			facility_id: true,
@@ -44,12 +45,13 @@ export async function getUserById(id: number) {
  */
 export async function createUser(data: {
 	username: string;
+	email?: string;
 	password: string;
 	role: UserRole;
 	is_active?: boolean;
 	facility_id?: string;
 }) {
-	const { username, password, role, is_active = true, facility_id } = data;
+	const { username, email, password, role, is_active = true, facility_id } = data;
 
 	// Hash the password
 	const password_hash = await hash(password, 10);
@@ -57,6 +59,7 @@ export async function createUser(data: {
 	return await db.user.create({
 		data: {
 			username,
+			email: email ?? null,
 			password_hash,
 			role,
 			is_active,
@@ -65,6 +68,7 @@ export async function createUser(data: {
 		select: {
 			id: true,
 			username: true,
+			email: true,
 			role: true,
 			is_active: true,
 			facility_id: true,
@@ -80,19 +84,24 @@ export async function updateUser(
 	id: number,
 	data: {
 		username?: string;
+		email?: string;
 		password?: string;
 		role?: UserRole;
 		is_active?: boolean;
 		facility_id?: string | null;
 	}
 ) {
-	const { username, password, role, is_active, facility_id } = data;
+	const { username, email, password, role, is_active, facility_id } = data;
 
 	// Prepare update data
 	const updateData: any = {};
 
 	if (username !== undefined) {
 		updateData.username = username;
+	}
+
+	if (email !== undefined) {
+		updateData.email = email;
 	}
 
 	if (password !== undefined) {
@@ -117,6 +126,7 @@ export async function updateUser(
 		select: {
 			id: true,
 			username: true,
+			email: true,
 			role: true,
 			is_active: true,
 			facility_id: true,

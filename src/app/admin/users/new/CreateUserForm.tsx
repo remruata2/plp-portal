@@ -13,6 +13,7 @@ export default function CreateUserForm() {
 	const [error, setError] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
 		username: "",
+		email: "",
 		password: "",
 		role: "facility" as UserRole,
 		is_active: true,
@@ -135,6 +136,7 @@ export default function CreateUserForm() {
 
 		const result = await createUserAction({
 			username: formData.username,
+			email: formData.email || undefined,
 			password: formData.password,
 			role: formData.role as any,
 			is_active: formData.is_active,
@@ -196,6 +198,25 @@ export default function CreateUserForm() {
 										value={formData.username}
 										onChange={handleInputChange}
 										required
+										className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
+									/>
+								</div>
+							</div>
+
+							<div>
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Email (optional)
+								</label>
+								<div className="mt-1">
+									<input
+										type="email"
+										name="email"
+										id="email"
+										value={formData.email}
+										onChange={handleInputChange}
 										className="block w-full pl-3 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
 									/>
 								</div>

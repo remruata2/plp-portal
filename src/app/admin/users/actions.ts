@@ -41,6 +41,7 @@ export async function deleteUserAction(
 
 export async function createUserAction(formData: {
 	username: string;
+	email?: string;
 	password: string;
 	role: UserRole;
 	is_active: boolean;
@@ -52,7 +53,7 @@ export async function createUserAction(formData: {
 		return { success: false, error: "Unauthorized" };
 	}
 
-	const { username, password, role, is_active, facility_id } = formData;
+	const { username, email, password, role, is_active, facility_id } = formData;
 
 	if (!username || !password) {
 		return { success: false, error: "Username and password are required." };
@@ -61,6 +62,7 @@ export async function createUserAction(formData: {
 	try {
 		const newUser = await createUserService({
 			username,
+			email,
 			password,
 			role,
 			is_active,
@@ -87,6 +89,7 @@ export async function updateUserAction(
 	userId: number,
 	formData: {
 		username: string;
+		email?: string; // Email is optional
 		password?: string; // Password is optional
 		role: UserRole;
 		is_active: boolean;
@@ -99,7 +102,7 @@ export async function updateUserAction(
 		return { success: false, error: "Unauthorized" };
 	}
 
-	const { username, password, role, is_active, facility_id } = formData;
+	const { username, email, password, role, is_active, facility_id } = formData;
 
 	if (!username) {
 		return { success: false, error: "Username is required." };
@@ -108,11 +111,16 @@ export async function updateUserAction(
 	// Prepare update data, only include password if provided
 	const updateData: {
 		username: string;
+		email?: string;
 		password?: string;
 		role: UserRole;
 		is_active: boolean;
 		facility_id?: string | null;
 	} = { username, role, is_active };
+
+	if (email !== undefined) {
+		updateData.email = email;
+	}
 
 	if (password && password.trim() !== "") {
 		updateData.password = password;

@@ -33,6 +33,7 @@ export default async function UserEditPage(props: UserEditPageProps) {
 				initialUserData = {
 					id: rawUser.id,
 					username: rawUser.username,
+					email: (rawUser as any).email ?? null,
 					role: rawUser.role,
 					is_active: rawUser.is_active === null ? true : rawUser.is_active, // Default to true if null
 					facility_id: (rawUser as any).facility_id ?? null,
