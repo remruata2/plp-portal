@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { month: string } }
+	{ params }: { params: Promise<{ month: string }> }
 ) {
 	try {
 		const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function GET(
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
-		const { month } = params;
+		const { month } = await params;
 		const facilityId = session.user.facility_id;
 		if (!facilityId) {
 			return NextResponse.json(

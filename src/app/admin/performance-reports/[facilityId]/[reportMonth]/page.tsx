@@ -21,6 +21,7 @@ import {
 	TrendingDown,
 	Target,
 	ArrowLeft,
+	Download,
 } from "lucide-react";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
 import { CalculationDetailsModal } from "@/components/calculation-details-modal";
@@ -196,9 +197,20 @@ export default function AdminFacilityReportPage({
 						• <Calendar className="h-4 w-4" /> {formatMonth(report.reportMonth)}
 					</p>
 				</div>
-				<Button variant="outline" onClick={() => router.back()}>
-					<ArrowLeft className="h-4 w-4 mr-2" /> Back
-				</Button>
+				<div className="flex items-center gap-2">
+					<Button
+						className="bg-indigo-600 hover:bg-indigo-700 text-white"
+						onClick={() => {
+							const url = `/api/admin/performance-reports/${report.facility.id}/${report.reportMonth}?download=xlsx`;
+							window.location.href = url;
+						}}
+					>
+						<Download className="h-4 w-4 mr-2" /> Download Excel
+					</Button>
+					<Button variant="outline" onClick={() => router.back()}>
+						<ArrowLeft className="h-4 w-4 mr-2" /> Back
+					</Button>
+				</div>
 			</div>
 
 			{/* Summary Cards (mirrors facility page) */}
