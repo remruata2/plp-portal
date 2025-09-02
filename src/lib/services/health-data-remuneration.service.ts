@@ -352,9 +352,10 @@ export class HealthDataRemunerationService {
 				};
 
 				let incentiveAmount = 0;
+				let calcResultRemuneration = 0;
 				try {
-					// Calculate remuneration using FormulaCalculator
-					let result = FormulaCalculator.calculateRemuneration(
+					// Calculate remuneration using FormulaCalculator (base reference)
+					const result = FormulaCalculator.calculateRemuneration(
 						actualValue,
 						denominatorValue,
 						effectiveMaxRemuneration,
@@ -363,17 +364,14 @@ export class HealthDataRemunerationService {
 						undefined,
 						Object.fromEntries(fieldValueMap)
 					);
-
-					incentiveAmount = result.remuneration;
+					calcResultRemuneration = Number(result.remuneration || 0);
 				} catch (error) {
 					console.error(
 						`Error calculating with FormulaCalculator for indicator ${indicator.code}:`,
 						error
 					);
-					incentiveAmount = 0;
+					calcResultRemuneration = 0;
 				}
-
-				totalIncentive += incentiveAmount;
 
 				// Apply storage logic for range-based targets
 				// For range targets (e.g., Total Footfall 3-5%, Elderly & Palliative 50-80%),
@@ -394,21 +392,45 @@ export class HealthDataRemunerationService {
 					rangeData?.min &&
 					rangeData?.max
 				) {
-					// For percentage range targets (e.g., TF001_SC: 3-5%), check if actual percentage is within or above range
-					// Calculate actual percentage from the raw values (not the achievement percentage which is relative to max)
-					const actualPercentage = (actualValue / denominatorValue) * 100;
-
-					if (actualPercentage >= rangeData.min) {
-						// If actual percentage meets the minimum target, store 100% (achieved)
+					// Base display on computed achievementPercentage against the minimum threshold
+					// If achievement meets minimum, treat as achieved (100). Otherwise, scale relative to min.
+					if (achievementPercentage >= rangeData.min) {
 						displayPercentage = 100;
 					} else {
-						// If below minimum target, store the actual achievement percentage relative to minimum
-						displayPercentage = (actualPercentage / rangeData.min) * 100;
+						displayPercentage = (achievementPercentage / rangeData.min) * 100;
 					}
 				} else {
 					// For other indicators, cap at 100% to match performance report display
 					displayPercentage = Math.min(achievementPercentage, 100);
 				}
+
+				// Normalize displayPercentage
+				if (!isFinite(displayPercentage) || isNaN(displayPercentage)) {
+					displayPercentage = 0;
+				}
+
+				// Incentive policy post-adjustment to fix inconsistencies:
+				// - Not achieved (<50%): 0 incentive
+				// - Achieved (>=100%): full effectiveMaxRemuneration
+				// - Partial (>=50% and <100%): pro-rated by displayPercentage
+				if (displayPercentage >= 100) {
+					incentiveAmount = Math.round(effectiveMaxRemuneration);
+				} else if (displayPercentage >= 50) {
+					incentiveAmount = Math.round((effectiveMaxRemuneration * displayPercentage) / 100);
+				} else {
+					incentiveAmount = 0;
+				}
+
+				// For binary indicators, only 0 or full applies; above logic already covers this
+				// Keep base calculation result as a ceiling if ever smaller than policy-based amount
+				// but ensure we never exceed effectiveMaxRemuneration.
+				incentiveAmount = Math.min(
+					Math.max(incentiveAmount, 0),
+					Math.round(effectiveMaxRemuneration)
+				);
+
+				// Now that incentiveAmount is finalized, add to total
+				totalIncentive += incentiveAmount;
 
 				// Convert actualValue to number for database storage (boolean -> number conversion)
 				const actualValueForDB =
