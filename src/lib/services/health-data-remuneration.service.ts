@@ -392,12 +392,11 @@ export class HealthDataRemunerationService {
 					rangeData?.min &&
 					rangeData?.max
 				) {
-					// Base display on computed achievementPercentage against the minimum threshold
-					// If achievement meets minimum, treat as achieved (100). Otherwise, scale relative to min.
+					// For PERCENTAGE_RANGE: only pay if achievement meets minimum threshold
 					if (achievementPercentage >= rangeData.min) {
 						displayPercentage = 100;
 					} else {
-						displayPercentage = (achievementPercentage / rangeData.min) * 100;
+						displayPercentage = 0; // No incentive below minimum
 					}
 				} else {
 					// For other indicators, cap at 100% to match performance report display

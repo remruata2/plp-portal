@@ -437,9 +437,33 @@ export default function AdminPerformanceReportsPage() {
 						/>
 						Refresh
 					</Button>
-					<Button variant="outline">
+					<Button
+						variant="outline"
+						onClick={() => {
+							// Bulk export using facility type NAME and YYYY-MM
+							try {
+								const ft = facilityTypes.find((t) => t.id === filters.facilityTypeId);
+								if (!ft) {
+									toast.error("Select a facility type to export");
+									return;
+								}
+								if (!filters.reportMonth) {
+									toast.error("Select a month (YYYY-MM)");
+									return;
+								}
+								const facilityTypeName = encodeURIComponent(ft.name);
+								const url = `/api/admin/performance-reports/bulk/${facilityTypeName}/${filters.reportMonth}`;
+								// Start download in a new tab to avoid blocking UI
+								window.open(url, "_blank");
+							} catch (e) {
+								console.error(e);
+								toast.error("Failed to start export");
+							}
+						}}
+						disabled={loading || !filters.facilityTypeId || !filters.reportMonth}
+					>
 						<Download className="h-4 w-4 mr-2" />
-						Export
+						Export (Bulk)
 					</Button>
 				</div>
 			</div>
