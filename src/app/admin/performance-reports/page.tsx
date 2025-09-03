@@ -477,8 +477,8 @@ export default function AdminPerformanceReportsPage() {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-						<div>
+					<div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+						<div className="md:col-span-2">
 							<Label htmlFor="facilityType">Facility Type</Label>
 							<Select
 								value={filters.facilityTypeId}
