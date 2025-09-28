@@ -255,8 +255,17 @@ export async function GET(
         const rec = records.find((r) => r.indicator_id === indicator.id);
         const indicatorKeyPrefix = `${indicator.name}`;
 
-        // Submitted value (A)
-        const actualValue = rec?.actual_value != null ? Number(rec.actual_value) : 0;
+        // Submitted value (A): prefer stored record; fallback to raw field value
+        let actualValue = 0;
+        if (rec && rec.actual_value != null) {
+          actualValue = Number(rec.actual_value);
+        } else {
+          const raw = indicator.numerator_field_id
+            ? fieldValueMap.get(indicator.numerator_field_id)
+            : undefined;
+          if (typeof raw === "boolean") actualValue = raw ? 1 : 0;
+          else if (raw != null && !Number.isNaN(Number(raw))) actualValue = Number(raw);
+        }
         row[`${indicatorKeyPrefix} - Indicator`] = actualValue;
 
         // Target display
