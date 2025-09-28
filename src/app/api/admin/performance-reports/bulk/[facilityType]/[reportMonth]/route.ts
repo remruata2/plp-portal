@@ -290,8 +290,64 @@ export async function GET(
         row[`${indicatorKeyPrefix} - Target min`] = Number.isFinite(targetMin) ? Math.round(targetMin) : 0;
         row[`${indicatorKeyPrefix} - Target max`] = Number.isFinite(targetMax) ? Math.round(targetMax) : 0;
 
-        // Indicator amount
-        const incentive = rec ? Number(rec.incentive_amount || 0) : 0;
+        // Indicator amount: prefer stored record; fallback to local computation
+        let incentive = 0;
+        if (rec) {
+          incentive = Number(rec.incentive_amount || 0);
+        } else {
+          const remuneration = indicator.remunerations?.[0];
+          const baseMaxRemuneration = remuneration ? Number(remuneration.base_amount) : 0;
+          const conditionalAmountRaw = remuneration ? remuneration.conditional_amount : undefined;
+          const conditionalAmount = conditionalAmountRaw != null ? Number(conditionalAmountRaw) : 0;
+
+          // For DVDMS and most indicators here, TB condition does not apply; keep simple effective cap
+          const effectiveMaxRemuneration = baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
+
+          // Compute achievement percentage similar to service
+          let achievementPercentage = 0;
+          if (indicator.target_type === "RANGE") {
+            const targetAmount = computeTargetAmountNumeric(
+              indicator,
+              facility.facility_type.name,
+              fieldValueMap
+            );
+            if (targetAmount > 0) {
+              achievementPercentage = (actualValue / targetAmount) * 100;
+            }
+          } else if (indicator.target_type === "PERCENTAGE_RANGE") {
+            const denom = resolveDenominatorForIndicator(
+              indicator,
+              facility.facility_type.name,
+              fieldValueMap
+            );
+            if (denom > 0) {
+              achievementPercentage = (actualValue / denom) * 100;
+            }
+          } else if (indicator.target_type === "BINARY") {
+            achievementPercentage = actualValue > 0 ? 100 : 0;
+          } else {
+            const denom = resolveDenominatorForIndicator(
+              indicator,
+              facility.facility_type.name,
+              fieldValueMap
+            );
+            if (denom > 0) {
+              achievementPercentage = (actualValue / denom) * 100;
+            }
+          }
+
+          // Normalize and apply policy
+          if (!Number.isFinite(achievementPercentage)) achievementPercentage = 0;
+          let displayPercentage = Math.min(Math.max(achievementPercentage, 0), 100);
+          if (displayPercentage >= 100) {
+            incentive = Math.round(effectiveMaxRemuneration);
+          } else if (displayPercentage >= 50) {
+            incentive = Math.round((effectiveMaxRemuneration * displayPercentage) / 100);
+          } else {
+            incentive = 0;
+          }
+        }
+
         row[`${indicatorKeyPrefix} - Indicator amount`] = Math.round(incentive);
         totalIncentiveForFacility += incentive;
       }
