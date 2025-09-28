@@ -135,7 +135,13 @@ export async function GET(
 					} else if (indicator.code === "JM001") {
 						// JAS Meeting - always 1
 						denominatorValue = 1;
-					} else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
+					} else if (
+						indicator.code === "DI001" ||
+						indicator.code === "DV001_PHC" ||
+						indicator.code === "DV001_UPHC" ||
+						indicator.code === "DV001_UHWC" ||
+						indicator.code === "DV001_AHWC"
+					) {
 						// DVDMS Issues - facility-specific targets
 						const dvdmsTargets: Record<string, number> = {
 							SC_HWC: 20,

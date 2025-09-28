@@ -88,12 +88,19 @@ export default function IndicatorRemunerationForm({
         toast.error("Please fill all required fields");
         return;
       }
+      const facilityTypeIdStr = String(values.facilityTypeId);
+      const indicatorIdNum = Number(values.indicator_id);
       const payload: any = {
-        facilityTypeId: Number(values.facilityTypeId),
-        indicator_id: Number(values.indicator_id),
+        // Accepted by API: both camelCase and snake_case for compatibility
+        facilityTypeId: facilityTypeIdStr,
+        facility_type_id: facilityTypeIdStr,
+        indicatorId: indicatorIdNum,
+        indicator_id: indicatorIdNum,
         base_amount: Number(values.base_amount),
       };
-      if (values.conditional_amount) payload.conditional_amount = Number(values.conditional_amount);
+      if (values.conditional_amount !== undefined && values.conditional_amount !== "") {
+        payload.conditional_amount = Number(values.conditional_amount);
+      }
       if (values.condition_type !== undefined) payload.condition_type = values.condition_type || null;
 
       if (mode === "create") {

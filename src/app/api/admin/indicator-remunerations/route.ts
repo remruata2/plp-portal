@@ -69,12 +69,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { facilityTypeId, indicatorId, base_amount, conditional_amount, condition_type } = body || {};
+    // Accept both indicatorId and indicator_id from clients
+    const indicatorIdRaw = body?.indicatorId ?? body?.indicator_id;
+    const facilityTypeIdRaw = body?.facilityTypeId ?? body?.facility_type_id ?? body?.facilityTypeID;
+    const { base_amount, conditional_amount, condition_type } = body || {};
 
-    if (!facilityTypeId || typeof facilityTypeId !== "string") {
+    const facilityTypeIdStr = String(facilityTypeIdRaw ?? '').trim();
+    if (!facilityTypeIdStr) {
       return NextResponse.json({ error: "facilityTypeId is required" }, { status: 400 });
     }
-    const indicatorIdNum = Number(indicatorId);
+    const indicatorIdNum = Number(indicatorIdRaw);
     if (!Number.isFinite(indicatorIdNum)) {
       return NextResponse.json({ error: "indicatorId must be a number" }, { status: 400 });
     }
@@ -89,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     // Find or ensure FacilityTypeRemuneration exists for this facilityType
     const ftr = await prisma.facilityTypeRemuneration.findUnique({
-      where: { facility_type_id: facilityTypeId },
+      where: { facility_type_id: facilityTypeIdStr },
     });
     if (!ftr) {
       return NextResponse.json({ error: "FacilityTypeRemuneration not found for facilityTypeId" }, { status: 400 });
