@@ -547,7 +547,8 @@ export class HealthDataRemunerationService {
 				const workerType = worker.worker_type.toLowerCase();
 
 				// Only performance-based workers (HW, ASHA) get individual incentives
-				// HWO, MO, AYUSH MO get facility remuneration instead
+				// HWO and AYUSH MO are individual-based and should also be stored with full facility remuneration
+				// MO remains team-based and is not stored per-worker here
 				if (workerType === "hw" || workerType === "asha") {
 					// Calculate worker incentive: allocated amount × performance percentage
 					const allocatedAmount = parseFloat(
@@ -589,6 +590,42 @@ export class HealthDataRemunerationService {
 							allocated_amount: worker.allocated_amount,
 							performance_percentage: performancePercentage,
 							calculated_amount: workerIncentive,
+							calculated_at: new Date(),
+						},
+					});
+
+					workerRecords.push(workerRecord);
+				} else if (workerType === "hwo" || workerType === "ayush_mo") {
+					// Individual-based: store full facility remuneration for the worker
+					const workerRecord = await tx.workerRemuneration.upsert({
+						where: {
+							health_worker_id_report_month: {
+								health_worker_id: worker.id,
+								report_month: reportMonth.substring(0, 7),
+							},
+						},
+						update: {
+							facility_id: facilityId,
+							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20),
+							worker_role: (worker.worker_type || "UNKNOWN")
+								.substring(0, 50)
+								.toUpperCase(),
+							allocated_amount: worker.allocated_amount,
+							performance_percentage: performancePercentage,
+							calculated_amount: facilityRemuneration,
+							calculated_at: new Date(),
+						},
+						create: {
+							health_worker_id: worker.id,
+							facility_id: facilityId,
+							report_month: reportMonth.substring(0, 7),
+							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20),
+							worker_role: (worker.worker_type || "UNKNOWN")
+								.substring(0, 50)
+								.toUpperCase(),
+							allocated_amount: worker.allocated_amount,
+							performance_percentage: performancePercentage,
+							calculated_amount: facilityRemuneration,
 							calculated_at: new Date(),
 						},
 					});
