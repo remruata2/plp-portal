@@ -122,7 +122,6 @@ export async function GET(
 					// Get target value for binary indicators with facility-specific targets
 					const facilityTypeName = facility.facility_type.name;
 
-					// Binary indicators with facility-specific targets
 					if (indicator.code === "EC001") {
 						// Elderly Clinic targets by facility type
 						const clinicTargets: Record<string, number> = {
@@ -136,7 +135,7 @@ export async function GET(
 					} else if (indicator.code === "JM001") {
 						// JAS Meeting - always 1
 						denominatorValue = 1;
-					} else if (indicator.code === "DI001") {
+					} else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
 						// DVDMS Issues - facility-specific targets
 						const dvdmsTargets: Record<string, number> = {
 							SC_HWC: 20,
@@ -150,21 +149,6 @@ export async function GET(
 						// Other binary indicators default to 1
 						denominatorValue = 1;
 					}
-				} else {
-					// For non-binary indicators, use facility-type based population defaults
-					const facilityTypeName = facility.facility_type.name;
-
-					// Default population values by facility type (based on typical catchment sizes)
-					const defaultPopulationValues: Record<string, number> = {
-						PHC: 25000,
-						SC_HWC: 3000,
-						A_HWC: 3000,
-						U_HWC: 10000,
-						UPHC: 50000,
-					};
-
-					// Use default based on facility type, or a reasonable fallback
-					denominatorValue = defaultPopulationValues[facilityTypeName] || 5000;
 				}
 			}
 

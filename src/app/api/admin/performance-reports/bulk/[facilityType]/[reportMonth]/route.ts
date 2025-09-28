@@ -105,7 +105,7 @@ function resolveDenominatorForIndicator(
         return Number(v || 1);
       }
       return 1;
-    } else if (indicator.code === "DI001") {
+    } else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
       const dvdmsTargets: Record<string, number> = { SC_HWC: 20, PHC: 50, UPHC: 100, U_HWC: 100, A_HWC: 100 };
       return dvdmsTargets[facilityTypeName] ?? 50;
     }
