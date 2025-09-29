@@ -244,7 +244,18 @@ export async function GET(
         fieldValueMap.set(fv.field_id, v);
       }
 
+      // Fetch HWO and AYUSH MO names for this facility
+      let leaderNames = "";
+      try {
+        const leaders = await prisma.healthWorker.findMany({
+          where: { facility_id: facility.id, worker_type: { in: ["hwo", "ayush_mo"] }, is_active: true },
+          select: { name: true },
+        });
+        leaderNames = leaders.map((l: any) => l.name || "").filter(Boolean).join(", ");
+      } catch {}
+
       const row: Record<string, any> = {
+        "HWO / AYUSH MO": leaderNames,
         Facility: facility.display_name || facility.name,
         District: facility.district?.name || "N/A",
       };
@@ -296,9 +307,12 @@ export async function GET(
           incentive = Number(rec.incentive_amount || 0);
         } else {
           const remuneration = indicator.remunerations?.[0];
-          const baseMaxRemuneration = remuneration ? Number(remuneration.base_amount) : 0;
-          const conditionalAmountRaw = remuneration ? remuneration.conditional_amount : undefined;
-          const conditionalAmount = conditionalAmountRaw != null ? Number(conditionalAmountRaw) : 0;
+          const baseMaxRemuneration = remuneration
+            ? parseFloat((remuneration.base_amount as any)?.toString?.() ?? `${remuneration.base_amount}`)
+            : 0;
+          const conditionalAmount = remuneration && (remuneration as any).conditional_amount != null
+            ? parseFloat((remuneration as any).conditional_amount?.toString?.() ?? `${(remuneration as any).conditional_amount}`)
+            : 0;
 
           // For DVDMS and most indicators here, TB condition does not apply; keep simple effective cap
           const effectiveMaxRemuneration = baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
@@ -358,8 +372,8 @@ export async function GET(
     }
 
     // Build worksheet with compact merged headers
-    const headerTop: any[] = ["Facility", "District"];
-    const headerSub: any[] = ["", ""];
+    const headerTop: any[] = ["HWO / AYUSH MO", "Facility", "District"];
+    const headerSub: any[] = ["", "", ""];
     for (const indicator of indicatorsSorted) {
       const p = `${indicator.name}`;
       headerTop.push(p, "", "", "", "");
@@ -376,7 +390,7 @@ export async function GET(
 
     const data: any[][] = [headerTop, headerSub];
     for (const r of rows) {
-      const line: any[] = [r["Facility"], r["District"]];
+      const line: any[] = [r["HWO / AYUSH MO"], r["Facility"], r["District"]];
       for (const indicator of indicatorsSorted) {
         const p = `${indicator.name}`;
         line.push(r[`${p} - Indicator`]);
@@ -407,6 +421,7 @@ export async function GET(
 
     // Set column widths
     let colIndex = 1;
+    worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
     worksheet.getColumn(colIndex++).width = 24; // Facility
     worksheet.getColumn(colIndex++).width = 18; // District
     for (let i = 0; i < indicatorsSorted.length; i++) {
@@ -423,17 +438,17 @@ export async function GET(
     worksheet.getRow(2).height = 28;
 
     // Merge header cells
-    // Merge Facility header over two rows
+    // Merge HWO/AYUSH, Facility, District headers over two rows
     worksheet.mergeCells(1, 1, 2, 1);
-    // Merge District header over two rows
     worksheet.mergeCells(1, 2, 2, 2);
+    worksheet.mergeCells(1, 3, 2, 3);
     // Merge each indicator group name across 5 columns in top row
     for (let i = 0; i < indicatorsSorted.length; i++) {
-      const startCol = 3 + i * 5; // after Facility and District (1-indexed)
+      const startCol = 4 + i * 5; // after HWO/AYUSH, Facility and District (1-indexed)
       worksheet.mergeCells(1, startCol, 1, startCol + 4);
     }
     // Merge Total Facility Incentive over two rows (last column)
-    const totalCol = 3 + indicatorsSorted.length * 5;
+    const totalCol = 4 + indicatorsSorted.length * 5;
     worksheet.mergeCells(1, totalCol, 2, totalCol);
 
     // Style header rows
