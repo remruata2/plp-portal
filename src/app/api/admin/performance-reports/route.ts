@@ -31,11 +31,29 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Get all facilities with their basic info
+		// Using select to avoid parent_facility_id which may not exist in database
 		const facilities = await prisma.facility.findMany({
 			where: facilityWhere,
-			include: {
-				district: true,
-				facility_type: true,
+			select: {
+				id: true,
+				name: true,
+				display_name: true,
+				district_id: true,
+				facility_type_id: true,
+				is_active: true,
+				district: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				facility_type: {
+					select: {
+						id: true,
+						name: true,
+						display_name: true,
+					},
+				},
 				_count: {
 					select: {
 						health_workers: true,
@@ -62,9 +80,26 @@ export async function GET(request: NextRequest) {
 			},
 			include: {
 				facility: {
-					include: {
-						district: true,
-						facility_type: true,
+					select: {
+						id: true,
+						name: true,
+						display_name: true,
+						district_id: true,
+						facility_type_id: true,
+						is_active: true,
+						district: {
+							select: {
+								id: true,
+								name: true,
+							},
+						},
+						facility_type: {
+							select: {
+								id: true,
+								name: true,
+								display_name: true,
+							},
+						},
 					},
 				},
 				indicator: true,
@@ -84,9 +119,26 @@ export async function GET(request: NextRequest) {
 				},
 				include: {
 					facility: {
-						include: {
-							district: true,
-							facility_type: true,
+						select: {
+							id: true,
+							name: true,
+							display_name: true,
+							district_id: true,
+							facility_type_id: true,
+							is_active: true,
+							district: {
+								select: {
+									id: true,
+									name: true,
+								},
+							},
+							facility_type: {
+								select: {
+									id: true,
+									name: true,
+									display_name: true,
+								},
+							},
 						},
 					},
 				},
