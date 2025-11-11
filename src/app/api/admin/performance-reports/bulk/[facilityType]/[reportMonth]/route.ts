@@ -9,542 +9,690 @@ import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
 const prisma = new PrismaClient();
 
 // Utilities to parse target display and amounts
-function parseRangeFromTargetValue(targetValue: unknown): { min?: number; max?: number } | null {
-  if (targetValue == null) return null;
-  const str = String(targetValue);
-  if (str.startsWith("{") && str.endsWith("}")) {
-    try {
-      const obj = JSON.parse(str);
-      if (typeof obj.min === "number" || typeof obj.max === "number") return { min: obj.min, max: obj.max };
-    } catch {}
-  }
-  const m = str.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
-  if (m) return { min: parseFloat(m[1]), max: parseFloat(m[2]) };
-  return null;
+function parseRangeFromTargetValue(
+	targetValue: unknown
+): { min?: number; max?: number } | null {
+	if (targetValue == null) return null;
+	const str = String(targetValue);
+	if (str.startsWith("{") && str.endsWith("}")) {
+		try {
+			const obj = JSON.parse(str);
+			if (typeof obj.min === "number" || typeof obj.max === "number")
+				return { min: obj.min, max: obj.max };
+		} catch {}
+	}
+	const m = str.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
+	if (m) return { min: parseFloat(m[1]), max: parseFloat(m[2]) };
+	return null;
 }
 
 function computeTargetAmountRange(
-  indicator: any,
-  facilityTypeName: string,
-  fieldValueMap: Map<string | number, any>
+	indicator: any,
+	facilityTypeName: string,
+	fieldValueMap: Map<string | number, any>
 ): { min: number; max: number } {
-  const cfg = (indicator.formula_config as any) || {};
-  const targetType = indicator.target_type;
-  const raw = indicator.target_value ? String(indicator.target_value) : undefined;
-  const range = cfg?.range || parseRangeFromTargetValue(raw || "");
+	const cfg = (indicator.formula_config as any) || {};
+	const targetType = indicator.target_type;
+	const raw = indicator.target_value
+		? String(indicator.target_value)
+		: undefined;
+	const range = cfg?.range || parseRangeFromTargetValue(raw || "");
 
-  if (targetType === "PERCENTAGE_RANGE") {
-    const denom = resolveDenominatorForIndicator(indicator, facilityTypeName, fieldValueMap);
-    const minPct = range?.min != null ? Number(range.min) : undefined;
-    const maxPct = range?.max != null ? Number(range.max) : undefined;
-    const min = denom && minPct != null && !Number.isNaN(minPct) ? (denom * minPct) / 100 : 0;
-    const max = denom && maxPct != null && !Number.isNaN(maxPct) ? (denom * maxPct) / 100 : 0;
-    return { min, max };
-  }
+	if (targetType === "PERCENTAGE_RANGE") {
+		const denom = resolveDenominatorForIndicator(
+			indicator,
+			facilityTypeName,
+			fieldValueMap
+		);
+		const minPct = range?.min != null ? Number(range.min) : undefined;
+		const maxPct = range?.max != null ? Number(range.max) : undefined;
+		const min =
+			denom && minPct != null && !Number.isNaN(minPct)
+				? (denom * minPct) / 100
+				: 0;
+		const max =
+			denom && maxPct != null && !Number.isNaN(maxPct)
+				? (denom * maxPct) / 100
+				: 0;
+		return { min, max };
+	}
 
-  if (targetType === "RANGE") {
-    const min = range?.min != null && !Number.isNaN(Number(range.min)) ? Number(range.min) : 0;
-    const max = range?.max != null && !Number.isNaN(Number(range.max)) ? Number(range.max) : 0;
-    return { min, max };
-  }
+	if (targetType === "RANGE") {
+		const min =
+			range?.min != null && !Number.isNaN(Number(range.min))
+				? Number(range.min)
+				: 0;
+		const max =
+			range?.max != null && !Number.isNaN(Number(range.max))
+				? Number(range.max)
+				: 0;
+		return { min, max };
+	}
 
-  if (targetType === "BINARY") {
-    const v = resolveDenominatorForIndicator(indicator, facilityTypeName, fieldValueMap);
-    return { min: v, max: v };
-  }
+	if (targetType === "BINARY") {
+		const v = resolveDenominatorForIndicator(
+			indicator,
+			facilityTypeName,
+			fieldValueMap
+		);
+		return { min: v, max: v };
+	}
 
-  const num = computeTargetAmountNumeric(indicator, facilityTypeName, fieldValueMap);
-  return { min: num, max: num };
+	const num = computeTargetAmountNumeric(
+		indicator,
+		facilityTypeName,
+		fieldValueMap
+	);
+	return { min: num, max: num };
 }
 
 function buildTargetDisplay(indicator: any): string {
-  const cfg = (indicator.formula_config as any) || {};
-  const targetType = indicator.target_type;
-  const raw = indicator.target_value ? String(indicator.target_value) : undefined;
-  if (targetType === "PERCENTAGE_RANGE") {
-    const min = cfg?.range?.min ?? parseRangeFromTargetValue(raw || "")?.min;
-    const max = cfg?.range?.max ?? parseRangeFromTargetValue(raw || "")?.max;
-    if (min != null && max != null) return `${min}%-${max}%`;
-  }
-  if (targetType === "RANGE") {
-    const r = parseRangeFromTargetValue(raw || "");
-    if (r?.min != null && r?.max != null) return `${r.min}-${r.max}`;
-  }
-  if (targetType === "BINARY") return "100%";
-  return raw || "N/A";
+	const cfg = (indicator.formula_config as any) || {};
+	const targetType = indicator.target_type;
+	const raw = indicator.target_value
+		? String(indicator.target_value)
+		: undefined;
+	if (targetType === "PERCENTAGE_RANGE") {
+		const min = cfg?.range?.min ?? parseRangeFromTargetValue(raw || "")?.min;
+		const max = cfg?.range?.max ?? parseRangeFromTargetValue(raw || "")?.max;
+		if (min != null && max != null) return `${min}%-${max}%`;
+	}
+	if (targetType === "RANGE") {
+		const r = parseRangeFromTargetValue(raw || "");
+		if (r?.min != null && r?.max != null) return `${r.min}-${r.max}`;
+	}
+	if (targetType === "BINARY") return "100%";
+	return raw || "N/A";
 }
 
 function resolveDenominatorForIndicator(
-  indicator: any,
-  facilityTypeName: string,
-  fieldValueMap: Map<string | number, any>
+	indicator: any,
+	facilityTypeName: string,
+	fieldValueMap: Map<string | number, any>
 ): number {
-  // Default fetch from denominator field
-  let denominatorValue: any = indicator.denominator_field_id
-    ? fieldValueMap.get(indicator.denominator_field_id)
-    : undefined;
+	// Default fetch from denominator field
+	let denominatorValue: any = indicator.denominator_field_id
+		? fieldValueMap.get(indicator.denominator_field_id)
+		: undefined;
 
-  if (indicator.code === "PS001") {
-    return 5; // Fixed scale
-  }
+	if (indicator.code === "PS001") {
+		return 5; // Fixed scale
+	}
 
-  if (denominatorValue !== undefined && denominatorValue !== null && !Number.isNaN(Number(denominatorValue))) {
-    return Number(denominatorValue);
-  }
+	if (
+		denominatorValue !== undefined &&
+		denominatorValue !== null &&
+		!Number.isNaN(Number(denominatorValue))
+	) {
+		return Number(denominatorValue);
+	}
 
-  // If missing, apply same defaults as service
-  if (indicator.target_type === "BINARY") {
-    if (indicator.code === "EC001") {
-      const clinicTargets: Record<string, number> = { SC_HWC: 1, PHC: 4, UPHC: 4, U_HWC: 4, A_HWC: 4 };
-      return clinicTargets[facilityTypeName] ?? 4;
-    } else if (indicator.code === "JM001") {
-      return 1;
-    } else if (indicator.code === "RS001") {
-      if (indicator.denominator_field_id) {
-        const v = fieldValueMap.get(indicator.denominator_field_id);
-        return Number(v || 1);
-      }
-      return 1;
-    } else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
-      const dvdmsTargets: Record<string, number> = { SC_HWC: 20, PHC: 50, UPHC: 100, U_HWC: 100, A_HWC: 100 };
-      return dvdmsTargets[facilityTypeName] ?? 50;
-    }
-    return 1;
-  }
+	// If missing, apply same defaults as service
+	if (indicator.target_type === "BINARY") {
+		if (indicator.code === "EC001") {
+			const clinicTargets: Record<string, number> = {
+				SC_HWC: 1,
+				PHC: 4,
+				UPHC: 4,
+				U_HWC: 4,
+				A_HWC: 4,
+			};
+			return clinicTargets[facilityTypeName] ?? 4;
+		} else if (indicator.code === "JM001") {
+			return 1;
+		} else if (indicator.code === "RS001") {
+			if (indicator.denominator_field_id) {
+				const v = fieldValueMap.get(indicator.denominator_field_id);
+				return Number(v || 1);
+			}
+			return 1;
+		} else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
+			const dvdmsTargets: Record<string, number> = {
+				SC_HWC: 20,
+				PHC: 50,
+				UPHC: 100,
+				U_HWC: 100,
+				A_HWC: 100,
+			};
+			return dvdmsTargets[facilityTypeName] ?? 50;
+		}
+		return 1;
+	}
 
-  const defaults: Record<string, number> = { PHC: 25000, SC_HWC: 3000, A_HWC: 3000, U_HWC: 10000, UPHC: 50000 };
-  return defaults[facilityTypeName] ?? 5000;
+	const defaults: Record<string, number> = {
+		PHC: 25000,
+		SC_HWC: 3000,
+		A_HWC: 3000,
+		U_HWC: 10000,
+		UPHC: 50000,
+	};
+	return defaults[facilityTypeName] ?? 5000;
 }
 
 function computeTargetAmountNumeric(
-  indicator: any,
-  facilityTypeName: string,
-  fieldValueMap: Map<string | number, any>
+	indicator: any,
+	facilityTypeName: string,
+	fieldValueMap: Map<string | number, any>
 ): number {
-  const cfg = (indicator.formula_config as any) || {};
-  const targetType = indicator.target_type;
-  const raw = indicator.target_value ? String(indicator.target_value) : undefined;
-  const range = cfg?.range || parseRangeFromTargetValue(raw || "");
+	const cfg = (indicator.formula_config as any) || {};
+	const targetType = indicator.target_type;
+	const raw = indicator.target_value
+		? String(indicator.target_value)
+		: undefined;
+	const range = cfg?.range || parseRangeFromTargetValue(raw || "");
 
-  if (targetType === "PERCENTAGE_RANGE") {
-    const denom = resolveDenominatorForIndicator(indicator, facilityTypeName, fieldValueMap);
-    const maxPct = (range?.max != null ? Number(range.max) : undefined) ?? (() => {
-      if (raw && raw.includes("%")) return Number(raw.replace("%", ""));
-      return undefined;
-    })();
-    if (!denom || maxPct == null || Number.isNaN(maxPct)) return 0;
-    return (denom * maxPct) / 100;
-  }
+	if (targetType === "PERCENTAGE_RANGE") {
+		const denom = resolveDenominatorForIndicator(
+			indicator,
+			facilityTypeName,
+			fieldValueMap
+		);
+		const maxPct =
+			(range?.max != null ? Number(range.max) : undefined) ??
+			(() => {
+				if (raw && raw.includes("%")) return Number(raw.replace("%", ""));
+				return undefined;
+			})();
+		if (!denom || maxPct == null || Number.isNaN(maxPct)) return 0;
+		return (denom * maxPct) / 100;
+	}
 
-  if (targetType === "RANGE") {
-    const max = range?.max != null ? Number(range.max) : undefined;
-    if (max == null || Number.isNaN(max)) return 0;
-    return max;
-  }
+	if (targetType === "RANGE") {
+		const max = range?.max != null ? Number(range.max) : undefined;
+		if (max == null || Number.isNaN(max)) return 0;
+		return max;
+	}
 
-  if (targetType === "BINARY") {
-    // show the value that is required to be met
-    return resolveDenominatorForIndicator(indicator, facilityTypeName, fieldValueMap);
-  }
+	if (targetType === "BINARY") {
+		// show the value that is required to be met
+		return resolveDenominatorForIndicator(
+			indicator,
+			facilityTypeName,
+			fieldValueMap
+		);
+	}
 
-  // Fallback for numeric target values
-  if (raw) {
-    const num = parseFloat(raw.replace(/%/g, ""));
-    return Number.isNaN(num) ? 0 : num;
-  }
-  return 0;
+	// Fallback for numeric target values
+	if (raw) {
+		const num = parseFloat(raw.replace(/%/g, ""));
+		return Number.isNaN(num) ? 0 : num;
+	}
+	return 0;
 }
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { facilityType: string; reportMonth: string } }
+	request: NextRequest,
+	{ params }: { params: { facilityType: string; reportMonth: string } }
 ) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== "admin") {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-    }
+	try {
+		const session = await getServerSession(authOptions);
+		if (!session || session.user.role !== "admin") {
+			return new Response(JSON.stringify({ error: "Unauthorized" }), {
+				status: 401,
+			});
+		}
 
-    const facilityTypeParam = decodeURIComponent(params.facilityType);
-    const reportMonth = params.reportMonth; // YYYY-MM
+		const facilityTypeParam = decodeURIComponent(params.facilityType);
+		const reportMonth = params.reportMonth; // YYYY-MM
 
-    // Find facility type by name
-    const facilityType = await prisma.facilityType.findFirst({
-      where: { name: facilityTypeParam },
-    });
-    if (!facilityType) {
-      return new Response(JSON.stringify({ error: `Facility type not found: ${facilityTypeParam}` }), { status: 404 });
-    }
+		// Find facility type by name
+		const facilityType = await prisma.facilityType.findFirst({
+			where: { name: facilityTypeParam },
+		});
+		if (!facilityType) {
+			return new Response(
+				JSON.stringify({
+					error: `Facility type not found: ${facilityTypeParam}`,
+				}),
+				{ status: 404 }
+			);
+		}
 
-    // List active facilities of this type
-    const facilities = await prisma.facility.findMany({
-      where: {
-        facility_type_id: facilityType.id,
-        is_active: true,
-      },
-      include: { district: true, facility_type: true },
-      orderBy: { name: "asc" },
-    });
+		// List active facilities of this type
+		// Using select to avoid parent_facility_id and has_clinic which may not exist in production yet
+		const facilities = await prisma.facility.findMany({
+			where: {
+				facility_type_id: facilityType.id,
+				is_active: true,
+			},
+			select: {
+				id: true,
+				name: true,
+				display_name: true,
+				district_id: true,
+				facility_type_id: true,
+				is_active: true,
+				district: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				facility_type: {
+					select: {
+						id: true,
+						name: true,
+						display_name: true,
+					},
+				},
+			},
+			orderBy: { name: "asc" },
+		});
 
-    // Get all indicators applicable to this facility type (similar to service)
-    const indicators = await prisma.indicator.findMany({
-      where: {
-        applicable_facility_types: { array_contains: [facilityType.name] },
-      },
-      include: {
-        remunerations: {
-          where: { facility_type_remuneration: { facility_type_id: facilityType.id } },
-          include: { facility_type_remuneration: true },
-        },
-        numerator_field: true,
-        denominator_field: true,
-        target_field: true,
-      },
-      orderBy: { code: "asc" },
-    });
+		// Get all indicators applicable to this facility type (similar to service)
+		const indicators = await prisma.indicator.findMany({
+			where: {
+				applicable_facility_types: { array_contains: [facilityType.name] },
+			},
+			include: {
+				remunerations: {
+					where: {
+						facility_type_remuneration: { facility_type_id: facilityType.id },
+					},
+					include: { facility_type_remuneration: true },
+				},
+				numerator_field: true,
+				denominator_field: true,
+				target_field: true,
+			},
+			orderBy: { code: "asc" },
+		});
 
-    // Apply the same indicator ordering as the detailed report page
-    const indicatorsSorted = sortIndicatorsBySourceOrder([...indicators]);
+		// Apply the same indicator ordering as the detailed report page
+		const indicatorsSorted = sortIndicatorsBySourceOrder([...indicators]);
 
-    // For each facility, ensure recalculation and fetch records + field values
-    const rows: any[] = [];
-    // Track facilities included in report (those with submissions)
-    const includedFacilities: { id: string; name: string; display_name?: string | null; district?: { name?: string | null } | null }[] = [];
-    let grandTotal = 0;
+		// For each facility, ensure recalculation and fetch records + field values
+		const rows: any[] = [];
+		// Track facilities included in report (those with submissions)
+		const includedFacilities: {
+			id: string;
+			name: string;
+			display_name?: string | null;
+			district?: { name?: string | null } | null;
+		}[] = [];
+		let grandTotal = 0;
 
-    for (const facility of facilities) {
-      // Fetch field values first to determine if the facility has submitted anything
-      const fieldValues = await prisma.fieldValue.findMany({
-        where: { facility_id: facility.id, report_month: reportMonth },
-        include: { field: true },
-      });
-      // Include only facilities who have submitted reports (any field value present)
-      if (!fieldValues || fieldValues.length === 0) {
-        continue;
-      }
-      includedFacilities.push({ id: facility.id, name: facility.name, display_name: facility.display_name, district: facility.district });
+		for (const facility of facilities) {
+			// Fetch field values first to determine if the facility has submitted anything
+			const fieldValues = await prisma.fieldValue.findMany({
+				where: { facility_id: facility.id, report_month: reportMonth },
+				include: { field: true },
+			});
+			// Include only facilities who have submitted reports (any field value present)
+			if (!fieldValues || fieldValues.length === 0) {
+				continue;
+			}
+			includedFacilities.push({
+				id: facility.id,
+				name: facility.name,
+				display_name: facility.display_name,
+				district: facility.district,
+			});
 
-      // Recalculate only for facilities that have submissions
-      try {
-        await HealthDataRemunerationService.processHealthDataRemuneration(
-          facility.id,
-          reportMonth,
-          [],
-          prisma
-        );
-      } catch {}
+			// Recalculate only for facilities that have submissions
+			try {
+				await HealthDataRemunerationService.processHealthDataRemuneration(
+					facility.id,
+					reportMonth,
+					[],
+					prisma
+				);
+			} catch {}
 
-      // Fetch remuneration records after recalculation
-      const records = await prisma.facilityRemunerationRecord.findMany({
-        where: { facility_id: facility.id, report_month: reportMonth },
-      });
-      const fieldValueMap = new Map<string | number, any>();
-      for (const fv of fieldValues) {
-        const v: any = (fv as any).string_value ?? (fv as any).numeric_value ?? (fv as any).boolean_value;
-        fieldValueMap.set(fv.field_id, v);
-      }
+			// Fetch remuneration records after recalculation
+			const records = await prisma.facilityRemunerationRecord.findMany({
+				where: { facility_id: facility.id, report_month: reportMonth },
+			});
+			const fieldValueMap = new Map<string | number, any>();
+			for (const fv of fieldValues) {
+				const v: any =
+					(fv as any).string_value ??
+					(fv as any).numeric_value ??
+					(fv as any).boolean_value;
+				fieldValueMap.set(fv.field_id, v);
+			}
 
-      // Fetch HWO and AYUSH MO names for this facility
-      let leaderNames = "";
-      try {
-        const leaders = await prisma.healthWorker.findMany({
-          where: { facility_id: facility.id, worker_type: { in: ["hwo", "ayush_mo"] }, is_active: true },
-          select: { name: true },
-        });
-        leaderNames = leaders.map((l: any) => l.name || "").filter(Boolean).join(", ");
-      } catch {}
+			// Fetch HWO and AYUSH MO names for this facility
+			let leaderNames = "";
+			try {
+				const leaders = await prisma.healthWorker.findMany({
+					where: {
+						facility_id: facility.id,
+						worker_type: { in: ["hwo", "ayush_mo"] },
+						is_active: true,
+					},
+					select: { name: true },
+				});
+				leaderNames = leaders
+					.map((l: any) => l.name || "")
+					.filter(Boolean)
+					.join(", ");
+			} catch {}
 
-      const row: Record<string, any> = {
-        "HWO / AYUSH MO": leaderNames,
-        Facility: facility.display_name || facility.name,
-        District: facility.district?.name || "N/A",
-      };
+			const row: Record<string, any> = {
+				"HWO / AYUSH MO": leaderNames,
+				Facility: facility.display_name || facility.name,
+				District: facility.district?.name || "N/A",
+			};
 
-      let totalIncentiveForFacility = 0;
+			let totalIncentiveForFacility = 0;
 
-      for (const indicator of indicatorsSorted) {
-        const rec = records.find((r) => r.indicator_id === indicator.id);
-        const indicatorKeyPrefix = `${indicator.name}`;
+			for (const indicator of indicatorsSorted) {
+				const rec = records.find((r) => r.indicator_id === indicator.id);
+				const indicatorKeyPrefix = `${indicator.name}`;
 
-        // Submitted value (A): prefer stored record; fallback to raw field value
-        let actualValue = 0;
-        if (rec && rec.actual_value != null) {
-          actualValue = Number(rec.actual_value);
-        } else {
-          const raw = indicator.numerator_field_id
-            ? fieldValueMap.get(indicator.numerator_field_id)
-            : undefined;
-          if (typeof raw === "boolean") actualValue = raw ? 1 : 0;
-          else if (raw != null && !Number.isNaN(Number(raw))) actualValue = Number(raw);
-        }
-        row[`${indicatorKeyPrefix} - Indicator`] = actualValue;
+				// Submitted value (A): prefer stored record; fallback to raw field value
+				let actualValue = 0;
+				if (rec && rec.actual_value != null) {
+					actualValue = Number(rec.actual_value);
+				} else {
+					const raw = indicator.numerator_field_id
+						? fieldValueMap.get(indicator.numerator_field_id)
+						: undefined;
+					if (typeof raw === "boolean") actualValue = raw ? 1 : 0;
+					else if (raw != null && !Number.isNaN(Number(raw)))
+						actualValue = Number(raw);
+				}
+				row[`${indicatorKeyPrefix} - Indicator`] = actualValue;
 
-        // Target display
-        row[`${indicatorKeyPrefix} - Target`] = buildTargetDisplay(indicator);
+				// Target display
+				row[`${indicatorKeyPrefix} - Target`] = buildTargetDisplay(indicator);
 
-        // Target amount numeric per rules
-        const targetAmount = computeTargetAmountNumeric(
-          indicator,
-          facility.facility_type.name,
-          fieldValueMap
-        );
-        row[`${indicatorKeyPrefix} - Target amount`] = Number.isFinite(targetAmount)
-          ? Math.round(targetAmount)
-          : 0;
+				// Target amount numeric per rules
+				const targetAmount = computeTargetAmountNumeric(
+					indicator,
+					facility.facility_type.name,
+					fieldValueMap
+				);
+				row[`${indicatorKeyPrefix} - Target amount`] = Number.isFinite(
+					targetAmount
+				)
+					? Math.round(targetAmount)
+					: 0;
 
-        // Target min/max amount (for clarity)
-        const { min: targetMin, max: targetMax } = computeTargetAmountRange(
-          indicator,
-          facility.facility_type.name,
-          fieldValueMap
-        );
-        row[`${indicatorKeyPrefix} - Target min`] = Number.isFinite(targetMin) ? Math.round(targetMin) : 0;
-        row[`${indicatorKeyPrefix} - Target max`] = Number.isFinite(targetMax) ? Math.round(targetMax) : 0;
+				// Target min/max amount (for clarity)
+				const { min: targetMin, max: targetMax } = computeTargetAmountRange(
+					indicator,
+					facility.facility_type.name,
+					fieldValueMap
+				);
+				row[`${indicatorKeyPrefix} - Target min`] = Number.isFinite(targetMin)
+					? Math.round(targetMin)
+					: 0;
+				row[`${indicatorKeyPrefix} - Target max`] = Number.isFinite(targetMax)
+					? Math.round(targetMax)
+					: 0;
 
-        // Indicator amount: prefer stored record; fallback to local computation
-        let incentive = 0;
-        if (rec) {
-          incentive = Number(rec.incentive_amount || 0);
-        } else {
-          const remuneration = indicator.remunerations?.[0];
-          const baseMaxRemuneration = remuneration
-            ? parseFloat((remuneration.base_amount as any)?.toString?.() ?? `${remuneration.base_amount}`)
-            : 0;
-          const conditionalAmount = remuneration && (remuneration as any).conditional_amount != null
-            ? parseFloat((remuneration as any).conditional_amount?.toString?.() ?? `${(remuneration as any).conditional_amount}`)
-            : 0;
+				// Indicator amount: prefer stored record; fallback to local computation
+				let incentive = 0;
+				if (rec) {
+					incentive = Number(rec.incentive_amount || 0);
+				} else {
+					const remuneration = indicator.remunerations?.[0];
+					const baseMaxRemuneration = remuneration
+						? parseFloat(
+								(remuneration.base_amount as any)?.toString?.() ??
+									`${remuneration.base_amount}`
+						  )
+						: 0;
+					const conditionalAmount =
+						remuneration && (remuneration as any).conditional_amount != null
+							? parseFloat(
+									(remuneration as any).conditional_amount?.toString?.() ??
+										`${(remuneration as any).conditional_amount}`
+							  )
+							: 0;
 
-          // For DVDMS and most indicators here, TB condition does not apply; keep simple effective cap
-          const effectiveMaxRemuneration = baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
+					// For DVDMS and most indicators here, TB condition does not apply; keep simple effective cap
+					const effectiveMaxRemuneration =
+						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
-          // Compute achievement percentage similar to service
-          let achievementPercentage = 0;
-          if (indicator.target_type === "RANGE") {
-            const targetAmount = computeTargetAmountNumeric(
-              indicator,
-              facility.facility_type.name,
-              fieldValueMap
-            );
-            if (targetAmount > 0) {
-              achievementPercentage = (actualValue / targetAmount) * 100;
-            }
-          } else if (indicator.target_type === "PERCENTAGE_RANGE") {
-            const denom = resolveDenominatorForIndicator(
-              indicator,
-              facility.facility_type.name,
-              fieldValueMap
-            );
-            if (denom > 0) {
-              achievementPercentage = (actualValue / denom) * 100;
-            }
-          } else if (indicator.target_type === "BINARY") {
-            achievementPercentage = actualValue > 0 ? 100 : 0;
-          } else {
-            const denom = resolveDenominatorForIndicator(
-              indicator,
-              facility.facility_type.name,
-              fieldValueMap
-            );
-            if (denom > 0) {
-              achievementPercentage = (actualValue / denom) * 100;
-            }
-          }
+					// Compute achievement percentage similar to service
+					let achievementPercentage = 0;
+					if (indicator.target_type === "RANGE") {
+						const targetAmount = computeTargetAmountNumeric(
+							indicator,
+							facility.facility_type.name,
+							fieldValueMap
+						);
+						if (targetAmount > 0) {
+							achievementPercentage = (actualValue / targetAmount) * 100;
+						}
+					} else if (indicator.target_type === "PERCENTAGE_RANGE") {
+						const denom = resolveDenominatorForIndicator(
+							indicator,
+							facility.facility_type.name,
+							fieldValueMap
+						);
+						if (denom > 0) {
+							achievementPercentage = (actualValue / denom) * 100;
+						}
+					} else if (indicator.target_type === "BINARY") {
+						achievementPercentage = actualValue > 0 ? 100 : 0;
+					} else {
+						const denom = resolveDenominatorForIndicator(
+							indicator,
+							facility.facility_type.name,
+							fieldValueMap
+						);
+						if (denom > 0) {
+							achievementPercentage = (actualValue / denom) * 100;
+						}
+					}
 
-          // Normalize and apply policy
-          if (!Number.isFinite(achievementPercentage)) achievementPercentage = 0;
-          let displayPercentage = Math.min(Math.max(achievementPercentage, 0), 100);
-          if (displayPercentage >= 100) {
-            incentive = Math.round(effectiveMaxRemuneration);
-          } else if (displayPercentage >= 50) {
-            incentive = Math.round((effectiveMaxRemuneration * displayPercentage) / 100);
-          } else {
-            incentive = 0;
-          }
-        }
+					// Normalize and apply policy
+					if (!Number.isFinite(achievementPercentage))
+						achievementPercentage = 0;
+					let displayPercentage = Math.min(
+						Math.max(achievementPercentage, 0),
+						100
+					);
+					if (displayPercentage >= 100) {
+						incentive = Math.round(effectiveMaxRemuneration);
+					} else if (displayPercentage >= 50) {
+						incentive = Math.round(
+							(effectiveMaxRemuneration * displayPercentage) / 100
+						);
+					} else {
+						incentive = 0;
+					}
+				}
 
-        row[`${indicatorKeyPrefix} - Indicator amount`] = Math.round(incentive);
-        totalIncentiveForFacility += incentive;
-      }
+				row[`${indicatorKeyPrefix} - Indicator amount`] = Math.round(incentive);
+				totalIncentiveForFacility += incentive;
+			}
 
-      row["Total Facility Incentive"] = Math.round(totalIncentiveForFacility);
-      grandTotal += totalIncentiveForFacility;
-      rows.push(row);
-    }
+			row["Total Facility Incentive"] = Math.round(totalIncentiveForFacility);
+			grandTotal += totalIncentiveForFacility;
+			rows.push(row);
+		}
 
-    // Build worksheet with compact merged headers
-    const headerTop: any[] = ["HWO / AYUSH MO", "Facility", "District"];
-    const headerSub: any[] = ["", "", ""];
-    for (const indicator of indicatorsSorted) {
-      const p = `${indicator.name}`;
-      headerTop.push(p, "", "", "", "");
-      headerSub.push(
-        "Submitted Value",
-        "Target",
-        "Target Min",
-        "Target Max",
-        "Incentive Amount"
-      );
-    }
-    headerTop.push("Total Facility Incentive");
-    headerSub.push("");
+		// Build worksheet with compact merged headers
+		const headerTop: any[] = ["HWO / AYUSH MO", "Facility", "District"];
+		const headerSub: any[] = ["", "", ""];
+		for (const indicator of indicatorsSorted) {
+			const p = `${indicator.name}`;
+			headerTop.push(p, "", "", "", "");
+			headerSub.push(
+				"Submitted Value",
+				"Target",
+				"Target Min",
+				"Target Max",
+				"Incentive Amount"
+			);
+		}
+		headerTop.push("Total Facility Incentive");
+		headerSub.push("");
 
-    const data: any[][] = [headerTop, headerSub];
-    for (const r of rows) {
-      const line: any[] = [r["HWO / AYUSH MO"], r["Facility"], r["District"]];
-      for (const indicator of indicatorsSorted) {
-        const p = `${indicator.name}`;
-        line.push(r[`${p} - Indicator`]);
-        line.push(r[`${p} - Target`]);
-        line.push(r[`${p} - Target min`]);
-        line.push(r[`${p} - Target max`]);
-        line.push(r[`${p} - Indicator amount`]);
-      }
-      line.push(r["Total Facility Incentive"]);
-      data.push(line);
-    }
+		const data: any[][] = [headerTop, headerSub];
+		for (const r of rows) {
+			const line: any[] = [r["HWO / AYUSH MO"], r["Facility"], r["District"]];
+			for (const indicator of indicatorsSorted) {
+				const p = `${indicator.name}`;
+				line.push(r[`${p} - Indicator`]);
+				line.push(r[`${p} - Target`]);
+				line.push(r[`${p} - Target min`]);
+				line.push(r[`${p} - Target max`]);
+				line.push(r[`${p} - Indicator amount`]);
+			}
+			line.push(r["Total Facility Incentive"]);
+			data.push(line);
+		}
 
-    // Add grand total row
-    const grandRow: any[] = ["GRAND TOTAL", ""];
-    // Fill blanks for indicator groups (5 subcolumns per indicator)
-    for (let i = 0; i < indicatorsSorted.length * 5; i++) grandRow.push("");
-    grandRow.push(Math.round(grandTotal));
-    data.push(grandRow);
+		// Add grand total row
+		const grandRow: any[] = ["GRAND TOTAL", ""];
+		// Fill blanks for indicator groups (5 subcolumns per indicator)
+		for (let i = 0; i < indicatorsSorted.length * 5; i++) grandRow.push("");
+		grandRow.push(Math.round(grandTotal));
+		data.push(grandRow);
 
-    // Create ExcelJS workbook for proper styling
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Bulk Report");
+		// Create ExcelJS workbook for proper styling
+		const workbook = new ExcelJS.Workbook();
+		const worksheet = workbook.addWorksheet("Bulk Report");
 
-    // Add data rows
-    data.forEach((row, rowIndex) => {
-      worksheet.addRow(row);
-    });
+		// Add data rows
+		data.forEach((row, rowIndex) => {
+			worksheet.addRow(row);
+		});
 
-    // Set column widths
-    let colIndex = 1;
-    worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
-    worksheet.getColumn(colIndex++).width = 24; // Facility
-    worksheet.getColumn(colIndex++).width = 18; // District
-    for (let i = 0; i < indicatorsSorted.length; i++) {
-      worksheet.getColumn(colIndex++).width = 16; // Submitted Value
-      worksheet.getColumn(colIndex++).width = 14; // Target
-      worksheet.getColumn(colIndex++).width = 14; // Target Min
-      worksheet.getColumn(colIndex++).width = 14; // Target Max
-      worksheet.getColumn(colIndex++).width = 16; // Incentive Amount
-    }
-    worksheet.getColumn(colIndex).width = 20; // Total Facility Incentive
+		// Set column widths
+		let colIndex = 1;
+		worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
+		worksheet.getColumn(colIndex++).width = 24; // Facility
+		worksheet.getColumn(colIndex++).width = 18; // District
+		for (let i = 0; i < indicatorsSorted.length; i++) {
+			worksheet.getColumn(colIndex++).width = 16; // Submitted Value
+			worksheet.getColumn(colIndex++).width = 14; // Target
+			worksheet.getColumn(colIndex++).width = 14; // Target Min
+			worksheet.getColumn(colIndex++).width = 14; // Target Max
+			worksheet.getColumn(colIndex++).width = 16; // Incentive Amount
+		}
+		worksheet.getColumn(colIndex).width = 20; // Total Facility Incentive
 
-    // Set header row heights
-    worksheet.getRow(1).height = 24;
-    worksheet.getRow(2).height = 28;
+		// Set header row heights
+		worksheet.getRow(1).height = 24;
+		worksheet.getRow(2).height = 28;
 
-    // Merge header cells
-    // Merge HWO/AYUSH, Facility, District headers over two rows
-    worksheet.mergeCells(1, 1, 2, 1);
-    worksheet.mergeCells(1, 2, 2, 2);
-    worksheet.mergeCells(1, 3, 2, 3);
-    // Merge each indicator group name across 5 columns in top row
-    for (let i = 0; i < indicatorsSorted.length; i++) {
-      const startCol = 4 + i * 5; // after HWO/AYUSH, Facility and District (1-indexed)
-      worksheet.mergeCells(1, startCol, 1, startCol + 4);
-    }
-    // Merge Total Facility Incentive over two rows (last column)
-    const totalCol = 4 + indicatorsSorted.length * 5;
-    worksheet.mergeCells(1, totalCol, 2, totalCol);
+		// Merge header cells
+		// Merge HWO/AYUSH, Facility, District headers over two rows
+		worksheet.mergeCells(1, 1, 2, 1);
+		worksheet.mergeCells(1, 2, 2, 2);
+		worksheet.mergeCells(1, 3, 2, 3);
+		// Merge each indicator group name across 5 columns in top row
+		for (let i = 0; i < indicatorsSorted.length; i++) {
+			const startCol = 4 + i * 5; // after HWO/AYUSH, Facility and District (1-indexed)
+			worksheet.mergeCells(1, startCol, 1, startCol + 4);
+		}
+		// Merge Total Facility Incentive over two rows (last column)
+		const totalCol = 4 + indicatorsSorted.length * 5;
+		worksheet.mergeCells(1, totalCol, 2, totalCol);
 
-    // Style header rows
-    const headerStyle = {
-      alignment: { horizontal: 'center' as const, vertical: 'middle' as const, wrapText: true },
-      font: { bold: true },
-      border: {
-        top: { style: 'thin' as const },
-        left: { style: 'thin' as const },
-        bottom: { style: 'thin' as const },
-        right: { style: 'thin' as const }
-      }
-    };
+		// Style header rows
+		const headerStyle = {
+			alignment: {
+				horizontal: "center" as const,
+				vertical: "middle" as const,
+				wrapText: true,
+			},
+			font: { bold: true },
+			border: {
+				top: { style: "thin" as const },
+				left: { style: "thin" as const },
+				bottom: { style: "thin" as const },
+				right: { style: "thin" as const },
+			},
+		};
 
-    // Apply styles to all header cells
-    worksheet.getRow(1).eachCell((cell) => {
-      cell.style = headerStyle;
-    });
-    worksheet.getRow(2).eachCell((cell) => {
-      cell.style = headerStyle;
-    });
+		// Apply styles to all header cells
+		worksheet.getRow(1).eachCell((cell) => {
+			cell.style = headerStyle;
+		});
+		worksheet.getRow(2).eachCell((cell) => {
+			cell.style = headerStyle;
+		});
 
-    // -------------------------------
-    // Sheet 2: Workers
-    // -------------------------------
-    const workersSheet = workbook.addWorksheet("Workers");
-    // Header
-    const workerHeader = [
-      "District",
-      "Facility",
-      "Name",
-      "Role",
-      "Type",
-      "Allocated (INR)",
-      "Performance (%)",
-      "Calculated (INR)",
-    ];
-    workersSheet.addRow(workerHeader);
-    // Style header
-    workersSheet.getRow(1).eachCell((cell) => {
-      cell.style = { alignment: { horizontal: 'center', vertical: 'middle', wrapText: true }, font: { bold: true } } as any;
-    });
-    // Column widths
-    workersSheet.getColumn(1).width = 18; // District
-    workersSheet.getColumn(2).width = 24; // Facility
-    workersSheet.getColumn(3).width = 24; // Name
-    workersSheet.getColumn(4).width = 14; // Role
-    workersSheet.getColumn(5).width = 10; // Type
-    workersSheet.getColumn(6).width = 16; // Allocated
-    workersSheet.getColumn(7).width = 16; // Performance
-    workersSheet.getColumn(8).width = 18; // Calculated
+		// -------------------------------
+		// Sheet 2: Workers
+		// -------------------------------
+		const workersSheet = workbook.addWorksheet("Workers");
+		// Header
+		const workerHeader = [
+			"District",
+			"Facility",
+			"Name",
+			"Role",
+			"Type",
+			"Allocated (INR)",
+			"Performance (%)",
+			"Calculated (INR)",
+		];
+		workersSheet.addRow(workerHeader);
+		// Style header
+		workersSheet.getRow(1).eachCell((cell) => {
+			cell.style = {
+				alignment: { horizontal: "center", vertical: "middle", wrapText: true },
+				font: { bold: true },
+			} as any;
+		});
+		// Column widths
+		workersSheet.getColumn(1).width = 18; // District
+		workersSheet.getColumn(2).width = 24; // Facility
+		workersSheet.getColumn(3).width = 24; // Name
+		workersSheet.getColumn(4).width = 14; // Role
+		workersSheet.getColumn(5).width = 10; // Type
+		workersSheet.getColumn(6).width = 16; // Allocated
+		workersSheet.getColumn(7).width = 16; // Performance
+		workersSheet.getColumn(8).width = 18; // Calculated
 
-    // Gather worker remuneration rows for included facilities
-    for (const f of includedFacilities) {
-      const wrs = await prisma.workerRemuneration.findMany({
-        where: { facility_id: f.id, report_month: reportMonth.substring(0, 7) },
-      });
-      if (!wrs || wrs.length === 0) continue;
+		// Gather worker remuneration rows for included facilities
+		for (const f of includedFacilities) {
+			const wrs = await prisma.workerRemuneration.findMany({
+				where: { facility_id: f.id, report_month: reportMonth.substring(0, 7) },
+			});
+			if (!wrs || wrs.length === 0) continue;
 
-      const workerIds = wrs.map((w: any) => w.health_worker_id).filter(Boolean);
-      const workers = workerIds.length
-        ? await prisma.healthWorker.findMany({ where: { id: { in: workerIds } } })
-        : [];
-      const nameById = new Map<string, string>();
-      for (const w of workers as any[]) {
-        nameById.set(w.id, w.name || "");
-      }
+			const workerIds = wrs.map((w: any) => w.health_worker_id).filter(Boolean);
+			const workers = workerIds.length
+				? await prisma.healthWorker.findMany({
+						where: { id: { in: workerIds } },
+				  })
+				: [];
+			const nameById = new Map<string, string>();
+			for (const w of workers as any[]) {
+				nameById.set(w.id, w.name || "");
+			}
 
-      for (const wr of wrs as any[]) {
-        const rowVals = [
-          f.district?.name || "N/A",
-          f.display_name || f.name,
-          nameById.get(wr.health_worker_id) || "",
-          (wr.worker_role || "").toString(),
-          (wr.worker_type || "").toString().toLowerCase(),
-          Number(wr.allocated_amount || 0),
-          Number(wr.performance_percentage || 0),
-          Number(wr.calculated_amount || 0),
-        ];
-        workersSheet.addRow(rowVals);
-      }
-    }
+			for (const wr of wrs as any[]) {
+				const rowVals = [
+					f.district?.name || "N/A",
+					f.display_name || f.name,
+					nameById.get(wr.health_worker_id) || "",
+					(wr.worker_role || "").toString(),
+					(wr.worker_type || "").toString().toLowerCase(),
+					Number(wr.allocated_amount || 0),
+					Number(wr.performance_percentage || 0),
+					Number(wr.calculated_amount || 0),
+				];
+				workersSheet.addRow(rowVals);
+			}
+		}
 
-    const buf = await workbook.xlsx.writeBuffer();
-    const fileName = `plp_bulk_${facilityType.name}_${reportMonth}.xlsx`;
+		const buf = await workbook.xlsx.writeBuffer();
+		const fileName = `plp_bulk_${facilityType.name}_${reportMonth}.xlsx`;
 
-    return new Response(buf, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename="${fileName}"`,
-        "Cache-Control": "no-store",
-      },
-    });
-  } catch (error) {
-    console.error("Bulk export error:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
-  }
+		return new Response(buf, {
+			status: 200,
+			headers: {
+				"Content-Type":
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+				"Content-Disposition": `attachment; filename="${fileName}"`,
+				"Cache-Control": "no-store",
+			},
+		});
+	} catch (error) {
+		console.error("Bulk export error:", error);
+		return new Response(JSON.stringify({ error: "Internal server error" }), {
+			status: 500,
+		});
+	}
 }
