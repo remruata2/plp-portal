@@ -170,11 +170,18 @@ export default function AdminPerformanceReportsPage() {
 			await loadFacilityTypes();
 			// Load available months and get the default month
 			const defaultMonth = await loadAvailableMonths();
+			console.log("Initial load - default month:", defaultMonth);
 			// Then load reports with the default month filter
 			// This ensures the default month filter is respected on initial load
 			if (defaultMonth) {
-				await loadReports({ reportMonth: defaultMonth });
+				console.log("Loading reports with default month:", defaultMonth);
+				await loadReports({
+					reportMonth: defaultMonth,
+					facilityTypeId: filters.facilityTypeId || "",
+					searchTerm: filters.searchTerm || "",
+				});
 			} else {
+				console.log("No default month found, loading all reports");
 				await loadReports();
 			}
 		} catch (error) {
@@ -238,6 +245,8 @@ export default function AdminPerformanceReportsPage() {
 				? { ...filters, ...overrideFilters }
 				: filters;
 
+			console.log("loadReports called with activeFilters:", activeFilters);
+
 			// Only add params if they're not empty and not "all"
 			if (
 				activeFilters.facilityTypeId &&
@@ -252,20 +261,46 @@ export default function AdminPerformanceReportsPage() {
 				activeFilters.reportMonth !== ""
 			) {
 				params.append("reportMonth", activeFilters.reportMonth);
+				console.log("Added reportMonth to params:", activeFilters.reportMonth);
+			} else {
+				console.warn(
+					"reportMonth is missing or empty:",
+					activeFilters.reportMonth
+				);
 			}
 
 			// Add timestamp to prevent caching
 			const timestamp = Date.now();
 			params.append("_t", timestamp.toString());
 
-			const response = await fetch(
-				`/api/admin/performance-reports?${params.toString()}`,
-				{ cache: "no-store" }
-			);
+			const url = `/api/admin/performance-reports?${params.toString()}`;
+			console.log("Fetching reports from:", url);
+
+			const response = await fetch(url, { cache: "no-store" });
 
 			if (response.ok) {
 				const data = await response.json();
-				setReports(data.reports || []);
+				let reports = data.reports || [];
+				console.log(`Loaded ${reports.length} reports`);
+
+				// Filter reports to ensure they match the requested month (safety check)
+				if (activeFilters.reportMonth) {
+					const filteredReports = reports.filter(
+						(r: FacilityReport) => r.reportMonth === activeFilters.reportMonth
+					);
+					if (filteredReports.length !== reports.length) {
+						console.warn(
+							`Filtered out ${
+								reports.length - filteredReports.length
+							} reports with mismatched months. Expected ${
+								activeFilters.reportMonth
+							}`
+						);
+					}
+					reports = filteredReports;
+				}
+
+				setReports(reports);
 			} else {
 				toast.error("Failed to load reports");
 				setReports([]);
