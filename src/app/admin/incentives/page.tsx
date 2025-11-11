@@ -108,10 +108,12 @@ export default function RemunerationPage() {
 		try {
 			setLoading(true);
 			console.log("Loading remuneration data for month:", monthToLoad);
+			// Add timestamp to prevent browser caching
+			const timestamp = Date.now();
 			const res = await fetch(
 				`/api/admin/remuneration-report?reportMonth=${encodeURIComponent(
 					monthToLoad
-				)}`,
+				)}&_t=${timestamp}`,
 				{ cache: "no-store" }
 			);
 			if (!res.ok) {
@@ -391,8 +393,11 @@ export default function RemunerationPage() {
 								value={reportMonth}
 								onChange={(e) => {
 									const newMonth = e.target.value;
-									setReportMonth(newMonth);
-									// Data will reload automatically via useEffect dependency on reportMonth
+									if (newMonth && newMonth.match(/^\d{4}-\d{2}$/)) {
+										setReportMonth(newMonth);
+										// Load data immediately with the new month to avoid stale state
+										loadRemunerationData(newMonth);
+									}
 								}}
 								className="w-48"
 							/>

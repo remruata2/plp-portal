@@ -306,6 +306,12 @@ export async function GET(
 			(ind) => ind.code === "CT001" || ind.code === "DC001"
 		);
 
+		// Check if facility type has HWO or AYUSH MO workers
+		// Only SC_HWC has HWO, A_HWC has AYUSH MO
+		// PHC, UPHC, U_HWC have MO (team-based, not shown individually)
+		const hasHwoOrAyushMo =
+			facilityType.name === "SC_HWC" || facilityType.name === "A_HWC";
+
 		// For each facility, ensure recalculation and fetch records + field values
 		const rows: any[] = [];
 		// Track facilities included in report (those with submissions)
@@ -357,22 +363,24 @@ export async function GET(
 				fieldValueMap.set(fv.field_id, v);
 			}
 
-			// Fetch HWO and AYUSH MO names for this facility
+			// Fetch HWO and AYUSH MO names for this facility (only if facility type has them)
 			let leaderNames = "";
-			try {
-				const leaders = await prisma.healthWorker.findMany({
-					where: {
-						facility_id: facility.id,
-						worker_type: { in: ["hwo", "ayush_mo"] },
-						is_active: true,
-					},
-					select: { name: true },
-				});
-				leaderNames = leaders
-					.map((l: any) => l.name || "")
-					.filter(Boolean)
-					.join(", ");
-			} catch {}
+			if (hasHwoOrAyushMo) {
+				try {
+					const leaders = await prisma.healthWorker.findMany({
+						where: {
+							facility_id: facility.id,
+							worker_type: { in: ["hwo", "ayush_mo"] },
+							is_active: true,
+						},
+						select: { name: true },
+					});
+					leaderNames = leaders
+						.map((l: any) => l.name || "")
+						.filter(Boolean)
+						.join(", ");
+				} catch {}
+			}
 
 			// Determine TB status for this facility based on what they selected in the form
 			// The Yes/No answer is reflected in the denominator fields:
@@ -412,12 +420,17 @@ export async function GET(
 				tbStatus = "";
 			}
 
+			// Build row data - conditionally include HWO/AYUSH MO column
 			const row: Record<string, any> = {
-				"With TB(Yes/No)": tbStatus,
-				"HWO / AYUSH MO": leaderNames,
 				Facility: facility.display_name || facility.name,
 				District: facility.district?.name || "N/A",
+				"With TB(Yes/No)": tbStatus,
 			};
+
+			// Only add HWO/AYUSH MO column if facility type has these workers
+			if (hasHwoOrAyushMo) {
+				row["HWO / AYUSH MO"] = leaderNames;
+			}
 
 			let totalIncentiveForFacility = 0;
 
@@ -552,13 +565,15 @@ export async function GET(
 		}
 
 		// Build worksheet with compact merged headers
-		const headerTop: any[] = [
-			"With TB(Yes/No)",
-			"HWO / AYUSH MO",
-			"Facility",
-			"District",
-		];
-		const headerSub: any[] = ["", "", "", ""];
+		// Column order: Facility, District, With TB(Yes/No), [HWO/AYUSH MO if applicable]
+		const headerTop: any[] = ["Facility", "District", "With TB(Yes/No)"];
+		const headerSub: any[] = ["", "", ""];
+
+		// Only add HWO/AYUSH MO column if facility type has these workers
+		if (hasHwoOrAyushMo) {
+			headerTop.push("HWO / AYUSH MO");
+			headerSub.push("");
+		}
 		for (const indicator of indicatorsSorted) {
 			const p = `${indicator.name}`;
 			headerTop.push(p, "", "", "", "");
@@ -575,12 +590,12 @@ export async function GET(
 
 		const data: any[][] = [headerTop, headerSub];
 		for (const r of rows) {
-			const line: any[] = [
-				r["With TB(Yes/No)"],
-				r["HWO / AYUSH MO"],
-				r["Facility"],
-				r["District"],
-			];
+			const line: any[] = [r["Facility"], r["District"], r["With TB(Yes/No)"]];
+
+			// Only add HWO/AYUSH MO column if facility type has these workers
+			if (hasHwoOrAyushMo) {
+				line.push(r["HWO / AYUSH MO"]);
+			}
 			for (const indicator of indicatorsSorted) {
 				const p = `${indicator.name}`;
 				line.push(r[`${p} - Indicator`]);
@@ -594,7 +609,11 @@ export async function GET(
 		}
 
 		// Add grand total row
+		// Start with Facility, District, With TB(Yes/No), [HWO/AYUSH MO if applicable]
 		const grandRow: any[] = ["GRAND TOTAL", "", ""];
+		if (hasHwoOrAyushMo) {
+			grandRow.push("");
+		}
 		// Fill blanks for indicator groups (5 subcolumns per indicator)
 		for (let i = 0; i < indicatorsSorted.length * 5; i++) grandRow.push("");
 		grandRow.push(Math.round(grandTotal));
@@ -611,10 +630,14 @@ export async function GET(
 
 		// Set column widths
 		let colIndex = 1;
-		worksheet.getColumn(colIndex++).width = 16; // With TB(Yes/No)
-		worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
 		worksheet.getColumn(colIndex++).width = 24; // Facility
 		worksheet.getColumn(colIndex++).width = 18; // District
+		worksheet.getColumn(colIndex++).width = 16; // With TB(Yes/No)
+
+		// Only set width for HWO/AYUSH MO column if facility type has these workers
+		if (hasHwoOrAyushMo) {
+			worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
+		}
 		for (let i = 0; i < indicatorsSorted.length; i++) {
 			worksheet.getColumn(colIndex++).width = 16; // Submitted Value
 			worksheet.getColumn(colIndex++).width = 14; // Target
@@ -629,18 +652,25 @@ export async function GET(
 		worksheet.getRow(2).height = 28;
 
 		// Merge header cells
-		// Merge With TB(Yes/No), HWO/AYUSH, Facility, District headers over two rows
-		worksheet.mergeCells(1, 1, 2, 1); // With TB(Yes/No)
-		worksheet.mergeCells(1, 2, 2, 2); // HWO / AYUSH MO
-		worksheet.mergeCells(1, 3, 2, 3); // Facility
-		worksheet.mergeCells(1, 4, 2, 4); // District
+		// Column order: Facility (1), District (2), With TB(Yes/No) (3), [HWO/AYUSH MO (4) if applicable]
+		worksheet.mergeCells(1, 1, 2, 1); // Facility
+		worksheet.mergeCells(1, 2, 2, 2); // District
+		worksheet.mergeCells(1, 3, 2, 3); // With TB(Yes/No)
+
+		// Only merge HWO/AYUSH MO column if facility type has these workers
+		let baseColCount = 3; // Facility, District, With TB(Yes/No)
+		if (hasHwoOrAyushMo) {
+			worksheet.mergeCells(1, 4, 2, 4); // HWO / AYUSH MO
+			baseColCount = 4;
+		}
+
 		// Merge each indicator group name across 5 columns in top row
 		for (let i = 0; i < indicatorsSorted.length; i++) {
-			const startCol = 5 + i * 5; // after With TB(Yes/No), HWO/AYUSH, Facility and District (1-indexed)
+			const startCol = baseColCount + 1 + i * 5; // after base columns (1-indexed)
 			worksheet.mergeCells(1, startCol, 1, startCol + 4);
 		}
 		// Merge Total Facility Incentive over two rows (last column)
-		const totalCol = 5 + indicatorsSorted.length * 5;
+		const totalCol = baseColCount + 1 + indicatorsSorted.length * 5;
 		worksheet.mergeCells(1, totalCol, 2, totalCol);
 
 		// Style header rows
