@@ -382,39 +382,39 @@ export async function GET(
 				} catch {}
 			}
 
-			// Determine TB status for this facility based on what they selected in the form
-			// The Yes/No answer is reflected in the denominator fields:
-			// - pulmonary_tb_patients (for CT001) - if > 0, they answered "Yes"
-			// - total_tb_patients (for DC001) - if > 0, they answered "Yes"
+			// Determine TB status based on actual indicator values (numerator fields)
+			// These represent actual work done (visits), which proves they have TB patients
+			// Using numerator fields prevents gaming: selecting "Yes" but entering 0 visits
 			let tbStatus = "";
 			if (hasTbIndicators) {
-				// Check for CT001 denominator field (pulmonary_tb_patients)
-				// This field stores the Yes/No answer: > 0 means "Yes", 0 or missing means "No"
-				const pulmonaryTbField = fieldValues.find(
-					(fv) => fv.field?.code === "pulmonary_tb_patients"
+				// Check CT001 numerator (tb_contact_tracing_households)
+				// This is the actual indicator - if > 0, they visited households (have TB patients)
+				const ct001Numerator = fieldValues.find(
+					(fv) => fv.field?.code === "tb_contact_tracing_households"
 				);
-				const pulmonaryTbValue = pulmonaryTbField
-					? pulmonaryTbField.string_value ||
-					  pulmonaryTbField.numeric_value ||
-					  pulmonaryTbField.boolean_value
+				const ct001Value = ct001Numerator
+					? ct001Numerator.string_value ||
+					  ct001Numerator.numeric_value ||
+					  ct001Numerator.boolean_value
 					: null;
 
-				// Check for DC001 denominator field (total_tb_patients)
-				// This field stores the Yes/No answer: > 0 means "Yes", 0 or missing means "No"
-				const totalTbField = fieldValues.find(
-					(fv) => fv.field?.code === "total_tb_patients"
+				// Check DC001 numerator (tb_differentiated_care_visits)
+				// This is the actual indicator - if > 0, they visited patients (have TB patients)
+				const dc001Numerator = fieldValues.find(
+					(fv) => fv.field?.code === "tb_differentiated_care_visits"
 				);
-				const totalTbValue = totalTbField
-					? totalTbField.string_value ||
-					  totalTbField.numeric_value ||
-					  totalTbField.boolean_value
+				const dc001Value = dc001Numerator
+					? dc001Numerator.string_value ||
+					  dc001Numerator.numeric_value ||
+					  dc001Numerator.boolean_value
 					: null;
 
-				// If either denominator field has value > 0, user answered "Yes" to the question
-				const hasTbPatients =
-					Number(pulmonaryTbValue || 0) > 0 || Number(totalTbValue || 0) > 0;
+				// Must have actual visits > 0 to be considered "Yes"
+				// This prevents gaming: selecting "Yes" but entering 0 visits
+				const hasActualTbVisits =
+					Number(ct001Value || 0) > 0 || Number(dc001Value || 0) > 0;
 
-				tbStatus = hasTbPatients ? "Yes" : "No";
+				tbStatus = hasActualTbVisits ? "Yes" : "No";
 			} else {
 				// Facility type doesn't have TB indicators
 				tbStatus = "";
