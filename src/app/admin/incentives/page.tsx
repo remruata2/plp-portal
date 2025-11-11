@@ -527,6 +527,9 @@ export default function RemunerationPage() {
 							<Select
 								value={filters.facilityType}
 								onValueChange={(value) => {
+									// Update facility type filter
+									const newFilters = { ...filters, facilityType: value };
+
 									// Check if the current district filter is still valid with the new facility type
 									if (value !== "all" && filters.district !== "all") {
 										let filtered = [...calculations];
@@ -553,15 +556,12 @@ export default function RemunerationPage() {
 											filtered.map((calc) => calc.districtName)
 										);
 										if (!availableDistricts.has(filters.district)) {
-											setFilters({
-												...filters,
-												facilityType: value,
-												district: "all",
-											});
-											return;
+											newFilters.district = "all";
 										}
 									}
-									setFilters({ ...filters, facilityType: value });
+
+									// Update filters - this will trigger applyFilters via useEffect
+									setFilters(newFilters);
 								}}
 							>
 								<SelectTrigger>
@@ -585,6 +585,9 @@ export default function RemunerationPage() {
 							<Select
 								value={filters.district}
 								onValueChange={(value) => {
+									// Update district filter
+									const newFilters = { ...filters, district: value };
+
 									// Check if the current facility type filter is still valid with the new district
 									if (value !== "all" && filters.facilityType !== "all") {
 										let filtered = [...calculations];
@@ -611,15 +614,12 @@ export default function RemunerationPage() {
 											filtered.map((calc) => calc.facilityType)
 										);
 										if (!availableTypes.has(filters.facilityType)) {
-											setFilters({
-												...filters,
-												district: value,
-												facilityType: "all",
-											});
-											return;
+											newFilters.facilityType = "all";
 										}
 									}
-									setFilters({ ...filters, district: value });
+
+									// Update filters - this will trigger applyFilters via useEffect
+									setFilters(newFilters);
 								}}
 							>
 								<SelectTrigger>

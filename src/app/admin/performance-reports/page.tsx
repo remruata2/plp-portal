@@ -166,11 +166,17 @@ export default function AdminPerformanceReportsPage() {
 	const loadInitialData = async () => {
 		try {
 			setLoading(true);
-			await Promise.all([
-				loadFacilityTypes(),
-				loadAvailableMonths(),
-				loadReports(), // Load all reports initially
-			]);
+			// First load facility types
+			await loadFacilityTypes();
+			// Load available months and get the default month
+			const defaultMonth = await loadAvailableMonths();
+			// Then load reports with the default month filter
+			// This ensures the default month filter is respected on initial load
+			if (defaultMonth) {
+				await loadReports({ reportMonth: defaultMonth });
+			} else {
+				await loadReports();
+			}
 		} catch (error) {
 			console.error("Error loading initial data:", error);
 			toast.error("Failed to load initial data");
@@ -192,7 +198,7 @@ export default function AdminPerformanceReportsPage() {
 		}
 	};
 
-	const loadAvailableMonths = async () => {
+	const loadAvailableMonths = async (): Promise<string> => {
 		try {
 			const response = await fetch(
 				"/api/admin/performance-reports/available-months"
@@ -206,43 +212,55 @@ export default function AdminPerformanceReportsPage() {
 					new Set(months.map((m: string) => m.split("-")[0]))
 				).sort((a, b) => b.localeCompare(a));
 				setAvailableYears(years);
-				// default to latest month and trigger initial load after setting
+				// default to latest month and set filter state
 				if (months.length > 0) {
 					const defaultMonth = months[0]; // already sorted (server returns desc)
 					const [yr, mo] = defaultMonth.split("-");
 					setSelectedYear(yr);
 					setSelectedMonth(mo);
 					handleFilterChange("reportMonth", defaultMonth);
+					return defaultMonth;
 				}
 			}
 		} catch (error) {
 			console.error("Error loading available months:", error);
 		}
+		return "";
 	};
 
-	const loadReports = async () => {
+	const loadReports = async (overrideFilters?: Partial<FilterOptions>) => {
 		try {
 			setLoading(true);
 			const params = new URLSearchParams();
 
+			// Use override filters if provided, otherwise use current filters state
+			const activeFilters = overrideFilters
+				? { ...filters, ...overrideFilters }
+				: filters;
+
 			// Only add params if they're not empty and not "all"
 			if (
-				filters.facilityTypeId &&
-				filters.facilityTypeId !== "all" &&
-				filters.facilityTypeId !== ""
+				activeFilters.facilityTypeId &&
+				activeFilters.facilityTypeId !== "all" &&
+				activeFilters.facilityTypeId !== ""
 			) {
-				params.append("facilityTypeId", filters.facilityTypeId);
+				params.append("facilityTypeId", activeFilters.facilityTypeId);
 			}
 			if (
-				filters.reportMonth &&
-				filters.reportMonth !== "all" &&
-				filters.reportMonth !== ""
+				activeFilters.reportMonth &&
+				activeFilters.reportMonth !== "all" &&
+				activeFilters.reportMonth !== ""
 			) {
-				params.append("reportMonth", filters.reportMonth);
+				params.append("reportMonth", activeFilters.reportMonth);
 			}
 
+			// Add timestamp to prevent caching
+			const timestamp = Date.now();
+			params.append("_t", timestamp.toString());
+
 			const response = await fetch(
-				`/api/admin/performance-reports?${params.toString()}`
+				`/api/admin/performance-reports?${params.toString()}`,
+				{ cache: "no-store" }
 			);
 
 			if (response.ok) {
@@ -285,7 +303,8 @@ export default function AdminPerformanceReportsPage() {
 	};
 
 	const handleSearch = () => {
-		loadReports();
+		// Search is client-side only, no need to reload from API
+		// The applyFilters useEffect will handle it
 	};
 
 	const handleViewReport = (report: FacilityReport) => {
@@ -431,7 +450,11 @@ export default function AdminPerformanceReportsPage() {
 					</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<Button variant="outline" onClick={loadReports} disabled={loading}>
+					<Button
+						variant="outline"
+						onClick={() => loadReports()}
+						disabled={loading}
+					>
 						<RefreshCw
 							className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
 						/>
@@ -442,7 +465,9 @@ export default function AdminPerformanceReportsPage() {
 						onClick={() => {
 							// Bulk export using facility type NAME and YYYY-MM
 							try {
-								const ft = facilityTypes.find((t) => t.id === filters.facilityTypeId);
+								const ft = facilityTypes.find(
+									(t) => t.id === filters.facilityTypeId
+								);
 								if (!ft) {
 									toast.error("Select a facility type to export");
 									return;
@@ -460,7 +485,9 @@ export default function AdminPerformanceReportsPage() {
 								toast.error("Failed to start export");
 							}
 						}}
-						disabled={loading || !filters.facilityTypeId || !filters.reportMonth}
+						disabled={
+							loading || !filters.facilityTypeId || !filters.reportMonth
+						}
 					>
 						<Download className="h-4 w-4 mr-2" />
 						Export (Bulk)
@@ -482,9 +509,16 @@ export default function AdminPerformanceReportsPage() {
 							<Label htmlFor="facilityType">Facility Type</Label>
 							<Select
 								value={filters.facilityTypeId}
-								onValueChange={(value) =>
-									handleFilterChange("facilityTypeId", value)
-								}
+								onValueChange={(value) => {
+									// Update filter state
+									handleFilterChange("facilityTypeId", value);
+									// Load reports immediately with all current filters (including the new facility type)
+									loadReports({
+										facilityTypeId: value,
+										reportMonth: filters.reportMonth, // Keep current month
+										searchTerm: filters.searchTerm, // Keep current search
+									});
+								}}
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select facility type" />
@@ -505,9 +539,18 @@ export default function AdminPerformanceReportsPage() {
 								value={selectedYear}
 								onValueChange={(year) => {
 									setSelectedYear(year);
-									const next = year && selectedMonth ? `${year}-${selectedMonth}` : "";
+									const next =
+										year && selectedMonth ? `${year}-${selectedMonth}` : "";
+									// Update filter state
 									handleFilterChange("reportMonth", next);
-									if (next) loadReports();
+									// Load reports immediately with all current filters (including the new month)
+									if (next) {
+										loadReports({
+											facilityTypeId: filters.facilityTypeId, // Keep current facility type
+											reportMonth: next,
+											searchTerm: filters.searchTerm, // Keep current search
+										});
+									}
 								}}
 							>
 								<SelectTrigger>
@@ -530,8 +573,16 @@ export default function AdminPerformanceReportsPage() {
 									setSelectedMonth(month);
 									const year = selectedYear || availableYears[0] || "";
 									const next = year && month ? `${year}-${month}` : "";
+									// Update filter state
 									handleFilterChange("reportMonth", next);
-									if (next) loadReports();
+									// Load reports immediately with all current filters (including the new month)
+									if (next) {
+										loadReports({
+											facilityTypeId: filters.facilityTypeId, // Keep current facility type
+											reportMonth: next,
+											searchTerm: filters.searchTerm, // Keep current search
+										});
+									}
 								}}
 								disabled={availableYears.length === 0}
 							>
@@ -544,7 +595,9 @@ export default function AdminPerformanceReportsPage() {
 								</SelectTrigger>
 								<SelectContent>
 									{availableMonths
-										.filter((m) => (selectedYear ? m.startsWith(selectedYear + "-") : true))
+										.filter((m) =>
+											selectedYear ? m.startsWith(selectedYear + "-") : true
+										)
 										.map((m) => m.split("-")[1])
 										.filter((v, i, arr) => arr.indexOf(v) === i)
 										.sort((a, b) => a.localeCompare(b))
