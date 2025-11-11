@@ -301,6 +301,11 @@ export async function GET(
 		// Apply the same indicator ordering as the detailed report page
 		const indicatorsSorted = sortIndicatorsBySourceOrder([...indicators]);
 
+		// Check if facility type has TB indicators (CT001 or DC001)
+		const hasTbIndicators = indicators.some(
+			(ind) => ind.code === "CT001" || ind.code === "DC001"
+		);
+
 		// For each facility, ensure recalculation and fetch records + field values
 		const rows: any[] = [];
 		// Track facilities included in report (those with submissions)
@@ -369,7 +374,46 @@ export async function GET(
 					.join(", ");
 			} catch {}
 
+			// Determine TB status for this facility based on what they selected in the form
+			// The Yes/No answer is reflected in the denominator fields:
+			// - pulmonary_tb_patients (for CT001) - if > 0, they answered "Yes"
+			// - total_tb_patients (for DC001) - if > 0, they answered "Yes"
+			let tbStatus = "";
+			if (hasTbIndicators) {
+				// Check for CT001 denominator field (pulmonary_tb_patients)
+				// This field stores the Yes/No answer: > 0 means "Yes", 0 or missing means "No"
+				const pulmonaryTbField = fieldValues.find(
+					(fv) => fv.field?.code === "pulmonary_tb_patients"
+				);
+				const pulmonaryTbValue = pulmonaryTbField
+					? pulmonaryTbField.string_value ||
+					  pulmonaryTbField.numeric_value ||
+					  pulmonaryTbField.boolean_value
+					: null;
+
+				// Check for DC001 denominator field (total_tb_patients)
+				// This field stores the Yes/No answer: > 0 means "Yes", 0 or missing means "No"
+				const totalTbField = fieldValues.find(
+					(fv) => fv.field?.code === "total_tb_patients"
+				);
+				const totalTbValue = totalTbField
+					? totalTbField.string_value ||
+					  totalTbField.numeric_value ||
+					  totalTbField.boolean_value
+					: null;
+
+				// If either denominator field has value > 0, user answered "Yes" to the question
+				const hasTbPatients =
+					Number(pulmonaryTbValue || 0) > 0 || Number(totalTbValue || 0) > 0;
+
+				tbStatus = hasTbPatients ? "Yes" : "No";
+			} else {
+				// Facility type doesn't have TB indicators
+				tbStatus = "";
+			}
+
 			const row: Record<string, any> = {
+				"With TB(Yes/No)": tbStatus,
 				"HWO / AYUSH MO": leaderNames,
 				Facility: facility.display_name || facility.name,
 				District: facility.district?.name || "N/A",
@@ -508,8 +552,13 @@ export async function GET(
 		}
 
 		// Build worksheet with compact merged headers
-		const headerTop: any[] = ["HWO / AYUSH MO", "Facility", "District"];
-		const headerSub: any[] = ["", "", ""];
+		const headerTop: any[] = [
+			"With TB(Yes/No)",
+			"HWO / AYUSH MO",
+			"Facility",
+			"District",
+		];
+		const headerSub: any[] = ["", "", "", ""];
 		for (const indicator of indicatorsSorted) {
 			const p = `${indicator.name}`;
 			headerTop.push(p, "", "", "", "");
@@ -526,7 +575,12 @@ export async function GET(
 
 		const data: any[][] = [headerTop, headerSub];
 		for (const r of rows) {
-			const line: any[] = [r["HWO / AYUSH MO"], r["Facility"], r["District"]];
+			const line: any[] = [
+				r["With TB(Yes/No)"],
+				r["HWO / AYUSH MO"],
+				r["Facility"],
+				r["District"],
+			];
 			for (const indicator of indicatorsSorted) {
 				const p = `${indicator.name}`;
 				line.push(r[`${p} - Indicator`]);
@@ -540,7 +594,7 @@ export async function GET(
 		}
 
 		// Add grand total row
-		const grandRow: any[] = ["GRAND TOTAL", ""];
+		const grandRow: any[] = ["GRAND TOTAL", "", ""];
 		// Fill blanks for indicator groups (5 subcolumns per indicator)
 		for (let i = 0; i < indicatorsSorted.length * 5; i++) grandRow.push("");
 		grandRow.push(Math.round(grandTotal));
@@ -557,6 +611,7 @@ export async function GET(
 
 		// Set column widths
 		let colIndex = 1;
+		worksheet.getColumn(colIndex++).width = 16; // With TB(Yes/No)
 		worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
 		worksheet.getColumn(colIndex++).width = 24; // Facility
 		worksheet.getColumn(colIndex++).width = 18; // District
@@ -574,17 +629,18 @@ export async function GET(
 		worksheet.getRow(2).height = 28;
 
 		// Merge header cells
-		// Merge HWO/AYUSH, Facility, District headers over two rows
-		worksheet.mergeCells(1, 1, 2, 1);
-		worksheet.mergeCells(1, 2, 2, 2);
-		worksheet.mergeCells(1, 3, 2, 3);
+		// Merge With TB(Yes/No), HWO/AYUSH, Facility, District headers over two rows
+		worksheet.mergeCells(1, 1, 2, 1); // With TB(Yes/No)
+		worksheet.mergeCells(1, 2, 2, 2); // HWO / AYUSH MO
+		worksheet.mergeCells(1, 3, 2, 3); // Facility
+		worksheet.mergeCells(1, 4, 2, 4); // District
 		// Merge each indicator group name across 5 columns in top row
 		for (let i = 0; i < indicatorsSorted.length; i++) {
-			const startCol = 4 + i * 5; // after HWO/AYUSH, Facility and District (1-indexed)
+			const startCol = 5 + i * 5; // after With TB(Yes/No), HWO/AYUSH, Facility and District (1-indexed)
 			worksheet.mergeCells(1, startCol, 1, startCol + 4);
 		}
 		// Merge Total Facility Incentive over two rows (last column)
-		const totalCol = 4 + indicatorsSorted.length * 5;
+		const totalCol = 5 + indicatorsSorted.length * 5;
 		worksheet.mergeCells(1, totalCol, 2, totalCol);
 
 		// Style header rows
