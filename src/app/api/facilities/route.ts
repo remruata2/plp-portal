@@ -106,7 +106,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, district_id, facility_type_id } = body;
+    const { 
+      name, 
+      district_id, 
+      facility_type_id, 
+      description,
+      parent_facility_id,
+      has_clinic 
+    } = body;
 
     if (!name || !district_id || !facility_type_id) {
       return NextResponse.json(
@@ -115,13 +122,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const facility = await prisma.facility.create({
-      data: {
-        name,
-        display_name: name, // Use name as display_name
-        district_id,
-        facility_type_id,
+    const createData: any = {
+      name,
+      display_name: name,
+      district: {
+        connect: { id: district_id }
       },
+      facility_type: {
+        connect: { id: facility_type_id }
+      },
+    };
+
+    // Add optional fields if provided
+    if (description) createData.description = description;
+    
+    // Handle parent_facility_id (empty string should be null)
+    if (parent_facility_id && parent_facility_id !== "") {
+      createData.parent_facility = {
+        connect: { id: parent_facility_id }
+      };
+    }
+    
+    // Handle has_clinic boolean (default to false if not provided)
+    createData.has_clinic = Boolean(has_clinic);
+
+    const facility = await prisma.facility.create({
+      data: createData,
       include: {
         district: true,
         facility_type: true,

@@ -103,6 +103,26 @@ export type FacilityRemunerationRecord = $Result.DefaultSelection<Prisma.$Facili
  * 
  */
 export type SystemSetting = $Result.DefaultSelection<Prisma.$SystemSettingPayload>
+/**
+ * Model Village
+ * 
+ */
+export type Village = $Result.DefaultSelection<Prisma.$VillagePayload>
+/**
+ * Model Section
+ * 
+ */
+export type Section = $Result.DefaultSelection<Prisma.$SectionPayload>
+/**
+ * Model Family
+ * 
+ */
+export type Family = $Result.DefaultSelection<Prisma.$FamilyPayload>
+/**
+ * Model FamilyMember
+ * 
+ */
+export type FamilyMember = $Result.DefaultSelection<Prisma.$FamilyMemberPayload>
 
 /**
  * Enums
@@ -214,6 +234,64 @@ export const formula_type: {
 
 export type formula_type = (typeof formula_type)[keyof typeof formula_type]
 
+
+export const Gender: {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+};
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const HabitationType: {
+  PERMANENT: 'PERMANENT',
+  TEMPORARY: 'TEMPORARY'
+};
+
+export type HabitationType = (typeof HabitationType)[keyof typeof HabitationType]
+
+
+export const DeletionReason: {
+  DEATH: 'DEATH',
+  MIGRATION: 'MIGRATION',
+  DUPLICATE: 'DUPLICATE',
+  OTHER: 'OTHER'
+};
+
+export type DeletionReason = (typeof DeletionReason)[keyof typeof DeletionReason]
+
+
+export const HOFRelationship: {
+  SELF: 'SELF',
+  HUSBAND: 'HUSBAND',
+  WIFE: 'WIFE',
+  SON: 'SON',
+  DAUGHTER: 'DAUGHTER',
+  FATHER: 'FATHER',
+  MOTHER: 'MOTHER',
+  BROTHER: 'BROTHER',
+  SISTER: 'SISTER',
+  GRANDFATHER: 'GRANDFATHER',
+  GRANDMOTHER: 'GRANDMOTHER',
+  GRANDSON: 'GRANDSON',
+  GRANDDAUGHTER: 'GRANDDAUGHTER',
+  FATHER_IN_LAW: 'FATHER_IN_LAW',
+  MOTHER_IN_LAW: 'MOTHER_IN_LAW',
+  SON_IN_LAW: 'SON_IN_LAW',
+  DAUGHTER_IN_LAW: 'DAUGHTER_IN_LAW',
+  BROTHER_IN_LAW: 'BROTHER_IN_LAW',
+  SISTER_IN_LAW: 'SISTER_IN_LAW',
+  UNCLE: 'UNCLE',
+  AUNT: 'AUNT',
+  NEPHEW: 'NEPHEW',
+  NIECE: 'NIECE',
+  COUSIN: 'COUSIN',
+  OTHER: 'OTHER'
+};
+
+export type HOFRelationship = (typeof HOFRelationship)[keyof typeof HOFRelationship]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -255,6 +333,22 @@ export const FieldCategory: typeof $Enums.FieldCategory
 export type formula_type = $Enums.formula_type
 
 export const formula_type: typeof $Enums.formula_type
+
+export type Gender = $Enums.Gender
+
+export const Gender: typeof $Enums.Gender
+
+export type HabitationType = $Enums.HabitationType
+
+export const HabitationType: typeof $Enums.HabitationType
+
+export type DeletionReason = $Enums.DeletionReason
+
+export const DeletionReason: typeof $Enums.DeletionReason
+
+export type HOFRelationship = $Enums.HOFRelationship
+
+export const HOFRelationship: typeof $Enums.HOFRelationship
 
 /**
  * ##  Prisma Client ʲˢ
@@ -560,6 +654,46 @@ export class PrismaClient<
     * ```
     */
   get systemSetting(): Prisma.SystemSettingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.village`: Exposes CRUD operations for the **Village** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Villages
+    * const villages = await prisma.village.findMany()
+    * ```
+    */
+  get village(): Prisma.VillageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.section`: Exposes CRUD operations for the **Section** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sections
+    * const sections = await prisma.section.findMany()
+    * ```
+    */
+  get section(): Prisma.SectionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.family`: Exposes CRUD operations for the **Family** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Families
+    * const families = await prisma.family.findMany()
+    * ```
+    */
+  get family(): Prisma.FamilyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.familyMember`: Exposes CRUD operations for the **FamilyMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FamilyMembers
+    * const familyMembers = await prisma.familyMember.findMany()
+    * ```
+    */
+  get familyMember(): Prisma.FamilyMemberDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1017,7 +1151,11 @@ export namespace Prisma {
     FacilityTarget: 'FacilityTarget',
     IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
     FacilityRemunerationRecord: 'FacilityRemunerationRecord',
-    SystemSetting: 'SystemSetting'
+    SystemSetting: 'SystemSetting',
+    Village: 'Village',
+    Section: 'Section',
+    Family: 'Family',
+    FamilyMember: 'FamilyMember'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1036,7 +1174,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "district" | "facilityType" | "facility" | "indicator" | "field" | "fieldValue" | "facilityFieldMapping" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityTypeRemuneration" | "indicatorRemuneration" | "facilityTarget" | "indicatorWorkerAllocation" | "facilityRemunerationRecord" | "systemSetting"
+      modelProps: "user" | "district" | "facilityType" | "facility" | "indicator" | "field" | "fieldValue" | "facilityFieldMapping" | "healthWorker" | "remunerationCalculation" | "workerRemuneration" | "workerAllocationConfig" | "facilityTypeRemuneration" | "indicatorRemuneration" | "facilityTarget" | "indicatorWorkerAllocation" | "facilityRemunerationRecord" | "systemSetting" | "village" | "section" | "family" | "familyMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2372,6 +2510,302 @@ export namespace Prisma {
           }
         }
       }
+      Village: {
+        payload: Prisma.$VillagePayload<ExtArgs>
+        fields: Prisma.VillageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VillageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VillageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          findFirst: {
+            args: Prisma.VillageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VillageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          findMany: {
+            args: Prisma.VillageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>[]
+          }
+          create: {
+            args: Prisma.VillageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          createMany: {
+            args: Prisma.VillageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VillageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>[]
+          }
+          delete: {
+            args: Prisma.VillageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          update: {
+            args: Prisma.VillageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          deleteMany: {
+            args: Prisma.VillageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VillageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VillageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>[]
+          }
+          upsert: {
+            args: Prisma.VillageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VillagePayload>
+          }
+          aggregate: {
+            args: Prisma.VillageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVillage>
+          }
+          groupBy: {
+            args: Prisma.VillageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VillageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VillageCountArgs<ExtArgs>
+            result: $Utils.Optional<VillageCountAggregateOutputType> | number
+          }
+        }
+      }
+      Section: {
+        payload: Prisma.$SectionPayload<ExtArgs>
+        fields: Prisma.SectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          findFirst: {
+            args: Prisma.SectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          findMany: {
+            args: Prisma.SectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>[]
+          }
+          create: {
+            args: Prisma.SectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          createMany: {
+            args: Prisma.SectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>[]
+          }
+          delete: {
+            args: Prisma.SectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          update: {
+            args: Prisma.SectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionPayload>
+          }
+          aggregate: {
+            args: Prisma.SectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSection>
+          }
+          groupBy: {
+            args: Prisma.SectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SectionCountArgs<ExtArgs>
+            result: $Utils.Optional<SectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      Family: {
+        payload: Prisma.$FamilyPayload<ExtArgs>
+        fields: Prisma.FamilyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FamilyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FamilyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          findFirst: {
+            args: Prisma.FamilyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FamilyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          findMany: {
+            args: Prisma.FamilyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          create: {
+            args: Prisma.FamilyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          createMany: {
+            args: Prisma.FamilyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FamilyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          delete: {
+            args: Prisma.FamilyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          update: {
+            args: Prisma.FamilyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          deleteMany: {
+            args: Prisma.FamilyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FamilyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FamilyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          upsert: {
+            args: Prisma.FamilyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          aggregate: {
+            args: Prisma.FamilyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFamily>
+          }
+          groupBy: {
+            args: Prisma.FamilyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FamilyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FamilyCountArgs<ExtArgs>
+            result: $Utils.Optional<FamilyCountAggregateOutputType> | number
+          }
+        }
+      }
+      FamilyMember: {
+        payload: Prisma.$FamilyMemberPayload<ExtArgs>
+        fields: Prisma.FamilyMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FamilyMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FamilyMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.FamilyMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FamilyMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          findMany: {
+            args: Prisma.FamilyMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+          }
+          create: {
+            args: Prisma.FamilyMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          createMany: {
+            args: Prisma.FamilyMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FamilyMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.FamilyMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          update: {
+            args: Prisma.FamilyMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.FamilyMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FamilyMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FamilyMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.FamilyMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.FamilyMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFamilyMember>
+          }
+          groupBy: {
+            args: Prisma.FamilyMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FamilyMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FamilyMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<FamilyMemberCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2474,6 +2908,10 @@ export namespace Prisma {
     indicatorWorkerAllocation?: IndicatorWorkerAllocationOmit
     facilityRemunerationRecord?: FacilityRemunerationRecordOmit
     systemSetting?: SystemSettingOmit
+    village?: VillageOmit
+    section?: SectionOmit
+    family?: FamilyOmit
+    familyMember?: FamilyMemberOmit
   }
 
   /* Types for Logging */
@@ -2686,6 +3124,8 @@ export namespace Prisma {
     health_workers: number
     remuneration_calculations: number
     users: number
+    child_facilities: number
+    villages: number
   }
 
   export type FacilityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2696,6 +3136,8 @@ export namespace Prisma {
     health_workers?: boolean | FacilityCountOutputTypeCountHealth_workersArgs
     remuneration_calculations?: boolean | FacilityCountOutputTypeCountRemuneration_calculationsArgs
     users?: boolean | FacilityCountOutputTypeCountUsersArgs
+    child_facilities?: boolean | FacilityCountOutputTypeCountChild_facilitiesArgs
+    villages?: boolean | FacilityCountOutputTypeCountVillagesArgs
   }
 
   // Custom InputTypes
@@ -2756,6 +3198,20 @@ export namespace Prisma {
    */
   export type FacilityCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * FacilityCountOutputType without action
+   */
+  export type FacilityCountOutputTypeCountChild_facilitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilityWhereInput
+  }
+
+  /**
+   * FacilityCountOutputType without action
+   */
+  export type FacilityCountOutputTypeCountVillagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VillageWhereInput
   }
 
 
@@ -2943,6 +3399,99 @@ export namespace Prisma {
    */
   export type FacilityTypeRemunerationCountOutputTypeCountIndicator_remunerationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: IndicatorRemunerationWhereInput
+  }
+
+
+  /**
+   * Count Type VillageCountOutputType
+   */
+
+  export type VillageCountOutputType = {
+    sections: number
+  }
+
+  export type VillageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sections?: boolean | VillageCountOutputTypeCountSectionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * VillageCountOutputType without action
+   */
+  export type VillageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VillageCountOutputType
+     */
+    select?: VillageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * VillageCountOutputType without action
+   */
+  export type VillageCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SectionWhereInput
+  }
+
+
+  /**
+   * Count Type SectionCountOutputType
+   */
+
+  export type SectionCountOutputType = {
+    families: number
+  }
+
+  export type SectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    families?: boolean | SectionCountOutputTypeCountFamiliesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SectionCountOutputType without action
+   */
+  export type SectionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SectionCountOutputType
+     */
+    select?: SectionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SectionCountOutputType without action
+   */
+  export type SectionCountOutputTypeCountFamiliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyWhereInput
+  }
+
+
+  /**
+   * Count Type FamilyCountOutputType
+   */
+
+  export type FamilyCountOutputType = {
+    members: number
+  }
+
+  export type FamilyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | FamilyCountOutputTypeCountMembersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyCountOutputType
+     */
+    select?: FamilyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyMemberWhereInput
   }
 
 
@@ -6395,6 +6944,8 @@ export namespace Prisma {
     facility_type_id: string | null
     is_active: boolean | null
     updated_at: Date | null
+    parent_facility_id: string | null
+    has_clinic: boolean | null
   }
 
   export type FacilityMaxAggregateOutputType = {
@@ -6407,6 +6958,8 @@ export namespace Prisma {
     facility_type_id: string | null
     is_active: boolean | null
     updated_at: Date | null
+    parent_facility_id: string | null
+    has_clinic: boolean | null
   }
 
   export type FacilityCountAggregateOutputType = {
@@ -6419,6 +6972,8 @@ export namespace Prisma {
     facility_type_id: number
     is_active: number
     updated_at: number
+    parent_facility_id: number
+    has_clinic: number
     _all: number
   }
 
@@ -6433,6 +6988,8 @@ export namespace Prisma {
     facility_type_id?: true
     is_active?: true
     updated_at?: true
+    parent_facility_id?: true
+    has_clinic?: true
   }
 
   export type FacilityMaxAggregateInputType = {
@@ -6445,6 +7002,8 @@ export namespace Prisma {
     facility_type_id?: true
     is_active?: true
     updated_at?: true
+    parent_facility_id?: true
+    has_clinic?: true
   }
 
   export type FacilityCountAggregateInputType = {
@@ -6457,6 +7016,8 @@ export namespace Prisma {
     facility_type_id?: true
     is_active?: true
     updated_at?: true
+    parent_facility_id?: true
+    has_clinic?: true
     _all?: true
   }
 
@@ -6542,6 +7103,8 @@ export namespace Prisma {
     facility_type_id: string
     is_active: boolean
     updated_at: Date
+    parent_facility_id: string | null
+    has_clinic: boolean
     _count: FacilityCountAggregateOutputType | null
     _min: FacilityMinAggregateOutputType | null
     _max: FacilityMaxAggregateOutputType | null
@@ -6571,6 +7134,8 @@ export namespace Prisma {
     facility_type_id?: boolean
     is_active?: boolean
     updated_at?: boolean
+    parent_facility_id?: boolean
+    has_clinic?: boolean
     remuneration_records?: boolean | Facility$remuneration_recordsArgs<ExtArgs>
     worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
     district?: boolean | DistrictDefaultArgs<ExtArgs>
@@ -6580,6 +7145,9 @@ export namespace Prisma {
     health_workers?: boolean | Facility$health_workersArgs<ExtArgs>
     remuneration_calculations?: boolean | Facility$remuneration_calculationsArgs<ExtArgs>
     users?: boolean | Facility$usersArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
+    child_facilities?: boolean | Facility$child_facilitiesArgs<ExtArgs>
+    villages?: boolean | Facility$villagesArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["facility"]>
 
@@ -6593,8 +7161,11 @@ export namespace Prisma {
     facility_type_id?: boolean
     is_active?: boolean
     updated_at?: boolean
+    parent_facility_id?: boolean
+    has_clinic?: boolean
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
   }, ExtArgs["result"]["facility"]>
 
   export type FacilitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6607,8 +7178,11 @@ export namespace Prisma {
     facility_type_id?: boolean
     is_active?: boolean
     updated_at?: boolean
+    parent_facility_id?: boolean
+    has_clinic?: boolean
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
   }, ExtArgs["result"]["facility"]>
 
   export type FacilitySelectScalar = {
@@ -6621,9 +7195,11 @@ export namespace Prisma {
     facility_type_id?: boolean
     is_active?: boolean
     updated_at?: boolean
+    parent_facility_id?: boolean
+    has_clinic?: boolean
   }
 
-  export type FacilityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "created_at" | "description" | "display_name" | "district_id" | "facility_type_id" | "is_active" | "updated_at", ExtArgs["result"]["facility"]>
+  export type FacilityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "created_at" | "description" | "display_name" | "district_id" | "facility_type_id" | "is_active" | "updated_at" | "parent_facility_id" | "has_clinic", ExtArgs["result"]["facility"]>
   export type FacilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     remuneration_records?: boolean | Facility$remuneration_recordsArgs<ExtArgs>
     worker_remunerations?: boolean | Facility$worker_remunerationsArgs<ExtArgs>
@@ -6634,15 +7210,20 @@ export namespace Prisma {
     health_workers?: boolean | Facility$health_workersArgs<ExtArgs>
     remuneration_calculations?: boolean | Facility$remuneration_calculationsArgs<ExtArgs>
     users?: boolean | Facility$usersArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
+    child_facilities?: boolean | Facility$child_facilitiesArgs<ExtArgs>
+    villages?: boolean | Facility$villagesArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FacilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
   }
   export type FacilityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     district?: boolean | DistrictDefaultArgs<ExtArgs>
     facility_type?: boolean | FacilityTypeDefaultArgs<ExtArgs>
+    parent_facility?: boolean | Facility$parent_facilityArgs<ExtArgs>
   }
 
   export type $FacilityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6657,6 +7238,9 @@ export namespace Prisma {
       health_workers: Prisma.$HealthWorkerPayload<ExtArgs>[]
       remuneration_calculations: Prisma.$RemunerationCalculationPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
+      parent_facility: Prisma.$FacilityPayload<ExtArgs> | null
+      child_facilities: Prisma.$FacilityPayload<ExtArgs>[]
+      villages: Prisma.$VillagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6668,6 +7252,8 @@ export namespace Prisma {
       facility_type_id: string
       is_active: boolean
       updated_at: Date
+      parent_facility_id: string | null
+      has_clinic: boolean
     }, ExtArgs["result"]["facility"]>
     composites: {}
   }
@@ -7071,6 +7657,9 @@ export namespace Prisma {
     health_workers<T extends Facility$health_workersArgs<ExtArgs> = {}>(args?: Subset<T, Facility$health_workersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HealthWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     remuneration_calculations<T extends Facility$remuneration_calculationsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$remuneration_calculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemunerationCalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Facility$usersArgs<ExtArgs> = {}>(args?: Subset<T, Facility$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parent_facility<T extends Facility$parent_facilityArgs<ExtArgs> = {}>(args?: Subset<T, Facility$parent_facilityArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    child_facilities<T extends Facility$child_facilitiesArgs<ExtArgs> = {}>(args?: Subset<T, Facility$child_facilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    villages<T extends Facility$villagesArgs<ExtArgs> = {}>(args?: Subset<T, Facility$villagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7109,6 +7698,8 @@ export namespace Prisma {
     readonly facility_type_id: FieldRef<"Facility", 'String'>
     readonly is_active: FieldRef<"Facility", 'Boolean'>
     readonly updated_at: FieldRef<"Facility", 'DateTime'>
+    readonly parent_facility_id: FieldRef<"Facility", 'String'>
+    readonly has_clinic: FieldRef<"Facility", 'Boolean'>
   }
     
 
@@ -7670,6 +8261,73 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Facility.parent_facility
+   */
+  export type Facility$parent_facilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facility
+     */
+    select?: FacilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facility
+     */
+    omit?: FacilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityInclude<ExtArgs> | null
+    where?: FacilityWhereInput
+  }
+
+  /**
+   * Facility.child_facilities
+   */
+  export type Facility$child_facilitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facility
+     */
+    select?: FacilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facility
+     */
+    omit?: FacilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityInclude<ExtArgs> | null
+    where?: FacilityWhereInput
+    orderBy?: FacilityOrderByWithRelationInput | FacilityOrderByWithRelationInput[]
+    cursor?: FacilityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilityScalarFieldEnum | FacilityScalarFieldEnum[]
+  }
+
+  /**
+   * Facility.villages
+   */
+  export type Facility$villagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    where?: VillageWhereInput
+    orderBy?: VillageOrderByWithRelationInput | VillageOrderByWithRelationInput[]
+    cursor?: VillageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VillageScalarFieldEnum | VillageScalarFieldEnum[]
   }
 
   /**
@@ -24471,6 +25129,4687 @@ export namespace Prisma {
 
 
   /**
+   * Model Village
+   */
+
+  export type AggregateVillage = {
+    _count: VillageCountAggregateOutputType | null
+    _min: VillageMinAggregateOutputType | null
+    _max: VillageMaxAggregateOutputType | null
+  }
+
+  export type VillageMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    facility_id: string | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type VillageMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    facility_id: string | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type VillageCountAggregateOutputType = {
+    id: number
+    name: number
+    facility_id: number
+    is_active: number
+    deleted_at: number
+    deleted_reason: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type VillageMinAggregateInputType = {
+    id?: true
+    name?: true
+    facility_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type VillageMaxAggregateInputType = {
+    id?: true
+    name?: true
+    facility_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type VillageCountAggregateInputType = {
+    id?: true
+    name?: true
+    facility_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type VillageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Village to aggregate.
+     */
+    where?: VillageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Villages to fetch.
+     */
+    orderBy?: VillageOrderByWithRelationInput | VillageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VillageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Villages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Villages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Villages
+    **/
+    _count?: true | VillageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VillageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VillageMaxAggregateInputType
+  }
+
+  export type GetVillageAggregateType<T extends VillageAggregateArgs> = {
+        [P in keyof T & keyof AggregateVillage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVillage[P]>
+      : GetScalarType<T[P], AggregateVillage[P]>
+  }
+
+
+
+
+  export type VillageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VillageWhereInput
+    orderBy?: VillageOrderByWithAggregationInput | VillageOrderByWithAggregationInput[]
+    by: VillageScalarFieldEnum[] | VillageScalarFieldEnum
+    having?: VillageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VillageCountAggregateInputType | true
+    _min?: VillageMinAggregateInputType
+    _max?: VillageMaxAggregateInputType
+  }
+
+  export type VillageGroupByOutputType = {
+    id: string
+    name: string
+    facility_id: string
+    is_active: boolean
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date
+    updated_at: Date
+    _count: VillageCountAggregateOutputType | null
+    _min: VillageMinAggregateOutputType | null
+    _max: VillageMaxAggregateOutputType | null
+  }
+
+  type GetVillageGroupByPayload<T extends VillageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VillageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VillageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VillageGroupByOutputType[P]>
+            : GetScalarType<T[P], VillageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VillageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    facility_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+    sections?: boolean | Village$sectionsArgs<ExtArgs>
+    _count?: boolean | VillageCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["village"]>
+
+  export type VillageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    facility_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["village"]>
+
+  export type VillageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    facility_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["village"]>
+
+  export type VillageSelectScalar = {
+    id?: boolean
+    name?: boolean
+    facility_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type VillageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "facility_id" | "is_active" | "deleted_at" | "deleted_reason" | "created_at" | "updated_at", ExtArgs["result"]["village"]>
+  export type VillageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+    sections?: boolean | Village$sectionsArgs<ExtArgs>
+    _count?: boolean | VillageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type VillageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }
+  export type VillageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }
+
+  export type $VillagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Village"
+    objects: {
+      facility: Prisma.$FacilityPayload<ExtArgs>
+      sections: Prisma.$SectionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      facility_id: string
+      is_active: boolean
+      deleted_at: Date | null
+      deleted_reason: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["village"]>
+    composites: {}
+  }
+
+  type VillageGetPayload<S extends boolean | null | undefined | VillageDefaultArgs> = $Result.GetResult<Prisma.$VillagePayload, S>
+
+  type VillageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VillageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VillageCountAggregateInputType | true
+    }
+
+  export interface VillageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Village'], meta: { name: 'Village' } }
+    /**
+     * Find zero or one Village that matches the filter.
+     * @param {VillageFindUniqueArgs} args - Arguments to find a Village
+     * @example
+     * // Get one Village
+     * const village = await prisma.village.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VillageFindUniqueArgs>(args: SelectSubset<T, VillageFindUniqueArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Village that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VillageFindUniqueOrThrowArgs} args - Arguments to find a Village
+     * @example
+     * // Get one Village
+     * const village = await prisma.village.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VillageFindUniqueOrThrowArgs>(args: SelectSubset<T, VillageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Village that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageFindFirstArgs} args - Arguments to find a Village
+     * @example
+     * // Get one Village
+     * const village = await prisma.village.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VillageFindFirstArgs>(args?: SelectSubset<T, VillageFindFirstArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Village that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageFindFirstOrThrowArgs} args - Arguments to find a Village
+     * @example
+     * // Get one Village
+     * const village = await prisma.village.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VillageFindFirstOrThrowArgs>(args?: SelectSubset<T, VillageFindFirstOrThrowArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Villages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Villages
+     * const villages = await prisma.village.findMany()
+     * 
+     * // Get first 10 Villages
+     * const villages = await prisma.village.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const villageWithIdOnly = await prisma.village.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VillageFindManyArgs>(args?: SelectSubset<T, VillageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Village.
+     * @param {VillageCreateArgs} args - Arguments to create a Village.
+     * @example
+     * // Create one Village
+     * const Village = await prisma.village.create({
+     *   data: {
+     *     // ... data to create a Village
+     *   }
+     * })
+     * 
+     */
+    create<T extends VillageCreateArgs>(args: SelectSubset<T, VillageCreateArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Villages.
+     * @param {VillageCreateManyArgs} args - Arguments to create many Villages.
+     * @example
+     * // Create many Villages
+     * const village = await prisma.village.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VillageCreateManyArgs>(args?: SelectSubset<T, VillageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Villages and returns the data saved in the database.
+     * @param {VillageCreateManyAndReturnArgs} args - Arguments to create many Villages.
+     * @example
+     * // Create many Villages
+     * const village = await prisma.village.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Villages and only return the `id`
+     * const villageWithIdOnly = await prisma.village.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VillageCreateManyAndReturnArgs>(args?: SelectSubset<T, VillageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Village.
+     * @param {VillageDeleteArgs} args - Arguments to delete one Village.
+     * @example
+     * // Delete one Village
+     * const Village = await prisma.village.delete({
+     *   where: {
+     *     // ... filter to delete one Village
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VillageDeleteArgs>(args: SelectSubset<T, VillageDeleteArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Village.
+     * @param {VillageUpdateArgs} args - Arguments to update one Village.
+     * @example
+     * // Update one Village
+     * const village = await prisma.village.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VillageUpdateArgs>(args: SelectSubset<T, VillageUpdateArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Villages.
+     * @param {VillageDeleteManyArgs} args - Arguments to filter Villages to delete.
+     * @example
+     * // Delete a few Villages
+     * const { count } = await prisma.village.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VillageDeleteManyArgs>(args?: SelectSubset<T, VillageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Villages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Villages
+     * const village = await prisma.village.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VillageUpdateManyArgs>(args: SelectSubset<T, VillageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Villages and returns the data updated in the database.
+     * @param {VillageUpdateManyAndReturnArgs} args - Arguments to update many Villages.
+     * @example
+     * // Update many Villages
+     * const village = await prisma.village.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Villages and only return the `id`
+     * const villageWithIdOnly = await prisma.village.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VillageUpdateManyAndReturnArgs>(args: SelectSubset<T, VillageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Village.
+     * @param {VillageUpsertArgs} args - Arguments to update or create a Village.
+     * @example
+     * // Update or create a Village
+     * const village = await prisma.village.upsert({
+     *   create: {
+     *     // ... data to create a Village
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Village we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VillageUpsertArgs>(args: SelectSubset<T, VillageUpsertArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Villages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageCountArgs} args - Arguments to filter Villages to count.
+     * @example
+     * // Count the number of Villages
+     * const count = await prisma.village.count({
+     *   where: {
+     *     // ... the filter for the Villages we want to count
+     *   }
+     * })
+    **/
+    count<T extends VillageCountArgs>(
+      args?: Subset<T, VillageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VillageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Village.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VillageAggregateArgs>(args: Subset<T, VillageAggregateArgs>): Prisma.PrismaPromise<GetVillageAggregateType<T>>
+
+    /**
+     * Group by Village.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VillageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VillageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VillageGroupByArgs['orderBy'] }
+        : { orderBy?: VillageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VillageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVillageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Village model
+   */
+  readonly fields: VillageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Village.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VillageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sections<T extends Village$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, Village$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Village model
+   */
+  interface VillageFieldRefs {
+    readonly id: FieldRef<"Village", 'String'>
+    readonly name: FieldRef<"Village", 'String'>
+    readonly facility_id: FieldRef<"Village", 'String'>
+    readonly is_active: FieldRef<"Village", 'Boolean'>
+    readonly deleted_at: FieldRef<"Village", 'DateTime'>
+    readonly deleted_reason: FieldRef<"Village", 'String'>
+    readonly created_at: FieldRef<"Village", 'DateTime'>
+    readonly updated_at: FieldRef<"Village", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Village findUnique
+   */
+  export type VillageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter, which Village to fetch.
+     */
+    where: VillageWhereUniqueInput
+  }
+
+  /**
+   * Village findUniqueOrThrow
+   */
+  export type VillageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter, which Village to fetch.
+     */
+    where: VillageWhereUniqueInput
+  }
+
+  /**
+   * Village findFirst
+   */
+  export type VillageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter, which Village to fetch.
+     */
+    where?: VillageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Villages to fetch.
+     */
+    orderBy?: VillageOrderByWithRelationInput | VillageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Villages.
+     */
+    cursor?: VillageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Villages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Villages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Villages.
+     */
+    distinct?: VillageScalarFieldEnum | VillageScalarFieldEnum[]
+  }
+
+  /**
+   * Village findFirstOrThrow
+   */
+  export type VillageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter, which Village to fetch.
+     */
+    where?: VillageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Villages to fetch.
+     */
+    orderBy?: VillageOrderByWithRelationInput | VillageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Villages.
+     */
+    cursor?: VillageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Villages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Villages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Villages.
+     */
+    distinct?: VillageScalarFieldEnum | VillageScalarFieldEnum[]
+  }
+
+  /**
+   * Village findMany
+   */
+  export type VillageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter, which Villages to fetch.
+     */
+    where?: VillageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Villages to fetch.
+     */
+    orderBy?: VillageOrderByWithRelationInput | VillageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Villages.
+     */
+    cursor?: VillageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Villages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Villages.
+     */
+    skip?: number
+    distinct?: VillageScalarFieldEnum | VillageScalarFieldEnum[]
+  }
+
+  /**
+   * Village create
+   */
+  export type VillageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Village.
+     */
+    data: XOR<VillageCreateInput, VillageUncheckedCreateInput>
+  }
+
+  /**
+   * Village createMany
+   */
+  export type VillageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Villages.
+     */
+    data: VillageCreateManyInput | VillageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Village createManyAndReturn
+   */
+  export type VillageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * The data used to create many Villages.
+     */
+    data: VillageCreateManyInput | VillageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Village update
+   */
+  export type VillageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Village.
+     */
+    data: XOR<VillageUpdateInput, VillageUncheckedUpdateInput>
+    /**
+     * Choose, which Village to update.
+     */
+    where: VillageWhereUniqueInput
+  }
+
+  /**
+   * Village updateMany
+   */
+  export type VillageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Villages.
+     */
+    data: XOR<VillageUpdateManyMutationInput, VillageUncheckedUpdateManyInput>
+    /**
+     * Filter which Villages to update
+     */
+    where?: VillageWhereInput
+    /**
+     * Limit how many Villages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Village updateManyAndReturn
+   */
+  export type VillageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * The data used to update Villages.
+     */
+    data: XOR<VillageUpdateManyMutationInput, VillageUncheckedUpdateManyInput>
+    /**
+     * Filter which Villages to update
+     */
+    where?: VillageWhereInput
+    /**
+     * Limit how many Villages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Village upsert
+   */
+  export type VillageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Village to update in case it exists.
+     */
+    where: VillageWhereUniqueInput
+    /**
+     * In case the Village found by the `where` argument doesn't exist, create a new Village with this data.
+     */
+    create: XOR<VillageCreateInput, VillageUncheckedCreateInput>
+    /**
+     * In case the Village was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VillageUpdateInput, VillageUncheckedUpdateInput>
+  }
+
+  /**
+   * Village delete
+   */
+  export type VillageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+    /**
+     * Filter which Village to delete.
+     */
+    where: VillageWhereUniqueInput
+  }
+
+  /**
+   * Village deleteMany
+   */
+  export type VillageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Villages to delete
+     */
+    where?: VillageWhereInput
+    /**
+     * Limit how many Villages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Village.sections
+   */
+  export type Village$sectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    where?: SectionWhereInput
+    orderBy?: SectionOrderByWithRelationInput | SectionOrderByWithRelationInput[]
+    cursor?: SectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SectionScalarFieldEnum | SectionScalarFieldEnum[]
+  }
+
+  /**
+   * Village without action
+   */
+  export type VillageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Village
+     */
+    select?: VillageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Village
+     */
+    omit?: VillageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VillageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Section
+   */
+
+  export type AggregateSection = {
+    _count: SectionCountAggregateOutputType | null
+    _min: SectionMinAggregateOutputType | null
+    _max: SectionMaxAggregateOutputType | null
+  }
+
+  export type SectionMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    village_id: string | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SectionMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    village_id: string | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SectionCountAggregateOutputType = {
+    id: number
+    name: number
+    village_id: number
+    is_active: number
+    deleted_at: number
+    deleted_reason: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SectionMinAggregateInputType = {
+    id?: true
+    name?: true
+    village_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SectionMaxAggregateInputType = {
+    id?: true
+    name?: true
+    village_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SectionCountAggregateInputType = {
+    id?: true
+    name?: true
+    village_id?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Section to aggregate.
+     */
+    where?: SectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sections to fetch.
+     */
+    orderBy?: SectionOrderByWithRelationInput | SectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Sections
+    **/
+    _count?: true | SectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SectionMaxAggregateInputType
+  }
+
+  export type GetSectionAggregateType<T extends SectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSection[P]>
+      : GetScalarType<T[P], AggregateSection[P]>
+  }
+
+
+
+
+  export type SectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SectionWhereInput
+    orderBy?: SectionOrderByWithAggregationInput | SectionOrderByWithAggregationInput[]
+    by: SectionScalarFieldEnum[] | SectionScalarFieldEnum
+    having?: SectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SectionCountAggregateInputType | true
+    _min?: SectionMinAggregateInputType
+    _max?: SectionMaxAggregateInputType
+  }
+
+  export type SectionGroupByOutputType = {
+    id: string
+    name: string
+    village_id: string
+    is_active: boolean
+    deleted_at: Date | null
+    deleted_reason: string | null
+    created_at: Date
+    updated_at: Date
+    _count: SectionCountAggregateOutputType | null
+    _min: SectionMinAggregateOutputType | null
+    _max: SectionMaxAggregateOutputType | null
+  }
+
+  type GetSectionGroupByPayload<T extends SectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SectionGroupByOutputType[P]>
+            : GetScalarType<T[P], SectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    village_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+    families?: boolean | Section$familiesArgs<ExtArgs>
+    _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["section"]>
+
+  export type SectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    village_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["section"]>
+
+  export type SectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    village_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["section"]>
+
+  export type SectionSelectScalar = {
+    id?: boolean
+    name?: boolean
+    village_id?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "village_id" | "is_active" | "deleted_at" | "deleted_reason" | "created_at" | "updated_at", ExtArgs["result"]["section"]>
+  export type SectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+    families?: boolean | Section$familiesArgs<ExtArgs>
+    _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+  }
+  export type SectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    village?: boolean | VillageDefaultArgs<ExtArgs>
+  }
+
+  export type $SectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Section"
+    objects: {
+      village: Prisma.$VillagePayload<ExtArgs>
+      families: Prisma.$FamilyPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      village_id: string
+      is_active: boolean
+      deleted_at: Date | null
+      deleted_reason: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["section"]>
+    composites: {}
+  }
+
+  type SectionGetPayload<S extends boolean | null | undefined | SectionDefaultArgs> = $Result.GetResult<Prisma.$SectionPayload, S>
+
+  type SectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SectionCountAggregateInputType | true
+    }
+
+  export interface SectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Section'], meta: { name: 'Section' } }
+    /**
+     * Find zero or one Section that matches the filter.
+     * @param {SectionFindUniqueArgs} args - Arguments to find a Section
+     * @example
+     * // Get one Section
+     * const section = await prisma.section.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SectionFindUniqueArgs>(args: SelectSubset<T, SectionFindUniqueArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Section that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SectionFindUniqueOrThrowArgs} args - Arguments to find a Section
+     * @example
+     * // Get one Section
+     * const section = await prisma.section.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SectionFindUniqueOrThrowArgs>(args: SelectSubset<T, SectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Section that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionFindFirstArgs} args - Arguments to find a Section
+     * @example
+     * // Get one Section
+     * const section = await prisma.section.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SectionFindFirstArgs>(args?: SelectSubset<T, SectionFindFirstArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Section that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionFindFirstOrThrowArgs} args - Arguments to find a Section
+     * @example
+     * // Get one Section
+     * const section = await prisma.section.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SectionFindFirstOrThrowArgs>(args?: SelectSubset<T, SectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Sections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Sections
+     * const sections = await prisma.section.findMany()
+     * 
+     * // Get first 10 Sections
+     * const sections = await prisma.section.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sectionWithIdOnly = await prisma.section.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SectionFindManyArgs>(args?: SelectSubset<T, SectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Section.
+     * @param {SectionCreateArgs} args - Arguments to create a Section.
+     * @example
+     * // Create one Section
+     * const Section = await prisma.section.create({
+     *   data: {
+     *     // ... data to create a Section
+     *   }
+     * })
+     * 
+     */
+    create<T extends SectionCreateArgs>(args: SelectSubset<T, SectionCreateArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Sections.
+     * @param {SectionCreateManyArgs} args - Arguments to create many Sections.
+     * @example
+     * // Create many Sections
+     * const section = await prisma.section.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SectionCreateManyArgs>(args?: SelectSubset<T, SectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Sections and returns the data saved in the database.
+     * @param {SectionCreateManyAndReturnArgs} args - Arguments to create many Sections.
+     * @example
+     * // Create many Sections
+     * const section = await prisma.section.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Sections and only return the `id`
+     * const sectionWithIdOnly = await prisma.section.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SectionCreateManyAndReturnArgs>(args?: SelectSubset<T, SectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Section.
+     * @param {SectionDeleteArgs} args - Arguments to delete one Section.
+     * @example
+     * // Delete one Section
+     * const Section = await prisma.section.delete({
+     *   where: {
+     *     // ... filter to delete one Section
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SectionDeleteArgs>(args: SelectSubset<T, SectionDeleteArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Section.
+     * @param {SectionUpdateArgs} args - Arguments to update one Section.
+     * @example
+     * // Update one Section
+     * const section = await prisma.section.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SectionUpdateArgs>(args: SelectSubset<T, SectionUpdateArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Sections.
+     * @param {SectionDeleteManyArgs} args - Arguments to filter Sections to delete.
+     * @example
+     * // Delete a few Sections
+     * const { count } = await prisma.section.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SectionDeleteManyArgs>(args?: SelectSubset<T, SectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Sections
+     * const section = await prisma.section.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SectionUpdateManyArgs>(args: SelectSubset<T, SectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sections and returns the data updated in the database.
+     * @param {SectionUpdateManyAndReturnArgs} args - Arguments to update many Sections.
+     * @example
+     * // Update many Sections
+     * const section = await prisma.section.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Sections and only return the `id`
+     * const sectionWithIdOnly = await prisma.section.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SectionUpdateManyAndReturnArgs>(args: SelectSubset<T, SectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Section.
+     * @param {SectionUpsertArgs} args - Arguments to update or create a Section.
+     * @example
+     * // Update or create a Section
+     * const section = await prisma.section.upsert({
+     *   create: {
+     *     // ... data to create a Section
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Section we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SectionUpsertArgs>(args: SelectSubset<T, SectionUpsertArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Sections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionCountArgs} args - Arguments to filter Sections to count.
+     * @example
+     * // Count the number of Sections
+     * const count = await prisma.section.count({
+     *   where: {
+     *     // ... the filter for the Sections we want to count
+     *   }
+     * })
+    **/
+    count<T extends SectionCountArgs>(
+      args?: Subset<T, SectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Section.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SectionAggregateArgs>(args: Subset<T, SectionAggregateArgs>): Prisma.PrismaPromise<GetSectionAggregateType<T>>
+
+    /**
+     * Group by Section.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SectionGroupByArgs['orderBy'] }
+        : { orderBy?: SectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Section model
+   */
+  readonly fields: SectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Section.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    village<T extends VillageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, VillageDefaultArgs<ExtArgs>>): Prisma__VillageClient<$Result.GetResult<Prisma.$VillagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    families<T extends Section$familiesArgs<ExtArgs> = {}>(args?: Subset<T, Section$familiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Section model
+   */
+  interface SectionFieldRefs {
+    readonly id: FieldRef<"Section", 'String'>
+    readonly name: FieldRef<"Section", 'String'>
+    readonly village_id: FieldRef<"Section", 'String'>
+    readonly is_active: FieldRef<"Section", 'Boolean'>
+    readonly deleted_at: FieldRef<"Section", 'DateTime'>
+    readonly deleted_reason: FieldRef<"Section", 'String'>
+    readonly created_at: FieldRef<"Section", 'DateTime'>
+    readonly updated_at: FieldRef<"Section", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Section findUnique
+   */
+  export type SectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter, which Section to fetch.
+     */
+    where: SectionWhereUniqueInput
+  }
+
+  /**
+   * Section findUniqueOrThrow
+   */
+  export type SectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter, which Section to fetch.
+     */
+    where: SectionWhereUniqueInput
+  }
+
+  /**
+   * Section findFirst
+   */
+  export type SectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter, which Section to fetch.
+     */
+    where?: SectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sections to fetch.
+     */
+    orderBy?: SectionOrderByWithRelationInput | SectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sections.
+     */
+    cursor?: SectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sections.
+     */
+    distinct?: SectionScalarFieldEnum | SectionScalarFieldEnum[]
+  }
+
+  /**
+   * Section findFirstOrThrow
+   */
+  export type SectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter, which Section to fetch.
+     */
+    where?: SectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sections to fetch.
+     */
+    orderBy?: SectionOrderByWithRelationInput | SectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sections.
+     */
+    cursor?: SectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sections.
+     */
+    distinct?: SectionScalarFieldEnum | SectionScalarFieldEnum[]
+  }
+
+  /**
+   * Section findMany
+   */
+  export type SectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter, which Sections to fetch.
+     */
+    where?: SectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sections to fetch.
+     */
+    orderBy?: SectionOrderByWithRelationInput | SectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Sections.
+     */
+    cursor?: SectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sections.
+     */
+    skip?: number
+    distinct?: SectionScalarFieldEnum | SectionScalarFieldEnum[]
+  }
+
+  /**
+   * Section create
+   */
+  export type SectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Section.
+     */
+    data: XOR<SectionCreateInput, SectionUncheckedCreateInput>
+  }
+
+  /**
+   * Section createMany
+   */
+  export type SectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Sections.
+     */
+    data: SectionCreateManyInput | SectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Section createManyAndReturn
+   */
+  export type SectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Sections.
+     */
+    data: SectionCreateManyInput | SectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Section update
+   */
+  export type SectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Section.
+     */
+    data: XOR<SectionUpdateInput, SectionUncheckedUpdateInput>
+    /**
+     * Choose, which Section to update.
+     */
+    where: SectionWhereUniqueInput
+  }
+
+  /**
+   * Section updateMany
+   */
+  export type SectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Sections.
+     */
+    data: XOR<SectionUpdateManyMutationInput, SectionUncheckedUpdateManyInput>
+    /**
+     * Filter which Sections to update
+     */
+    where?: SectionWhereInput
+    /**
+     * Limit how many Sections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Section updateManyAndReturn
+   */
+  export type SectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * The data used to update Sections.
+     */
+    data: XOR<SectionUpdateManyMutationInput, SectionUncheckedUpdateManyInput>
+    /**
+     * Filter which Sections to update
+     */
+    where?: SectionWhereInput
+    /**
+     * Limit how many Sections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Section upsert
+   */
+  export type SectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Section to update in case it exists.
+     */
+    where: SectionWhereUniqueInput
+    /**
+     * In case the Section found by the `where` argument doesn't exist, create a new Section with this data.
+     */
+    create: XOR<SectionCreateInput, SectionUncheckedCreateInput>
+    /**
+     * In case the Section was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SectionUpdateInput, SectionUncheckedUpdateInput>
+  }
+
+  /**
+   * Section delete
+   */
+  export type SectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    /**
+     * Filter which Section to delete.
+     */
+    where: SectionWhereUniqueInput
+  }
+
+  /**
+   * Section deleteMany
+   */
+  export type SectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sections to delete
+     */
+    where?: SectionWhereInput
+    /**
+     * Limit how many Sections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Section.families
+   */
+  export type Section$familiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    where?: FamilyWhereInput
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    cursor?: FamilyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Section without action
+   */
+  export type SectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Family
+   */
+
+  export type AggregateFamily = {
+    _count: FamilyCountAggregateOutputType | null
+    _avg: FamilyAvgAggregateOutputType | null
+    _sum: FamilySumAggregateOutputType | null
+    _min: FamilyMinAggregateOutputType | null
+    _max: FamilyMaxAggregateOutputType | null
+  }
+
+  export type FamilyAvgAggregateOutputType = {
+    no_of_couples: number | null
+  }
+
+  export type FamilySumAggregateOutputType = {
+    no_of_couples: number | null
+  }
+
+  export type FamilyMinAggregateOutputType = {
+    id: string | null
+    section_id: string | null
+    house_no: string | null
+    floor_no: string | null
+    no_of_couples: number | null
+    habitation_type: $Enums.HabitationType | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type FamilyMaxAggregateOutputType = {
+    id: string | null
+    section_id: string | null
+    house_no: string | null
+    floor_no: string | null
+    no_of_couples: number | null
+    habitation_type: $Enums.HabitationType | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type FamilyCountAggregateOutputType = {
+    id: number
+    section_id: number
+    house_no: number
+    floor_no: number
+    no_of_couples: number
+    habitation_type: number
+    is_active: number
+    deleted_at: number
+    deleted_reason: number
+    deleted_remarks: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type FamilyAvgAggregateInputType = {
+    no_of_couples?: true
+  }
+
+  export type FamilySumAggregateInputType = {
+    no_of_couples?: true
+  }
+
+  export type FamilyMinAggregateInputType = {
+    id?: true
+    section_id?: true
+    house_no?: true
+    floor_no?: true
+    no_of_couples?: true
+    habitation_type?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type FamilyMaxAggregateInputType = {
+    id?: true
+    section_id?: true
+    house_no?: true
+    floor_no?: true
+    no_of_couples?: true
+    habitation_type?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type FamilyCountAggregateInputType = {
+    id?: true
+    section_id?: true
+    house_no?: true
+    floor_no?: true
+    no_of_couples?: true
+    habitation_type?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type FamilyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Family to aggregate.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Families
+    **/
+    _count?: true | FamilyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FamilyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FamilySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FamilyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FamilyMaxAggregateInputType
+  }
+
+  export type GetFamilyAggregateType<T extends FamilyAggregateArgs> = {
+        [P in keyof T & keyof AggregateFamily]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFamily[P]>
+      : GetScalarType<T[P], AggregateFamily[P]>
+  }
+
+
+
+
+  export type FamilyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyWhereInput
+    orderBy?: FamilyOrderByWithAggregationInput | FamilyOrderByWithAggregationInput[]
+    by: FamilyScalarFieldEnum[] | FamilyScalarFieldEnum
+    having?: FamilyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FamilyCountAggregateInputType | true
+    _avg?: FamilyAvgAggregateInputType
+    _sum?: FamilySumAggregateInputType
+    _min?: FamilyMinAggregateInputType
+    _max?: FamilyMaxAggregateInputType
+  }
+
+  export type FamilyGroupByOutputType = {
+    id: string
+    section_id: string
+    house_no: string
+    floor_no: string | null
+    no_of_couples: number
+    habitation_type: $Enums.HabitationType
+    is_active: boolean
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date
+    updated_at: Date
+    _count: FamilyCountAggregateOutputType | null
+    _avg: FamilyAvgAggregateOutputType | null
+    _sum: FamilySumAggregateOutputType | null
+    _min: FamilyMinAggregateOutputType | null
+    _max: FamilyMaxAggregateOutputType | null
+  }
+
+  type GetFamilyGroupByPayload<T extends FamilyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FamilyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FamilyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FamilyGroupByOutputType[P]>
+            : GetScalarType<T[P], FamilyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FamilySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section_id?: boolean
+    house_no?: boolean
+    floor_no?: boolean
+    no_of_couples?: boolean
+    habitation_type?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+    members?: boolean | Family$membersArgs<ExtArgs>
+    _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section_id?: boolean
+    house_no?: boolean
+    floor_no?: boolean
+    no_of_couples?: boolean
+    habitation_type?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section_id?: boolean
+    house_no?: boolean
+    floor_no?: boolean
+    no_of_couples?: boolean
+    habitation_type?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectScalar = {
+    id?: boolean
+    section_id?: boolean
+    house_no?: boolean
+    floor_no?: boolean
+    no_of_couples?: boolean
+    habitation_type?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type FamilyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "section_id" | "house_no" | "floor_no" | "no_of_couples" | "habitation_type" | "is_active" | "deleted_at" | "deleted_reason" | "deleted_remarks" | "created_at" | "updated_at", ExtArgs["result"]["family"]>
+  export type FamilyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+    members?: boolean | Family$membersArgs<ExtArgs>
+    _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FamilyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }
+  export type FamilyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }
+
+  export type $FamilyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Family"
+    objects: {
+      section: Prisma.$SectionPayload<ExtArgs>
+      members: Prisma.$FamilyMemberPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      section_id: string
+      house_no: string
+      floor_no: string | null
+      no_of_couples: number
+      habitation_type: $Enums.HabitationType
+      is_active: boolean
+      deleted_at: Date | null
+      deleted_reason: $Enums.DeletionReason | null
+      deleted_remarks: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["family"]>
+    composites: {}
+  }
+
+  type FamilyGetPayload<S extends boolean | null | undefined | FamilyDefaultArgs> = $Result.GetResult<Prisma.$FamilyPayload, S>
+
+  type FamilyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FamilyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FamilyCountAggregateInputType | true
+    }
+
+  export interface FamilyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Family'], meta: { name: 'Family' } }
+    /**
+     * Find zero or one Family that matches the filter.
+     * @param {FamilyFindUniqueArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FamilyFindUniqueArgs>(args: SelectSubset<T, FamilyFindUniqueArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Family that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FamilyFindUniqueOrThrowArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FamilyFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Family that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindFirstArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FamilyFindFirstArgs>(args?: SelectSubset<T, FamilyFindFirstArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Family that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindFirstOrThrowArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FamilyFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Families that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Families
+     * const families = await prisma.family.findMany()
+     * 
+     * // Get first 10 Families
+     * const families = await prisma.family.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const familyWithIdOnly = await prisma.family.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FamilyFindManyArgs>(args?: SelectSubset<T, FamilyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Family.
+     * @param {FamilyCreateArgs} args - Arguments to create a Family.
+     * @example
+     * // Create one Family
+     * const Family = await prisma.family.create({
+     *   data: {
+     *     // ... data to create a Family
+     *   }
+     * })
+     * 
+     */
+    create<T extends FamilyCreateArgs>(args: SelectSubset<T, FamilyCreateArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Families.
+     * @param {FamilyCreateManyArgs} args - Arguments to create many Families.
+     * @example
+     * // Create many Families
+     * const family = await prisma.family.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FamilyCreateManyArgs>(args?: SelectSubset<T, FamilyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Families and returns the data saved in the database.
+     * @param {FamilyCreateManyAndReturnArgs} args - Arguments to create many Families.
+     * @example
+     * // Create many Families
+     * const family = await prisma.family.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Families and only return the `id`
+     * const familyWithIdOnly = await prisma.family.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FamilyCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Family.
+     * @param {FamilyDeleteArgs} args - Arguments to delete one Family.
+     * @example
+     * // Delete one Family
+     * const Family = await prisma.family.delete({
+     *   where: {
+     *     // ... filter to delete one Family
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FamilyDeleteArgs>(args: SelectSubset<T, FamilyDeleteArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Family.
+     * @param {FamilyUpdateArgs} args - Arguments to update one Family.
+     * @example
+     * // Update one Family
+     * const family = await prisma.family.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FamilyUpdateArgs>(args: SelectSubset<T, FamilyUpdateArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Families.
+     * @param {FamilyDeleteManyArgs} args - Arguments to filter Families to delete.
+     * @example
+     * // Delete a few Families
+     * const { count } = await prisma.family.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FamilyDeleteManyArgs>(args?: SelectSubset<T, FamilyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Families.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Families
+     * const family = await prisma.family.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FamilyUpdateManyArgs>(args: SelectSubset<T, FamilyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Families and returns the data updated in the database.
+     * @param {FamilyUpdateManyAndReturnArgs} args - Arguments to update many Families.
+     * @example
+     * // Update many Families
+     * const family = await prisma.family.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Families and only return the `id`
+     * const familyWithIdOnly = await prisma.family.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FamilyUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Family.
+     * @param {FamilyUpsertArgs} args - Arguments to update or create a Family.
+     * @example
+     * // Update or create a Family
+     * const family = await prisma.family.upsert({
+     *   create: {
+     *     // ... data to create a Family
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Family we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FamilyUpsertArgs>(args: SelectSubset<T, FamilyUpsertArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Families.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyCountArgs} args - Arguments to filter Families to count.
+     * @example
+     * // Count the number of Families
+     * const count = await prisma.family.count({
+     *   where: {
+     *     // ... the filter for the Families we want to count
+     *   }
+     * })
+    **/
+    count<T extends FamilyCountArgs>(
+      args?: Subset<T, FamilyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FamilyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Family.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FamilyAggregateArgs>(args: Subset<T, FamilyAggregateArgs>): Prisma.PrismaPromise<GetFamilyAggregateType<T>>
+
+    /**
+     * Group by Family.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FamilyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FamilyGroupByArgs['orderBy'] }
+        : { orderBy?: FamilyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FamilyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Family model
+   */
+  readonly fields: FamilyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Family.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FamilyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    section<T extends SectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SectionDefaultArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    members<T extends Family$membersArgs<ExtArgs> = {}>(args?: Subset<T, Family$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Family model
+   */
+  interface FamilyFieldRefs {
+    readonly id: FieldRef<"Family", 'String'>
+    readonly section_id: FieldRef<"Family", 'String'>
+    readonly house_no: FieldRef<"Family", 'String'>
+    readonly floor_no: FieldRef<"Family", 'String'>
+    readonly no_of_couples: FieldRef<"Family", 'Int'>
+    readonly habitation_type: FieldRef<"Family", 'HabitationType'>
+    readonly is_active: FieldRef<"Family", 'Boolean'>
+    readonly deleted_at: FieldRef<"Family", 'DateTime'>
+    readonly deleted_reason: FieldRef<"Family", 'DeletionReason'>
+    readonly deleted_remarks: FieldRef<"Family", 'String'>
+    readonly created_at: FieldRef<"Family", 'DateTime'>
+    readonly updated_at: FieldRef<"Family", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Family findUnique
+   */
+  export type FamilyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family findUniqueOrThrow
+   */
+  export type FamilyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family findFirst
+   */
+  export type FamilyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Families.
+     */
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family findFirstOrThrow
+   */
+  export type FamilyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Families.
+     */
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family findMany
+   */
+  export type FamilyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Families to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family create
+   */
+  export type FamilyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Family.
+     */
+    data: XOR<FamilyCreateInput, FamilyUncheckedCreateInput>
+  }
+
+  /**
+   * Family createMany
+   */
+  export type FamilyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Families.
+     */
+    data: FamilyCreateManyInput | FamilyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Family createManyAndReturn
+   */
+  export type FamilyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * The data used to create many Families.
+     */
+    data: FamilyCreateManyInput | FamilyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Family update
+   */
+  export type FamilyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Family.
+     */
+    data: XOR<FamilyUpdateInput, FamilyUncheckedUpdateInput>
+    /**
+     * Choose, which Family to update.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family updateMany
+   */
+  export type FamilyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Families.
+     */
+    data: XOR<FamilyUpdateManyMutationInput, FamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which Families to update
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Family updateManyAndReturn
+   */
+  export type FamilyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * The data used to update Families.
+     */
+    data: XOR<FamilyUpdateManyMutationInput, FamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which Families to update
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Family upsert
+   */
+  export type FamilyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Family to update in case it exists.
+     */
+    where: FamilyWhereUniqueInput
+    /**
+     * In case the Family found by the `where` argument doesn't exist, create a new Family with this data.
+     */
+    create: XOR<FamilyCreateInput, FamilyUncheckedCreateInput>
+    /**
+     * In case the Family was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FamilyUpdateInput, FamilyUncheckedUpdateInput>
+  }
+
+  /**
+   * Family delete
+   */
+  export type FamilyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter which Family to delete.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family deleteMany
+   */
+  export type FamilyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Families to delete
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Family.members
+   */
+  export type Family$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    where?: FamilyMemberWhereInput
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    cursor?: FamilyMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Family without action
+   */
+  export type FamilyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FamilyMember
+   */
+
+  export type AggregateFamilyMember = {
+    _count: FamilyMemberCountAggregateOutputType | null
+    _min: FamilyMemberMinAggregateOutputType | null
+    _max: FamilyMemberMaxAggregateOutputType | null
+  }
+
+  export type FamilyMemberMinAggregateOutputType = {
+    id: string | null
+    family_id: string | null
+    name: string | null
+    relationship_with_hof: $Enums.HOFRelationship | null
+    voter_id: string | null
+    phone: string | null
+    sex: $Enums.Gender | null
+    occupation: string | null
+    abha_id: string | null
+    abha_address: string | null
+    dob: Date | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type FamilyMemberMaxAggregateOutputType = {
+    id: string | null
+    family_id: string | null
+    name: string | null
+    relationship_with_hof: $Enums.HOFRelationship | null
+    voter_id: string | null
+    phone: string | null
+    sex: $Enums.Gender | null
+    occupation: string | null
+    abha_id: string | null
+    abha_address: string | null
+    dob: Date | null
+    is_active: boolean | null
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type FamilyMemberCountAggregateOutputType = {
+    id: number
+    family_id: number
+    name: number
+    relationship_with_hof: number
+    voter_id: number
+    phone: number
+    sex: number
+    occupation: number
+    abha_id: number
+    abha_address: number
+    dob: number
+    is_active: number
+    deleted_at: number
+    deleted_reason: number
+    deleted_remarks: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type FamilyMemberMinAggregateInputType = {
+    id?: true
+    family_id?: true
+    name?: true
+    relationship_with_hof?: true
+    voter_id?: true
+    phone?: true
+    sex?: true
+    occupation?: true
+    abha_id?: true
+    abha_address?: true
+    dob?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type FamilyMemberMaxAggregateInputType = {
+    id?: true
+    family_id?: true
+    name?: true
+    relationship_with_hof?: true
+    voter_id?: true
+    phone?: true
+    sex?: true
+    occupation?: true
+    abha_id?: true
+    abha_address?: true
+    dob?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type FamilyMemberCountAggregateInputType = {
+    id?: true
+    family_id?: true
+    name?: true
+    relationship_with_hof?: true
+    voter_id?: true
+    phone?: true
+    sex?: true
+    occupation?: true
+    abha_id?: true
+    abha_address?: true
+    dob?: true
+    is_active?: true
+    deleted_at?: true
+    deleted_reason?: true
+    deleted_remarks?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type FamilyMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FamilyMember to aggregate.
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyMembers to fetch.
+     */
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FamilyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FamilyMembers
+    **/
+    _count?: true | FamilyMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FamilyMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FamilyMemberMaxAggregateInputType
+  }
+
+  export type GetFamilyMemberAggregateType<T extends FamilyMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateFamilyMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFamilyMember[P]>
+      : GetScalarType<T[P], AggregateFamilyMember[P]>
+  }
+
+
+
+
+  export type FamilyMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyMemberWhereInput
+    orderBy?: FamilyMemberOrderByWithAggregationInput | FamilyMemberOrderByWithAggregationInput[]
+    by: FamilyMemberScalarFieldEnum[] | FamilyMemberScalarFieldEnum
+    having?: FamilyMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FamilyMemberCountAggregateInputType | true
+    _min?: FamilyMemberMinAggregateInputType
+    _max?: FamilyMemberMaxAggregateInputType
+  }
+
+  export type FamilyMemberGroupByOutputType = {
+    id: string
+    family_id: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id: string | null
+    phone: string | null
+    sex: $Enums.Gender
+    occupation: string | null
+    abha_id: string | null
+    abha_address: string | null
+    dob: Date
+    is_active: boolean
+    deleted_at: Date | null
+    deleted_reason: $Enums.DeletionReason | null
+    deleted_remarks: string | null
+    created_at: Date
+    updated_at: Date
+    _count: FamilyMemberCountAggregateOutputType | null
+    _min: FamilyMemberMinAggregateOutputType | null
+    _max: FamilyMemberMaxAggregateOutputType | null
+  }
+
+  type GetFamilyMemberGroupByPayload<T extends FamilyMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FamilyMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FamilyMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FamilyMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], FamilyMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FamilyMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    family_id?: boolean
+    name?: boolean
+    relationship_with_hof?: boolean
+    voter_id?: boolean
+    phone?: boolean
+    sex?: boolean
+    occupation?: boolean
+    abha_id?: boolean
+    abha_address?: boolean
+    dob?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMember"]>
+
+  export type FamilyMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    family_id?: boolean
+    name?: boolean
+    relationship_with_hof?: boolean
+    voter_id?: boolean
+    phone?: boolean
+    sex?: boolean
+    occupation?: boolean
+    abha_id?: boolean
+    abha_address?: boolean
+    dob?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMember"]>
+
+  export type FamilyMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    family_id?: boolean
+    name?: boolean
+    relationship_with_hof?: boolean
+    voter_id?: boolean
+    phone?: boolean
+    sex?: boolean
+    occupation?: boolean
+    abha_id?: boolean
+    abha_address?: boolean
+    dob?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMember"]>
+
+  export type FamilyMemberSelectScalar = {
+    id?: boolean
+    family_id?: boolean
+    name?: boolean
+    relationship_with_hof?: boolean
+    voter_id?: boolean
+    phone?: boolean
+    sex?: boolean
+    occupation?: boolean
+    abha_id?: boolean
+    abha_address?: boolean
+    dob?: boolean
+    is_active?: boolean
+    deleted_at?: boolean
+    deleted_reason?: boolean
+    deleted_remarks?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "family_id" | "name" | "relationship_with_hof" | "voter_id" | "phone" | "sex" | "occupation" | "abha_id" | "abha_address" | "dob" | "is_active" | "deleted_at" | "deleted_reason" | "deleted_remarks" | "created_at" | "updated_at", ExtArgs["result"]["familyMember"]>
+  export type FamilyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type FamilyMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type FamilyMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+
+  export type $FamilyMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FamilyMember"
+    objects: {
+      family: Prisma.$FamilyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      family_id: string
+      name: string
+      relationship_with_hof: $Enums.HOFRelationship
+      voter_id: string | null
+      phone: string | null
+      sex: $Enums.Gender
+      occupation: string | null
+      abha_id: string | null
+      abha_address: string | null
+      dob: Date
+      is_active: boolean
+      deleted_at: Date | null
+      deleted_reason: $Enums.DeletionReason | null
+      deleted_remarks: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["familyMember"]>
+    composites: {}
+  }
+
+  type FamilyMemberGetPayload<S extends boolean | null | undefined | FamilyMemberDefaultArgs> = $Result.GetResult<Prisma.$FamilyMemberPayload, S>
+
+  type FamilyMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FamilyMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FamilyMemberCountAggregateInputType | true
+    }
+
+  export interface FamilyMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FamilyMember'], meta: { name: 'FamilyMember' } }
+    /**
+     * Find zero or one FamilyMember that matches the filter.
+     * @param {FamilyMemberFindUniqueArgs} args - Arguments to find a FamilyMember
+     * @example
+     * // Get one FamilyMember
+     * const familyMember = await prisma.familyMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FamilyMemberFindUniqueArgs>(args: SelectSubset<T, FamilyMemberFindUniqueArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FamilyMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FamilyMemberFindUniqueOrThrowArgs} args - Arguments to find a FamilyMember
+     * @example
+     * // Get one FamilyMember
+     * const familyMember = await prisma.familyMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FamilyMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberFindFirstArgs} args - Arguments to find a FamilyMember
+     * @example
+     * // Get one FamilyMember
+     * const familyMember = await prisma.familyMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FamilyMemberFindFirstArgs>(args?: SelectSubset<T, FamilyMemberFindFirstArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberFindFirstOrThrowArgs} args - Arguments to find a FamilyMember
+     * @example
+     * // Get one FamilyMember
+     * const familyMember = await prisma.familyMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FamilyMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FamilyMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FamilyMembers
+     * const familyMembers = await prisma.familyMember.findMany()
+     * 
+     * // Get first 10 FamilyMembers
+     * const familyMembers = await prisma.familyMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const familyMemberWithIdOnly = await prisma.familyMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FamilyMemberFindManyArgs>(args?: SelectSubset<T, FamilyMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FamilyMember.
+     * @param {FamilyMemberCreateArgs} args - Arguments to create a FamilyMember.
+     * @example
+     * // Create one FamilyMember
+     * const FamilyMember = await prisma.familyMember.create({
+     *   data: {
+     *     // ... data to create a FamilyMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends FamilyMemberCreateArgs>(args: SelectSubset<T, FamilyMemberCreateArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FamilyMembers.
+     * @param {FamilyMemberCreateManyArgs} args - Arguments to create many FamilyMembers.
+     * @example
+     * // Create many FamilyMembers
+     * const familyMember = await prisma.familyMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FamilyMemberCreateManyArgs>(args?: SelectSubset<T, FamilyMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FamilyMembers and returns the data saved in the database.
+     * @param {FamilyMemberCreateManyAndReturnArgs} args - Arguments to create many FamilyMembers.
+     * @example
+     * // Create many FamilyMembers
+     * const familyMember = await prisma.familyMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FamilyMembers and only return the `id`
+     * const familyMemberWithIdOnly = await prisma.familyMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FamilyMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FamilyMember.
+     * @param {FamilyMemberDeleteArgs} args - Arguments to delete one FamilyMember.
+     * @example
+     * // Delete one FamilyMember
+     * const FamilyMember = await prisma.familyMember.delete({
+     *   where: {
+     *     // ... filter to delete one FamilyMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FamilyMemberDeleteArgs>(args: SelectSubset<T, FamilyMemberDeleteArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FamilyMember.
+     * @param {FamilyMemberUpdateArgs} args - Arguments to update one FamilyMember.
+     * @example
+     * // Update one FamilyMember
+     * const familyMember = await prisma.familyMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FamilyMemberUpdateArgs>(args: SelectSubset<T, FamilyMemberUpdateArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FamilyMembers.
+     * @param {FamilyMemberDeleteManyArgs} args - Arguments to filter FamilyMembers to delete.
+     * @example
+     * // Delete a few FamilyMembers
+     * const { count } = await prisma.familyMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FamilyMemberDeleteManyArgs>(args?: SelectSubset<T, FamilyMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FamilyMembers
+     * const familyMember = await prisma.familyMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FamilyMemberUpdateManyArgs>(args: SelectSubset<T, FamilyMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyMembers and returns the data updated in the database.
+     * @param {FamilyMemberUpdateManyAndReturnArgs} args - Arguments to update many FamilyMembers.
+     * @example
+     * // Update many FamilyMembers
+     * const familyMember = await prisma.familyMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FamilyMembers and only return the `id`
+     * const familyMemberWithIdOnly = await prisma.familyMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FamilyMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FamilyMember.
+     * @param {FamilyMemberUpsertArgs} args - Arguments to update or create a FamilyMember.
+     * @example
+     * // Update or create a FamilyMember
+     * const familyMember = await prisma.familyMember.upsert({
+     *   create: {
+     *     // ... data to create a FamilyMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FamilyMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FamilyMemberUpsertArgs>(args: SelectSubset<T, FamilyMemberUpsertArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FamilyMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberCountArgs} args - Arguments to filter FamilyMembers to count.
+     * @example
+     * // Count the number of FamilyMembers
+     * const count = await prisma.familyMember.count({
+     *   where: {
+     *     // ... the filter for the FamilyMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends FamilyMemberCountArgs>(
+      args?: Subset<T, FamilyMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FamilyMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FamilyMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FamilyMemberAggregateArgs>(args: Subset<T, FamilyMemberAggregateArgs>): Prisma.PrismaPromise<GetFamilyMemberAggregateType<T>>
+
+    /**
+     * Group by FamilyMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FamilyMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FamilyMemberGroupByArgs['orderBy'] }
+        : { orderBy?: FamilyMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FamilyMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FamilyMember model
+   */
+  readonly fields: FamilyMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FamilyMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FamilyMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FamilyMember model
+   */
+  interface FamilyMemberFieldRefs {
+    readonly id: FieldRef<"FamilyMember", 'String'>
+    readonly family_id: FieldRef<"FamilyMember", 'String'>
+    readonly name: FieldRef<"FamilyMember", 'String'>
+    readonly relationship_with_hof: FieldRef<"FamilyMember", 'HOFRelationship'>
+    readonly voter_id: FieldRef<"FamilyMember", 'String'>
+    readonly phone: FieldRef<"FamilyMember", 'String'>
+    readonly sex: FieldRef<"FamilyMember", 'Gender'>
+    readonly occupation: FieldRef<"FamilyMember", 'String'>
+    readonly abha_id: FieldRef<"FamilyMember", 'String'>
+    readonly abha_address: FieldRef<"FamilyMember", 'String'>
+    readonly dob: FieldRef<"FamilyMember", 'DateTime'>
+    readonly is_active: FieldRef<"FamilyMember", 'Boolean'>
+    readonly deleted_at: FieldRef<"FamilyMember", 'DateTime'>
+    readonly deleted_reason: FieldRef<"FamilyMember", 'DeletionReason'>
+    readonly deleted_remarks: FieldRef<"FamilyMember", 'String'>
+    readonly created_at: FieldRef<"FamilyMember", 'DateTime'>
+    readonly updated_at: FieldRef<"FamilyMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FamilyMember findUnique
+   */
+  export type FamilyMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyMember to fetch.
+     */
+    where: FamilyMemberWhereUniqueInput
+  }
+
+  /**
+   * FamilyMember findUniqueOrThrow
+   */
+  export type FamilyMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyMember to fetch.
+     */
+    where: FamilyMemberWhereUniqueInput
+  }
+
+  /**
+   * FamilyMember findFirst
+   */
+  export type FamilyMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyMember to fetch.
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyMembers to fetch.
+     */
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FamilyMembers.
+     */
+    cursor?: FamilyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FamilyMembers.
+     */
+    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyMember findFirstOrThrow
+   */
+  export type FamilyMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyMember to fetch.
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyMembers to fetch.
+     */
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FamilyMembers.
+     */
+    cursor?: FamilyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FamilyMembers.
+     */
+    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyMember findMany
+   */
+  export type FamilyMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyMembers to fetch.
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyMembers to fetch.
+     */
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FamilyMembers.
+     */
+    cursor?: FamilyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyMembers.
+     */
+    skip?: number
+    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyMember create
+   */
+  export type FamilyMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FamilyMember.
+     */
+    data: XOR<FamilyMemberCreateInput, FamilyMemberUncheckedCreateInput>
+  }
+
+  /**
+   * FamilyMember createMany
+   */
+  export type FamilyMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FamilyMembers.
+     */
+    data: FamilyMemberCreateManyInput | FamilyMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FamilyMember createManyAndReturn
+   */
+  export type FamilyMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many FamilyMembers.
+     */
+    data: FamilyMemberCreateManyInput | FamilyMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FamilyMember update
+   */
+  export type FamilyMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FamilyMember.
+     */
+    data: XOR<FamilyMemberUpdateInput, FamilyMemberUncheckedUpdateInput>
+    /**
+     * Choose, which FamilyMember to update.
+     */
+    where: FamilyMemberWhereUniqueInput
+  }
+
+  /**
+   * FamilyMember updateMany
+   */
+  export type FamilyMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FamilyMembers.
+     */
+    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which FamilyMembers to update
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * Limit how many FamilyMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FamilyMember updateManyAndReturn
+   */
+  export type FamilyMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update FamilyMembers.
+     */
+    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which FamilyMembers to update
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * Limit how many FamilyMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FamilyMember upsert
+   */
+  export type FamilyMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FamilyMember to update in case it exists.
+     */
+    where: FamilyMemberWhereUniqueInput
+    /**
+     * In case the FamilyMember found by the `where` argument doesn't exist, create a new FamilyMember with this data.
+     */
+    create: XOR<FamilyMemberCreateInput, FamilyMemberUncheckedCreateInput>
+    /**
+     * In case the FamilyMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FamilyMemberUpdateInput, FamilyMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * FamilyMember delete
+   */
+  export type FamilyMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    /**
+     * Filter which FamilyMember to delete.
+     */
+    where: FamilyMemberWhereUniqueInput
+  }
+
+  /**
+   * FamilyMember deleteMany
+   */
+  export type FamilyMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FamilyMembers to delete
+     */
+    where?: FamilyMemberWhereInput
+    /**
+     * Limit how many FamilyMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FamilyMember without action
+   */
+  export type FamilyMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -24531,7 +29870,9 @@ export namespace Prisma {
     district_id: 'district_id',
     facility_type_id: 'facility_type_id',
     is_active: 'is_active',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    parent_facility_id: 'parent_facility_id',
+    has_clinic: 'has_clinic'
   };
 
   export type FacilityScalarFieldEnum = (typeof FacilityScalarFieldEnum)[keyof typeof FacilityScalarFieldEnum]
@@ -24770,6 +30111,75 @@ export namespace Prisma {
   export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
 
 
+  export const VillageScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    facility_id: 'facility_id',
+    is_active: 'is_active',
+    deleted_at: 'deleted_at',
+    deleted_reason: 'deleted_reason',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type VillageScalarFieldEnum = (typeof VillageScalarFieldEnum)[keyof typeof VillageScalarFieldEnum]
+
+
+  export const SectionScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    village_id: 'village_id',
+    is_active: 'is_active',
+    deleted_at: 'deleted_at',
+    deleted_reason: 'deleted_reason',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SectionScalarFieldEnum = (typeof SectionScalarFieldEnum)[keyof typeof SectionScalarFieldEnum]
+
+
+  export const FamilyScalarFieldEnum: {
+    id: 'id',
+    section_id: 'section_id',
+    house_no: 'house_no',
+    floor_no: 'floor_no',
+    no_of_couples: 'no_of_couples',
+    habitation_type: 'habitation_type',
+    is_active: 'is_active',
+    deleted_at: 'deleted_at',
+    deleted_reason: 'deleted_reason',
+    deleted_remarks: 'deleted_remarks',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type FamilyScalarFieldEnum = (typeof FamilyScalarFieldEnum)[keyof typeof FamilyScalarFieldEnum]
+
+
+  export const FamilyMemberScalarFieldEnum: {
+    id: 'id',
+    family_id: 'family_id',
+    name: 'name',
+    relationship_with_hof: 'relationship_with_hof',
+    voter_id: 'voter_id',
+    phone: 'phone',
+    sex: 'sex',
+    occupation: 'occupation',
+    abha_id: 'abha_id',
+    abha_address: 'abha_address',
+    dob: 'dob',
+    is_active: 'is_active',
+    deleted_at: 'deleted_at',
+    deleted_reason: 'deleted_reason',
+    deleted_remarks: 'deleted_remarks',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type FamilyMemberScalarFieldEnum = (typeof FamilyMemberScalarFieldEnum)[keyof typeof FamilyMemberScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -24988,6 +30398,62 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'HabitationType'
+   */
+  export type EnumHabitationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HabitationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'HabitationType[]'
+   */
+  export type ListEnumHabitationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HabitationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeletionReason'
+   */
+  export type EnumDeletionReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionReason'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeletionReason[]'
+   */
+  export type ListEnumDeletionReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionReason[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'HOFRelationship'
+   */
+  export type EnumHOFRelationshipFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HOFRelationship'>
+    
+
+
+  /**
+   * Reference to a field of type 'HOFRelationship[]'
+   */
+  export type ListEnumHOFRelationshipFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HOFRelationship[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender'
+   */
+  export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender[]'
+   */
+  export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
     
   /**
    * Deep Input Types
@@ -25211,6 +30677,8 @@ export namespace Prisma {
     facility_type_id?: StringFilter<"Facility"> | string
     is_active?: BoolFilter<"Facility"> | boolean
     updated_at?: DateTimeFilter<"Facility"> | Date | string
+    parent_facility_id?: StringNullableFilter<"Facility"> | string | null
+    has_clinic?: BoolFilter<"Facility"> | boolean
     remuneration_records?: FacilityRemunerationRecordListRelationFilter
     worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
@@ -25220,6 +30688,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerListRelationFilter
     remuneration_calculations?: RemunerationCalculationListRelationFilter
     users?: UserListRelationFilter
+    parent_facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
+    child_facilities?: FacilityListRelationFilter
+    villages?: VillageListRelationFilter
   }
 
   export type FacilityOrderByWithRelationInput = {
@@ -25232,6 +30703,8 @@ export namespace Prisma {
     facility_type_id?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+    parent_facility_id?: SortOrderInput | SortOrder
+    has_clinic?: SortOrder
     remuneration_records?: FacilityRemunerationRecordOrderByRelationAggregateInput
     worker_remunerations?: WorkerRemunerationOrderByRelationAggregateInput
     district?: DistrictOrderByWithRelationInput
@@ -25241,6 +30714,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerOrderByRelationAggregateInput
     remuneration_calculations?: RemunerationCalculationOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
+    parent_facility?: FacilityOrderByWithRelationInput
+    child_facilities?: FacilityOrderByRelationAggregateInput
+    villages?: VillageOrderByRelationAggregateInput
   }
 
   export type FacilityWhereUniqueInput = Prisma.AtLeast<{
@@ -25257,6 +30733,8 @@ export namespace Prisma {
     facility_type_id?: StringFilter<"Facility"> | string
     is_active?: BoolFilter<"Facility"> | boolean
     updated_at?: DateTimeFilter<"Facility"> | Date | string
+    parent_facility_id?: StringNullableFilter<"Facility"> | string | null
+    has_clinic?: BoolFilter<"Facility"> | boolean
     remuneration_records?: FacilityRemunerationRecordListRelationFilter
     worker_remunerations?: WorkerRemunerationListRelationFilter
     district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
@@ -25266,6 +30744,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerListRelationFilter
     remuneration_calculations?: RemunerationCalculationListRelationFilter
     users?: UserListRelationFilter
+    parent_facility?: XOR<FacilityNullableScalarRelationFilter, FacilityWhereInput> | null
+    child_facilities?: FacilityListRelationFilter
+    villages?: VillageListRelationFilter
   }, "id" | "name_district_id">
 
   export type FacilityOrderByWithAggregationInput = {
@@ -25278,6 +30759,8 @@ export namespace Prisma {
     facility_type_id?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+    parent_facility_id?: SortOrderInput | SortOrder
+    has_clinic?: SortOrder
     _count?: FacilityCountOrderByAggregateInput
     _max?: FacilityMaxOrderByAggregateInput
     _min?: FacilityMinOrderByAggregateInput
@@ -25296,6 +30779,8 @@ export namespace Prisma {
     facility_type_id?: StringWithAggregatesFilter<"Facility"> | string
     is_active?: BoolWithAggregatesFilter<"Facility"> | boolean
     updated_at?: DateTimeWithAggregatesFilter<"Facility"> | Date | string
+    parent_facility_id?: StringNullableWithAggregatesFilter<"Facility"> | string | null
+    has_clinic?: BoolWithAggregatesFilter<"Facility"> | boolean
   }
 
   export type IndicatorWhereInput = {
@@ -26552,6 +32037,365 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
   }
 
+  export type VillageWhereInput = {
+    AND?: VillageWhereInput | VillageWhereInput[]
+    OR?: VillageWhereInput[]
+    NOT?: VillageWhereInput | VillageWhereInput[]
+    id?: StringFilter<"Village"> | string
+    name?: StringFilter<"Village"> | string
+    facility_id?: StringFilter<"Village"> | string
+    is_active?: BoolFilter<"Village"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Village"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Village"> | string | null
+    created_at?: DateTimeFilter<"Village"> | Date | string
+    updated_at?: DateTimeFilter<"Village"> | Date | string
+    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
+    sections?: SectionListRelationFilter
+  }
+
+  export type VillageOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    facility_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    facility?: FacilityOrderByWithRelationInput
+    sections?: SectionOrderByRelationAggregateInput
+  }
+
+  export type VillageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name_facility_id?: VillageNameFacility_idCompoundUniqueInput
+    AND?: VillageWhereInput | VillageWhereInput[]
+    OR?: VillageWhereInput[]
+    NOT?: VillageWhereInput | VillageWhereInput[]
+    name?: StringFilter<"Village"> | string
+    facility_id?: StringFilter<"Village"> | string
+    is_active?: BoolFilter<"Village"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Village"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Village"> | string | null
+    created_at?: DateTimeFilter<"Village"> | Date | string
+    updated_at?: DateTimeFilter<"Village"> | Date | string
+    facility?: XOR<FacilityScalarRelationFilter, FacilityWhereInput>
+    sections?: SectionListRelationFilter
+  }, "id" | "name_facility_id">
+
+  export type VillageOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    facility_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: VillageCountOrderByAggregateInput
+    _max?: VillageMaxOrderByAggregateInput
+    _min?: VillageMinOrderByAggregateInput
+  }
+
+  export type VillageScalarWhereWithAggregatesInput = {
+    AND?: VillageScalarWhereWithAggregatesInput | VillageScalarWhereWithAggregatesInput[]
+    OR?: VillageScalarWhereWithAggregatesInput[]
+    NOT?: VillageScalarWhereWithAggregatesInput | VillageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Village"> | string
+    name?: StringWithAggregatesFilter<"Village"> | string
+    facility_id?: StringWithAggregatesFilter<"Village"> | string
+    is_active?: BoolWithAggregatesFilter<"Village"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Village"> | Date | string | null
+    deleted_reason?: StringNullableWithAggregatesFilter<"Village"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Village"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Village"> | Date | string
+  }
+
+  export type SectionWhereInput = {
+    AND?: SectionWhereInput | SectionWhereInput[]
+    OR?: SectionWhereInput[]
+    NOT?: SectionWhereInput | SectionWhereInput[]
+    id?: StringFilter<"Section"> | string
+    name?: StringFilter<"Section"> | string
+    village_id?: StringFilter<"Section"> | string
+    is_active?: BoolFilter<"Section"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Section"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Section"> | string | null
+    created_at?: DateTimeFilter<"Section"> | Date | string
+    updated_at?: DateTimeFilter<"Section"> | Date | string
+    village?: XOR<VillageScalarRelationFilter, VillageWhereInput>
+    families?: FamilyListRelationFilter
+  }
+
+  export type SectionOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    village_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    village?: VillageOrderByWithRelationInput
+    families?: FamilyOrderByRelationAggregateInput
+  }
+
+  export type SectionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name_village_id?: SectionNameVillage_idCompoundUniqueInput
+    AND?: SectionWhereInput | SectionWhereInput[]
+    OR?: SectionWhereInput[]
+    NOT?: SectionWhereInput | SectionWhereInput[]
+    name?: StringFilter<"Section"> | string
+    village_id?: StringFilter<"Section"> | string
+    is_active?: BoolFilter<"Section"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Section"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Section"> | string | null
+    created_at?: DateTimeFilter<"Section"> | Date | string
+    updated_at?: DateTimeFilter<"Section"> | Date | string
+    village?: XOR<VillageScalarRelationFilter, VillageWhereInput>
+    families?: FamilyListRelationFilter
+  }, "id" | "name_village_id">
+
+  export type SectionOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    village_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SectionCountOrderByAggregateInput
+    _max?: SectionMaxOrderByAggregateInput
+    _min?: SectionMinOrderByAggregateInput
+  }
+
+  export type SectionScalarWhereWithAggregatesInput = {
+    AND?: SectionScalarWhereWithAggregatesInput | SectionScalarWhereWithAggregatesInput[]
+    OR?: SectionScalarWhereWithAggregatesInput[]
+    NOT?: SectionScalarWhereWithAggregatesInput | SectionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Section"> | string
+    name?: StringWithAggregatesFilter<"Section"> | string
+    village_id?: StringWithAggregatesFilter<"Section"> | string
+    is_active?: BoolWithAggregatesFilter<"Section"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Section"> | Date | string | null
+    deleted_reason?: StringNullableWithAggregatesFilter<"Section"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Section"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Section"> | Date | string
+  }
+
+  export type FamilyWhereInput = {
+    AND?: FamilyWhereInput | FamilyWhereInput[]
+    OR?: FamilyWhereInput[]
+    NOT?: FamilyWhereInput | FamilyWhereInput[]
+    id?: StringFilter<"Family"> | string
+    section_id?: StringFilter<"Family"> | string
+    house_no?: StringFilter<"Family"> | string
+    floor_no?: StringNullableFilter<"Family"> | string | null
+    no_of_couples?: IntFilter<"Family"> | number
+    habitation_type?: EnumHabitationTypeFilter<"Family"> | $Enums.HabitationType
+    is_active?: BoolFilter<"Family"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Family"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"Family"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"Family"> | string | null
+    created_at?: DateTimeFilter<"Family"> | Date | string
+    updated_at?: DateTimeFilter<"Family"> | Date | string
+    section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
+    members?: FamilyMemberListRelationFilter
+  }
+
+  export type FamilyOrderByWithRelationInput = {
+    id?: SortOrder
+    section_id?: SortOrder
+    house_no?: SortOrder
+    floor_no?: SortOrderInput | SortOrder
+    no_of_couples?: SortOrder
+    habitation_type?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    deleted_remarks?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    section?: SectionOrderByWithRelationInput
+    members?: FamilyMemberOrderByRelationAggregateInput
+  }
+
+  export type FamilyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    section_id_house_no?: FamilySection_idHouse_noCompoundUniqueInput
+    AND?: FamilyWhereInput | FamilyWhereInput[]
+    OR?: FamilyWhereInput[]
+    NOT?: FamilyWhereInput | FamilyWhereInput[]
+    section_id?: StringFilter<"Family"> | string
+    house_no?: StringFilter<"Family"> | string
+    floor_no?: StringNullableFilter<"Family"> | string | null
+    no_of_couples?: IntFilter<"Family"> | number
+    habitation_type?: EnumHabitationTypeFilter<"Family"> | $Enums.HabitationType
+    is_active?: BoolFilter<"Family"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Family"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"Family"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"Family"> | string | null
+    created_at?: DateTimeFilter<"Family"> | Date | string
+    updated_at?: DateTimeFilter<"Family"> | Date | string
+    section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
+    members?: FamilyMemberListRelationFilter
+  }, "id" | "section_id_house_no">
+
+  export type FamilyOrderByWithAggregationInput = {
+    id?: SortOrder
+    section_id?: SortOrder
+    house_no?: SortOrder
+    floor_no?: SortOrderInput | SortOrder
+    no_of_couples?: SortOrder
+    habitation_type?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    deleted_remarks?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: FamilyCountOrderByAggregateInput
+    _avg?: FamilyAvgOrderByAggregateInput
+    _max?: FamilyMaxOrderByAggregateInput
+    _min?: FamilyMinOrderByAggregateInput
+    _sum?: FamilySumOrderByAggregateInput
+  }
+
+  export type FamilyScalarWhereWithAggregatesInput = {
+    AND?: FamilyScalarWhereWithAggregatesInput | FamilyScalarWhereWithAggregatesInput[]
+    OR?: FamilyScalarWhereWithAggregatesInput[]
+    NOT?: FamilyScalarWhereWithAggregatesInput | FamilyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Family"> | string
+    section_id?: StringWithAggregatesFilter<"Family"> | string
+    house_no?: StringWithAggregatesFilter<"Family"> | string
+    floor_no?: StringNullableWithAggregatesFilter<"Family"> | string | null
+    no_of_couples?: IntWithAggregatesFilter<"Family"> | number
+    habitation_type?: EnumHabitationTypeWithAggregatesFilter<"Family"> | $Enums.HabitationType
+    is_active?: BoolWithAggregatesFilter<"Family"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Family"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableWithAggregatesFilter<"Family"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableWithAggregatesFilter<"Family"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Family"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Family"> | Date | string
+  }
+
+  export type FamilyMemberWhereInput = {
+    AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
+    OR?: FamilyMemberWhereInput[]
+    NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
+    id?: StringFilter<"FamilyMember"> | string
+    family_id?: StringFilter<"FamilyMember"> | string
+    name?: StringFilter<"FamilyMember"> | string
+    relationship_with_hof?: EnumHOFRelationshipFilter<"FamilyMember"> | $Enums.HOFRelationship
+    voter_id?: StringNullableFilter<"FamilyMember"> | string | null
+    phone?: StringNullableFilter<"FamilyMember"> | string | null
+    sex?: EnumGenderFilter<"FamilyMember"> | $Enums.Gender
+    occupation?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_id?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_address?: StringNullableFilter<"FamilyMember"> | string | null
+    dob?: DateTimeFilter<"FamilyMember"> | Date | string
+    is_active?: BoolFilter<"FamilyMember"> | boolean
+    deleted_at?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"FamilyMember"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"FamilyMember"> | string | null
+    created_at?: DateTimeFilter<"FamilyMember"> | Date | string
+    updated_at?: DateTimeFilter<"FamilyMember"> | Date | string
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  }
+
+  export type FamilyMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    family_id?: SortOrder
+    name?: SortOrder
+    relationship_with_hof?: SortOrder
+    voter_id?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    sex?: SortOrder
+    occupation?: SortOrderInput | SortOrder
+    abha_id?: SortOrderInput | SortOrder
+    abha_address?: SortOrderInput | SortOrder
+    dob?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    deleted_remarks?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    family?: FamilyOrderByWithRelationInput
+  }
+
+  export type FamilyMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
+    OR?: FamilyMemberWhereInput[]
+    NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
+    family_id?: StringFilter<"FamilyMember"> | string
+    name?: StringFilter<"FamilyMember"> | string
+    relationship_with_hof?: EnumHOFRelationshipFilter<"FamilyMember"> | $Enums.HOFRelationship
+    voter_id?: StringNullableFilter<"FamilyMember"> | string | null
+    phone?: StringNullableFilter<"FamilyMember"> | string | null
+    sex?: EnumGenderFilter<"FamilyMember"> | $Enums.Gender
+    occupation?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_id?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_address?: StringNullableFilter<"FamilyMember"> | string | null
+    dob?: DateTimeFilter<"FamilyMember"> | Date | string
+    is_active?: BoolFilter<"FamilyMember"> | boolean
+    deleted_at?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"FamilyMember"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"FamilyMember"> | string | null
+    created_at?: DateTimeFilter<"FamilyMember"> | Date | string
+    updated_at?: DateTimeFilter<"FamilyMember"> | Date | string
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  }, "id">
+
+  export type FamilyMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    family_id?: SortOrder
+    name?: SortOrder
+    relationship_with_hof?: SortOrder
+    voter_id?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    sex?: SortOrder
+    occupation?: SortOrderInput | SortOrder
+    abha_id?: SortOrderInput | SortOrder
+    abha_address?: SortOrderInput | SortOrder
+    dob?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    deleted_reason?: SortOrderInput | SortOrder
+    deleted_remarks?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: FamilyMemberCountOrderByAggregateInput
+    _max?: FamilyMemberMaxOrderByAggregateInput
+    _min?: FamilyMemberMinOrderByAggregateInput
+  }
+
+  export type FamilyMemberScalarWhereWithAggregatesInput = {
+    AND?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
+    OR?: FamilyMemberScalarWhereWithAggregatesInput[]
+    NOT?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FamilyMember"> | string
+    family_id?: StringWithAggregatesFilter<"FamilyMember"> | string
+    name?: StringWithAggregatesFilter<"FamilyMember"> | string
+    relationship_with_hof?: EnumHOFRelationshipWithAggregatesFilter<"FamilyMember"> | $Enums.HOFRelationship
+    voter_id?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    sex?: EnumGenderWithAggregatesFilter<"FamilyMember"> | $Enums.Gender
+    occupation?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    abha_id?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    abha_address?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    dob?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
+    is_active?: BoolWithAggregatesFilter<"FamilyMember"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableWithAggregatesFilter<"FamilyMember"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
+  }
+
   export type UserCreateInput = {
     username: string
     password_hash: string
@@ -26783,6 +32627,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -26792,6 +32637,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateInput = {
@@ -26804,6 +32652,8 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
@@ -26811,6 +32661,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUpdateInput = {
@@ -26821,6 +32673,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -26830,6 +32683,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateInput = {
@@ -26842,6 +32698,8 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
@@ -26849,6 +32707,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateManyInput = {
@@ -26861,6 +32721,8 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
   }
 
   export type FacilityUpdateManyMutationInput = {
@@ -26871,6 +32733,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FacilityUncheckedUpdateManyInput = {
@@ -26883,6 +32746,8 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type IndicatorCreateInput = {
@@ -28212,6 +34077,413 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VillageCreateInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility: FacilityCreateNestedOneWithoutVillagesInput
+    sections?: SectionCreateNestedManyWithoutVillageInput
+  }
+
+  export type VillageUncheckedCreateInput = {
+    id?: string
+    name: string
+    facility_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sections?: SectionUncheckedCreateNestedManyWithoutVillageInput
+  }
+
+  export type VillageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: FacilityUpdateOneRequiredWithoutVillagesNestedInput
+    sections?: SectionUpdateManyWithoutVillageNestedInput
+  }
+
+  export type VillageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    facility_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: SectionUncheckedUpdateManyWithoutVillageNestedInput
+  }
+
+  export type VillageCreateManyInput = {
+    id?: string
+    name: string
+    facility_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type VillageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VillageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    facility_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SectionCreateInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    village: VillageCreateNestedOneWithoutSectionsInput
+    families?: FamilyCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionUncheckedCreateInput = {
+    id?: string
+    name: string
+    village_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    families?: FamilyUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    village?: VillageUpdateOneRequiredWithoutSectionsNestedInput
+    families?: FamilyUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    village_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    families?: FamilyUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionCreateManyInput = {
+    id?: string
+    name: string
+    village_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SectionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SectionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    village_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyCreateInput = {
+    id?: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    section: SectionCreateNestedOneWithoutFamiliesInput
+    members?: FamilyMemberCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUncheckedCreateInput = {
+    id?: string
+    section_id: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: SectionUpdateOneRequiredWithoutFamiliesNestedInput
+    members?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    section_id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyCreateManyInput = {
+    id?: string
+    section_id: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    section_id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberCreateInput = {
+    id?: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    family: FamilyCreateNestedOneWithoutMembersInput
+  }
+
+  export type FamilyMemberUncheckedCreateInput = {
+    id?: string
+    family_id: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type FamilyMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    family_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberCreateManyInput = {
+    id?: string
+    family_id: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    family_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -28594,6 +34866,12 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type VillageListRelationFilter = {
+    every?: VillageWhereInput
+    some?: VillageWhereInput
+    none?: VillageWhereInput
+  }
+
   export type FacilityRemunerationRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -28618,6 +34896,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type VillageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type FacilityNameDistrict_idCompoundUniqueInput = {
     name: string
     district_id: string
@@ -28633,6 +34915,8 @@ export namespace Prisma {
     facility_type_id?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+    parent_facility_id?: SortOrder
+    has_clinic?: SortOrder
   }
 
   export type FacilityMaxOrderByAggregateInput = {
@@ -28645,6 +34929,8 @@ export namespace Prisma {
     facility_type_id?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+    parent_facility_id?: SortOrder
+    has_clinic?: SortOrder
   }
 
   export type FacilityMinOrderByAggregateInput = {
@@ -28657,6 +34943,8 @@ export namespace Prisma {
     facility_type_id?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+    parent_facility_id?: SortOrder
+    has_clinic?: SortOrder
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -29772,6 +36060,313 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
+  export type SectionListRelationFilter = {
+    every?: SectionWhereInput
+    some?: SectionWhereInput
+    none?: SectionWhereInput
+  }
+
+  export type SectionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VillageNameFacility_idCompoundUniqueInput = {
+    name: string
+    facility_id: string
+  }
+
+  export type VillageCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    facility_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type VillageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    facility_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type VillageMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    facility_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type VillageScalarRelationFilter = {
+    is?: VillageWhereInput
+    isNot?: VillageWhereInput
+  }
+
+  export type FamilyListRelationFilter = {
+    every?: FamilyWhereInput
+    some?: FamilyWhereInput
+    none?: FamilyWhereInput
+  }
+
+  export type FamilyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SectionNameVillage_idCompoundUniqueInput = {
+    name: string
+    village_id: string
+  }
+
+  export type SectionCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    village_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SectionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    village_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SectionMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    village_id?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EnumHabitationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.HabitationType | EnumHabitationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumHabitationTypeFilter<$PrismaModel> | $Enums.HabitationType
+  }
+
+  export type EnumDeletionReasonNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeletionReason | EnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeletionReasonNullableFilter<$PrismaModel> | $Enums.DeletionReason | null
+  }
+
+  export type SectionScalarRelationFilter = {
+    is?: SectionWhereInput
+    isNot?: SectionWhereInput
+  }
+
+  export type FamilyMemberListRelationFilter = {
+    every?: FamilyMemberWhereInput
+    some?: FamilyMemberWhereInput
+    none?: FamilyMemberWhereInput
+  }
+
+  export type FamilyMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FamilySection_idHouse_noCompoundUniqueInput = {
+    section_id: string
+    house_no: string
+  }
+
+  export type FamilyCountOrderByAggregateInput = {
+    id?: SortOrder
+    section_id?: SortOrder
+    house_no?: SortOrder
+    floor_no?: SortOrder
+    no_of_couples?: SortOrder
+    habitation_type?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type FamilyAvgOrderByAggregateInput = {
+    no_of_couples?: SortOrder
+  }
+
+  export type FamilyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    section_id?: SortOrder
+    house_no?: SortOrder
+    floor_no?: SortOrder
+    no_of_couples?: SortOrder
+    habitation_type?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type FamilyMinOrderByAggregateInput = {
+    id?: SortOrder
+    section_id?: SortOrder
+    house_no?: SortOrder
+    floor_no?: SortOrder
+    no_of_couples?: SortOrder
+    habitation_type?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type FamilySumOrderByAggregateInput = {
+    no_of_couples?: SortOrder
+  }
+
+  export type EnumHabitationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.HabitationType | EnumHabitationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumHabitationTypeWithAggregatesFilter<$PrismaModel> | $Enums.HabitationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumHabitationTypeFilter<$PrismaModel>
+    _max?: NestedEnumHabitationTypeFilter<$PrismaModel>
+  }
+
+  export type EnumDeletionReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeletionReason | EnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeletionReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeletionReason | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDeletionReasonNullableFilter<$PrismaModel>
+    _max?: NestedEnumDeletionReasonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumHOFRelationshipFilter<$PrismaModel = never> = {
+    equals?: $Enums.HOFRelationship | EnumHOFRelationshipFieldRefInput<$PrismaModel>
+    in?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    not?: NestedEnumHOFRelationshipFilter<$PrismaModel> | $Enums.HOFRelationship
+  }
+
+  export type EnumGenderFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+  }
+
+  export type FamilyScalarRelationFilter = {
+    is?: FamilyWhereInput
+    isNot?: FamilyWhereInput
+  }
+
+  export type FamilyMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    family_id?: SortOrder
+    name?: SortOrder
+    relationship_with_hof?: SortOrder
+    voter_id?: SortOrder
+    phone?: SortOrder
+    sex?: SortOrder
+    occupation?: SortOrder
+    abha_id?: SortOrder
+    abha_address?: SortOrder
+    dob?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type FamilyMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    family_id?: SortOrder
+    name?: SortOrder
+    relationship_with_hof?: SortOrder
+    voter_id?: SortOrder
+    phone?: SortOrder
+    sex?: SortOrder
+    occupation?: SortOrder
+    abha_id?: SortOrder
+    abha_address?: SortOrder
+    dob?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type FamilyMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    family_id?: SortOrder
+    name?: SortOrder
+    relationship_with_hof?: SortOrder
+    voter_id?: SortOrder
+    phone?: SortOrder
+    sex?: SortOrder
+    occupation?: SortOrder
+    abha_id?: SortOrder
+    abha_address?: SortOrder
+    dob?: SortOrder
+    is_active?: SortOrder
+    deleted_at?: SortOrder
+    deleted_reason?: SortOrder
+    deleted_remarks?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EnumHOFRelationshipWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.HOFRelationship | EnumHOFRelationshipFieldRefInput<$PrismaModel>
+    in?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    not?: NestedEnumHOFRelationshipWithAggregatesFilter<$PrismaModel> | $Enums.HOFRelationship
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumHOFRelationshipFilter<$PrismaModel>
+    _max?: NestedEnumHOFRelationshipFilter<$PrismaModel>
+  }
+
+  export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGenderFilter<$PrismaModel>
+    _max?: NestedEnumGenderFilter<$PrismaModel>
+  }
+
   export type FieldValueCreateNestedManyWithoutUploaderInput = {
     create?: XOR<FieldValueCreateWithoutUploaderInput, FieldValueUncheckedCreateWithoutUploaderInput> | FieldValueCreateWithoutUploaderInput[] | FieldValueUncheckedCreateWithoutUploaderInput[]
     connectOrCreate?: FieldValueCreateOrConnectWithoutUploaderInput | FieldValueCreateOrConnectWithoutUploaderInput[]
@@ -30127,6 +36722,26 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type FacilityCreateNestedOneWithoutChild_facilitiesInput = {
+    create?: XOR<FacilityCreateWithoutChild_facilitiesInput, FacilityUncheckedCreateWithoutChild_facilitiesInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutChild_facilitiesInput
+    connect?: FacilityWhereUniqueInput
+  }
+
+  export type FacilityCreateNestedManyWithoutParent_facilityInput = {
+    create?: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput> | FacilityCreateWithoutParent_facilityInput[] | FacilityUncheckedCreateWithoutParent_facilityInput[]
+    connectOrCreate?: FacilityCreateOrConnectWithoutParent_facilityInput | FacilityCreateOrConnectWithoutParent_facilityInput[]
+    createMany?: FacilityCreateManyParent_facilityInputEnvelope
+    connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+  }
+
+  export type VillageCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput> | VillageCreateWithoutFacilityInput[] | VillageUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: VillageCreateOrConnectWithoutFacilityInput | VillageCreateOrConnectWithoutFacilityInput[]
+    createMany?: VillageCreateManyFacilityInputEnvelope
+    connect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+  }
+
   export type FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput = {
     create?: XOR<FacilityRemunerationRecordCreateWithoutFacilityInput, FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput> | FacilityRemunerationRecordCreateWithoutFacilityInput[] | FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutFacilityInput | FacilityRemunerationRecordCreateOrConnectWithoutFacilityInput[]
@@ -30174,6 +36789,20 @@ export namespace Prisma {
     connectOrCreate?: UserCreateOrConnectWithoutFacilityInput | UserCreateOrConnectWithoutFacilityInput[]
     createMany?: UserCreateManyFacilityInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type FacilityUncheckedCreateNestedManyWithoutParent_facilityInput = {
+    create?: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput> | FacilityCreateWithoutParent_facilityInput[] | FacilityUncheckedCreateWithoutParent_facilityInput[]
+    connectOrCreate?: FacilityCreateOrConnectWithoutParent_facilityInput | FacilityCreateOrConnectWithoutParent_facilityInput[]
+    createMany?: FacilityCreateManyParent_facilityInputEnvelope
+    connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+  }
+
+  export type VillageUncheckedCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput> | VillageCreateWithoutFacilityInput[] | VillageUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: VillageCreateOrConnectWithoutFacilityInput | VillageCreateOrConnectWithoutFacilityInput[]
+    createMany?: VillageCreateManyFacilityInputEnvelope
+    connect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
   }
 
   export type FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput = {
@@ -30290,6 +36919,44 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type FacilityUpdateOneWithoutChild_facilitiesNestedInput = {
+    create?: XOR<FacilityCreateWithoutChild_facilitiesInput, FacilityUncheckedCreateWithoutChild_facilitiesInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutChild_facilitiesInput
+    upsert?: FacilityUpsertWithoutChild_facilitiesInput
+    disconnect?: FacilityWhereInput | boolean
+    delete?: FacilityWhereInput | boolean
+    connect?: FacilityWhereUniqueInput
+    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutChild_facilitiesInput, FacilityUpdateWithoutChild_facilitiesInput>, FacilityUncheckedUpdateWithoutChild_facilitiesInput>
+  }
+
+  export type FacilityUpdateManyWithoutParent_facilityNestedInput = {
+    create?: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput> | FacilityCreateWithoutParent_facilityInput[] | FacilityUncheckedCreateWithoutParent_facilityInput[]
+    connectOrCreate?: FacilityCreateOrConnectWithoutParent_facilityInput | FacilityCreateOrConnectWithoutParent_facilityInput[]
+    upsert?: FacilityUpsertWithWhereUniqueWithoutParent_facilityInput | FacilityUpsertWithWhereUniqueWithoutParent_facilityInput[]
+    createMany?: FacilityCreateManyParent_facilityInputEnvelope
+    set?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    disconnect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    delete?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    update?: FacilityUpdateWithWhereUniqueWithoutParent_facilityInput | FacilityUpdateWithWhereUniqueWithoutParent_facilityInput[]
+    updateMany?: FacilityUpdateManyWithWhereWithoutParent_facilityInput | FacilityUpdateManyWithWhereWithoutParent_facilityInput[]
+    deleteMany?: FacilityScalarWhereInput | FacilityScalarWhereInput[]
+  }
+
+  export type VillageUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput> | VillageCreateWithoutFacilityInput[] | VillageUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: VillageCreateOrConnectWithoutFacilityInput | VillageCreateOrConnectWithoutFacilityInput[]
+    upsert?: VillageUpsertWithWhereUniqueWithoutFacilityInput | VillageUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: VillageCreateManyFacilityInputEnvelope
+    set?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    disconnect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    delete?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    connect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    update?: VillageUpdateWithWhereUniqueWithoutFacilityInput | VillageUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: VillageUpdateManyWithWhereWithoutFacilityInput | VillageUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: VillageScalarWhereInput | VillageScalarWhereInput[]
+  }
+
   export type FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<FacilityRemunerationRecordCreateWithoutFacilityInput, FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput> | FacilityRemunerationRecordCreateWithoutFacilityInput[] | FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: FacilityRemunerationRecordCreateOrConnectWithoutFacilityInput | FacilityRemunerationRecordCreateOrConnectWithoutFacilityInput[]
@@ -30386,6 +37053,34 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutFacilityInput | UserUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: UserUpdateManyWithWhereWithoutFacilityInput | UserUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput = {
+    create?: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput> | FacilityCreateWithoutParent_facilityInput[] | FacilityUncheckedCreateWithoutParent_facilityInput[]
+    connectOrCreate?: FacilityCreateOrConnectWithoutParent_facilityInput | FacilityCreateOrConnectWithoutParent_facilityInput[]
+    upsert?: FacilityUpsertWithWhereUniqueWithoutParent_facilityInput | FacilityUpsertWithWhereUniqueWithoutParent_facilityInput[]
+    createMany?: FacilityCreateManyParent_facilityInputEnvelope
+    set?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    disconnect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    delete?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    connect?: FacilityWhereUniqueInput | FacilityWhereUniqueInput[]
+    update?: FacilityUpdateWithWhereUniqueWithoutParent_facilityInput | FacilityUpdateWithWhereUniqueWithoutParent_facilityInput[]
+    updateMany?: FacilityUpdateManyWithWhereWithoutParent_facilityInput | FacilityUpdateManyWithWhereWithoutParent_facilityInput[]
+    deleteMany?: FacilityScalarWhereInput | FacilityScalarWhereInput[]
+  }
+
+  export type VillageUncheckedUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput> | VillageCreateWithoutFacilityInput[] | VillageUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: VillageCreateOrConnectWithoutFacilityInput | VillageCreateOrConnectWithoutFacilityInput[]
+    upsert?: VillageUpsertWithWhereUniqueWithoutFacilityInput | VillageUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: VillageCreateManyFacilityInputEnvelope
+    set?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    disconnect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    delete?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    connect?: VillageWhereUniqueInput | VillageWhereUniqueInput[]
+    update?: VillageUpdateWithWhereUniqueWithoutFacilityInput | VillageUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: VillageUpdateManyWithWhereWithoutFacilityInput | VillageUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: VillageScalarWhereInput | VillageScalarWhereInput[]
   }
 
   export type FacilityRemunerationRecordCreateNestedManyWithoutIndicatorInput = {
@@ -31214,6 +37909,204 @@ export namespace Prisma {
     update?: XOR<XOR<IndicatorUpdateToOneWithWhereWithoutRemuneration_recordsInput, IndicatorUpdateWithoutRemuneration_recordsInput>, IndicatorUncheckedUpdateWithoutRemuneration_recordsInput>
   }
 
+  export type FacilityCreateNestedOneWithoutVillagesInput = {
+    create?: XOR<FacilityCreateWithoutVillagesInput, FacilityUncheckedCreateWithoutVillagesInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutVillagesInput
+    connect?: FacilityWhereUniqueInput
+  }
+
+  export type SectionCreateNestedManyWithoutVillageInput = {
+    create?: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput> | SectionCreateWithoutVillageInput[] | SectionUncheckedCreateWithoutVillageInput[]
+    connectOrCreate?: SectionCreateOrConnectWithoutVillageInput | SectionCreateOrConnectWithoutVillageInput[]
+    createMany?: SectionCreateManyVillageInputEnvelope
+    connect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+  }
+
+  export type SectionUncheckedCreateNestedManyWithoutVillageInput = {
+    create?: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput> | SectionCreateWithoutVillageInput[] | SectionUncheckedCreateWithoutVillageInput[]
+    connectOrCreate?: SectionCreateOrConnectWithoutVillageInput | SectionCreateOrConnectWithoutVillageInput[]
+    createMany?: SectionCreateManyVillageInputEnvelope
+    connect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+  }
+
+  export type FacilityUpdateOneRequiredWithoutVillagesNestedInput = {
+    create?: XOR<FacilityCreateWithoutVillagesInput, FacilityUncheckedCreateWithoutVillagesInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutVillagesInput
+    upsert?: FacilityUpsertWithoutVillagesInput
+    connect?: FacilityWhereUniqueInput
+    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutVillagesInput, FacilityUpdateWithoutVillagesInput>, FacilityUncheckedUpdateWithoutVillagesInput>
+  }
+
+  export type SectionUpdateManyWithoutVillageNestedInput = {
+    create?: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput> | SectionCreateWithoutVillageInput[] | SectionUncheckedCreateWithoutVillageInput[]
+    connectOrCreate?: SectionCreateOrConnectWithoutVillageInput | SectionCreateOrConnectWithoutVillageInput[]
+    upsert?: SectionUpsertWithWhereUniqueWithoutVillageInput | SectionUpsertWithWhereUniqueWithoutVillageInput[]
+    createMany?: SectionCreateManyVillageInputEnvelope
+    set?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    disconnect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    delete?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    connect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    update?: SectionUpdateWithWhereUniqueWithoutVillageInput | SectionUpdateWithWhereUniqueWithoutVillageInput[]
+    updateMany?: SectionUpdateManyWithWhereWithoutVillageInput | SectionUpdateManyWithWhereWithoutVillageInput[]
+    deleteMany?: SectionScalarWhereInput | SectionScalarWhereInput[]
+  }
+
+  export type SectionUncheckedUpdateManyWithoutVillageNestedInput = {
+    create?: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput> | SectionCreateWithoutVillageInput[] | SectionUncheckedCreateWithoutVillageInput[]
+    connectOrCreate?: SectionCreateOrConnectWithoutVillageInput | SectionCreateOrConnectWithoutVillageInput[]
+    upsert?: SectionUpsertWithWhereUniqueWithoutVillageInput | SectionUpsertWithWhereUniqueWithoutVillageInput[]
+    createMany?: SectionCreateManyVillageInputEnvelope
+    set?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    disconnect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    delete?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    connect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
+    update?: SectionUpdateWithWhereUniqueWithoutVillageInput | SectionUpdateWithWhereUniqueWithoutVillageInput[]
+    updateMany?: SectionUpdateManyWithWhereWithoutVillageInput | SectionUpdateManyWithWhereWithoutVillageInput[]
+    deleteMany?: SectionScalarWhereInput | SectionScalarWhereInput[]
+  }
+
+  export type VillageCreateNestedOneWithoutSectionsInput = {
+    create?: XOR<VillageCreateWithoutSectionsInput, VillageUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: VillageCreateOrConnectWithoutSectionsInput
+    connect?: VillageWhereUniqueInput
+  }
+
+  export type FamilyCreateNestedManyWithoutSectionInput = {
+    create?: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput> | FamilyCreateWithoutSectionInput[] | FamilyUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: FamilyCreateOrConnectWithoutSectionInput | FamilyCreateOrConnectWithoutSectionInput[]
+    createMany?: FamilyCreateManySectionInputEnvelope
+    connect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+  }
+
+  export type FamilyUncheckedCreateNestedManyWithoutSectionInput = {
+    create?: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput> | FamilyCreateWithoutSectionInput[] | FamilyUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: FamilyCreateOrConnectWithoutSectionInput | FamilyCreateOrConnectWithoutSectionInput[]
+    createMany?: FamilyCreateManySectionInputEnvelope
+    connect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+  }
+
+  export type VillageUpdateOneRequiredWithoutSectionsNestedInput = {
+    create?: XOR<VillageCreateWithoutSectionsInput, VillageUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: VillageCreateOrConnectWithoutSectionsInput
+    upsert?: VillageUpsertWithoutSectionsInput
+    connect?: VillageWhereUniqueInput
+    update?: XOR<XOR<VillageUpdateToOneWithWhereWithoutSectionsInput, VillageUpdateWithoutSectionsInput>, VillageUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type FamilyUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput> | FamilyCreateWithoutSectionInput[] | FamilyUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: FamilyCreateOrConnectWithoutSectionInput | FamilyCreateOrConnectWithoutSectionInput[]
+    upsert?: FamilyUpsertWithWhereUniqueWithoutSectionInput | FamilyUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: FamilyCreateManySectionInputEnvelope
+    set?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    disconnect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    delete?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    connect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    update?: FamilyUpdateWithWhereUniqueWithoutSectionInput | FamilyUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: FamilyUpdateManyWithWhereWithoutSectionInput | FamilyUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: FamilyScalarWhereInput | FamilyScalarWhereInput[]
+  }
+
+  export type FamilyUncheckedUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput> | FamilyCreateWithoutSectionInput[] | FamilyUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: FamilyCreateOrConnectWithoutSectionInput | FamilyCreateOrConnectWithoutSectionInput[]
+    upsert?: FamilyUpsertWithWhereUniqueWithoutSectionInput | FamilyUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: FamilyCreateManySectionInputEnvelope
+    set?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    disconnect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    delete?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    connect?: FamilyWhereUniqueInput | FamilyWhereUniqueInput[]
+    update?: FamilyUpdateWithWhereUniqueWithoutSectionInput | FamilyUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: FamilyUpdateManyWithWhereWithoutSectionInput | FamilyUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: FamilyScalarWhereInput | FamilyScalarWhereInput[]
+  }
+
+  export type SectionCreateNestedOneWithoutFamiliesInput = {
+    create?: XOR<SectionCreateWithoutFamiliesInput, SectionUncheckedCreateWithoutFamiliesInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutFamiliesInput
+    connect?: SectionWhereUniqueInput
+  }
+
+  export type FamilyMemberCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  }
+
+  export type FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  }
+
+  export type EnumHabitationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.HabitationType
+  }
+
+  export type NullableEnumDeletionReasonFieldUpdateOperationsInput = {
+    set?: $Enums.DeletionReason | null
+  }
+
+  export type SectionUpdateOneRequiredWithoutFamiliesNestedInput = {
+    create?: XOR<SectionCreateWithoutFamiliesInput, SectionUncheckedCreateWithoutFamiliesInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutFamiliesInput
+    upsert?: SectionUpsertWithoutFamiliesInput
+    connect?: SectionWhereUniqueInput
+    update?: XOR<XOR<SectionUpdateToOneWithWhereWithoutFamiliesInput, SectionUpdateWithoutFamiliesInput>, SectionUncheckedUpdateWithoutFamiliesInput>
+  }
+
+  export type FamilyMemberUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type FamilyCreateNestedOneWithoutMembersInput = {
+    create?: XOR<FamilyCreateWithoutMembersInput, FamilyUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutMembersInput
+    connect?: FamilyWhereUniqueInput
+  }
+
+  export type EnumHOFRelationshipFieldUpdateOperationsInput = {
+    set?: $Enums.HOFRelationship
+  }
+
+  export type EnumGenderFieldUpdateOperationsInput = {
+    set?: $Enums.Gender
+  }
+
+  export type FamilyUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<FamilyCreateWithoutMembersInput, FamilyUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutMembersInput
+    upsert?: FamilyUpsertWithoutMembersInput
+    connect?: FamilyWhereUniqueInput
+    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutMembersInput, FamilyUpdateWithoutMembersInput>, FamilyUncheckedUpdateWithoutMembersInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -31639,6 +38532,74 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumHabitationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.HabitationType | EnumHabitationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumHabitationTypeFilter<$PrismaModel> | $Enums.HabitationType
+  }
+
+  export type NestedEnumDeletionReasonNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeletionReason | EnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeletionReasonNullableFilter<$PrismaModel> | $Enums.DeletionReason | null
+  }
+
+  export type NestedEnumHabitationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.HabitationType | EnumHabitationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HabitationType[] | ListEnumHabitationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumHabitationTypeWithAggregatesFilter<$PrismaModel> | $Enums.HabitationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumHabitationTypeFilter<$PrismaModel>
+    _max?: NestedEnumHabitationTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDeletionReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeletionReason | EnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeletionReason[] | ListEnumDeletionReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeletionReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeletionReason | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDeletionReasonNullableFilter<$PrismaModel>
+    _max?: NestedEnumDeletionReasonNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumHOFRelationshipFilter<$PrismaModel = never> = {
+    equals?: $Enums.HOFRelationship | EnumHOFRelationshipFieldRefInput<$PrismaModel>
+    in?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    not?: NestedEnumHOFRelationshipFilter<$PrismaModel> | $Enums.HOFRelationship
+  }
+
+  export type NestedEnumGenderFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+  }
+
+  export type NestedEnumHOFRelationshipWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.HOFRelationship | EnumHOFRelationshipFieldRefInput<$PrismaModel>
+    in?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    notIn?: $Enums.HOFRelationship[] | ListEnumHOFRelationshipFieldRefInput<$PrismaModel>
+    not?: NestedEnumHOFRelationshipWithAggregatesFilter<$PrismaModel> | $Enums.HOFRelationship
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumHOFRelationshipFilter<$PrismaModel>
+    _max?: NestedEnumHOFRelationshipFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGenderFilter<$PrismaModel>
+    _max?: NestedEnumGenderFilter<$PrismaModel>
+  }
+
   export type FieldValueCreateWithoutUploaderInput = {
     report_month: string
     string_value?: string | null
@@ -31688,6 +38649,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -31696,6 +38658,9 @@ export namespace Prisma {
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutUsersInput = {
@@ -31708,12 +38673,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutUsersInput = {
@@ -31776,6 +38745,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -31784,6 +38754,9 @@ export namespace Prisma {
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutUsersInput = {
@@ -31796,12 +38769,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateWithoutDistrictInput = {
@@ -31812,6 +38789,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
@@ -31820,6 +38798,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutDistrictInput = {
@@ -31831,6 +38812,8 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
@@ -31838,6 +38821,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutDistrictInput = {
@@ -31879,6 +38864,8 @@ export namespace Prisma {
     facility_type_id?: StringFilter<"Facility"> | string
     is_active?: BoolFilter<"Facility"> | boolean
     updated_at?: DateTimeFilter<"Facility"> | Date | string
+    parent_facility_id?: StringNullableFilter<"Facility"> | string | null
+    has_clinic?: BoolFilter<"Facility"> | boolean
   }
 
   export type FacilityCreateWithoutFacility_typeInput = {
@@ -31889,6 +38876,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -31897,6 +38885,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutFacility_typeInput = {
@@ -31908,6 +38899,8 @@ export namespace Prisma {
     district_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
@@ -31915,6 +38908,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutFacility_typeInput = {
@@ -32422,6 +39417,141 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FacilityCreateWithoutChild_facilitiesInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at?: Date | string
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
+    district: DistrictCreateNestedOneWithoutFacilitiesInput
+    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
+    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
+    users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityUncheckedCreateWithoutChild_facilitiesInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    district_id: string
+    facility_type_id: string
+    is_active?: boolean
+    updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
+    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityCreateOrConnectWithoutChild_facilitiesInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutChild_facilitiesInput, FacilityUncheckedCreateWithoutChild_facilitiesInput>
+  }
+
+  export type FacilityCreateWithoutParent_facilityInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at?: Date | string
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
+    district: DistrictCreateNestedOneWithoutFacilitiesInput
+    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
+    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
+    users?: UserCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityUncheckedCreateWithoutParent_facilityInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    district_id: string
+    facility_type_id: string
+    is_active?: boolean
+    updated_at?: Date | string
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
+    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityCreateOrConnectWithoutParent_facilityInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput>
+  }
+
+  export type FacilityCreateManyParent_facilityInputEnvelope = {
+    data: FacilityCreateManyParent_facilityInput | FacilityCreateManyParent_facilityInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VillageCreateWithoutFacilityInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sections?: SectionCreateNestedManyWithoutVillageInput
+  }
+
+  export type VillageUncheckedCreateWithoutFacilityInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sections?: SectionUncheckedCreateNestedManyWithoutVillageInput
+  }
+
+  export type VillageCreateOrConnectWithoutFacilityInput = {
+    where: VillageWhereUniqueInput
+    create: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type VillageCreateManyFacilityInputEnvelope = {
+    data: VillageCreateManyFacilityInput | VillageCreateManyFacilityInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FacilityRemunerationRecordUpsertWithWhereUniqueWithoutFacilityInput = {
     where: FacilityRemunerationRecordWhereUniqueInput
     update: XOR<FacilityRemunerationRecordUpdateWithoutFacilityInput, FacilityRemunerationRecordUncheckedUpdateWithoutFacilityInput>
@@ -32695,6 +39825,107 @@ export namespace Prisma {
     created_at?: DateTimeNullableFilter<"User"> | Date | string | null
     email?: StringNullableFilter<"User"> | string | null
     facility_id?: StringNullableFilter<"User"> | string | null
+  }
+
+  export type FacilityUpsertWithoutChild_facilitiesInput = {
+    update: XOR<FacilityUpdateWithoutChild_facilitiesInput, FacilityUncheckedUpdateWithoutChild_facilitiesInput>
+    create: XOR<FacilityCreateWithoutChild_facilitiesInput, FacilityUncheckedCreateWithoutChild_facilitiesInput>
+    where?: FacilityWhereInput
+  }
+
+  export type FacilityUpdateToOneWithWhereWithoutChild_facilitiesInput = {
+    where?: FacilityWhereInput
+    data: XOR<FacilityUpdateWithoutChild_facilitiesInput, FacilityUncheckedUpdateWithoutChild_facilitiesInput>
+  }
+
+  export type FacilityUpdateWithoutChild_facilitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
+    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
+    users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateWithoutChild_facilitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    district_id?: StringFieldUpdateOperationsInput | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
+    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUpsertWithWhereUniqueWithoutParent_facilityInput = {
+    where: FacilityWhereUniqueInput
+    update: XOR<FacilityUpdateWithoutParent_facilityInput, FacilityUncheckedUpdateWithoutParent_facilityInput>
+    create: XOR<FacilityCreateWithoutParent_facilityInput, FacilityUncheckedCreateWithoutParent_facilityInput>
+  }
+
+  export type FacilityUpdateWithWhereUniqueWithoutParent_facilityInput = {
+    where: FacilityWhereUniqueInput
+    data: XOR<FacilityUpdateWithoutParent_facilityInput, FacilityUncheckedUpdateWithoutParent_facilityInput>
+  }
+
+  export type FacilityUpdateManyWithWhereWithoutParent_facilityInput = {
+    where: FacilityScalarWhereInput
+    data: XOR<FacilityUpdateManyMutationInput, FacilityUncheckedUpdateManyWithoutParent_facilityInput>
+  }
+
+  export type VillageUpsertWithWhereUniqueWithoutFacilityInput = {
+    where: VillageWhereUniqueInput
+    update: XOR<VillageUpdateWithoutFacilityInput, VillageUncheckedUpdateWithoutFacilityInput>
+    create: XOR<VillageCreateWithoutFacilityInput, VillageUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type VillageUpdateWithWhereUniqueWithoutFacilityInput = {
+    where: VillageWhereUniqueInput
+    data: XOR<VillageUpdateWithoutFacilityInput, VillageUncheckedUpdateWithoutFacilityInput>
+  }
+
+  export type VillageUpdateManyWithWhereWithoutFacilityInput = {
+    where: VillageScalarWhereInput
+    data: XOR<VillageUpdateManyMutationInput, VillageUncheckedUpdateManyWithoutFacilityInput>
+  }
+
+  export type VillageScalarWhereInput = {
+    AND?: VillageScalarWhereInput | VillageScalarWhereInput[]
+    OR?: VillageScalarWhereInput[]
+    NOT?: VillageScalarWhereInput | VillageScalarWhereInput[]
+    id?: StringFilter<"Village"> | string
+    name?: StringFilter<"Village"> | string
+    facility_id?: StringFilter<"Village"> | string
+    is_active?: BoolFilter<"Village"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Village"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Village"> | string | null
+    created_at?: DateTimeFilter<"Village"> | Date | string
+    updated_at?: DateTimeFilter<"Village"> | Date | string
   }
 
   export type FacilityRemunerationRecordCreateWithoutIndicatorInput = {
@@ -33599,6 +40830,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -33607,6 +40839,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutField_valuesInput = {
@@ -33619,12 +40854,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutField_valuesInput = {
@@ -33727,6 +40966,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -33735,6 +40975,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutField_valuesInput = {
@@ -33747,12 +40990,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FieldUpsertWithoutField_valuesInput = {
@@ -34021,6 +41268,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -34029,6 +41277,9 @@ export namespace Prisma {
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutHealth_workersInput = {
@@ -34041,12 +41292,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutHealth_workersInput = {
@@ -34106,6 +41361,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -34114,6 +41370,9 @@ export namespace Prisma {
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutHealth_workersInput = {
@@ -34126,12 +41385,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type WorkerRemunerationUpsertWithWhereUniqueWithoutHealth_workerInput = {
@@ -34158,6 +41421,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -34166,6 +41430,9 @@ export namespace Prisma {
     field_values?: FieldValueCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutRemuneration_calculationsInput = {
@@ -34178,12 +41445,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutRemuneration_calculationsInput = {
@@ -34210,6 +41481,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -34218,6 +41490,9 @@ export namespace Prisma {
     field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutRemuneration_calculationsInput = {
@@ -34230,12 +41505,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type HealthWorkerCreateWithoutRemuneration_calculationsInput = {
@@ -34276,6 +41555,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
@@ -34284,6 +41564,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutWorker_remunerationsInput = {
@@ -34296,12 +41579,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutWorker_remunerationsInput = {
@@ -34364,6 +41651,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -34372,6 +41660,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutWorker_remunerationsInput = {
@@ -34384,12 +41675,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityTypeCreateWithoutWorker_allocationsInput = {
@@ -34757,6 +42052,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
@@ -34765,6 +42061,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutFacility_targetsInput = {
@@ -34777,12 +42076,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutFacility_targetsInput = {
@@ -34867,6 +42170,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -34875,6 +42179,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutFacility_targetsInput = {
@@ -34887,12 +42194,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type IndicatorUpsertWithoutFacility_targetsInput = {
@@ -35089,6 +42400,7 @@ export namespace Prisma {
     display_name: string
     is_active?: boolean
     updated_at?: Date | string
+    has_clinic?: boolean
     worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
     district: DistrictCreateNestedOneWithoutFacilitiesInput
     facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
@@ -35097,6 +42409,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
     users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutRemuneration_recordsInput = {
@@ -35109,12 +42424,16 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
     worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
     facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
     field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
     health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
     remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
     users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+    villages?: VillageUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutRemuneration_recordsInput = {
@@ -35199,6 +42518,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -35207,6 +42527,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutRemuneration_recordsInput = {
@@ -35219,12 +42542,16 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
     field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type IndicatorUpsertWithoutRemuneration_recordsInput = {
@@ -35289,6 +42616,529 @@ export namespace Prisma {
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutIndicatorNestedInput
     remunerations?: IndicatorRemunerationUncheckedUpdateManyWithoutIndicatorNestedInput
     worker_allocations?: IndicatorWorkerAllocationUncheckedUpdateManyWithoutIndicatorNestedInput
+  }
+
+  export type FacilityCreateWithoutVillagesInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at?: Date | string
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationCreateNestedManyWithoutFacilityInput
+    district: DistrictCreateNestedOneWithoutFacilitiesInput
+    facility_type: FacilityTypeCreateNestedOneWithoutFacilitiesInput
+    facility_targets?: FacilityTargetCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationCreateNestedManyWithoutFacilityInput
+    users?: UserCreateNestedManyWithoutFacilityInput
+    parent_facility?: FacilityCreateNestedOneWithoutChild_facilitiesInput
+    child_facilities?: FacilityCreateNestedManyWithoutParent_facilityInput
+  }
+
+  export type FacilityUncheckedCreateWithoutVillagesInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    district_id: string
+    facility_type_id: string
+    is_active?: boolean
+    updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedCreateNestedManyWithoutFacilityInput
+    worker_remunerations?: WorkerRemunerationUncheckedCreateNestedManyWithoutFacilityInput
+    facility_targets?: FacilityTargetUncheckedCreateNestedManyWithoutFacilityInput
+    field_values?: FieldValueUncheckedCreateNestedManyWithoutFacilityInput
+    health_workers?: HealthWorkerUncheckedCreateNestedManyWithoutFacilityInput
+    remuneration_calculations?: RemunerationCalculationUncheckedCreateNestedManyWithoutFacilityInput
+    users?: UserUncheckedCreateNestedManyWithoutFacilityInput
+    child_facilities?: FacilityUncheckedCreateNestedManyWithoutParent_facilityInput
+  }
+
+  export type FacilityCreateOrConnectWithoutVillagesInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutVillagesInput, FacilityUncheckedCreateWithoutVillagesInput>
+  }
+
+  export type SectionCreateWithoutVillageInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    families?: FamilyCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionUncheckedCreateWithoutVillageInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    families?: FamilyUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionCreateOrConnectWithoutVillageInput = {
+    where: SectionWhereUniqueInput
+    create: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput>
+  }
+
+  export type SectionCreateManyVillageInputEnvelope = {
+    data: SectionCreateManyVillageInput | SectionCreateManyVillageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilityUpsertWithoutVillagesInput = {
+    update: XOR<FacilityUpdateWithoutVillagesInput, FacilityUncheckedUpdateWithoutVillagesInput>
+    create: XOR<FacilityCreateWithoutVillagesInput, FacilityUncheckedCreateWithoutVillagesInput>
+    where?: FacilityWhereInput
+  }
+
+  export type FacilityUpdateToOneWithWhereWithoutVillagesInput = {
+    where?: FacilityWhereInput
+    data: XOR<FacilityUpdateWithoutVillagesInput, FacilityUncheckedUpdateWithoutVillagesInput>
+  }
+
+  export type FacilityUpdateWithoutVillagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
+    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
+    users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateWithoutVillagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    district_id?: StringFieldUpdateOperationsInput | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
+    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+  }
+
+  export type SectionUpsertWithWhereUniqueWithoutVillageInput = {
+    where: SectionWhereUniqueInput
+    update: XOR<SectionUpdateWithoutVillageInput, SectionUncheckedUpdateWithoutVillageInput>
+    create: XOR<SectionCreateWithoutVillageInput, SectionUncheckedCreateWithoutVillageInput>
+  }
+
+  export type SectionUpdateWithWhereUniqueWithoutVillageInput = {
+    where: SectionWhereUniqueInput
+    data: XOR<SectionUpdateWithoutVillageInput, SectionUncheckedUpdateWithoutVillageInput>
+  }
+
+  export type SectionUpdateManyWithWhereWithoutVillageInput = {
+    where: SectionScalarWhereInput
+    data: XOR<SectionUpdateManyMutationInput, SectionUncheckedUpdateManyWithoutVillageInput>
+  }
+
+  export type SectionScalarWhereInput = {
+    AND?: SectionScalarWhereInput | SectionScalarWhereInput[]
+    OR?: SectionScalarWhereInput[]
+    NOT?: SectionScalarWhereInput | SectionScalarWhereInput[]
+    id?: StringFilter<"Section"> | string
+    name?: StringFilter<"Section"> | string
+    village_id?: StringFilter<"Section"> | string
+    is_active?: BoolFilter<"Section"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Section"> | Date | string | null
+    deleted_reason?: StringNullableFilter<"Section"> | string | null
+    created_at?: DateTimeFilter<"Section"> | Date | string
+    updated_at?: DateTimeFilter<"Section"> | Date | string
+  }
+
+  export type VillageCreateWithoutSectionsInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility: FacilityCreateNestedOneWithoutVillagesInput
+  }
+
+  export type VillageUncheckedCreateWithoutSectionsInput = {
+    id?: string
+    name: string
+    facility_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type VillageCreateOrConnectWithoutSectionsInput = {
+    where: VillageWhereUniqueInput
+    create: XOR<VillageCreateWithoutSectionsInput, VillageUncheckedCreateWithoutSectionsInput>
+  }
+
+  export type FamilyCreateWithoutSectionInput = {
+    id?: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: FamilyMemberCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUncheckedCreateWithoutSectionInput = {
+    id?: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyCreateOrConnectWithoutSectionInput = {
+    where: FamilyWhereUniqueInput
+    create: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput>
+  }
+
+  export type FamilyCreateManySectionInputEnvelope = {
+    data: FamilyCreateManySectionInput | FamilyCreateManySectionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VillageUpsertWithoutSectionsInput = {
+    update: XOR<VillageUpdateWithoutSectionsInput, VillageUncheckedUpdateWithoutSectionsInput>
+    create: XOR<VillageCreateWithoutSectionsInput, VillageUncheckedCreateWithoutSectionsInput>
+    where?: VillageWhereInput
+  }
+
+  export type VillageUpdateToOneWithWhereWithoutSectionsInput = {
+    where?: VillageWhereInput
+    data: XOR<VillageUpdateWithoutSectionsInput, VillageUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type VillageUpdateWithoutSectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: FacilityUpdateOneRequiredWithoutVillagesNestedInput
+  }
+
+  export type VillageUncheckedUpdateWithoutSectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    facility_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyUpsertWithWhereUniqueWithoutSectionInput = {
+    where: FamilyWhereUniqueInput
+    update: XOR<FamilyUpdateWithoutSectionInput, FamilyUncheckedUpdateWithoutSectionInput>
+    create: XOR<FamilyCreateWithoutSectionInput, FamilyUncheckedCreateWithoutSectionInput>
+  }
+
+  export type FamilyUpdateWithWhereUniqueWithoutSectionInput = {
+    where: FamilyWhereUniqueInput
+    data: XOR<FamilyUpdateWithoutSectionInput, FamilyUncheckedUpdateWithoutSectionInput>
+  }
+
+  export type FamilyUpdateManyWithWhereWithoutSectionInput = {
+    where: FamilyScalarWhereInput
+    data: XOR<FamilyUpdateManyMutationInput, FamilyUncheckedUpdateManyWithoutSectionInput>
+  }
+
+  export type FamilyScalarWhereInput = {
+    AND?: FamilyScalarWhereInput | FamilyScalarWhereInput[]
+    OR?: FamilyScalarWhereInput[]
+    NOT?: FamilyScalarWhereInput | FamilyScalarWhereInput[]
+    id?: StringFilter<"Family"> | string
+    section_id?: StringFilter<"Family"> | string
+    house_no?: StringFilter<"Family"> | string
+    floor_no?: StringNullableFilter<"Family"> | string | null
+    no_of_couples?: IntFilter<"Family"> | number
+    habitation_type?: EnumHabitationTypeFilter<"Family"> | $Enums.HabitationType
+    is_active?: BoolFilter<"Family"> | boolean
+    deleted_at?: DateTimeNullableFilter<"Family"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"Family"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"Family"> | string | null
+    created_at?: DateTimeFilter<"Family"> | Date | string
+    updated_at?: DateTimeFilter<"Family"> | Date | string
+  }
+
+  export type SectionCreateWithoutFamiliesInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    village: VillageCreateNestedOneWithoutSectionsInput
+  }
+
+  export type SectionUncheckedCreateWithoutFamiliesInput = {
+    id?: string
+    name: string
+    village_id: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SectionCreateOrConnectWithoutFamiliesInput = {
+    where: SectionWhereUniqueInput
+    create: XOR<SectionCreateWithoutFamiliesInput, SectionUncheckedCreateWithoutFamiliesInput>
+  }
+
+  export type FamilyMemberCreateWithoutFamilyInput = {
+    id?: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyMemberUncheckedCreateWithoutFamilyInput = {
+    id?: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyMemberCreateOrConnectWithoutFamilyInput = {
+    where: FamilyMemberWhereUniqueInput
+    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type FamilyMemberCreateManyFamilyInputEnvelope = {
+    data: FamilyMemberCreateManyFamilyInput | FamilyMemberCreateManyFamilyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SectionUpsertWithoutFamiliesInput = {
+    update: XOR<SectionUpdateWithoutFamiliesInput, SectionUncheckedUpdateWithoutFamiliesInput>
+    create: XOR<SectionCreateWithoutFamiliesInput, SectionUncheckedCreateWithoutFamiliesInput>
+    where?: SectionWhereInput
+  }
+
+  export type SectionUpdateToOneWithWhereWithoutFamiliesInput = {
+    where?: SectionWhereInput
+    data: XOR<SectionUpdateWithoutFamiliesInput, SectionUncheckedUpdateWithoutFamiliesInput>
+  }
+
+  export type SectionUpdateWithoutFamiliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    village?: VillageUpdateOneRequiredWithoutSectionsNestedInput
+  }
+
+  export type SectionUncheckedUpdateWithoutFamiliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    village_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput = {
+    where: FamilyMemberWhereUniqueInput
+    update: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
+    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput = {
+    where: FamilyMemberWhereUniqueInput
+    data: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
+  }
+
+  export type FamilyMemberUpdateManyWithWhereWithoutFamilyInput = {
+    where: FamilyMemberScalarWhereInput
+    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutFamilyInput>
+  }
+
+  export type FamilyMemberScalarWhereInput = {
+    AND?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+    OR?: FamilyMemberScalarWhereInput[]
+    NOT?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+    id?: StringFilter<"FamilyMember"> | string
+    family_id?: StringFilter<"FamilyMember"> | string
+    name?: StringFilter<"FamilyMember"> | string
+    relationship_with_hof?: EnumHOFRelationshipFilter<"FamilyMember"> | $Enums.HOFRelationship
+    voter_id?: StringNullableFilter<"FamilyMember"> | string | null
+    phone?: StringNullableFilter<"FamilyMember"> | string | null
+    sex?: EnumGenderFilter<"FamilyMember"> | $Enums.Gender
+    occupation?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_id?: StringNullableFilter<"FamilyMember"> | string | null
+    abha_address?: StringNullableFilter<"FamilyMember"> | string | null
+    dob?: DateTimeFilter<"FamilyMember"> | Date | string
+    is_active?: BoolFilter<"FamilyMember"> | boolean
+    deleted_at?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
+    deleted_reason?: EnumDeletionReasonNullableFilter<"FamilyMember"> | $Enums.DeletionReason | null
+    deleted_remarks?: StringNullableFilter<"FamilyMember"> | string | null
+    created_at?: DateTimeFilter<"FamilyMember"> | Date | string
+    updated_at?: DateTimeFilter<"FamilyMember"> | Date | string
+  }
+
+  export type FamilyCreateWithoutMembersInput = {
+    id?: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    section: SectionCreateNestedOneWithoutFamiliesInput
+  }
+
+  export type FamilyUncheckedCreateWithoutMembersInput = {
+    id?: string
+    section_id: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyCreateOrConnectWithoutMembersInput = {
+    where: FamilyWhereUniqueInput
+    create: XOR<FamilyCreateWithoutMembersInput, FamilyUncheckedCreateWithoutMembersInput>
+  }
+
+  export type FamilyUpsertWithoutMembersInput = {
+    update: XOR<FamilyUpdateWithoutMembersInput, FamilyUncheckedUpdateWithoutMembersInput>
+    create: XOR<FamilyCreateWithoutMembersInput, FamilyUncheckedCreateWithoutMembersInput>
+    where?: FamilyWhereInput
+  }
+
+  export type FamilyUpdateToOneWithWhereWithoutMembersInput = {
+    where?: FamilyWhereInput
+    data: XOR<FamilyUpdateWithoutMembersInput, FamilyUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type FamilyUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: SectionUpdateOneRequiredWithoutFamiliesNestedInput
+  }
+
+  export type FamilyUncheckedUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    section_id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FieldValueCreateManyUploaderInput = {
@@ -35363,6 +43213,8 @@ export namespace Prisma {
     facility_type_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
   }
 
   export type FacilityUpdateWithoutDistrictInput = {
@@ -35373,6 +43225,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -35381,6 +43234,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutDistrictInput = {
@@ -35392,6 +43248,8 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
@@ -35399,6 +43257,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateManyWithoutDistrictInput = {
@@ -35410,6 +43270,8 @@ export namespace Prisma {
     facility_type_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FacilityCreateManyFacility_typeInput = {
@@ -35421,6 +43283,8 @@ export namespace Prisma {
     district_id: string
     is_active?: boolean
     updated_at?: Date | string
+    parent_facility_id?: string | null
+    has_clinic?: boolean
   }
 
   export type FacilityFieldMappingCreateManyFacility_typeInput = {
@@ -35452,6 +43316,7 @@ export namespace Prisma {
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
     district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -35460,6 +43325,9 @@ export namespace Prisma {
     health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
     users?: UserUpdateManyWithoutFacilityNestedInput
+    parent_facility?: FacilityUpdateOneWithoutChild_facilitiesNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutFacility_typeInput = {
@@ -35471,6 +43339,8 @@ export namespace Prisma {
     district_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
     remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
     worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
     facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
@@ -35478,6 +43348,8 @@ export namespace Prisma {
     health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
     remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
     users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateManyWithoutFacility_typeInput = {
@@ -35489,6 +43361,8 @@ export namespace Prisma {
     district_id?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_facility_id?: NullableStringFieldUpdateOperationsInput | string | null
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FacilityFieldMappingUpdateWithoutFacility_typeInput = {
@@ -35643,6 +43517,29 @@ export namespace Prisma {
     last_login?: Date | string | null
     created_at?: Date | string | null
     email?: string | null
+  }
+
+  export type FacilityCreateManyParent_facilityInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    district_id: string
+    facility_type_id: string
+    is_active?: boolean
+    updated_at?: Date | string
+    has_clinic?: boolean
+  }
+
+  export type VillageCreateManyFacilityInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type FacilityRemunerationRecordUpdateWithoutFacilityInput = {
@@ -35920,6 +43817,95 @@ export namespace Prisma {
     last_login?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityUpdateWithoutParent_facilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUpdateManyWithoutFacilityNestedInput
+    district?: DistrictUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_type?: FacilityTypeUpdateOneRequiredWithoutFacilitiesNestedInput
+    facility_targets?: FacilityTargetUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUpdateManyWithoutFacilityNestedInput
+    users?: UserUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateWithoutParent_facilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    district_id?: StringFieldUpdateOperationsInput | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+    remuneration_records?: FacilityRemunerationRecordUncheckedUpdateManyWithoutFacilityNestedInput
+    worker_remunerations?: WorkerRemunerationUncheckedUpdateManyWithoutFacilityNestedInput
+    facility_targets?: FacilityTargetUncheckedUpdateManyWithoutFacilityNestedInput
+    field_values?: FieldValueUncheckedUpdateManyWithoutFacilityNestedInput
+    health_workers?: HealthWorkerUncheckedUpdateManyWithoutFacilityNestedInput
+    remuneration_calculations?: RemunerationCalculationUncheckedUpdateManyWithoutFacilityNestedInput
+    users?: UserUncheckedUpdateManyWithoutFacilityNestedInput
+    child_facilities?: FacilityUncheckedUpdateManyWithoutParent_facilityNestedInput
+    villages?: VillageUncheckedUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateManyWithoutParent_facilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    district_id?: StringFieldUpdateOperationsInput | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    has_clinic?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type VillageUpdateWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: SectionUpdateManyWithoutVillageNestedInput
+  }
+
+  export type VillageUncheckedUpdateWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: SectionUncheckedUpdateManyWithoutVillageNestedInput
+  }
+
+  export type VillageUncheckedUpdateManyWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FacilityRemunerationRecordCreateManyIndicatorInput = {
@@ -36589,6 +44575,182 @@ export namespace Prisma {
     base_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conditional_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_type?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SectionCreateManyVillageInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SectionUpdateWithoutVillageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    families?: FamilyUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionUncheckedUpdateWithoutVillageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    families?: FamilyUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionUncheckedUpdateManyWithoutVillageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyCreateManySectionInput = {
+    id?: string
+    house_no: string
+    floor_no?: string | null
+    no_of_couples?: number
+    habitation_type?: $Enums.HabitationType
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateManyWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    house_no?: StringFieldUpdateOperationsInput | string
+    floor_no?: NullableStringFieldUpdateOperationsInput | string | null
+    no_of_couples?: IntFieldUpdateOperationsInput | number
+    habitation_type?: EnumHabitationTypeFieldUpdateOperationsInput | $Enums.HabitationType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberCreateManyFamilyInput = {
+    id?: string
+    name: string
+    relationship_with_hof: $Enums.HOFRelationship
+    voter_id?: string | null
+    phone?: string | null
+    sex: $Enums.Gender
+    occupation?: string | null
+    abha_id?: string | null
+    abha_address?: string | null
+    dob: Date | string
+    is_active?: boolean
+    deleted_at?: Date | string | null
+    deleted_reason?: $Enums.DeletionReason | null
+    deleted_remarks?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type FamilyMemberUpdateWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberUncheckedUpdateWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberUncheckedUpdateManyWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    relationship_with_hof?: EnumHOFRelationshipFieldUpdateOperationsInput | $Enums.HOFRelationship
+    voter_id?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    sex?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_id?: NullableStringFieldUpdateOperationsInput | string | null
+    abha_address?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_reason?: NullableEnumDeletionReasonFieldUpdateOperationsInput | $Enums.DeletionReason | null
+    deleted_remarks?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

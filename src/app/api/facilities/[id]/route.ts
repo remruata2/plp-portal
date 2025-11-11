@@ -42,7 +42,15 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, district_id, facility_type_id } = body;
+    const { 
+      name, 
+      district_id, 
+      facility_type_id, 
+      description,
+      parent_facility_id,
+      has_clinic,
+      is_active
+    } = body;
 
     if (!name || !district_id || !facility_type_id) {
       return NextResponse.json(
@@ -53,9 +61,36 @@ export async function PUT(
 
     const updateData: any = {
       name,
-      district_id,
-      facility_type_id,
+      display_name: name,
+      district: {
+        connect: { id: district_id }
+      },
+      facility_type: {
+        connect: { id: facility_type_id }
+      },
     };
+
+    // Add optional fields if provided
+    if (description !== undefined) updateData.description = description;
+    
+    // Handle parent_facility_id (empty string should be null)
+    if (parent_facility_id !== undefined) {
+      if (parent_facility_id === "" || parent_facility_id === null) {
+        updateData.parent_facility = { disconnect: true };
+      } else {
+        updateData.parent_facility = { connect: { id: parent_facility_id } };
+      }
+    }
+    
+    // Handle has_clinic boolean
+    if (has_clinic !== undefined) {
+      updateData.has_clinic = Boolean(has_clinic);
+    }
+    
+    // Handle is_active boolean
+    if (is_active !== undefined) {
+      updateData.is_active = Boolean(is_active);
+    }
 
     const facility = await prisma.facility.update({
       where: { id },

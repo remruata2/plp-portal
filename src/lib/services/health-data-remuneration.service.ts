@@ -415,7 +415,9 @@ export class HealthDataRemunerationService {
 				if (displayPercentage >= 100) {
 					incentiveAmount = Math.round(effectiveMaxRemuneration);
 				} else if (displayPercentage >= 50) {
-					incentiveAmount = Math.round((effectiveMaxRemuneration * displayPercentage) / 100);
+					incentiveAmount = Math.round(
+						(effectiveMaxRemuneration * displayPercentage) / 100
+					);
 				} else {
 					incentiveAmount = 0;
 				}
@@ -539,6 +541,14 @@ export class HealthDataRemunerationService {
 				where: { facility_id: facilityId },
 			});
 
+			// Get worker allocation configs for proper worker role mapping
+			const workerConfigs = await tx.workerAllocationConfig.findMany({
+				where: {
+					facility_type_id: facility.facility_type.id,
+					is_active: true,
+				},
+			});
+
 			// Calculate worker remuneration and store in WorkerRemuneration table
 			const workerRecords = [];
 			let totalWorkerRemuneration = 0;
@@ -546,10 +556,21 @@ export class HealthDataRemunerationService {
 			for (const worker of healthWorkers) {
 				const workerType = worker.worker_type.toLowerCase();
 
-				// Only performance-based workers (HW, ASHA) get individual incentives
+				// Get proper worker role from config
+				const workerConfig = workerConfigs.find(
+					(c: any) => c.worker_type === worker.worker_type
+				);
+				const workerRole =
+					workerConfig?.worker_role || worker.worker_type.toUpperCase();
+
+				// Only performance-based workers (HW, ASHA, Colocated SC HW) get individual incentives
 				// HWO and AYUSH MO are individual-based and should also be stored with full facility remuneration
 				// MO remains team-based and is not stored per-worker here
-				if (workerType === "hw" || workerType === "asha") {
+				if (
+					workerType === "hw" ||
+					workerType === "asha" ||
+					workerType === "colocated_sc_hw"
+				) {
 					// Calculate worker incentive: allocated amount × performance percentage
 					const allocatedAmount = parseFloat(
 						worker.allocated_amount.toString()
@@ -571,9 +592,7 @@ export class HealthDataRemunerationService {
 						update: {
 							facility_id: facilityId,
 							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20), // Truncate worker_type too
-							worker_role: (worker.worker_type || "UNKNOWN")
-								.substring(0, 50)
-								.toUpperCase(), // Truncate to prevent column length issues
+							worker_role: workerRole.substring(0, 50), // Use proper worker role from config
 							allocated_amount: worker.allocated_amount,
 							performance_percentage: performancePercentage,
 							calculated_amount: workerIncentive,
@@ -584,9 +603,7 @@ export class HealthDataRemunerationService {
 							facility_id: facilityId,
 							report_month: reportMonth.substring(0, 7), // Truncate to 7 chars (VarChar(7) in schema)
 							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20), // Truncate worker_type too
-							worker_role: (worker.worker_type || "UNKNOWN")
-								.substring(0, 50)
-								.toUpperCase(), // Truncate to prevent column length issues
+							worker_role: workerRole.substring(0, 50), // Use proper worker role from config
 							allocated_amount: worker.allocated_amount,
 							performance_percentage: performancePercentage,
 							calculated_amount: workerIncentive,
@@ -607,9 +624,7 @@ export class HealthDataRemunerationService {
 						update: {
 							facility_id: facilityId,
 							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20),
-							worker_role: (worker.worker_type || "UNKNOWN")
-								.substring(0, 50)
-								.toUpperCase(),
+							worker_role: workerRole.substring(0, 50), // Use proper worker role from config
 							allocated_amount: worker.allocated_amount,
 							performance_percentage: performancePercentage,
 							calculated_amount: facilityRemuneration,
@@ -620,9 +635,7 @@ export class HealthDataRemunerationService {
 							facility_id: facilityId,
 							report_month: reportMonth.substring(0, 7),
 							worker_type: (worker.worker_type || "UNKNOWN").substring(0, 20),
-							worker_role: (worker.worker_type || "UNKNOWN")
-								.substring(0, 50)
-								.toUpperCase(),
+							worker_role: workerRole.substring(0, 50), // Use proper worker role from config
 							allocated_amount: worker.allocated_amount,
 							performance_percentage: performancePercentage,
 							calculated_amount: facilityRemuneration,

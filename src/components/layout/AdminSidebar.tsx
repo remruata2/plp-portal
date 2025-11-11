@@ -95,6 +95,32 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 					Dashboard
 				</Link>
 
+				{/* Long Roll Dashboard */}
+<Link
+  href="/admin/long-roll-dashboard"
+  onClick={() => setSidebarOpen && setSidebarOpen(false)}
+  className={`${baseLinkClasses} ${
+    pathname.startsWith("/admin/long-roll-dashboard")
+      ? activeLinkClasses
+      : inactiveLinkClasses
+  }`}
+>
+  <svg
+    className="mr-3 h-5 w-5 text-gray-500"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+    />
+  </svg>
+  Long Roll Dashboard
+</Link>
+
 				{/* Data Management Section */}
 				<SectionHeader title="Data Management" />
 
@@ -347,6 +373,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 						{/* Performance & Analytics Section */}
 						<SectionHeader title="Performance & Analytics" />
 
+
 						{/* Incentive Reports */}
 						<Link
 							href="/admin/performance-reports"
@@ -370,6 +397,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 									d="M4 19h16M4 15h6m4 0h6M4 11h10m4 0h2M4 7h2m4 0h10"
 								/>
 							</svg>
+
 							Incentive Reports
 						</Link>
 

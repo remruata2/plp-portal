@@ -143,6 +143,74 @@ export default function RemunerationPage() {
     setFilteredCalculations(filtered);
   };
 
+  // Get available facility types based on current filters (excluding the facility type filter itself)
+  const getAvailableFacilityTypes = () => {
+    let filtered = [...calculations];
+
+    // Apply district filter if set
+    if (filters.district && filters.district !== "all") {
+      filtered = filtered.filter(
+        (calc) => calc.districtName === filters.district
+      );
+    }
+
+    // Apply search term filter if set
+    if (filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (calc) =>
+          calc.facilityName.toLowerCase().includes(searchLower) ||
+          calc.facilityType.toLowerCase().includes(searchLower) ||
+          calc.districtName.toLowerCase().includes(searchLower)
+      );
+    }
+
+    const types = new Set(filtered.map((calc) => calc.facilityType));
+    return Array.from(types).sort();
+  };
+
+  // Get available districts based on current filters (excluding the district filter itself)
+  const getAvailableDistricts = () => {
+    let filtered = [...calculations];
+
+    // Apply facility type filter if set
+    if (filters.facilityType && filters.facilityType !== "all") {
+      filtered = filtered.filter(
+        (calc) => calc.facilityType === filters.facilityType
+      );
+    }
+
+    // Apply search term filter if set
+    if (filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (calc) =>
+          calc.facilityName.toLowerCase().includes(searchLower) ||
+          calc.facilityType.toLowerCase().includes(searchLower) ||
+          calc.districtName.toLowerCase().includes(searchLower)
+      );
+    }
+
+    const districts = new Set(filtered.map((calc) => calc.districtName));
+    return Array.from(districts).sort();
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      facilityType: "all",
+      district: "all",
+      searchTerm: "",
+    });
+  };
+
+  const hasActiveFilters = () => {
+    return (
+      (filters.facilityType && filters.facilityType !== "all") ||
+      (filters.district && filters.district !== "all") ||
+      filters.searchTerm !== ""
+    );
+  };
+
   const getPerformanceBadge = (percentage: number) => {
     if (percentage >= 80) {
       return <Badge variant="default">Excellent</Badge>;
@@ -202,16 +270,6 @@ export default function RemunerationPage() {
     URL.revokeObjectURL(url);
 
     toast.success("Incentives report downloaded successfully");
-  };
-
-  const getUniqueFacilityTypes = () => {
-    const types = new Set(calculations.map((calc) => calc.facilityType));
-    return Array.from(types).sort();
-  };
-
-  const getUniqueDistricts = () => {
-    const districts = new Set(calculations.map((calc) => calc.districtName));
-    return Array.from(districts).sort();
   };
 
   const totalRemuneration = filteredCalculations.reduce(
@@ -372,10 +430,22 @@ export default function RemunerationPage() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Filters
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              Filters
+            </CardTitle>
+            {hasActiveFilters() && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearFilters}
+                className="text-xs"
+              >
+                Clear Filters
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -402,16 +472,46 @@ export default function RemunerationPage() {
               </label>
               <Select
                 value={filters.facilityType}
-                onValueChange={(value) =>
-                  setFilters({ ...filters, facilityType: value })
-                }
+                onValueChange={(value) => {
+                  // Check if the current district filter is still valid with the new facility type
+                  if (value !== "all" && filters.district !== "all") {
+                    let filtered = [...calculations];
+                    // Apply search term filter if set
+                    if (filters.searchTerm) {
+                      const searchLower = filters.searchTerm.toLowerCase();
+                      filtered = filtered.filter(
+                        (calc) =>
+                          calc.facilityName.toLowerCase().includes(searchLower) ||
+                          calc.facilityType.toLowerCase().includes(searchLower) ||
+                          calc.districtName.toLowerCase().includes(searchLower)
+                      );
+                    }
+                    // Apply the new facility type filter
+                    filtered = filtered.filter(
+                      (calc) => calc.facilityType === value
+                    );
+                    // Check if current district exists in filtered results
+                    const availableDistricts = new Set(
+                      filtered.map((calc) => calc.districtName)
+                    );
+                    if (!availableDistricts.has(filters.district)) {
+                      setFilters({
+                        ...filters,
+                        facilityType: value,
+                        district: "all",
+                      });
+                      return;
+                    }
+                  }
+                  setFilters({ ...filters, facilityType: value });
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All types</SelectItem>
-                  {getUniqueFacilityTypes().map((type) => (
+                  {getAvailableFacilityTypes().map((type) => (
                     <SelectItem key={type} value={type}>
                       {type}
                     </SelectItem>
@@ -426,16 +526,46 @@ export default function RemunerationPage() {
               </label>
               <Select
                 value={filters.district}
-                onValueChange={(value) =>
-                  setFilters({ ...filters, district: value })
-                }
+                onValueChange={(value) => {
+                  // Check if the current facility type filter is still valid with the new district
+                  if (value !== "all" && filters.facilityType !== "all") {
+                    let filtered = [...calculations];
+                    // Apply search term filter if set
+                    if (filters.searchTerm) {
+                      const searchLower = filters.searchTerm.toLowerCase();
+                      filtered = filtered.filter(
+                        (calc) =>
+                          calc.facilityName.toLowerCase().includes(searchLower) ||
+                          calc.facilityType.toLowerCase().includes(searchLower) ||
+                          calc.districtName.toLowerCase().includes(searchLower)
+                      );
+                    }
+                    // Apply the new district filter
+                    filtered = filtered.filter(
+                      (calc) => calc.districtName === value
+                    );
+                    // Check if current facility type exists in filtered results
+                    const availableTypes = new Set(
+                      filtered.map((calc) => calc.facilityType)
+                    );
+                    if (!availableTypes.has(filters.facilityType)) {
+                      setFilters({
+                        ...filters,
+                        district: value,
+                        facilityType: "all",
+                      });
+                      return;
+                    }
+                  }
+                  setFilters({ ...filters, district: value });
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All districts" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All districts</SelectItem>
-                  {getUniqueDistricts().map((district) => (
+                  {getAvailableDistricts().map((district) => (
                     <SelectItem key={district} value={district}>
                       {district}
                     </SelectItem>

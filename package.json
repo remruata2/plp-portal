@@ -29,6 +29,8 @@
     "db:studio": "npx prisma studio",
     "cleanup:facility-types": "tsx prisma/cleanup-facility-types.ts",
     "seed:facilities": "tsx prisma/seed-facilities.ts",
+    "seed:longroll": "tsx prisma/seed-longroll.ts",
+    "seed:clinics": "tsx prisma/seed-clinics.ts",
     "recalculate:incentives": "tsx scripts/recalculate-incentives.ts"
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -18,6 +18,30 @@ export default function FacilitySidebar({
 }: FacilitySidebarProps) {
 	const pathname = usePathname();
 	const { data: session } = useSession();
+	const [hasClinic, setHasClinic] = useState(false);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchFacilityData = async () => {
+			if (session?.user?.facility_id) {
+				try {
+					const response = await fetch("/api/facility/my-facility");
+					const data = await response.json();
+					if (data.facility) {
+						setHasClinic(data.facility.has_clinic || false);
+					}
+				} catch (error) {
+					console.error("Error fetching facility data:", error);
+				} finally {
+					setLoading(false);
+				}
+			} else {
+				setLoading(false);
+			}
+		};
+
+		fetchFacilityData();
+	}, [session]);
 
 	const baseLinkClasses =
 		"flex items-center px-3 py-3 text-lg md:text-sm font-medium rounded-md transition-colors";
@@ -176,6 +200,62 @@ export default function FacilitySidebar({
 					</svg>
 					Profile
 				</Link>
+  
+				{/* Long Roll Dashboard - Only visible for facilities with clinic */}
+				{!loading && hasClinic && (
+					<Link
+						href="/facility/long-roll-dashboard"
+						onClick={() => setSidebarOpen && setSidebarOpen(false)}
+						className={`${baseLinkClasses} ${
+							pathname.startsWith("/facility/long-roll-dashboard")
+								? activeLinkClasses
+								: inactiveLinkClasses
+						}`}
+					>
+						<svg
+							className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+							/>
+						</svg>
+						Long Roll Dashboard
+					</Link>
+				)}
+
+				{/* Long Roll Registry - Only visible for facilities with clinic */}
+				{!loading && hasClinic && (
+					<Link
+						href="/facility/long-roll"
+						onClick={() => setSidebarOpen && setSidebarOpen(false)}
+						className={`${baseLinkClasses} ${
+							pathname === "/facility/long-roll"
+								? activeLinkClasses
+								: inactiveLinkClasses
+						}`}
+					>
+						<svg
+							className="mr-3 h-6 w-6 md:h-5 md:w-5 text-gray-400"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M9 12h6m-6 4h6m-3-8v8m-6 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+							/>
+						</svg>
+						Registry Management
+					</Link>
+				)}
 			</nav>
 
 			{/* Sign Out Button */}

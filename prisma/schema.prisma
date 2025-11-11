@@ -64,6 +64,8 @@ model Facility {
   facility_type_id          String
   is_active                 Boolean                      @default(true)
   updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
+  parent_facility_id        String?                      // NULL = subcentre, NOT NULL = clinic under subcentre
+  has_clinic                Boolean                      @default(false) // Indicates if facility has clinic infrastructure for Long Roll
   remuneration_records      FacilityRemunerationRecord[]
   worker_remunerations      WorkerRemuneration[]
   district                  District                     @relation(fields: [district_id], references: [id])
@@ -73,6 +75,9 @@ model Facility {
   health_workers            HealthWorker[]
   remuneration_calculations RemunerationCalculation[]
   users                     User[]
+  parent_facility           Facility?                    @relation("FacilityHierarchy", fields: [parent_facility_id], references: [id], onDelete: Restrict)
+  child_facilities          Facility[]                   @relation("FacilityHierarchy")
+  villages                  Village[]
 
   @@unique([name, district_id])
   @@index([district_id])
@@ -80,6 +85,8 @@ model Facility {
   @@index([is_active])
   @@index([district_id, is_active])
   @@index([facility_type_id, is_active])
+  @@index([parent_facility_id])
+  @@index([has_clinic])
   @@map("facility")
 }
 
@@ -490,4 +497,150 @@ enum formula_type {
   THRESHOLD_BONUS
   MINIMUM_THRESHOLD
   PERCENTAGE_RANGE
+}
+
+// Long Roll Registration Models
+
+model Village {
+  id              String    @id @default(cuid())
+  name            String    @db.VarChar(200)
+  facility_id     String
+  is_active       Boolean   @default(true)
+  deleted_at      DateTime? @db.Timestamptz(6)
+  deleted_reason  String?   @db.VarChar(500)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
+  
+  facility        Facility  @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  sections        Section[]
+  
+  @@unique([name, facility_id])
+  @@index([facility_id])
+  @@index([is_active])
+  @@index([deleted_at])
+  @@map("village")
+}
+
+model Section {
+  id              String    @id @default(cuid())
+  name            String    @db.VarChar(200)
+  village_id      String
+  is_active       Boolean   @default(true)
+  deleted_at      DateTime? @db.Timestamptz(6)
+  deleted_reason  String?   @db.VarChar(500)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
+  
+  village         Village   @relation(fields: [village_id], references: [id], onDelete: Cascade)
+  families        Family[]
+  
+  @@unique([name, village_id])
+  @@index([village_id])
+  @@index([is_active])
+  @@index([deleted_at])
+  @@map("section")
+}
+
+model Family {
+  id                String          @id @default(cuid())
+  section_id        String
+  house_no          String          @db.VarChar(50)
+  floor_no          String?         @db.VarChar(20)
+  no_of_couples     Int             @default(0)
+  habitation_type   HabitationType  @default(PERMANENT)
+  is_active         Boolean         @default(true)
+  deleted_at        DateTime?       @db.Timestamptz(6)
+  deleted_reason    DeletionReason?
+  deleted_remarks   String?         @db.VarChar(500)
+  created_at        DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime        @updatedAt @db.Timestamptz(6)
+  
+  section           Section         @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  members           FamilyMember[]
+  
+  @@unique([section_id, house_no])
+  @@index([section_id])
+  @@index([is_active])
+  @@index([deleted_at])
+  @@index([habitation_type])
+  @@map("family")
+}
+
+model FamilyMember {
+  id                    String          @id @default(cuid())
+  family_id             String
+  name                  String          @db.VarChar(200)
+  relationship_with_hof HOFRelationship
+  voter_id              String?         @db.VarChar(50)
+  phone                 String?         @db.VarChar(20)
+  sex                   Gender
+  occupation            String?         @db.VarChar(200)
+  abha_id               String?         @db.VarChar(50)
+  abha_address          String?         @db.VarChar(200)
+  dob                   DateTime        @db.Date
+  is_active             Boolean         @default(true)
+  deleted_at            DateTime?       @db.Timestamptz(6)
+  deleted_reason        DeletionReason?
+  deleted_remarks       String?         @db.VarChar(500)
+  created_at            DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime        @updatedAt @db.Timestamptz(6)
+  
+  family                Family          @relation(fields: [family_id], references: [id], onDelete: Cascade)
+  
+  @@index([family_id])
+  @@index([is_active])
+  @@index([deleted_at])
+  @@index([sex])
+  @@index([relationship_with_hof])
+  @@index([voter_id])
+  @@index([abha_id])
+  @@map("family_member")
+}
+
+// Enums for Long Roll
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum HabitationType {
+  PERMANENT
+  TEMPORARY
+}
+
+enum DeletionReason {
+  DEATH
+  MIGRATION
+  DUPLICATE
+  OTHER
+}
+
+enum HOFRelationship {
+  SELF              // Head of Family
+  HUSBAND
+  WIFE
+  SON
+  DAUGHTER
+  FATHER
+  MOTHER
+  BROTHER
+  SISTER
+  GRANDFATHER
+  GRANDMOTHER
+  GRANDSON
+  GRANDDAUGHTER
+  FATHER_IN_LAW
+  MOTHER_IN_LAW
+  SON_IN_LAW
+  DAUGHTER_IN_LAW
+  BROTHER_IN_LAW
+  SISTER_IN_LAW
+  UNCLE
+  AUNT
+  NEPHEW
+  NIECE
+  COUSIN
+  OTHER
 }

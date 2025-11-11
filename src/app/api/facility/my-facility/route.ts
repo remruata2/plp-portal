@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
         id: user.facility.id,
         name: user.facility.name,
         display_name: user.facility.display_name,
+        has_clinic: user.facility.has_clinic,
         facility_type: {
           id: user.facility.facility_type.id,
           name: user.facility.facility_type.name,

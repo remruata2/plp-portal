@@ -46,12 +46,13 @@ interface FacilityType {
 interface Facility {
   id: string;
   name: string;
+  display_name: string;
   district_id: string;
   facility_type_id: string;
-  address?: string;
-  contact_number?: string;
-  email?: string;
+  description?: string;
   is_active?: boolean;
+  parent_facility_id?: string | null;
+  has_clinic?: boolean;
   created_at: string;
   updated_at: string;
   district: District;
@@ -81,9 +82,9 @@ export default function FacilitiesPage() {
     name: "",
     district_id: "",
     facility_type_id: "",
-    address: "",
-    contact_number: "",
-    email: "",
+    description: "",
+    parent_facility_id: "",
+    has_clinic: false,
   });
   const [filters, setFilters] = useState<FacilityFilters>({
     facilityType: "all",
@@ -165,8 +166,8 @@ export default function FacilitiesPage() {
           facility.name.toLowerCase().includes(searchLower) ||
           facility.facility_type.name.toLowerCase().includes(searchLower) ||
           facility.district.name.toLowerCase().includes(searchLower) ||
-          (facility.address &&
-            facility.address.toLowerCase().includes(searchLower))
+          (facility.description &&
+            facility.description.toLowerCase().includes(searchLower))
       );
     }
 
@@ -263,9 +264,9 @@ export default function FacilitiesPage() {
       name: facility.name,
       district_id: facility.district_id,
       facility_type_id: facility.facility_type_id,
-      address: facility.address || "",
-      contact_number: facility.contact_number || "",
-      email: facility.email || "",
+      description: facility.description || "",
+      parent_facility_id: facility.parent_facility_id || "",
+      has_clinic: facility.has_clinic || false,
     });
     setIsEditOpen(true);
   };
@@ -275,9 +276,9 @@ export default function FacilitiesPage() {
       name: "",
       district_id: "",
       facility_type_id: "",
-      address: "",
-      contact_number: "",
-      email: "",
+      description: "",
+      parent_facility_id: "",
+      has_clinic: false,
     });
   };
 
@@ -301,9 +302,8 @@ export default function FacilitiesPage() {
       "Facility Name",
       "Facility Type",
       "District",
-      "Address",
-      "Contact Number",
-      "Email",
+      "Description",
+      "Has Clinic",
       "Status",
       "Created At",
       "Updated At",
@@ -317,9 +317,8 @@ export default function FacilitiesPage() {
           `"${facility.name}"`,
           `"${facility.facility_type.name}"`,
           `"${facility.district.name}"`,
-          `"${facility.address || ""}"`,
-          `"${facility.contact_number || ""}"`,
-          `"${facility.email || ""}"`,
+          `"${facility.description || ""}"`,
+          facility.has_clinic ? "Yes" : "No",
           facility.is_active ? "Active" : "Inactive",
           `"${new Date(facility.created_at).toLocaleDateString()}"`,
           `"${new Date(facility.updated_at).toLocaleDateString()}"`,
@@ -458,44 +457,66 @@ export default function FacilitiesPage() {
                     </select>
                   </div>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Description (Optional)
+                  </label>
+                  <Input
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    placeholder="Enter facility description"
+                  />
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Address
+                      Parent Facility (Optional)
                     </label>
-                    <Input
-                      value={formData.address}
+                    <select
+                      value={formData.parent_facility_id}
                       onChange={(e) =>
-                        setFormData({ ...formData, address: e.target.value })
+                        setFormData({ ...formData, parent_facility_id: e.target.value })
                       }
-                      placeholder="Enter facility address"
-                    />
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    >
+                      <option value="">None (Subcentre)</option>
+                      {Array.isArray(facilities) &&
+                        facilities
+                          .filter((f) => !f.parent_facility_id)
+                          .map((facility) => (
+                            <option key={facility.id} value={facility.id}>
+                              {facility.name}
+                            </option>
+                          ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Select parent if this is a clinic under a subcentre
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Contact Number
+                      Has Clinic Infrastructure
                     </label>
-                    <Input
-                      value={formData.contact_number}
-                      onChange={(e) =>
-                        setFormData({ ...formData, contact_number: e.target.value })
-                      }
-                      placeholder="Enter contact number"
-                    />
+                    <div className="flex items-center space-x-2 mt-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.has_clinic}
+                        onChange={(e) =>
+                          setFormData({ ...formData, has_clinic: e.target.checked })
+                        }
+                        className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                      />
+                      <span className="text-sm text-gray-700">
+                        Enable Long Roll Registration
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Check if facility has clinic infrastructure
+                    </p>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <Input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="Enter email address"
-                  />
                 </div>
 
                 <div className="flex justify-end space-x-2">
@@ -689,13 +710,12 @@ export default function FacilitiesPage() {
                         District: {facility.district.name} | Type:{" "}
                         {facility.facility_type.name}
                       </p>
-                      {facility.address && (
-                        <p>Address: {facility.address}</p>
+                      {facility.description && (
+                        <p>Description: {facility.description}</p>
                       )}
-                      {facility.contact_number && (
-                        <p>Contact: {facility.contact_number}</p>
+                      {facility.has_clinic && (
+                        <p className="text-green-600 font-medium">✓ Has Clinic Infrastructure</p>
                       )}
-                      {facility.email && <p>Email: {facility.email}</p>}
                       <div className="flex items-center gap-2">
                         <span>Status:</span> {getStatusBadge(facility.is_active)}
                       </div>
@@ -813,44 +833,66 @@ export default function FacilitiesPage() {
                 </select>
               </div>
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Description (Optional)
+              </label>
+              <Input
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                placeholder="Enter facility description"
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Address
+                  Parent Facility (Optional)
                 </label>
-                <Input
-                  value={formData.address}
+                <select
+                  value={formData.parent_facility_id}
                   onChange={(e) =>
-                    setFormData({ ...formData, address: e.target.value })
+                    setFormData({ ...formData, parent_facility_id: e.target.value })
                   }
-                  placeholder="Enter facility address"
-                />
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">None (Subcentre)</option>
+                  {Array.isArray(facilities) &&
+                    facilities
+                      .filter((f) => !f.parent_facility_id && f.id !== editingFacility?.id)
+                      .map((facility) => (
+                        <option key={facility.id} value={facility.id}>
+                          {facility.name}
+                        </option>
+                      ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Select parent if this is a clinic under a subcentre
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Contact Number
+                  Has Clinic Infrastructure
                 </label>
-                <Input
-                  value={formData.contact_number}
-                  onChange={(e) =>
-                    setFormData({ ...formData, contact_number: e.target.value })
-                  }
-                  placeholder="Enter contact number"
-                />
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.has_clinic}
+                    onChange={(e) =>
+                      setFormData({ ...formData, has_clinic: e.target.checked })
+                    }
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-gray-700">
+                    Enable Long Roll Registration
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Check if facility has clinic infrastructure
+                </p>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Email
-              </label>
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                placeholder="Enter email address"
-              />
             </div>
 
             <div className="flex justify-end space-x-2">

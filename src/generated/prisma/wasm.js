@@ -158,7 +158,9 @@ exports.Prisma.FacilityScalarFieldEnum = {
   district_id: 'district_id',
   facility_type_id: 'facility_type_id',
   is_active: 'is_active',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  parent_facility_id: 'parent_facility_id',
+  has_clinic: 'has_clinic'
 };
 
 exports.Prisma.IndicatorScalarFieldEnum = {
@@ -352,6 +354,63 @@ exports.Prisma.SystemSettingScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.VillageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  facility_id: 'facility_id',
+  is_active: 'is_active',
+  deleted_at: 'deleted_at',
+  deleted_reason: 'deleted_reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SectionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  village_id: 'village_id',
+  is_active: 'is_active',
+  deleted_at: 'deleted_at',
+  deleted_reason: 'deleted_reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.FamilyScalarFieldEnum = {
+  id: 'id',
+  section_id: 'section_id',
+  house_no: 'house_no',
+  floor_no: 'floor_no',
+  no_of_couples: 'no_of_couples',
+  habitation_type: 'habitation_type',
+  is_active: 'is_active',
+  deleted_at: 'deleted_at',
+  deleted_reason: 'deleted_reason',
+  deleted_remarks: 'deleted_remarks',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.FamilyMemberScalarFieldEnum = {
+  id: 'id',
+  family_id: 'family_id',
+  name: 'name',
+  relationship_with_hof: 'relationship_with_hof',
+  voter_id: 'voter_id',
+  phone: 'phone',
+  sex: 'sex',
+  occupation: 'occupation',
+  abha_id: 'abha_id',
+  abha_address: 'abha_address',
+  dob: 'dob',
+  is_active: 'is_active',
+  deleted_at: 'deleted_at',
+  deleted_reason: 'deleted_reason',
+  deleted_remarks: 'deleted_remarks',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -422,6 +481,52 @@ exports.FieldCategory = exports.$Enums.FieldCategory = {
   TARGET_FIELD: 'TARGET_FIELD'
 };
 
+exports.HabitationType = exports.$Enums.HabitationType = {
+  PERMANENT: 'PERMANENT',
+  TEMPORARY: 'TEMPORARY'
+};
+
+exports.DeletionReason = exports.$Enums.DeletionReason = {
+  DEATH: 'DEATH',
+  MIGRATION: 'MIGRATION',
+  DUPLICATE: 'DUPLICATE',
+  OTHER: 'OTHER'
+};
+
+exports.HOFRelationship = exports.$Enums.HOFRelationship = {
+  SELF: 'SELF',
+  HUSBAND: 'HUSBAND',
+  WIFE: 'WIFE',
+  SON: 'SON',
+  DAUGHTER: 'DAUGHTER',
+  FATHER: 'FATHER',
+  MOTHER: 'MOTHER',
+  BROTHER: 'BROTHER',
+  SISTER: 'SISTER',
+  GRANDFATHER: 'GRANDFATHER',
+  GRANDMOTHER: 'GRANDMOTHER',
+  GRANDSON: 'GRANDSON',
+  GRANDDAUGHTER: 'GRANDDAUGHTER',
+  FATHER_IN_LAW: 'FATHER_IN_LAW',
+  MOTHER_IN_LAW: 'MOTHER_IN_LAW',
+  SON_IN_LAW: 'SON_IN_LAW',
+  DAUGHTER_IN_LAW: 'DAUGHTER_IN_LAW',
+  BROTHER_IN_LAW: 'BROTHER_IN_LAW',
+  SISTER_IN_LAW: 'SISTER_IN_LAW',
+  UNCLE: 'UNCLE',
+  AUNT: 'AUNT',
+  NEPHEW: 'NEPHEW',
+  NIECE: 'NIECE',
+  COUSIN: 'COUSIN',
+  OTHER: 'OTHER'
+};
+
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   District: 'District',
@@ -440,7 +545,11 @@ exports.Prisma.ModelName = {
   FacilityTarget: 'FacilityTarget',
   IndicatorWorkerAllocation: 'IndicatorWorkerAllocation',
   FacilityRemunerationRecord: 'FacilityRemunerationRecord',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  Village: 'Village',
+  Section: 'Section',
+  Family: 'Family',
+  FamilyMember: 'FamilyMember'
 };
 
 /**
