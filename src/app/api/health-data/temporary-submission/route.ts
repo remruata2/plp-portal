@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { SmartFieldService } from "@/lib/services/smart-field-service";
 import { FieldMappingService } from "@/lib/services/field-mapping-service";
+import { checkSubmissionAllowed } from "@/lib/submission-deadline";
 
 const prisma = new PrismaClient();
 
@@ -34,6 +35,21 @@ export async function POST(request: NextRequest) {
       facilityType,
       remarks,
     });
+
+    // Check submission deadline - only enforce for facility users, admins can bypass
+    if (session.user.role === "facility") {
+      const deadlineStatus = await checkSubmissionAllowed();
+      if (!deadlineStatus.isSubmissionAllowed) {
+        return NextResponse.json(
+          { 
+            error: "Submission deadline has passed",
+            reason: deadlineStatus.reason,
+            deadlineStatus: deadlineStatus
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     if (!facilityId || !reportMonth || (!formData && !fieldValues)) {
       return NextResponse.json(

@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 // Import dynamic form component
 import DynamicHealthDataForm from "@/components/forms/DynamicHealthDataForm";
+import SubmissionDeadlineGuard from "@/components/SubmissionDeadlineGuard";
 
 interface Facility {
 	id: string;
@@ -196,7 +197,11 @@ export default function HealthDataFormPage() {
 
 			{/* Data Submission Form */}
 			<Card>
-				<CardContent className="p-4 sm:p-6">{getFormComponent()}</CardContent>
+				<CardContent className="p-4 sm:p-6">
+					<SubmissionDeadlineGuard showDeadlineInfo={true}>
+						{getFormComponent()}
+					</SubmissionDeadlineGuard>
+				</CardContent>
 			</Card>
 		</div>
 	);

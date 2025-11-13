@@ -1310,11 +1310,49 @@ export default function DynamicHealthDataForm({
 			});
 
 			if (!response.ok) {
+				let errorMessage = "Failed to submit data";
+				let errorDescription = `HTTP ${response.status}`;
+				
+				// Read response as text first (can only read body once)
 				const errorText = await response.text();
-				console.error("API error response:", errorText);
-				throw new Error(
-					`Failed to submit data: ${response.status} - ${errorText}`
-				);
+				
+				if (errorText) {
+					try {
+						// Try to parse as JSON
+						const errorData = JSON.parse(errorText);
+						if (errorData.error) {
+							errorMessage = errorData.error;
+						}
+						if (errorData.reason) {
+							errorDescription = errorData.reason;
+						} else if (errorData.error) {
+							errorDescription = errorData.error;
+						}
+					} catch {
+						// If not JSON, use text as description
+						errorDescription = errorText;
+					}
+				} else {
+					errorDescription = `HTTP ${response.status}: ${response.statusText}`;
+				}
+				
+				// Show specific error message for deadline
+				if (response.status === 403 && (errorMessage.includes("deadline") || errorDescription.includes("deadline"))) {
+					toast({
+						title: "Submission Deadline Passed",
+						description: errorDescription,
+						variant: "destructive",
+					});
+				} else {
+					toast({
+						title: errorMessage,
+						description: errorDescription,
+						variant: "destructive",
+					});
+				}
+				
+				// Return early instead of throwing to avoid duplicate error toast
+				return;
 			}
 
 			const result = await response.json();

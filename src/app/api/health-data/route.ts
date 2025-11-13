@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/prisma";
 import { RemunerationCalculator } from "@/lib/calculations/remuneration-calculator";
+import { checkSubmissionAllowed } from "@/lib/submission-deadline";
 
 
 export async function POST(request: NextRequest) {
@@ -17,6 +18,20 @@ export async function POST(request: NextRequest) {
     
     // Check if comparison mode is enabled (temporarily enabled for testing)
 
+    // Check submission deadline - only enforce for facility users, admins can bypass
+    if (session.user.role === "facility") {
+      const deadlineStatus = await checkSubmissionAllowed();
+      if (!deadlineStatus.isSubmissionAllowed) {
+        return NextResponse.json(
+          { 
+            error: "Submission deadline has passed",
+            reason: deadlineStatus.reason,
+            deadlineStatus: deadlineStatus
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     if (!facilityId || !reportMonth || !fieldValues) {
       return NextResponse.json(
