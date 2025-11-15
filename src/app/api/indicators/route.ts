@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
       target_formula,
       conditions,
       formula_config,
+      applicable_facility_types,
     } = body;
 
     if (!code || !name) {
@@ -98,6 +99,9 @@ export async function POST(request: NextRequest) {
         target_formula: target_formula || null,
         conditions: conditions || null,
         formula_config: formula_config || {},
+        applicable_facility_types: Array.isArray(applicable_facility_types)
+          ? applicable_facility_types
+          : [],
         type: "PERCENTAGE", // Default type for field-based indicators
       },
     });

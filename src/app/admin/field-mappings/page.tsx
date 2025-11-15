@@ -39,7 +39,7 @@ export default function FieldMappingPage() {
 	const [facilityTypes, setFacilityTypes] = useState<FacilityType[]>([]);
 	const [healthFields, setHealthFields] = useState<HealthField[]>([]);
 	const [selectedFacilityType, setSelectedFacilityType] = useState<
-		number | null
+		string | null
 	>(null);
 	const [selectedFields, setSelectedFields] = useState<Set<number>>(
 		new Set<number>()
@@ -102,7 +102,9 @@ export default function FieldMappingPage() {
 						throw new Error("Failed to fetch mappings");
 					}
 
-					const mappings = await response.json();
+					const data = await response.json();
+					// API returns { facilityType, mappings }
+					const mappings = data.mappings || [];
 					const selectedIds = Array.isArray(mappings)
 						? mappings.map((mapping: FieldMapping) => mapping.field_id)
 						: [];
@@ -150,6 +152,16 @@ export default function FieldMappingPage() {
 
 		try {
 			setSaving(true);
+			setErrorMessage("");
+
+			// Convert selected fields to mappings format with display_order
+			// Empty array is allowed - means no fields mapped to this facility type
+			const fieldIdsArray = Array.from(selectedFields);
+			const mappings = fieldIdsArray.map((fieldId, index) => ({
+				field_id: fieldId,
+				is_required: false, // Default to false, can be made configurable later
+				display_order: index + 1, // Use array index + 1 as display order
+			}));
 
 			const response = await fetch("/api/admin/facility-type-field-mappings", {
 				method: "POST",
@@ -157,20 +169,24 @@ export default function FieldMappingPage() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					facilityTypeId: selectedFacilityType,
-					fieldIds: Array.from(selectedFields),
+					facilityTypeId: selectedFacilityType, // Send as string (database uses string IDs)
+					mappings: mappings, // Can be empty array []
 				}),
 			});
 
 			if (!response.ok) {
-				throw new Error("Failed to save mappings");
+				const errorData = await response.json().catch(() => ({}));
+				throw new Error(errorData.error || "Failed to save mappings");
 			}
 
 			toast.success("Field mappings saved successfully!");
 			setSaving(false);
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Error saving mappings:", error);
-			toast.error("Failed to save mappings. Please try again.");
+			const errorMessage =
+				error.message || "Failed to save mappings. Please try again.";
+			setErrorMessage(errorMessage);
+			toast.error(errorMessage);
 			setSaving(false);
 		}
 	};

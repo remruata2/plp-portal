@@ -57,6 +57,7 @@ interface Indicator {
   denominator_field_id?: number;
   target_field_id?: number;
   conditions?: string;
+  applicable_facility_types?: string[] | null;
   formula_config?: {
     type: string;
     calculationFormula?: string;
@@ -166,6 +167,7 @@ export default function IndicatorsPage() {
         },
         body: JSON.stringify({
           ...formData,
+          applicable_facility_types: formData.applicable_facility_types || [],
           formula_config: JSON.stringify({
             type: formData.target_type,
             calculationFormula: formData.calculation_formula,
@@ -204,7 +206,31 @@ export default function IndicatorsPage() {
         toast.success("Indicator deleted successfully");
         loadIndicators();
       } else {
-        toast.error("Failed to delete indicator");
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "Failed to delete indicator";
+        const details = errorData.details;
+        
+        let fullMessage = errorMessage;
+        if (details) {
+          const detailParts = [];
+          if (details.facilityTargets > 0) {
+            detailParts.push(`${details.facilityTargets} facility target(s)`);
+          }
+          if (details.indicatorRemunerations > 0) {
+            detailParts.push(`${details.indicatorRemunerations} remuneration configuration(s)`);
+          }
+          if (details.facilityRemunerationRecords > 0) {
+            detailParts.push(`${details.facilityRemunerationRecords} remuneration record(s)`);
+          }
+          if (details.indicatorWorkerAllocations > 0) {
+            detailParts.push(`${details.indicatorWorkerAllocations} worker allocation(s)`);
+          }
+          if (detailParts.length > 0) {
+            fullMessage += ` (Used in: ${detailParts.join(", ")})`;
+          }
+        }
+        
+        toast.error(fullMessage);
       }
     } catch (error) {
       console.error("Error deleting indicator:", error);
@@ -225,6 +251,7 @@ export default function IndicatorsPage() {
         },
         body: JSON.stringify({
           ...formData,
+          applicable_facility_types: formData.applicable_facility_types || [],
           formula_config: JSON.stringify({
             type: formData.target_type,
             calculationFormula: formData.calculation_formula,
@@ -484,6 +511,10 @@ export default function IndicatorsPage() {
                   code: selectedIndicator.code,
                   name: selectedIndicator.name,
                   description: selectedIndicator.description || "",
+                  applicable_facility_types:
+                    Array.isArray(selectedIndicator.applicable_facility_types)
+                      ? selectedIndicator.applicable_facility_types
+                      : [],
                   numerator_field_id:
                     selectedIndicator.numerator_field_id?.toString() || "",
                   denominator_field_id:
