@@ -1278,3 +1278,23 @@ export class FormulaCalculator {
 		};
 	}
 }
+
+// Explicit named exports for static methods
+// This avoids tree-shaking issues in production builds where static methods can be stripped
+export const extractFieldValueForCalculation =
+	FormulaCalculator.extractFieldValueForCalculation.bind(FormulaCalculator);
+
+export const calculateDenominatorValue =
+	FormulaCalculator.calculateDenominatorValue.bind(FormulaCalculator);
+
+export const extractTargetConfiguration =
+	FormulaCalculator.extractTargetConfiguration.bind(FormulaCalculator);
+
+export const buildCalculationConfig =
+	FormulaCalculator.buildCalculationConfig.bind(FormulaCalculator);
+
+export const calculateTbConditionalRemuneration =
+	FormulaCalculator.calculateTbConditionalRemuneration.bind(FormulaCalculator);
+
+export const mapStatusToReportStatus =
+	FormulaCalculator.mapStatusToReportStatus.bind(FormulaCalculator);

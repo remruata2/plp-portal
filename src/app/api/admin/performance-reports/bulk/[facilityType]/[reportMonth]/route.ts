@@ -110,12 +110,12 @@ async function resolveDenominatorForIndicator(
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
 ): Promise<number> {
-	// Dynamic import to ensure FormulaCalculator is available
-	const { FormulaCalculator } = await import(
+	// Dynamic import using named exports to avoid tree-shaking issues
+	const { calculateDenominatorValue } = await import(
 		"@/lib/calculations/formula-calculator"
 	);
 
-	// Convert fieldValueMap to Map<number, any> for FormulaCalculator
+	// Convert fieldValueMap to Map<number, any> for calculateDenominatorValue
 	const numberFieldValueMap = new Map<number, any>();
 	fieldValueMap.forEach((value, key) => {
 		const numKey = typeof key === "number" ? key : parseInt(String(key), 10);
@@ -126,7 +126,7 @@ async function resolveDenominatorForIndicator(
 
 	// Use centralized denominator calculation
 	// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-	return FormulaCalculator.calculateDenominatorValue(
+	return calculateDenominatorValue(
 		{
 			code: indicator.code || "",
 			target_type: indicator.target_type || "",
@@ -321,19 +321,19 @@ export async function GET(
 				);
 			} catch {}
 
-			// Fetch remuneration records after recalculation
-			const records = await prisma.facilityRemunerationRecord.findMany({
-				where: { facility_id: facility.id, report_month: reportMonth },
-			});
-			// Dynamic import to ensure FormulaCalculator is available
-			const { FormulaCalculator } = await import(
-				"@/lib/calculations/formula-calculator"
-			);
-			const fieldValueMap = new Map<string | number, any>();
-			for (const fv of fieldValues) {
-				const v = FormulaCalculator.extractFieldValueForCalculation(fv as any);
-				fieldValueMap.set(fv.field_id, v);
-			}
+		// Fetch remuneration records after recalculation
+		const records = await prisma.facilityRemunerationRecord.findMany({
+			where: { facility_id: facility.id, report_month: reportMonth },
+		});
+		// Dynamic import using named exports to avoid tree-shaking issues
+		const { extractFieldValueForCalculation } = await import(
+			"@/lib/calculations/formula-calculator"
+		);
+		const fieldValueMap = new Map<string | number, any>();
+		for (const fv of fieldValues) {
+			const v = extractFieldValueForCalculation(fv as any);
+			fieldValueMap.set(fv.field_id, v);
+		}
 
 			// Fetch HWO and AYUSH MO names for this facility (only if facility type has them)
 			let leaderNames = "";

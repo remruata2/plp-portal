@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
-import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
+import {
+	FormulaCalculator,
+	extractFieldValueForCalculation,
+	calculateDenominatorValue,
+	extractTargetConfiguration,
+	buildCalculationConfig,
+	calculateTbConditionalRemuneration,
+	mapStatusToReportStatus,
+} from "@/lib/calculations/formula-calculator";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
@@ -126,7 +134,7 @@ export async function GET(
 		// Create a map of field values for easy lookup
 		const fieldValueMap = new Map();
 		fieldValues.forEach((fv) => {
-			const value = FormulaCalculator.extractFieldValueForCalculation(fv);
+			const value = extractFieldValueForCalculation(fv);
 			fieldValueMap.set(fv.field_id, value);
 		});
 
@@ -172,7 +180,7 @@ export async function GET(
 
 				// Calculate denominator value (still needed for display)
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
+				const denominatorValue = calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -187,7 +195,7 @@ export async function GET(
 
 				// Extract target description
 				const formulaConfig = (indicator.formula_config as any) || {};
-				const targetConfig = FormulaCalculator.extractTargetConfiguration(
+				const targetConfig = extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -293,7 +301,7 @@ export async function GET(
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
+				const denominatorValue = calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -313,7 +321,7 @@ export async function GET(
 				// 1. Facility-specific targets
 				// 2. General formula_config targets
 				// 3. target_value column fallback
-				const targetConfig = FormulaCalculator.extractTargetConfiguration(
+				const targetConfig = extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,

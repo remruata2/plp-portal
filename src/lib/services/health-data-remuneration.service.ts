@@ -26,10 +26,16 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
-			// Dynamic import to ensure FormulaCalculator is available in production builds
-			const { FormulaCalculator } = await import(
-				"@/lib/calculations/formula-calculator"
-			);
+			// Dynamic import using named exports to avoid tree-shaking issues
+			const {
+				extractFieldValueForCalculation,
+				calculateDenominatorValue,
+				extractTargetConfiguration,
+				buildCalculationConfig,
+				calculateTbConditionalRemuneration,
+				mapStatusToReportStatus,
+				FormulaCalculator,
+			} = await import("@/lib/calculations/formula-calculator");
 			// Get facility information
 			const facility = await tx.facility.findUnique({
 				where: { id: facilityId },
@@ -78,7 +84,7 @@ export class HealthDataRemunerationService {
 			// Create a map of field values for easy lookup - EXACT SAME AS PERFORMANCE REPORT
 			const fieldValueMap = new Map();
 			dbFieldValues.forEach((fv: any) => {
-				const value = FormulaCalculator.extractFieldValueForCalculation(fv);
+				const value = extractFieldValueForCalculation(fv);
 				fieldValueMap.set(fv.field_id, value);
 			});
 
@@ -99,7 +105,7 @@ export class HealthDataRemunerationService {
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
+				const denominatorValue = calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -119,7 +125,7 @@ export class HealthDataRemunerationService {
 				// 1. Facility-specific targets
 				// 2. General formula_config targets
 				// 3. target_value column fallback
-				const targetConfig = FormulaCalculator.extractTargetConfiguration(
+				const targetConfig = extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -129,7 +135,7 @@ export class HealthDataRemunerationService {
 				);
 
 				// Build calculation config using centralized method
-				const calculationConfig = FormulaCalculator.buildCalculationConfig(
+				const calculationConfig = buildCalculationConfig(
 					indicator,
 					targetConfig,
 					formulaConfig
@@ -168,7 +174,7 @@ export class HealthDataRemunerationService {
 				}
 
 				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = FormulaCalculator.calculateTbConditionalRemuneration(
+				const tbResult = calculateTbConditionalRemuneration(
 					remuneration,
 					dbFieldValues,
 					indicator.code,
@@ -250,7 +256,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: FormulaCalculator.mapStatusToReportStatus(result.status),
+							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 						create: {
@@ -265,7 +271,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: FormulaCalculator.mapStatusToReportStatus(result.status),
+							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 					});

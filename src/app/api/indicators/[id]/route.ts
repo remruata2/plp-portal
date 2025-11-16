@@ -213,8 +213,8 @@ export async function DELETE(
 					error: "Cannot delete indicator that is being used by other records",
 				},
 				{ status: 400 }
-			);
-		}
+      );
+    }
 
     return NextResponse.json(
       { error: "Failed to delete indicator" },

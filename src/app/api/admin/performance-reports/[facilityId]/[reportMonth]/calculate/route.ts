@@ -44,7 +44,7 @@ export async function POST(
     try {
       serviceResult = await prisma.$transaction(async (tx) => {
         return await HealthDataRemunerationService.processHealthDataRemuneration(
-          facilityId,
+        facilityId,
           reportMonth,
           [], // Empty array - service will fetch field values from database
           tx
@@ -90,8 +90,8 @@ export async function POST(
       where: {
         facility_id: facilityId,
         report_month: reportMonth,
-      },
-    });
+          },
+        });
 
     const summary = {
       facility: {
