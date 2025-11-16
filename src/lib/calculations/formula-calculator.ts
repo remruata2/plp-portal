@@ -1281,16 +1281,18 @@ export class FormulaCalculator {
 
 // Explicit named exports using wrapper functions
 // This avoids tree-shaking issues in production builds where static methods can be stripped
-export function extractFieldValueForCalculation(fieldValue: {
+// Using const arrow functions for better Next.js/SWC compatibility
+
+const extractFieldValueForCalculation = (fieldValue: {
 	string_value?: string | null;
 	numeric_value?: number | any | null;
 	boolean_value?: boolean | null;
 	[key: string]: any;
-}): string | number | null {
+}): string | number | null => {
 	return FormulaCalculator.extractFieldValueForCalculation(fieldValue);
-}
+};
 
-export function calculateDenominatorValue(
+const calculateDenominatorValue = (
 	indicator: {
 		code: string;
 		target_type: string;
@@ -1301,48 +1303,48 @@ export function calculateDenominatorValue(
 	fieldValueMap: Map<number, any>,
 	facilityTypeName?: string,
 	denominatorFieldDefaultValue?: string | null
-): number {
+): number => {
 	return FormulaCalculator.calculateDenominatorValue(
 		indicator,
 		fieldValueMap,
 		facilityTypeName,
 		denominatorFieldDefaultValue
 	);
-}
+};
 
-export function extractTargetConfiguration(
+const extractTargetConfiguration = (
 	indicator: {
 		target_type: string;
 		target_value?: string | null;
 		formula_config?: any;
 	},
 	facilityTypeName?: string
-): any {
+): any => {
 	return FormulaCalculator.extractTargetConfiguration(
 		indicator,
 		facilityTypeName
 	);
-}
+};
 
-export function buildCalculationConfig(
+const buildCalculationConfig = (
 	indicator: any,
 	targetConfig: any,
 	formulaConfig: any
-): any {
+): any => {
 	return FormulaCalculator.buildCalculationConfig(
 		indicator,
 		targetConfig,
 		formulaConfig
 	);
-}
+};
 
-export function calculateTbConditionalRemuneration(
+const calculateTbConditionalRemuneration = (
 	remuneration: any,
 	fieldValues: any[],
 	indicatorCode: string,
 	achievement: number,
 	denominatorValue: number
-): any {
+): any => {
 	return FormulaCalculator.calculateTbConditionalRemuneration(
 		remuneration,
 		fieldValues,
@@ -1350,15 +1352,25 @@ export function calculateTbConditionalRemuneration(
 		achievement,
 		denominatorValue
 	);
-}
+};
 
-export function mapStatusToReportStatus(
+const mapStatusToReportStatus = (
 	status: "BELOW_TARGET" | "PARTIALLY_ACHIEVED" | "ACHIEVED" | "NA" | string,
 	counters?: {
 		achievedCount: number;
 		partialCount: number;
 		notAchievedCount: number;
 	}
-): string {
+): string => {
 	return FormulaCalculator.mapStatusToReportStatus(status as any, counters);
-}
+};
+
+// Export all functions explicitly
+export {
+	extractFieldValueForCalculation,
+	calculateDenominatorValue,
+	extractTargetConfiguration,
+	buildCalculationConfig,
+	calculateTbConditionalRemuneration,
+	mapStatusToReportStatus,
+};
