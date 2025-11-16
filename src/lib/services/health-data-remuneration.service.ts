@@ -1,4 +1,3 @@
-import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
 import type { PrismaClient } from "@prisma/client";
 
 export interface HealthDataRemunerationResult {
@@ -27,6 +26,10 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
+			// Dynamic import to ensure FormulaCalculator is available in production builds
+			const { FormulaCalculator } = await import(
+				"@/lib/calculations/formula-calculator"
+			);
 			// Get facility information
 			const facility = await tx.facility.findUnique({
 				where: { id: facilityId },
