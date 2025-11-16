@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -26,28 +27,8 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
-			// Dynamic import with robust fallback for ESM/CJS and tree-shaking edge cases
-			const FCMod: any = await import("@/lib/calculations/formula-calculator");
-			const FCClass = FCMod.FormulaCalculator;
-			const extractFieldValueForCalculation =
-				FCMod.extractFieldValueForCalculation ||
-				(FCClass && FCClass.extractFieldValueForCalculation?.bind(FCClass));
-			const calculateDenominatorValue =
-				FCMod.calculateDenominatorValue ||
-				(FCClass && FCClass.calculateDenominatorValue?.bind(FCClass));
-			const extractTargetConfiguration =
-				FCMod.extractTargetConfiguration ||
-				(FCClass && FCClass.extractTargetConfiguration?.bind(FCClass));
-			const buildCalculationConfig =
-				FCMod.buildCalculationConfig ||
-				(FCClass && FCClass.buildCalculationConfig?.bind(FCClass));
-			const calculateTbConditionalRemuneration =
-				FCMod.calculateTbConditionalRemuneration ||
-				(FCClass && FCClass.calculateTbConditionalRemuneration?.bind(FCClass));
-			const mapStatusToReportStatus =
-				FCMod.mapStatusToReportStatus ||
-				(FCClass && FCClass.mapStatusToReportStatus?.bind(FCClass));
-			const FormulaCalculator = FCClass;
+			// Use unified resolver for consistent dynamic import resolution
+			const FC = await resolveFormulaCalculator();
 			// Get facility information
 			const facility = await tx.facility.findUnique({
 				where: { id: facilityId },
@@ -96,7 +77,7 @@ export class HealthDataRemunerationService {
 			// Create a map of field values for easy lookup - EXACT SAME AS PERFORMANCE REPORT
 			const fieldValueMap = new Map();
 			dbFieldValues.forEach((fv: any) => {
-				const value = extractFieldValueForCalculation(fv);
+				const value = FC.extractFieldValueForCalculation(fv);
 				fieldValueMap.set(fv.field_id, value);
 			});
 
@@ -117,7 +98,7 @@ export class HealthDataRemunerationService {
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = calculateDenominatorValue(
+				const denominatorValue = FC.calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -137,7 +118,7 @@ export class HealthDataRemunerationService {
 				// 1. Facility-specific targets
 				// 2. General formula_config targets
 				// 3. target_value column fallback
-				const targetConfig = extractTargetConfiguration(
+				const targetConfig = FC.extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -147,7 +128,7 @@ export class HealthDataRemunerationService {
 				);
 
 				// Build calculation config using centralized method
-				const calculationConfig = buildCalculationConfig(
+				const calculationConfig = FC.buildCalculationConfig(
 					indicator,
 					targetConfig,
 					formulaConfig
@@ -161,7 +142,7 @@ export class HealthDataRemunerationService {
 					const baseMaxRemuneration = parseFloat(
 						remuneration.base_amount.toString()
 					);
-					result = FormulaCalculator.calculateRemuneration(
+					result = FC.FormulaCalculator.calculateRemuneration(
 						actualValue,
 						denominatorValue,
 						baseMaxRemuneration,
@@ -186,7 +167,7 @@ export class HealthDataRemunerationService {
 				}
 
 				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = calculateTbConditionalRemuneration(
+				const tbResult = FC.calculateTbConditionalRemuneration(
 					remuneration,
 					dbFieldValues,
 					indicator.code,
@@ -201,15 +182,16 @@ export class HealthDataRemunerationService {
 					parseFloat(remuneration.base_amount.toString())
 				) {
 					try {
-						const recalculatedResult = FormulaCalculator.calculateRemuneration(
-							actualValue,
-							denominatorValue,
-							tbResult.effectiveMaxRemuneration,
-							calculationConfig,
-							facility.facility_type.name,
-							undefined,
-							Object.fromEntries(fieldValueMap)
-						);
+						const recalculatedResult =
+							FC.FormulaCalculator.calculateRemuneration(
+								actualValue,
+								denominatorValue,
+								tbResult.effectiveMaxRemuneration,
+								calculationConfig,
+								facility.facility_type.name,
+								undefined,
+								Object.fromEntries(fieldValueMap)
+							);
 						finalRemuneration = recalculatedResult.remuneration;
 					} catch (error) {
 						// Use original result if recalculation fails
@@ -268,7 +250,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: mapStatusToReportStatus(result.status),
+							status: FC.mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 						create: {
@@ -283,7 +265,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: mapStatusToReportStatus(result.status),
+							status: FC.mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 					});

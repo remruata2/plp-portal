@@ -5,6 +5,7 @@ import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
+import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
 
 const prisma = new PrismaClient();
 
@@ -110,12 +111,8 @@ async function resolveDenominatorForIndicator(
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
 ): Promise<number> {
-	// Dynamic import with robust fallback
-	const FCMod: any = await import("@/lib/calculations/formula-calculator");
-	const FCClass = FCMod.FormulaCalculator;
-	const calculateDenominatorValue =
-		FCMod.calculateDenominatorValue ||
-		(FCClass && FCClass.calculateDenominatorValue?.bind(FCClass));
+	// Use unified resolver for consistent dynamic import resolution
+	const FC = await resolveFormulaCalculator();
 
 	// Convert fieldValueMap to Map<number, any> for calculateDenominatorValue
 	const numberFieldValueMap = new Map<number, any>();
@@ -128,7 +125,7 @@ async function resolveDenominatorForIndicator(
 
 	// Use centralized denominator calculation
 	// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-	return calculateDenominatorValue(
+	return FC.calculateDenominatorValue(
 		{
 			code: indicator.code || "",
 			target_type: indicator.target_type || "",
@@ -327,15 +324,11 @@ export async function GET(
 			const records = await prisma.facilityRemunerationRecord.findMany({
 				where: { facility_id: facility.id, report_month: reportMonth },
 			});
-			// Dynamic import with robust fallback
-			const FCMod: any = await import("@/lib/calculations/formula-calculator");
-			const FCClass = FCMod.FormulaCalculator;
-			const extractFieldValueForCalculation =
-				FCMod.extractFieldValueForCalculation ||
-				(FCClass && FCClass.extractFieldValueForCalculation?.bind(FCClass));
+			// Use unified resolver for consistent dynamic import resolution
+			const FC = await resolveFormulaCalculator();
 			const fieldValueMap = new Map<string | number, any>();
 			for (const fv of fieldValues) {
-				const v = extractFieldValueForCalculation(fv as any);
+				const v = FC.extractFieldValueForCalculation(fv as any);
 				fieldValueMap.set(fv.field_id, v);
 			}
 
@@ -487,10 +480,7 @@ export async function GET(
 						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
 					// Calculate using FormulaCalculator (single source of truth)
-					const FCMod2: any = await import(
-						"@/lib/calculations/formula-calculator"
-					);
-					const FormulaCalculator = FCMod2.FormulaCalculator;
+					const FC2 = await resolveFormulaCalculator();
 					const denominatorValue = await resolveDenominatorForIndicator(
 						indicator,
 						facility.facility_type.name,
@@ -502,22 +492,7 @@ export async function GET(
 					// 2. General formula_config targets
 					// 3. target_value column fallback
 					const formulaConfig = (indicator.formula_config as any) || {};
-					const FCMod3: any = await import(
-						"@/lib/calculations/formula-calculator"
-					);
-					const extractTarget =
-						FCMod3.extractTargetConfiguration ||
-						(FCMod3.FormulaCalculator &&
-							FCMod3.FormulaCalculator.extractTargetConfiguration?.bind(
-								FCMod3.FormulaCalculator
-							));
-					const buildConfig =
-						FCMod3.buildCalculationConfig ||
-						(FCMod3.FormulaCalculator &&
-							FCMod3.FormulaCalculator.buildCalculationConfig?.bind(
-								FCMod3.FormulaCalculator
-							));
-					const targetConfig = extractTarget(
+					const targetConfig = FC2.extractTargetConfiguration(
 						{
 							target_type: indicator.target_type,
 							target_value: indicator.target_value,
@@ -527,14 +502,14 @@ export async function GET(
 					);
 
 					// Build calculation config using centralized method
-					const calculationConfig = buildConfig(
+					const calculationConfig = FC2.buildCalculationConfig(
 						indicator,
 						targetConfig,
 						formulaConfig
 					);
 
 					try {
-						const result = FormulaCalculator.calculateRemuneration(
+						const result = FC2.FormulaCalculator.calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							effectiveMaxRemuneration,

@@ -5,6 +5,7 @@ import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
+import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
 
 const prisma = new PrismaClient();
 
@@ -13,9 +14,8 @@ export async function GET(
 	{ params }: { params: Promise<{ month: string }> }
 ) {
 	try {
-		// Load FormulaCalculator utils dynamically to avoid tree-shaking/static import issues
-		const FCmod: any = await import("@/lib/calculations/formula-calculator");
-		const FC = FCmod?.default ?? FCmod;
+		// Use unified resolver for consistent dynamic import resolution
+		const FC = await resolveFormulaCalculator();
 		const session = await getServerSession(authOptions);
 		if (!session?.user) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
