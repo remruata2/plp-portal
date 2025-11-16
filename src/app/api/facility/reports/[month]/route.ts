@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
-import * as FC from "@/lib/calculations/formula-calculator";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
@@ -14,6 +13,9 @@ export async function GET(
 	{ params }: { params: Promise<{ month: string }> }
 ) {
 	try {
+		// Load FormulaCalculator utils dynamically to avoid tree-shaking/static import issues
+		const FCmod: any = await import("@/lib/calculations/formula-calculator");
+		const FC = FCmod?.default ?? FCmod;
 		const session = await getServerSession(authOptions);
 		if (!session?.user) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -1374,3 +1374,14 @@ export {
 	calculateTbConditionalRemuneration,
 	mapStatusToReportStatus,
 };
+
+// Provide a default export aggregator to ensure stable shape for dynamic imports
+export default {
+	FormulaCalculator,
+	extractFieldValueForCalculation,
+	calculateDenominatorValue,
+	extractTargetConfiguration,
+	buildCalculationConfig,
+	calculateTbConditionalRemuneration,
+	mapStatusToReportStatus,
+};

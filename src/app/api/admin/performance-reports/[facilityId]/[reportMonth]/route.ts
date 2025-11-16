@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
-import * as FC from "@/lib/calculations/formula-calculator";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import * as XLSX from "xlsx";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
@@ -15,6 +14,9 @@ export async function GET(
 	{ params }: { params: Promise<{ facilityId: string; reportMonth: string }> }
 ) {
 	try {
+		// Load FormulaCalculator utils dynamically to avoid tree-shaking/static import issues
+		const FCmod: any = await import("@/lib/calculations/formula-calculator");
+		const FC = FCmod?.default ?? FCmod;
 		const session = await getServerSession(authOptions);
 
 		if (!session || session.user.role !== "admin") {
