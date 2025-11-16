@@ -108,6 +108,7 @@ export class HealthDataRemunerationService {
 				}
 
 				// Calculate denominator value using centralized method
+				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
 					{
 						code: indicator.code,
@@ -117,7 +118,8 @@ export class HealthDataRemunerationService {
 						formula_config: indicator.formula_config,
 					},
 					fieldValueMap,
-					facility.facility_type.name
+					facility.facility_type.name,
+					indicator.denominator_field?.default_value || null
 				);
 
 				// Get the formula config from indicator (same as reports)
@@ -186,7 +188,10 @@ export class HealthDataRemunerationService {
 
 				// Recalculate remuneration with effective max remuneration if different
 				let finalRemuneration = result.remuneration;
-				if (tbResult.effectiveMaxRemuneration !== parseFloat(remuneration.base_amount.toString())) {
+				if (
+					tbResult.effectiveMaxRemuneration !==
+					parseFloat(remuneration.base_amount.toString())
+				) {
 					try {
 						const recalculatedResult = FormulaCalculator.calculateRemuneration(
 							actualValue,
@@ -248,7 +253,10 @@ export class HealthDataRemunerationService {
 						},
 						update: {
 							actual_value: actualValueForDB,
-							target_value: targetConfig.targetValue || (targetConfig.range?.max) || undefined,
+							target_value:
+								targetConfig.targetValue ||
+								targetConfig.range?.max ||
+								undefined,
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
@@ -260,7 +268,10 @@ export class HealthDataRemunerationService {
 							indicator_id: indicator.id,
 							report_month: reportMonth,
 							actual_value: actualValueForDB,
-							target_value: targetConfig.targetValue || (targetConfig.range?.max) || undefined,
+							target_value:
+								targetConfig.targetValue ||
+								targetConfig.range?.max ||
+								undefined,
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,

@@ -171,6 +171,7 @@ export async function GET(
 						: fieldValueMap.get(indicator.numerator_field_id) || 0;
 
 				// Calculate denominator value (still needed for display)
+				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
 					{
 						code: indicator.code,
@@ -180,7 +181,8 @@ export async function GET(
 						formula_config: indicator.formula_config,
 					},
 					fieldValueMap,
-					facility.facility_type.name
+					facility.facility_type.name,
+					indicator.denominator_field?.default_value || null
 				);
 
 				// Extract target description
@@ -290,6 +292,7 @@ export async function GET(
 					fieldValueMap.get(indicator.numerator_field_id) || 0;
 
 				// Calculate denominator value using centralized method
+				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
 					{
 						code: indicator.code,
@@ -299,7 +302,8 @@ export async function GET(
 						formula_config: indicator.formula_config,
 					},
 					fieldValueMap,
-					facility.facility_type.name
+					facility.facility_type.name,
+					indicator.denominator_field?.default_value || null
 				);
 
 				// Parse formula config

@@ -117,10 +117,11 @@ function resolveDenominatorForIndicator(
 		const numKey = typeof key === "number" ? key : parseInt(String(key), 10);
 		if (!Number.isNaN(numKey)) {
 			numberFieldValueMap.set(numKey, value);
-	}
+		}
 	});
 
 	// Use centralized denominator calculation
+	// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 	return FormulaCalculator.calculateDenominatorValue(
 		{
 			code: indicator.code || "",
@@ -130,7 +131,8 @@ function resolveDenominatorForIndicator(
 			formula_config: indicator.formula_config,
 		},
 		numberFieldValueMap,
-		facilityTypeName
+		facilityTypeName,
+		indicator.denominator_field?.default_value || null
 	);
 }
 
@@ -448,7 +450,7 @@ export async function GET(
 				// Indicator amount: prefer stored record; fallback to calculation using FormulaCalculator
 				let incentive = 0;
 				let achievementPercentage = 0;
-				
+
 				if (rec) {
 					// Use stored values from database (calculated by HealthDataRemunerationService)
 					incentive = Number(rec.incentive_amount || 0);
@@ -475,13 +477,15 @@ export async function GET(
 						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
 					// Calculate using FormulaCalculator (single source of truth)
-					const { FormulaCalculator } = await import("@/lib/calculations/formula-calculator");
+					const { FormulaCalculator } = await import(
+						"@/lib/calculations/formula-calculator"
+					);
 					const denominatorValue = resolveDenominatorForIndicator(
-							indicator,
-							facility.facility_type.name,
-							fieldValueMap
-						);
-					
+						indicator,
+						facility.facility_type.name,
+						fieldValueMap
+					);
+
 					// Extract target configuration using centralized method with correct priority:
 					// 1. Facility-specific targets
 					// 2. General formula_config targets
@@ -498,7 +502,7 @@ export async function GET(
 
 					// Build calculation config using centralized method
 					const calculationConfig = FormulaCalculator.buildCalculationConfig(
-							indicator,
+						indicator,
 						targetConfig,
 						formulaConfig
 					);
@@ -513,7 +517,7 @@ export async function GET(
 							undefined,
 							Object.fromEntries(fieldValueMap)
 						);
-						
+
 						achievementPercentage = result.achievement;
 						incentive = Math.round(result.remuneration);
 					} catch (error) {

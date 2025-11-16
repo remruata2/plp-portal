@@ -155,9 +155,10 @@ export class FormulaCalculator {
 			formula_config?: any;
 		},
 		fieldValueMap: Map<number, any>,
-		facilityTypeName?: string
+		facilityTypeName?: string,
+		denominatorFieldDefaultValue?: string | null
 	): number {
-		// 1. Get from field value map
+		// 1. Get from field value map (submitted field value)
 		let denominatorValue: number | undefined = undefined;
 		if (indicator.denominator_field_id) {
 			const rawDenominator = fieldValueMap.get(indicator.denominator_field_id);
@@ -171,56 +172,34 @@ export class FormulaCalculator {
 			return 5;
 		}
 
-		// 3. For RANGE indicators, extract range.max or targetValueMax
-		if (indicator.target_type === "RANGE") {
-			const formulaConfig = indicator.formula_config || {};
-			let rangeData = formulaConfig.range;
+		// 3. For RANGE and PERCENTAGE_RANGE indicators, use extractTargetConfiguration() to get range with correct priority:
+		//    Priority 1: Facility-specific range (formula_config.facilitySpecificTargets[facilityType].range)
+		//    Priority 2: General range (formula_config.range)
+		//    Priority 3: Range from target_value column
+		//    Priority 4: Field default value (if provided)
+		if (
+			indicator.target_type === "RANGE" ||
+			indicator.target_type === "PERCENTAGE_RANGE"
+		) {
+			const targetConfig = this.extractTargetConfiguration(
+				{
+					target_type: indicator.target_type,
+					target_value: indicator.target_value,
+					formula_config: indicator.formula_config,
+				},
+				facilityTypeName
+			);
 
-			// Try to extract from target_value if not in formula_config
-			if (!rangeData?.max && indicator.target_value) {
-				const targetValueStr = indicator.target_value.toString();
-				if (targetValueStr.startsWith("{") && targetValueStr.endsWith("}")) {
-					try {
-						const parsed = JSON.parse(targetValueStr);
-						if (parsed.min !== undefined && parsed.max !== undefined) {
-							rangeData = { min: parsed.min, max: parsed.max };
-						}
-					} catch (error) {
-						// ignore
-					}
-				} else if (targetValueStr.includes("-")) {
-					const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
-					if (rangeMatch) {
-						rangeData = {
-							min: parseInt(rangeMatch[1]),
-							max: parseInt(rangeMatch[2]),
-						};
-					}
-				}
+			// Use range.max from extracted configuration (priorities 1-3)
+			if (targetConfig.range?.max !== undefined) {
+				return targetConfig.range.max;
 			}
 
-			// For RANGE, use range.max as denominator
-			if (rangeData?.max) {
-				return rangeData.max;
-			}
-
-			// Fallback: extract max from target_value
-			if (indicator.target_value) {
-				const targetValueStr = indicator.target_value.toString();
-				if (targetValueStr.startsWith("{") && targetValueStr.endsWith("}")) {
-					try {
-						const parsed = JSON.parse(targetValueStr);
-						if (parsed.max !== undefined) {
-							return parsed.max;
-						}
-					} catch (error) {
-						// ignore
-					}
-				} else if (targetValueStr.includes("-")) {
-					const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
-					if (rangeMatch) {
-						return parseInt(rangeMatch[2]);
-					}
+			// Priority 4: Field default value (if provided)
+			if (denominatorFieldDefaultValue) {
+				const parsedDefault = parseFloat(denominatorFieldDefaultValue);
+				if (!Number.isNaN(parsedDefault)) {
+					return parsedDefault;
 				}
 			}
 		}

@@ -166,6 +166,8 @@ export async function GET(
 			);
 
 			// Calculate denominator value using centralized method
+			// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
+			const denominatorField = indicatorAny?.denominator_field;
 			const finalDenominatorValue = FormulaCalculator.calculateDenominatorValue(
 				{
 					code: indicatorAny?.code || "",
@@ -175,7 +177,8 @@ export async function GET(
 					formula_config: cfg,
 				},
 				fieldValueMap,
-				facility.facility_type.name
+				facility.facility_type.name,
+				denominatorField?.default_value || null
 			);
 
 			// Build target display: prefer target_formula, then build from extracted config
