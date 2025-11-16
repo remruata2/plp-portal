@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
+import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
 
@@ -110,63 +111,27 @@ function resolveDenominatorForIndicator(
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
 ): number {
-	// Default fetch from denominator field
-	let denominatorValue: any = indicator.denominator_field_id
-		? fieldValueMap.get(indicator.denominator_field_id)
-		: undefined;
-
-	if (indicator.code === "PS001") {
-		return 5; // Fixed scale
+	// Convert fieldValueMap to Map<number, any> for FormulaCalculator
+	const numberFieldValueMap = new Map<number, any>();
+	fieldValueMap.forEach((value, key) => {
+		const numKey = typeof key === "number" ? key : parseInt(String(key), 10);
+		if (!Number.isNaN(numKey)) {
+			numberFieldValueMap.set(numKey, value);
 	}
+	});
 
-	if (
-		denominatorValue !== undefined &&
-		denominatorValue !== null &&
-		!Number.isNaN(Number(denominatorValue))
-	) {
-		return Number(denominatorValue);
-	}
-
-	// If missing, apply same defaults as service
-	if (indicator.target_type === "BINARY") {
-		if (indicator.code === "EC001") {
-			const clinicTargets: Record<string, number> = {
-				SC_HWC: 1,
-				PHC: 4,
-				UPHC: 4,
-				U_HWC: 4,
-				A_HWC: 4,
-			};
-			return clinicTargets[facilityTypeName] ?? 4;
-		} else if (indicator.code === "JM001") {
-			return 1;
-		} else if (indicator.code === "RS001") {
-			if (indicator.denominator_field_id) {
-				const v = fieldValueMap.get(indicator.denominator_field_id);
-				return Number(v || 1);
-			}
-			return 1;
-		} else if (indicator.code === "DI001" || indicator.code === "DV001_PHC") {
-			const dvdmsTargets: Record<string, number> = {
-				SC_HWC: 20,
-				PHC: 50,
-				UPHC: 100,
-				U_HWC: 100,
-				A_HWC: 100,
-			};
-			return dvdmsTargets[facilityTypeName] ?? 50;
-		}
-		return 1;
-	}
-
-	const defaults: Record<string, number> = {
-		PHC: 25000,
-		SC_HWC: 3000,
-		A_HWC: 3000,
-		U_HWC: 10000,
-		UPHC: 50000,
-	};
-	return defaults[facilityTypeName] ?? 5000;
+	// Use centralized denominator calculation
+	return FormulaCalculator.calculateDenominatorValue(
+		{
+			code: indicator.code || "",
+			target_type: indicator.target_type || "",
+			denominator_field_id: indicator.denominator_field_id,
+			target_value: indicator.target_value,
+			formula_config: indicator.formula_config,
+		},
+		numberFieldValueMap,
+		facilityTypeName
+	);
 }
 
 function computeTargetAmountNumeric(
@@ -480,11 +445,16 @@ export async function GET(
 					? Math.round(targetMax)
 					: 0;
 
-				// Indicator amount: prefer stored record; fallback to local computation
+				// Indicator amount: prefer stored record; fallback to calculation using FormulaCalculator
 				let incentive = 0;
+				let achievementPercentage = 0;
+				
 				if (rec) {
+					// Use stored values from database (calculated by HealthDataRemunerationService)
 					incentive = Number(rec.incentive_amount || 0);
+					achievementPercentage = Number(rec.percentage_achieved || 0);
 				} else {
+					// If record doesn't exist, calculate using FormulaCalculator (same as service)
 					const remuneration = indicator.remunerations?.[0];
 					const baseMaxRemuneration = remuneration
 						? parseFloat(
@@ -504,53 +474,54 @@ export async function GET(
 					const effectiveMaxRemuneration =
 						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
-					// Compute achievement percentage similar to service
-					let achievementPercentage = 0;
-					if (indicator.target_type === "RANGE") {
-						const targetAmount = computeTargetAmountNumeric(
+					// Calculate using FormulaCalculator (single source of truth)
+					const { FormulaCalculator } = await import("@/lib/calculations/formula-calculator");
+					const denominatorValue = resolveDenominatorForIndicator(
 							indicator,
 							facility.facility_type.name,
 							fieldValueMap
 						);
-						if (targetAmount > 0) {
-							achievementPercentage = (actualValue / targetAmount) * 100;
-						}
-					} else if (indicator.target_type === "PERCENTAGE_RANGE") {
-						const denom = resolveDenominatorForIndicator(
-							indicator,
-							facility.facility_type.name,
-							fieldValueMap
-						);
-						if (denom > 0) {
-							achievementPercentage = (actualValue / denom) * 100;
-						}
-					} else if (indicator.target_type === "BINARY") {
-						achievementPercentage = actualValue > 0 ? 100 : 0;
-					} else {
-						const denom = resolveDenominatorForIndicator(
-							indicator,
-							facility.facility_type.name,
-							fieldValueMap
-						);
-						if (denom > 0) {
-							achievementPercentage = (actualValue / denom) * 100;
-						}
-					}
-
-					// Normalize and apply policy
-					if (!Number.isFinite(achievementPercentage))
-						achievementPercentage = 0;
-					let displayPercentage = Math.min(
-						Math.max(achievementPercentage, 0),
-						100
+					
+					// Extract target configuration using centralized method with correct priority:
+					// 1. Facility-specific targets
+					// 2. General formula_config targets
+					// 3. target_value column fallback
+					const formulaConfig = (indicator.formula_config as any) || {};
+					const targetConfig = FormulaCalculator.extractTargetConfiguration(
+						{
+							target_type: indicator.target_type,
+							target_value: indicator.target_value,
+							formula_config: formulaConfig,
+						},
+						facility.facility_type.name
 					);
-					if (displayPercentage >= 100) {
-						incentive = Math.round(effectiveMaxRemuneration);
-					} else if (displayPercentage >= 50) {
-						incentive = Math.round(
-							(effectiveMaxRemuneration * displayPercentage) / 100
+
+					// Build calculation config using centralized method
+					const calculationConfig = FormulaCalculator.buildCalculationConfig(
+							indicator,
+						targetConfig,
+						formulaConfig
+					);
+
+					try {
+						const result = FormulaCalculator.calculateRemuneration(
+							actualValue,
+							denominatorValue,
+							effectiveMaxRemuneration,
+							calculationConfig,
+							facility.facility_type.name,
+							undefined,
+							Object.fromEntries(fieldValueMap)
 						);
-					} else {
+						
+						achievementPercentage = result.achievement;
+						incentive = Math.round(result.remuneration);
+					} catch (error) {
+						console.error(
+							`Error calculating for indicator ${indicator.code}:`,
+							error
+						);
+						achievementPercentage = 0;
 						incentive = 0;
 					}
 				}

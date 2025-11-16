@@ -114,16 +114,16 @@ export async function POST(request: NextRequest) {
 
     // Create new mappings (only if there are any)
     if (mappings.length > 0) {
-      const mappingsData = mappings.map((mapping: any) => ({
+    const mappingsData = mappings.map((mapping: any) => ({
         facility_type_id: facilityTypeId, // Use string ID directly
         field_id: parseInt(String(mapping.field_id), 10),
         is_required: Boolean(mapping.is_required),
         display_order: parseInt(String(mapping.display_order), 10) || 0,
-      }));
+    }));
 
-      await prisma.facilityFieldMapping.createMany({
-        data: mappingsData,
-      });
+    await prisma.facilityFieldMapping.createMany({
+      data: mappingsData,
+    });
     }
 
     return NextResponse.json({

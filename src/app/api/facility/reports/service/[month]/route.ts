@@ -73,12 +73,19 @@ export async function GET(
 		// Transform indicators similar to admin detail route
 		const indicators = perfRecords.map((perf) => {
 			const achievementPercentage = Number(perf.percentage_achieved || 0);
-			let status: "achieved" | "partial" | "not_achieved" = "not_achieved";
-			if (achievementPercentage >= 100) status = "achieved";
-			else if (achievementPercentage >= 50) status = "partial";
+			
+			// Use stored status directly, but validate for binary indicators
+			let status: "achieved" | "partial" | "not_achieved" = 
+				(perf.status as "achieved" | "partial" | "not_achieved") || "not_achieved";
 
 			const indicatorAny: any = perf.indicator as any;
 			const targetType = indicatorAny?.target_type;
+			
+			// For binary indicators, validate status based on percentage
+			// Binary indicators are all-or-nothing: 100% = achieved, <100% = not_achieved
+			if (targetType === "BINARY") {
+				status = achievementPercentage >= 100 ? "achieved" : "not_achieved";
+			}
 			const cfg = (indicatorAny?.formula_config as any) || {};
 			let targetDisplay: string =
 				indicatorAny?.target_formula ||

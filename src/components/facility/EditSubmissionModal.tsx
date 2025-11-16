@@ -80,6 +80,49 @@ export default function EditSubmissionModal({
 		}
 	}, [isOpen, submissionId]);
 
+	// Build indicator-based grouping for field values using mappings.
+	// Matches mapping.databaseFieldId with fieldValues.fieldId to get values per indicator, in the same sorted order.
+	// MUST be called before any early returns to follow Rules of Hooks
+	const groupedFieldValues = useMemo(() => {
+		if (!indicatorGroups.length || !fieldMappings.length) {
+			// Fallback: show all fields in a single group to avoid empty UI before mappings load
+			return [
+				{ code: "ALL", name: "All Fields", fields: fieldValues },
+			] as { code: string; name: string; fields: FieldValue[] }[];
+		}
+
+		const byId = new Map<number, FieldValue>();
+		for (const fv of fieldValues) byId.set(fv.fieldId, fv);
+
+		const groups: { code: string; name: string; fields: FieldValue[] }[] = [];
+		const seen = new Set<number>();
+
+		for (const grp of indicatorGroups) {
+			const fields: FieldValue[] = [];
+			for (const mapping of grp.fields) {
+				const fv = byId.get(mapping.databaseFieldId);
+				if (fv) {
+					fields.push(fv);
+					seen.add(fv.fieldId);
+				}
+			}
+			if (fields.length) {
+				groups.push({ code: grp.indicatorCode, name: grp.indicatorName, fields });
+			}
+		}
+
+		// Any remaining field values not present in mappings go to "Other"
+		const leftovers: FieldValue[] = [];
+		for (const fv of fieldValues) {
+			if (!seen.has(fv.fieldId)) leftovers.push(fv);
+		}
+		if (leftovers.length) {
+			groups.push({ code: "OTHER", name: "Other Fields", fields: leftovers });
+		}
+
+		return groups;
+	}, [indicatorGroups, fieldMappings, fieldValues]);
+
 	const loadSubmission = async () => {
 		if (!submissionId) return;
 
@@ -273,48 +316,6 @@ export default function EditSubmissionModal({
 	if (!submission) {
 		return null;
 	}
-
-  // Build indicator-based grouping for field values using mappings.
-  // Matches mapping.databaseFieldId with fieldValues.fieldId to get values per indicator, in the same sorted order.
-  const groupedFieldValues = useMemo(() => {
-    if (!indicatorGroups.length || !fieldMappings.length) {
-      // Fallback: show all fields in a single group to avoid empty UI before mappings load
-      return [
-        { code: "ALL", name: "All Fields", fields: fieldValues },
-      ] as { code: string; name: string; fields: FieldValue[] }[];
-    }
-
-    const byId = new Map<number, FieldValue>();
-    for (const fv of fieldValues) byId.set(fv.fieldId, fv);
-
-    const groups: { code: string; name: string; fields: FieldValue[] }[] = [];
-    const seen = new Set<number>();
-
-    for (const grp of indicatorGroups) {
-      const fields: FieldValue[] = [];
-      for (const mapping of grp.fields) {
-        const fv = byId.get(mapping.databaseFieldId);
-        if (fv) {
-          fields.push(fv);
-          seen.add(fv.fieldId);
-        }
-      }
-      if (fields.length) {
-        groups.push({ code: grp.indicatorCode, name: grp.indicatorName, fields });
-      }
-    }
-
-    // Any remaining field values not present in mappings go to "Other"
-    const leftovers: FieldValue[] = [];
-    for (const fv of fieldValues) {
-      if (!seen.has(fv.fieldId)) leftovers.push(fv);
-    }
-    if (leftovers.length) {
-      groups.push({ code: "OTHER", name: "Other Fields", fields: leftovers });
-    }
-
-    return groups;
-  }, [indicatorGroups, fieldMappings, fieldValues]);
 
 	const getInputType = (fieldType: string) => {
 		switch (fieldType.toLowerCase()) {

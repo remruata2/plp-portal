@@ -53,6 +53,13 @@ interface EnhancedIndicatorFormData {
 	// Target Configuration
 	target_type: "BINARY" | "RANGE" | "PERCENTAGE_RANGE";
 
+	// General Target Values (for RANGE/PERCENTAGE_RANGE)
+	general_range_min?: number;
+	general_range_max?: number;
+
+	// Binary Target Value (for BINARY)
+	binary_target_value?: number | string;
+
 	// Enhanced Formula Configuration
 	calculation_formula: string; // Mathematical formula like "(numerator/denominator)*100"
 
@@ -61,12 +68,15 @@ interface EnhancedIndicatorFormData {
 	facility_specific_targets: {
 		[facilityType: string]: {
 			range?: { min: number; max: number };
-			target_value?: number;
+			targetValue?: number; // Changed from target_value to match JSON structure
 		};
 	};
 
 	// Conditions
 	conditions: string;
+
+	// Target Description
+	target_formula?: string; // Text description displayed in reports (e.g., "3%-5%", "5-10 sessions")
 }
 
 interface EnhancedIndicatorFormProps {
@@ -178,13 +188,20 @@ export default function EnhancedIndicatorForm({
 	}, []);
 
 	const addFacilitySpecificTarget = (facilityType: string) => {
+		const initialTarget: any = {};
+
+		if (formData.target_type === "BINARY") {
+			// For BINARY indicators: initialize with targetValue (no default value)
+			initialTarget.targetValue = undefined;
+		} else {
+			// For RANGE and PERCENTAGE_RANGE indicators: initialize with range (no default values)
+			initialTarget.range = { min: undefined, max: undefined };
+		}
+
 		updateFormData({
 			facility_specific_targets: {
 				...formData.facility_specific_targets,
-				[facilityType]: {
-					range: { min: 0, max: 100 },
-					target_value: 0,
-				},
+				[facilityType]: initialTarget,
 			},
 		});
 	};
@@ -198,17 +215,40 @@ export default function EnhancedIndicatorForm({
 	const updateFacilityTarget = (
 		facilityType: string,
 		field: string,
-		value: number
+		value: number | undefined
 	) => {
-		updateFormData({
-			facility_specific_targets: {
-				...formData.facility_specific_targets,
-				[facilityType]: {
-					...formData.facility_specific_targets[facilityType],
-					[field]: value,
+		const currentTarget =
+			formData.facility_specific_targets[facilityType] || {};
+
+		// Handle nested properties (e.g., "range.min", "range.max")
+		if (field.includes(".")) {
+			const [parent, child] = field.split(".");
+			updateFormData({
+				facility_specific_targets: {
+					...formData.facility_specific_targets,
+					[facilityType]: {
+						...currentTarget,
+						[parent]: {
+							...((currentTarget[
+								parent as keyof typeof currentTarget
+							] as any) || {}),
+							[child]: value,
+						},
+					},
 				},
-			},
-		});
+			});
+		} else {
+			// Handle flat properties (e.g., "targetValue")
+			updateFormData({
+				facility_specific_targets: {
+					...formData.facility_specific_targets,
+					[facilityType]: {
+						...currentTarget,
+						[field]: value,
+					},
+				},
+			});
+		}
 	};
 
 	const getFormulaConfig = () => {
@@ -500,6 +540,118 @@ export default function EnhancedIndicatorForm({
 								</div>
 
 								<div>
+									<Label htmlFor="target_formula">Target</Label>
+									<Textarea
+										id="target_formula"
+										value={formData.target_formula || ""}
+										onChange={(e) =>
+											updateFormData({ target_formula: e.target.value })
+										}
+										placeholder="e.g., 3%-5%, 5-10 sessions, 50-100%, 100%"
+										rows={2}
+									/>
+									<p className="text-xs text-gray-500 mt-1">
+										This text will be displayed in the reports table to show the
+										target. Examples: "3%-5%", "5-10 sessions", "50-100%",
+										"100%"
+									</p>
+								</div>
+
+								{/* General Target Range (for RANGE and PERCENTAGE_RANGE) */}
+								{(formData.target_type === "RANGE" ||
+									formData.target_type === "PERCENTAGE_RANGE") && (
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<Label htmlFor="general_range_min">
+												Range Min
+												{formData.target_type === "PERCENTAGE_RANGE" && " (%)"}
+											</Label>
+											<Input
+												id="general_range_min"
+												type="number"
+												step="0.01"
+												value={formData.general_range_min ?? ""}
+												onChange={(e) =>
+													updateFormData({
+														general_range_min: e.target.value
+															? parseFloat(e.target.value)
+															: undefined,
+													})
+												}
+												placeholder={
+													formData.target_type === "PERCENTAGE_RANGE"
+														? "e.g., 3"
+														: "e.g., 25"
+												}
+											/>
+											<p className="text-xs text-gray-500 mt-1">
+												Minimum threshold for achievement
+											</p>
+										</div>
+										<div>
+											<Label htmlFor="general_range_max">
+												Range Max
+												{formData.target_type === "PERCENTAGE_RANGE" && " (%)"}
+											</Label>
+											<Input
+												id="general_range_max"
+												type="number"
+												step="0.01"
+												value={formData.general_range_max ?? ""}
+												onChange={(e) =>
+													updateFormData({
+														general_range_max: e.target.value
+															? parseFloat(e.target.value)
+															: undefined,
+													})
+												}
+												placeholder={
+													formData.target_type === "PERCENTAGE_RANGE"
+														? "e.g., 5"
+														: "e.g., 50"
+												}
+											/>
+											<p className="text-xs text-gray-500 mt-1">
+												Maximum threshold for full achievement
+											</p>
+										</div>
+									</div>
+								)}
+
+								{/* Binary Target Value (for BINARY) */}
+								{formData.target_type === "BINARY" && (
+									<div>
+										<Label htmlFor="binary_target_value">
+											Binary Target Value
+										</Label>
+										<Input
+											id="binary_target_value"
+											type="number"
+											step="1"
+											min="0"
+											value={
+												formData.binary_target_value !== undefined
+													? String(formData.binary_target_value)
+													: ""
+											}
+											onChange={(e) => {
+												const value = e.target.value;
+												updateFormData({
+													binary_target_value: value
+														? parseFloat(value) || value
+														: undefined,
+												});
+											}}
+											placeholder="e.g., 1, 4, 5"
+										/>
+										<p className="text-xs text-gray-500 mt-1">
+											Threshold value for binary indicators (typically 1, but
+											can be 4, 5, etc.)
+										</p>
+									</div>
+								)}
+
+								<div>
 									<Label htmlFor="calculation_formula">
 										Mathematical Formula
 									</Label>
@@ -608,36 +760,106 @@ export default function EnhancedIndicatorForm({
 														</div>
 
 														{isConfigured && (
-															<div className="grid grid-cols-2 gap-4">
-																<div>
-																	<Label>Range Min</Label>
-																	<Input
-																		type="number"
-																		value={target?.range?.min || 0}
-																		onChange={(e) =>
-																			updateFacilityTarget(
-																				facilityType.name,
-																				"range.min",
-																				Number(e.target.value)
-																			)
-																		}
-																	/>
-																</div>
-																<div>
-																	<Label>Range Max</Label>
-																	<Input
-																		type="number"
-																		value={target?.range?.max || 100}
-																		onChange={(e) =>
-																			updateFacilityTarget(
-																				facilityType.name,
-																				"range.max",
-																				Number(e.target.value)
-																			)
-																		}
-																	/>
-																</div>
-															</div>
+															<>
+																{/* For BINARY indicators: Show targetValue input */}
+																{formData.target_type === "BINARY" && (
+																	<div>
+																		<Label>Target Value</Label>
+																		<Input
+																			type="number"
+																			step="1"
+																			min="0"
+																			value={target?.targetValue ?? ""}
+																			onChange={(e) =>
+																				updateFacilityTarget(
+																					facilityType.name,
+																					"targetValue",
+																					e.target.value
+																						? Number(e.target.value)
+																						: undefined
+																				)
+																			}
+																			placeholder="e.g., 1, 4, 5"
+																		/>
+																		<p className="text-xs text-gray-500 mt-1">
+																			Binary threshold value for this facility
+																			type
+																		</p>
+																	</div>
+																)}
+
+																{/* For RANGE and PERCENTAGE_RANGE indicators: Show range inputs */}
+																{(formData.target_type === "RANGE" ||
+																	formData.target_type ===
+																		"PERCENTAGE_RANGE") && (
+																	<div className="grid grid-cols-2 gap-4">
+																		<div>
+																			<Label>
+																				Range Min
+																				{formData.target_type ===
+																					"PERCENTAGE_RANGE" && " (%)"}
+																			</Label>
+																			<Input
+																				type="number"
+																				step={
+																					formData.target_type ===
+																					"PERCENTAGE_RANGE"
+																						? "0.01"
+																						: "1"
+																				}
+																				value={target?.range?.min ?? ""}
+																				onChange={(e) =>
+																					updateFacilityTarget(
+																						facilityType.name,
+																						"range.min",
+																						e.target.value
+																							? Number(e.target.value)
+																							: undefined
+																					)
+																				}
+																				placeholder={
+																					formData.target_type ===
+																					"PERCENTAGE_RANGE"
+																						? "e.g., 3"
+																						: "e.g., 25"
+																				}
+																			/>
+																		</div>
+																		<div>
+																			<Label>
+																				Range Max
+																				{formData.target_type ===
+																					"PERCENTAGE_RANGE" && " (%)"}
+																			</Label>
+																			<Input
+																				type="number"
+																				step={
+																					formData.target_type ===
+																					"PERCENTAGE_RANGE"
+																						? "0.01"
+																						: "1"
+																				}
+																				value={target?.range?.max ?? ""}
+																				onChange={(e) =>
+																					updateFacilityTarget(
+																						facilityType.name,
+																						"range.max",
+																						e.target.value
+																							? Number(e.target.value)
+																							: undefined
+																					)
+																				}
+																				placeholder={
+																					formData.target_type ===
+																					"PERCENTAGE_RANGE"
+																						? "e.g., 5"
+																						: "e.g., 50"
+																				}
+																			/>
+																		</div>
+																	</div>
+																)}
+															</>
 														)}
 													</Card>
 												);

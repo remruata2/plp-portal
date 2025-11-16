@@ -22,9 +22,11 @@ import {
 	Target,
 	ArrowLeft,
 	Download,
+	RefreshCw,
 } from "lucide-react";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
 import { CalculationDetailsModal } from "@/components/calculation-details-modal";
+import { toast } from "sonner";
 
 interface PerformanceIndicator {
 	id: number;
@@ -84,6 +86,7 @@ export default function AdminFacilityReportPage({
 	const [report, setReport] = useState<ReportResponse | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [recalculating, setRecalculating] = useState(false);
 
 	useEffect(() => {
 		if (session?.user?.role === "admin") {
@@ -108,6 +111,41 @@ export default function AdminFacilityReportPage({
 			setError(e.message || "Failed to load report");
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	const handleRecalculate = async () => {
+		if (!report) return;
+
+		try {
+			setRecalculating(true);
+			const { facilityId, reportMonth } = await params;
+			const res = await fetch(
+				`/api/admin/performance-reports/${facilityId}/${reportMonth}/calculate`,
+				{
+					method: "POST",
+				}
+			);
+
+			if (!res.ok) {
+				const data = await res.json().catch(() => ({}));
+				throw new Error(data.error || data.message || "Failed to recalculate");
+			}
+
+			const result = await res.json();
+
+			if (result.success) {
+				toast.success("Recalculation completed successfully");
+				// Reload the report to show updated data
+				await loadReport();
+			} else {
+				throw new Error(result.message || "Recalculation failed");
+			}
+		} catch (e: any) {
+			console.error("Error recalculating:", e);
+			toast.error(e.message || "Failed to recalculate report");
+		} finally {
+			setRecalculating(false);
 		}
 	};
 
@@ -198,6 +236,16 @@ export default function AdminFacilityReportPage({
 					</p>
 				</div>
 				<div className="flex items-center gap-2">
+					<Button
+						variant="outline"
+						onClick={handleRecalculate}
+						disabled={recalculating || loading}
+					>
+						<RefreshCw
+							className={`h-4 w-4 mr-2 ${recalculating ? "animate-spin" : ""}`}
+						/>{" "}
+						{recalculating ? "Recalculating..." : "Recalculate"}
+					</Button>
 					<Button
 						className="bg-indigo-600 hover:bg-indigo-700 text-white"
 						onClick={() => {

@@ -98,7 +98,17 @@ export async function POST(request: NextRequest) {
         target_value: target_value || null,
         target_formula: target_formula || null,
         conditions: conditions || null,
-        formula_config: formula_config || {},
+        formula_config: (() => {
+          if (typeof formula_config === "string") {
+            try {
+              return JSON.parse(formula_config);
+            } catch (error) {
+              console.error("Error parsing formula_config:", error);
+              return {};
+            }
+          }
+          return formula_config || {};
+        })(),
         applicable_facility_types: Array.isArray(applicable_facility_types)
           ? applicable_facility_types
           : [],

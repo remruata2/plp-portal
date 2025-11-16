@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
+import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
+import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
 
 const prisma = new PrismaClient();
@@ -39,6 +41,57 @@ export async function GET(
 				{ error: "Facility not found" },
 				{ status: 404 }
 			);
+		}
+
+		// Smart recalculation check: check if stored data exists and is fresh
+		const recalculationCheck = await shouldRecalculate(
+			facilityId,
+			month,
+			false // Don't force recalculation for facility reports
+		);
+
+		// If stored data exists and is fresh, read from FacilityRemunerationRecord
+		// Otherwise, calculate on-the-fly and store
+		let shouldUseStoredData = !recalculationCheck.shouldRecalculate;
+		let storedPerformanceData: any[] = [];
+
+		// Try to read from stored data if available and fresh
+		if (shouldUseStoredData) {
+			try {
+				storedPerformanceData =
+					await prisma.facilityRemunerationRecord.findMany({
+						where: {
+							facility_id: facilityId,
+							report_month: month,
+						},
+						include: {
+							indicator: {
+								include: {
+									numerator_field: true,
+									denominator_field: true,
+									target_field: true,
+									remunerations: {
+										where: {
+											facility_type_remuneration: {
+												facility_type_id: facility.facility_type.id,
+											},
+										},
+										include: { facility_type_remuneration: true },
+									},
+								},
+							},
+						},
+					});
+
+				// If we have stored data for all indicators, use it
+				// Otherwise, fall back to calculation
+				if (storedPerformanceData.length === 0) {
+					shouldUseStoredData = false;
+				}
+			} catch (error) {
+				console.error("Error reading stored performance data:", error);
+				shouldUseStoredData = false;
+			}
 		}
 
 		// Get all indicators for this facility type
@@ -87,375 +140,339 @@ export async function GET(
 			  totalTbField.boolean_value
 			: 0;
 		const totalTbZero = Number(totalTbValueRaw || 0) === 0;
+
 		// Calculate performance for each indicator
 		const performanceIndicators = [];
 		let totalIncentive = 0;
 		let achievedCount = 0;
 		let partialCount = 0;
 		let notAchievedCount = 0;
-		for (let i = 0; i < indicators.length; i++) {
-			const indicator = indicators[i];
-			const remuneration = indicator.remunerations[0];
 
-			// Skip indicators without remuneration configuration for now
-			if (!remuneration) {
-				continue;
-			}
-
-			// Get the actual value for this indicator
-			const actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
-
-			// Get denominator value - use proper population defaults instead of fallback to 1
-			let denominatorValue = fieldValueMap.get(indicator.denominator_field_id);
-
-			// Special handling for PS001 (Patient Satisfaction) - use fixed scale of 5
-			if (indicator.code === "PS001") {
-				denominatorValue = 5; // Fixed scale for 1-5 satisfaction rating
-			}
-			// For binary indicators, use target value as denominator when missing
-			else if (denominatorValue === undefined || denominatorValue === null) {
-				// Check if this is a binary indicator - they have target_type "BINARY"
-				const targetType = indicator.target_type;
-
-				if (targetType === "BINARY") {
-					// For binary indicators, the denominator should be the target value, not population
-					// Get target value for binary indicators with facility-specific targets
-					const facilityTypeName = facility.facility_type.name;
-
-					if (indicator.code === "EC001") {
-						// Elderly Clinic targets by facility type
-						const clinicTargets: Record<string, number> = {
-							SC_HWC: 1,
-							PHC: 4,
-							UPHC: 4,
-							U_HWC: 4,
-							A_HWC: 4,
-						};
-						denominatorValue = clinicTargets[facilityTypeName] || 4;
-					} else if (indicator.code === "JM001") {
-						// JAS Meeting - always 1
-						denominatorValue = 1;
-					} else if (
-						indicator.code === "DI001" ||
-						indicator.code === "DV001_PHC" ||
-						indicator.code === "DV001_UPHC" ||
-						indicator.code === "DV001_UHWC" ||
-						indicator.code === "DV001_AHWC"
-					) {
-						// DVDMS Issues - facility-specific targets
-						const dvdmsTargets: Record<string, number> = {
-							SC_HWC: 20,
-							PHC: 50,
-							UPHC: 100,
-							U_HWC: 100,
-							A_HWC: 100,
-						};
-						denominatorValue = dvdmsTargets[facilityTypeName] || 50;
-					} else {
-						// Other binary indicators default to 1
-						denominatorValue = 1;
-					}
-				}
-			}
-
-			// Get target value from the database (seeded from indicator source files)
-			let targetValue = 0;
-			let targetDescription = indicator.target_formula || "Standard target";
-
-			// Parse formula config
-			const formulaConfig = (indicator.formula_config as any) || {};
-
-			// First, try to get target from the database (primary source)
-			if (indicator.target_value) {
-				// Handle different target value formats
-				const targetValueStr = indicator.target_value.toString();
-
-				// Check if it's a JSON string (for ranges)
-				if (targetValueStr.startsWith("{") && targetValueStr.endsWith("}")) {
-					try {
-						const parsedRange = JSON.parse(targetValueStr);
-						if (
-							parsedRange.min !== undefined &&
-							parsedRange.max !== undefined
-						) {
-							targetValue = parsedRange.max; // Use max value for calculations
-							// Keep the target_formula from database instead of overwriting
-							if (!indicator.target_formula) {
-								targetDescription = `Target: ${parsedRange.min}-${parsedRange.max}`;
-							}
-						} else {
-							targetValue = parseFloat(targetValueStr);
-						}
-					} catch (error) {
-						// If JSON parsing fails, treat as regular string
-						targetValue = parseFloat(targetValueStr);
-					}
-				} else if (targetValueStr.includes("%")) {
-					// Remove % and parse as number
-					targetValue = parseFloat(targetValueStr.replace("%", ""));
-				} else if (targetValueStr.includes("-")) {
-					// Handle range format (e.g., "3-5", "50-100")
-					const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
-					if (rangeMatch) {
-						targetValue = parseFloat(rangeMatch[2]); // Use max value for calculations
-						// Keep the target_formula from database instead of overwriting
-						if (!indicator.target_formula) {
-							targetDescription = `Target: ${rangeMatch[1]}-${rangeMatch[2]}`;
-						}
-					} else {
-						targetValue = parseFloat(targetValueStr);
-					}
-				} else if (targetValueStr === "true" || targetValueStr === "false") {
-					// Boolean value for binary indicators
-					targetValue = targetValueStr === "true" ? 1 : 0;
-				} else {
-					// Simple numeric value
-					targetValue = parseFloat(targetValueStr);
-				}
-
-				// Always prefer target_formula from database if available
-				// Don't overwrite targetDescription if target_formula exists
-				if (!indicator.target_formula) {
-					// Only set fallback description if no target_formula exists
-					if (targetValueStr.startsWith("{") && targetValueStr.endsWith("}")) {
-						// For JSON ranges, description was already set above
-					} else {
-						targetDescription = `${indicator.target_value}`;
-					}
-				}
-			} else if (formulaConfig.targetValue) {
-				// Fallback to formula config
-				targetValue = formulaConfig.targetValue;
-				if (!indicator.target_formula) {
-					targetDescription = `Target: ${formulaConfig.targetValue}`;
-				}
-			} else if (formulaConfig.range?.max) {
-				// For range-based indicators, use the max value
-				targetValue = formulaConfig.range.max;
-				if (!indicator.target_formula) {
-					targetDescription = `Target: ${formulaConfig.range.min}-${formulaConfig.range.max}`;
-				}
-			} else if (indicator.target_field_id) {
-				// Use target field value if available
-				const targetFieldValue = fieldValueMap.get(indicator.target_field_id);
-				if (targetFieldValue !== undefined) {
-					targetValue = targetFieldValue;
-					if (!indicator.target_formula) {
-						targetDescription = `Target: ${targetFieldValue}`;
-					}
-				}
-			} else {
-				// Default fallback for any remaining cases
-				targetValue = 100;
-				if (!indicator.target_formula) {
-					targetDescription = "Target: 100%";
-				}
-			}
-
-			// Prepare remuneration amounts
-			const baseMaxRemuneration = parseFloat(
-				remuneration.base_amount.toString()
+		// If using stored data, transform stored records to performanceIndicators format
+		if (shouldUseStoredData && storedPerformanceData.length > 0) {
+			// Create a map of stored records by indicator_id for quick lookup
+			const storedRecordsMap = new Map(
+				storedPerformanceData.map((record) => [record.indicator_id, record])
 			);
-			const conditionalAmountRaw = (remuneration as any)?.conditional_amount;
-			const conditionalAmount =
-				conditionalAmountRaw !== undefined && conditionalAmountRaw !== null
-					? Number(conditionalAmountRaw)
-					: 0;
-			const effectiveMaxRemuneration =
-				totalTbZero && conditionalAmount > 0
-					? conditionalAmount
-					: baseMaxRemuneration;
-			const isTbContactTracing = indicator.code === "CT001";
-			const isTbDifferentiatedCare = indicator.code === "DC001";
 
-			// Calculate the achievement percentage first
-			let achievementPercentage = 0;
-			if (indicator.target_type === "BINARY") {
-				// For binary indicators, use the numerator value directly
-				achievementPercentage = actualValue > 0 ? 100 : 0;
-			} else if (indicator.target_type === "RANGE") {
-				// For RANGE indicators, use target value as denominator
-				const formula = formulaConfig.calculationFormula || "(A/B)*100";
-				achievementPercentage = FormulaCalculator.calculateMathematicalFormula(
-					actualValue,
-					targetValue, // Use target value, not denominator field value
-					formula
-				);
-			} else if (indicator.target_type === "PERCENTAGE_RANGE") {
-				// For PERCENTAGE_RANGE indicators, use the formula from database configuration
-				// The formula now handles adjustments directly (e.g., (A/(B/12))*100)
-				const formula = formulaConfig.calculationFormula || "(A/B)*100";
+			// Transform stored records to match the expected format
+			for (const storedRecord of storedPerformanceData) {
+				if (!storedRecord.indicator) continue;
 
-				achievementPercentage = FormulaCalculator.calculateMathematicalFormula(
-					actualValue,
-					denominatorValue, // Use raw denominator value, formula handles adjustment
-					formula
+				const indicator = storedRecord.indicator;
+				const remuneration = indicator.remunerations?.[0];
+				if (!remuneration) continue;
+
+				// Get actual value from stored record or field values
+				const actualValue =
+					storedRecord.actual_value !== null &&
+					storedRecord.actual_value !== undefined
+						? Number(storedRecord.actual_value)
+						: fieldValueMap.get(indicator.numerator_field_id) || 0;
+
+				// Calculate denominator value (still needed for display)
+				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
+					{
+						code: indicator.code,
+						target_type: indicator.target_type,
+						denominator_field_id: indicator.denominator_field_id,
+						target_value: indicator.target_value,
+						formula_config: indicator.formula_config,
+					},
+					fieldValueMap,
+					facility.facility_type.name
 				);
-			} else if (denominatorValue > 0) {
-				// For other types, use the calculation formula from indicator config
-				const formula = formulaConfig.calculationFormula || "(A/B)*100";
-				achievementPercentage = FormulaCalculator.calculateMathematicalFormula(
+
+				// Extract target description
+				const formulaConfig = (indicator.formula_config as any) || {};
+				const targetConfig = FormulaCalculator.extractTargetConfiguration(
+					{
+						target_type: indicator.target_type,
+						target_value: indicator.target_value,
+						formula_config: formulaConfig,
+					},
+					facility.facility_type.name
+				);
+
+				let targetDescription = indicator.target_formula || "Standard target";
+				if (!indicator.target_formula) {
+					if (indicator.target_type === "BINARY") {
+						targetDescription = `Target: ${targetConfig.targetValue || 1}`;
+					} else if (
+						indicator.target_type === "RANGE" ||
+						indicator.target_type === "PERCENTAGE_RANGE"
+					) {
+						if (targetConfig.range) {
+							const rangeLabel =
+								indicator.target_type === "PERCENTAGE_RANGE" ? "%" : "";
+							targetDescription = `Target: ${targetConfig.range.min}${rangeLabel}-${targetConfig.range.max}${rangeLabel}`;
+						}
+					}
+				}
+
+				const percentage = storedRecord.percentage_achieved || 0;
+				let status = storedRecord.status as
+					| "achieved"
+					| "partial"
+					| "not_achieved";
+
+				// For binary indicators, validate status based on percentage
+				// Binary indicators are all-or-nothing: 100% = achieved, <100% = not_achieved
+				if (indicator.target_type === "BINARY") {
+					status = percentage >= 100 ? "achieved" : "not_achieved";
+				}
+
+				const incentiveAmount = storedRecord.incentive_amount || 0;
+
+				// Update counters
+				if (status === "achieved") achievedCount++;
+				else if (status === "partial") partialCount++;
+				else notAchievedCount++;
+
+				totalIncentive += incentiveAmount;
+
+				performanceIndicators.push({
+					id: indicator.id,
+					name: indicator.name,
+					target: targetDescription,
+					actual: actualValue,
+					percentage: percentage,
+					status: status,
+					incentive_amount: incentiveAmount,
+					target_type: indicator.target_type,
+					target_description: targetDescription,
+					target_value_for_calculation:
+						targetConfig.targetValue || targetConfig.range?.max || 0,
+					indicator_code: indicator.code,
+					numerator_value: actualValue,
+					denominator_value: denominatorValue,
+					formula_config: indicator.formula_config,
+					max_remuneration:
+						storedRecord.max_remuneration ||
+						parseFloat(remuneration.base_amount.toString()),
+					raw_percentage: storedRecord.raw_percentage || percentage,
+					numerator_field: indicator.numerator_field
+						? {
+								id: indicator.numerator_field.id,
+								code: indicator.numerator_field.code,
+								name: indicator.numerator_field.name,
+						  }
+						: null,
+					denominator_field: indicator.denominator_field
+						? {
+								id: indicator.denominator_field.id,
+								code: indicator.denominator_field.code,
+								name: indicator.denominator_field.name,
+						  }
+						: null,
+					target_field: indicator.target_field
+						? {
+								id: indicator.target_field.id,
+								code: indicator.target_field.code,
+								name: indicator.target_field.name,
+						  }
+						: null,
+				});
+			}
+		} else {
+			// Calculate on-the-fly (original logic)
+			for (let i = 0; i < indicators.length; i++) {
+				const indicator = indicators[i];
+				const remuneration = indicator.remunerations[0];
+
+				// Skip indicators without remuneration configuration for now
+				if (!remuneration) {
+					continue;
+				}
+
+				// Get the actual value for this indicator
+				const actualValue =
+					fieldValueMap.get(indicator.numerator_field_id) || 0;
+
+				// Calculate denominator value using centralized method
+				const denominatorValue = FormulaCalculator.calculateDenominatorValue(
+					{
+						code: indicator.code,
+						target_type: indicator.target_type,
+						denominator_field_id: indicator.denominator_field_id,
+						target_value: indicator.target_value,
+						formula_config: indicator.formula_config,
+					},
+					fieldValueMap,
+					facility.facility_type.name
+				);
+
+				// Parse formula config
+				const formulaConfig = (indicator.formula_config as any) || {};
+
+				// Extract target configuration using centralized method with correct priority:
+				// 1. Facility-specific targets
+				// 2. General formula_config targets
+				// 3. target_value column fallback
+				const targetConfig = FormulaCalculator.extractTargetConfiguration(
+					{
+						target_type: indicator.target_type,
+						target_value: indicator.target_value,
+						formula_config: formulaConfig,
+					},
+					facility.facility_type.name
+				);
+
+				// Extract targetValue and set targetDescription for display
+				let targetValue = 0;
+				let targetDescription = indicator.target_formula || "Standard target";
+
+				if (indicator.target_type === "BINARY") {
+					targetValue = targetConfig.targetValue || 1;
+					if (!indicator.target_formula) {
+						targetDescription = `Target: ${targetValue}`;
+					}
+				} else if (
+					indicator.target_type === "RANGE" ||
+					indicator.target_type === "PERCENTAGE_RANGE"
+				) {
+					if (targetConfig.range) {
+						targetValue = targetConfig.range.max;
+						if (!indicator.target_formula) {
+							const rangeLabel =
+								indicator.target_type === "PERCENTAGE_RANGE" ? "%" : "";
+							targetDescription = `Target: ${targetConfig.range.min}${rangeLabel}-${targetConfig.range.max}${rangeLabel}`;
+						}
+					} else {
+						targetValue = 100;
+						if (!indicator.target_formula) {
+							targetDescription = "Target: 100%";
+						}
+					}
+				} else {
+					// Fallback for unknown types
+					if (indicator.target_field_id) {
+						const targetFieldValue = fieldValueMap.get(
+							indicator.target_field_id
+						);
+						if (targetFieldValue !== undefined) {
+							targetValue = targetFieldValue;
+							if (!indicator.target_formula) {
+								targetDescription = `Target: ${targetFieldValue}`;
+							}
+						}
+					} else {
+						targetValue = 100;
+						if (!indicator.target_formula) {
+							targetDescription = "Target: 100%";
+						}
+					}
+				}
+
+				// Build calculation config using centralized method
+				const calculationConfig = FormulaCalculator.buildCalculationConfig(
+					indicator,
+					targetConfig,
+					formulaConfig
+				);
+
+				// Calculate remuneration using FormulaCalculator (base calculation)
+				// We'll adjust for TB conditions after
+				const baseMaxRemuneration = parseFloat(
+					remuneration.base_amount.toString()
+				);
+				let result = FormulaCalculator.calculateRemuneration(
 					actualValue,
 					denominatorValue,
-					formula
+					baseMaxRemuneration,
+					calculationConfig,
+					facility.facility_type.name,
+					undefined,
+					Object.fromEntries(fieldValueMap)
 				);
-			}
 
-			// Ensure achievementPercentage is a valid number
-			if (
-				isNaN(achievementPercentage) ||
-				achievementPercentage === null ||
-				achievementPercentage === undefined
-			) {
-				achievementPercentage = 0;
-			}
+				// Calculate TB-conditional remuneration and display percentage using centralized method
+				const tbResult = FormulaCalculator.calculateTbConditionalRemuneration(
+					remuneration,
+					fieldValues,
+					indicator.code,
+					result.achievement,
+					denominatorValue
+				);
 
-			// Build formula config for calculation with proper range extraction
-			let rangeData = formulaConfig.range;
-
-			// Extract range from target_value if not in formula_config
-			if (!rangeData && indicator.target_value) {
-				const targetValueStr = indicator.target_value.toString();
-
-				// Try parsing JSON range first
-				if (targetValueStr.startsWith("{") && targetValueStr.endsWith("}")) {
+				// Recalculate remuneration with effective max remuneration if different
+				if (tbResult.effectiveMaxRemuneration !== baseMaxRemuneration) {
 					try {
-						const parsedRange = JSON.parse(targetValueStr);
-						if (
-							parsedRange.min !== undefined &&
-							parsedRange.max !== undefined
-						) {
-							rangeData = { min: parsedRange.min, max: parsedRange.max };
-						}
+						result = FormulaCalculator.calculateRemuneration(
+							actualValue,
+							denominatorValue,
+							tbResult.effectiveMaxRemuneration,
+							calculationConfig,
+							facility.facility_type.name,
+							undefined,
+							Object.fromEntries(fieldValueMap)
+						);
 					} catch (error) {
-						// ignore parse error
+						console.error(
+							`Error recalculating with effective max remuneration for indicator ${indicator.code}:`,
+							error
+						);
 					}
 				}
-				// Try parsing string range like "3-5"
-				else if (targetValueStr.includes("-")) {
-					const rangeMatch = targetValueStr.match(/(\d+)\s*-\s*(\d+)/);
-					if (rangeMatch) {
-						rangeData = {
-							min: parseInt(rangeMatch[1]),
-							max: parseInt(rangeMatch[2]),
-						};
+
+				// Map status using centralized method
+				const status = FormulaCalculator.mapStatusToReportStatus(
+					result.status,
+					{
+						achievedCount,
+						partialCount,
+						notAchievedCount,
 					}
-				}
+				);
+
+				totalIncentive += result.remuneration;
+
+				// Use display percentage from TB conditional calculation
+				const displayPercentage = tbResult.displayPercentage;
+
+				performanceIndicators.push({
+					id: indicator.id,
+					name: indicator.name,
+					target: targetDescription, // Show target description instead of max value
+					actual: actualValue,
+					percentage: displayPercentage, // Use storage logic percentage (100% when target achieved)
+					status: status,
+					incentive_amount: result.remuneration,
+					target_type: indicator.target_type,
+					target_description: targetDescription,
+					target_value_for_calculation: targetValue, // Keep max value for calculations
+					indicator_code: indicator.code,
+					// Add calculation details
+					numerator_value: actualValue,
+					denominator_value: denominatorValue, // Already calculated correctly by calculateDenominatorValue
+					formula_config: indicator.formula_config,
+					calculation_result: result,
+					max_remuneration: tbResult.effectiveMaxRemuneration,
+					raw_percentage: result.achievement, // Use achievement from FormulaCalculator (single source of truth)
+					// Add field information
+					numerator_field: indicator.numerator_field
+						? {
+								id: indicator.numerator_field.id,
+								code: indicator.numerator_field.code,
+								name: indicator.numerator_field.name,
+						  }
+						: null,
+					denominator_field: indicator.denominator_field
+						? {
+								id: indicator.denominator_field.id,
+								code: indicator.denominator_field.code,
+								name: indicator.denominator_field.name,
+						  }
+						: null,
+					target_field: indicator.target_field
+						? {
+								id: indicator.target_field.id,
+								code: indicator.target_field.code,
+								name: indicator.target_field.name,
+						  }
+						: null,
+				});
 			}
-
-			const calculationConfig = {
-				type: indicator.target_type,
-				targetValue: targetValue,
-				range: rangeData, // Use extracted range data
-				percentageCap: formulaConfig.percentageCap,
-				calculationFormula: formulaConfig.calculationFormula,
-				facilitySpecificTargets: formulaConfig.facilitySpecificTargets,
-			};
-
-			// Calculate remuneration using FormulaCalculator with effective max remuneration
-			let result = FormulaCalculator.calculateRemuneration(
-				actualValue,
-				denominatorValue,
-				effectiveMaxRemuneration,
-				calculationConfig,
-				facility.facility_type.name,
-				undefined,
-				Object.fromEntries(fieldValueMap)
-			);
-
-			// Determine status based on FormulaCalculator result
-			let status: "achieved" | "partial" | "not_achieved";
-
-			switch (result.status) {
-				case "ACHIEVED":
-					status = "achieved";
-					achievedCount++;
-					break;
-				case "PARTIALLY_ACHIEVED":
-					status = "partial";
-					partialCount++;
-					break;
-				case "BELOW_TARGET":
-				case "NA":
-				default:
-					status = "not_achieved";
-					notAchievedCount++;
-					break;
-			}
-
-			totalIncentive += result.remuneration;
-
-			// Apply storage logic for range-based targets (same as service)
-			let displayPercentage = result.achievement;
-			if (totalTbZero && (isTbContactTracing || isTbDifferentiatedCare)) {
-				// When TB is absent, keep display at 0% to reflect NA state even if conditional incentive applied
-				displayPercentage = 0;
-			} else if (
-				indicator.target_type === "PERCENTAGE_RANGE" &&
-				rangeData?.min &&
-				rangeData?.max
-			) {
-				// For percentage range targets (e.g., TF001_SC: 3-5%), check if actual percentage is within or above range
-				const actualPercentage = (actualValue / denominatorValue) * 100;
-
-				if (actualPercentage >= rangeData.min) {
-					// If actual percentage meets the minimum target, store 100% (achieved)
-					displayPercentage = 100;
-				} else {
-					// If below minimum target, store the actual achievement percentage relative to minimum
-					displayPercentage = (actualPercentage / rangeData.min) * 100;
-				}
-			} else {
-				// For other indicators, cap at 100% to match service behavior
-				displayPercentage = Math.min(result.achievement, 100);
-			}
-
-			performanceIndicators.push({
-				id: indicator.id,
-				name: indicator.name,
-				target: targetDescription, // Show target description instead of max value
-				actual: actualValue,
-				percentage: displayPercentage, // Use storage logic percentage (100% when target achieved)
-				status: status,
-				incentive_amount: result.remuneration,
-				target_type: indicator.target_type,
-				target_description: targetDescription,
-				target_value_for_calculation: targetValue, // Keep max value for calculations
-				indicator_code: indicator.code,
-				// Add calculation details
-				numerator_value: actualValue,
-				denominator_value: (() => {
-					const finalDenominatorValue =
-						indicator.target_type === "RANGE" ? targetValue : denominatorValue;
-					return finalDenominatorValue;
-				})(),
-				formula_config: indicator.formula_config,
-				calculation_result: result,
-				max_remuneration: effectiveMaxRemuneration,
-				raw_percentage: achievementPercentage, // Keep raw calculation for debugging
-				// Add field information
-				numerator_field: indicator.numerator_field
-					? {
-							id: indicator.numerator_field.id,
-							code: indicator.numerator_field.code,
-							name: indicator.numerator_field.name,
-					  }
-					: null,
-				denominator_field: indicator.denominator_field
-					? {
-							id: indicator.denominator_field.id,
-							code: indicator.denominator_field.code,
-							name: indicator.denominator_field.name,
-					  }
-					: null,
-				target_field: indicator.target_field
-					? {
-							id: indicator.target_field.id,
-							code: indicator.target_field.code,
-							name: indicator.target_field.name,
-					  }
-					: null,
-			});
 		}
 		// Get all active workers for the facility
 		const workers = await prisma.healthWorker.findMany({
@@ -592,6 +609,27 @@ export async function GET(
 			},
 			{}
 		);
+
+		// Store calculated data if we calculated on-the-fly (not using stored data)
+		if (!shouldUseStoredData) {
+			try {
+				// Store using HealthDataRemunerationService to ensure consistency
+				await prisma.$transaction(async (tx) => {
+					await HealthDataRemunerationService.processHealthDataRemuneration(
+						facilityId,
+						month,
+						[], // Empty array - service will fetch field values from database
+						tx
+					);
+				});
+			} catch (storageError) {
+				// Log error but don't fail the request - report is already calculated
+				console.error(
+					`Error storing remuneration data for ${facilityId} ${month}:`,
+					storageError
+				);
+			}
+		}
 
 		// Sort indicators by source file order before returning
 		const sortedPerformanceIndicators = sortIndicatorsBySourceOrder(
