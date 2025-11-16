@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
-import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
 
@@ -27,11 +26,11 @@ function parseRangeFromTargetValue(
 	return null;
 }
 
-function computeTargetAmountRange(
+async function computeTargetAmountRange(
 	indicator: any,
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
-): { min: number; max: number } {
+): Promise<{ min: number; max: number }> {
 	const cfg = (indicator.formula_config as any) || {};
 	const targetType = indicator.target_type;
 	const raw = indicator.target_value
@@ -40,7 +39,7 @@ function computeTargetAmountRange(
 	const range = cfg?.range || parseRangeFromTargetValue(raw || "");
 
 	if (targetType === "PERCENTAGE_RANGE") {
-		const denom = resolveDenominatorForIndicator(
+		const denom = await resolveDenominatorForIndicator(
 			indicator,
 			facilityTypeName,
 			fieldValueMap
@@ -71,7 +70,7 @@ function computeTargetAmountRange(
 	}
 
 	if (targetType === "BINARY") {
-		const v = resolveDenominatorForIndicator(
+		const v = await resolveDenominatorForIndicator(
 			indicator,
 			facilityTypeName,
 			fieldValueMap
@@ -79,7 +78,7 @@ function computeTargetAmountRange(
 		return { min: v, max: v };
 	}
 
-	const num = computeTargetAmountNumeric(
+	const num = await computeTargetAmountNumeric(
 		indicator,
 		facilityTypeName,
 		fieldValueMap
@@ -106,11 +105,16 @@ function buildTargetDisplay(indicator: any): string {
 	return raw || "N/A";
 }
 
-function resolveDenominatorForIndicator(
+async function resolveDenominatorForIndicator(
 	indicator: any,
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
-): number {
+): Promise<number> {
+	// Dynamic import to ensure FormulaCalculator is available
+	const { FormulaCalculator } = await import(
+		"@/lib/calculations/formula-calculator"
+	);
+
 	// Convert fieldValueMap to Map<number, any> for FormulaCalculator
 	const numberFieldValueMap = new Map<number, any>();
 	fieldValueMap.forEach((value, key) => {
@@ -136,11 +140,11 @@ function resolveDenominatorForIndicator(
 	);
 }
 
-function computeTargetAmountNumeric(
+async function computeTargetAmountNumeric(
 	indicator: any,
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
-): number {
+): Promise<number> {
 	const cfg = (indicator.formula_config as any) || {};
 	const targetType = indicator.target_type;
 	const raw = indicator.target_value
@@ -149,7 +153,7 @@ function computeTargetAmountNumeric(
 	const range = cfg?.range || parseRangeFromTargetValue(raw || "");
 
 	if (targetType === "PERCENTAGE_RANGE") {
-		const denom = resolveDenominatorForIndicator(
+		const denom = await resolveDenominatorForIndicator(
 			indicator,
 			facilityTypeName,
 			fieldValueMap
@@ -172,7 +176,7 @@ function computeTargetAmountNumeric(
 
 	if (targetType === "BINARY") {
 		// show the value that is required to be met
-		return resolveDenominatorForIndicator(
+		return await resolveDenominatorForIndicator(
 			indicator,
 			facilityTypeName,
 			fieldValueMap
@@ -321,6 +325,10 @@ export async function GET(
 			const records = await prisma.facilityRemunerationRecord.findMany({
 				where: { facility_id: facility.id, report_month: reportMonth },
 			});
+			// Dynamic import to ensure FormulaCalculator is available
+			const { FormulaCalculator } = await import(
+				"@/lib/calculations/formula-calculator"
+			);
 			const fieldValueMap = new Map<string | number, any>();
 			for (const fv of fieldValues) {
 				const v = FormulaCalculator.extractFieldValueForCalculation(fv as any);
@@ -420,7 +428,7 @@ export async function GET(
 				row[`${indicatorKeyPrefix} - Target`] = buildTargetDisplay(indicator);
 
 				// Target amount numeric per rules
-				const targetAmount = computeTargetAmountNumeric(
+				const targetAmount = await computeTargetAmountNumeric(
 					indicator,
 					facility.facility_type.name,
 					fieldValueMap
@@ -432,11 +440,12 @@ export async function GET(
 					: 0;
 
 				// Target min/max amount (for clarity)
-				const { min: targetMin, max: targetMax } = computeTargetAmountRange(
-					indicator,
-					facility.facility_type.name,
-					fieldValueMap
-				);
+				const { min: targetMin, max: targetMax } =
+					await computeTargetAmountRange(
+						indicator,
+						facility.facility_type.name,
+						fieldValueMap
+					);
 				row[`${indicatorKeyPrefix} - Target min`] = Number.isFinite(targetMin)
 					? Math.round(targetMin)
 					: 0;
@@ -477,7 +486,7 @@ export async function GET(
 					const { FormulaCalculator } = await import(
 						"@/lib/calculations/formula-calculator"
 					);
-					const denominatorValue = resolveDenominatorForIndicator(
+					const denominatorValue = await resolveDenominatorForIndicator(
 						indicator,
 						facility.facility_type.name,
 						fieldValueMap
