@@ -377,7 +377,7 @@ export async function GET(
 				}
 
 				// Build calculation config using centralized method
-				const calculationConfig = FormulaCalculator.buildCalculationConfig(
+				const calculationConfig = buildCalculationConfig(
 					indicator,
 					targetConfig,
 					formulaConfig
@@ -399,7 +399,7 @@ export async function GET(
 				);
 
 				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = FormulaCalculator.calculateTbConditionalRemuneration(
+				const tbResult = calculateTbConditionalRemuneration(
 					remuneration,
 					fieldValues,
 					indicator.code,
@@ -428,14 +428,11 @@ export async function GET(
 				}
 
 				// Map status using centralized method
-				const status = FormulaCalculator.mapStatusToReportStatus(
-					result.status,
-					{
-						achievedCount,
-						partialCount,
-						notAchievedCount,
-					}
-				);
+				const status = mapStatusToReportStatus(result.status, {
+					achievedCount,
+					partialCount,
+					notAchievedCount,
+				});
 
 				totalIncentive += result.remuneration;
 

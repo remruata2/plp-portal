@@ -321,19 +321,19 @@ export async function GET(
 				);
 			} catch {}
 
-		// Fetch remuneration records after recalculation
-		const records = await prisma.facilityRemunerationRecord.findMany({
-			where: { facility_id: facility.id, report_month: reportMonth },
-		});
-		// Dynamic import using named exports to avoid tree-shaking issues
-		const { extractFieldValueForCalculation } = await import(
-			"@/lib/calculations/formula-calculator"
-		);
-		const fieldValueMap = new Map<string | number, any>();
-		for (const fv of fieldValues) {
-			const v = extractFieldValueForCalculation(fv as any);
-			fieldValueMap.set(fv.field_id, v);
-		}
+			// Fetch remuneration records after recalculation
+			const records = await prisma.facilityRemunerationRecord.findMany({
+				where: { facility_id: facility.id, report_month: reportMonth },
+			});
+			// Dynamic import using named exports to avoid tree-shaking issues
+			const { extractFieldValueForCalculation } = await import(
+				"@/lib/calculations/formula-calculator"
+			);
+			const fieldValueMap = new Map<string | number, any>();
+			for (const fv of fieldValues) {
+				const v = extractFieldValueForCalculation(fv as any);
+				fieldValueMap.set(fv.field_id, v);
+			}
 
 			// Fetch HWO and AYUSH MO names for this facility (only if facility type has them)
 			let leaderNames = "";
@@ -497,7 +497,11 @@ export async function GET(
 					// 2. General formula_config targets
 					// 3. target_value column fallback
 					const formulaConfig = (indicator.formula_config as any) || {};
-					const targetConfig = FormulaCalculator.extractTargetConfiguration(
+					const {
+						extractTargetConfiguration: extractTarget,
+						buildCalculationConfig: buildConfig,
+					} = await import("@/lib/calculations/formula-calculator");
+					const targetConfig = extractTarget(
 						{
 							target_type: indicator.target_type,
 							target_value: indicator.target_value,
@@ -507,7 +511,7 @@ export async function GET(
 					);
 
 					// Build calculation config using centralized method
-					const calculationConfig = FormulaCalculator.buildCalculationConfig(
+					const calculationConfig = buildConfig(
 						indicator,
 						targetConfig,
 						formulaConfig
