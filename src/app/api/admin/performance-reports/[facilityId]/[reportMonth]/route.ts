@@ -136,7 +136,7 @@ export async function GET(
 		// Create field value map for denominator calculation
 		const fieldValueMap = new Map<number, any>();
 		fieldValues.forEach((fv) => {
-			const value = fv.numeric_value || fv.string_value || fv.boolean_value;
+			const value = FormulaCalculator.extractFieldValueForCalculation(fv);
 			fieldValueMap.set(fv.field_id, value);
 		});
 

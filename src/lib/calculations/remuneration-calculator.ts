@@ -1345,8 +1345,7 @@ export class RemunerationCalculator {
 						// Create field value map (same as reports)
 						const fieldValueMap = new Map();
 						fieldValues.forEach((fv) => {
-							const value =
-								fv.string_value || fv.numeric_value || fv.boolean_value;
+							const value = FormulaCalculator.extractFieldValueForCalculation(fv);
 							fieldValueMap.set(fv.field_id, value);
 						});
 

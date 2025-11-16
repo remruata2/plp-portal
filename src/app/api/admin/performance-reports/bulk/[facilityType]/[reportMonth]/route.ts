@@ -189,7 +189,7 @@ function computeTargetAmountNumeric(
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { facilityType: string; reportMonth: string } }
+	{ params }: { params: Promise<{ facilityType: string; reportMonth: string }> }
 ) {
 	try {
 		const session = await getServerSession(authOptions);
@@ -199,8 +199,8 @@ export async function GET(
 			});
 		}
 
-		const facilityTypeParam = decodeURIComponent(params.facilityType);
-		const reportMonth = params.reportMonth; // YYYY-MM
+		const { facilityType: facilityTypeParamRaw, reportMonth } = await params;
+		const facilityTypeParam = decodeURIComponent(facilityTypeParamRaw);
 
 		// Find facility type by name
 		const facilityType = await prisma.facilityType.findFirst({
@@ -323,10 +323,7 @@ export async function GET(
 			});
 			const fieldValueMap = new Map<string | number, any>();
 			for (const fv of fieldValues) {
-				const v: any =
-					(fv as any).string_value ??
-					(fv as any).numeric_value ??
-					(fv as any).boolean_value;
+				const v = FormulaCalculator.extractFieldValueForCalculation(fv as any);
 				fieldValueMap.set(fv.field_id, v);
 			}
 

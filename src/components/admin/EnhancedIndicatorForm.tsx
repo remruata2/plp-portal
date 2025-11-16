@@ -445,71 +445,66 @@ export default function EnhancedIndicatorForm({
 								<CardTitle className="text-lg">Formula Configuration</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<div className="grid grid-cols-2 gap-4">
-									<div>
-										<Label htmlFor="numerator_field_id">
-											Numerator Field (A)
-										</Label>
-										<Select
-											value={formData.numerator_field_id}
-											onValueChange={(value) =>
-												updateFormData({ numerator_field_id: value })
-											}
-										>
-											<SelectTrigger>
-												<SelectValue placeholder="Select numerator field">
-													{formData.numerator_field_id &&
-														fields.find(
-															(f) =>
-																f.id.toString() === formData.numerator_field_id
-														)?.name}
-												</SelectValue>
-											</SelectTrigger>
-											<SelectContent>
-												{fields.map((field) => (
-													<SelectItem
-														key={field.id}
-														value={field.id.toString()}
-													>
-														{field.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</div>
+								<div>
+									<Label htmlFor="numerator_field_id">
+										Numerator Field (A)
+									</Label>
+									<Select
+										value={formData.numerator_field_id}
+										onValueChange={(value) =>
+											updateFormData({ numerator_field_id: value })
+										}
+									>
+										<SelectTrigger>
+											<SelectValue placeholder="Select numerator field">
+												{formData.numerator_field_id &&
+													fields.find(
+														(f) =>
+															f.id.toString() === formData.numerator_field_id
+													)?.name}
+											</SelectValue>
+										</SelectTrigger>
+										<SelectContent>
+											{fields.map((field) => (
+												<SelectItem key={field.id} value={field.id.toString()}>
+													{field.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</div>
 
-									<div>
-										<Label htmlFor="denominator_field_id">
-											Denominator Field (B)
-										</Label>
-										<Select
-											value={formData.denominator_field_id}
-											onValueChange={(value) =>
-												updateFormData({ denominator_field_id: value })
-											}
-										>
-											<SelectTrigger>
-												<SelectValue placeholder="Select denominator field">
-													{formData.denominator_field_id &&
-														fields.find(
+								<div>
+									<Label htmlFor="denominator_field_id">
+										Denominator Field (B){" "}
+										<span className="text-gray-500 text-sm">(Optional)</span>
+									</Label>
+									<Select
+										value={formData.denominator_field_id || ""}
+										onValueChange={(value) =>
+											updateFormData({ denominator_field_id: value || "" })
+										}
+									>
+										<SelectTrigger>
+											<SelectValue placeholder="Select denominator field (optional)">
+												{formData.denominator_field_id
+													? fields.find(
 															(f) =>
 																f.id.toString() ===
 																formData.denominator_field_id
-														)?.name}
-												</SelectValue>
-											</SelectTrigger>
-											<SelectContent>
-												{fields.map((field) => (
-													<SelectItem
-														key={field.id}
-														value={field.id.toString()}
-													>
-														{field.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</div>
+													  )?.name
+													: "None"}
+											</SelectValue>
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="">None (No denominator)</SelectItem>
+											{fields.map((field) => (
+												<SelectItem key={field.id} value={field.id.toString()}>
+													{field.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 								</div>
 
 								<div className="grid grid-cols-2 gap-4">

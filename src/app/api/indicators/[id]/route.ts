@@ -47,6 +47,7 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 		const {
+			code,
 			name,
 			description,
 			type,
@@ -74,6 +75,7 @@ export async function PUT(
     const indicator = await prisma.indicator.update({
       where: { id: parseInt(id) },
       data: {
+        code: code || undefined,
         name,
         description,
         type,

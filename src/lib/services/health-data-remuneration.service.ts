@@ -75,7 +75,7 @@ export class HealthDataRemunerationService {
 			// Create a map of field values for easy lookup - EXACT SAME AS PERFORMANCE REPORT
 			const fieldValueMap = new Map();
 			dbFieldValues.forEach((fv: any) => {
-				const value = fv.string_value || fv.numeric_value || fv.boolean_value;
+				const value = FormulaCalculator.extractFieldValueForCalculation(fv);
 				fieldValueMap.set(fv.field_id, value);
 			});
 
@@ -90,22 +90,9 @@ export class HealthDataRemunerationService {
 				}
 
 				// Get the actual value for this indicator (EXACT SAME AS ROUTE)
-				let actualValue = fieldValueMap.get(indicator.numerator_field_id) || 0;
-
-				// Special handling for boolean indicators like ES001 (Whether Elderly Support Group is formed)
-				if (indicator.code === "ES001") {
-					// ES001 is a Yes/No field - let's first check what value we actually get
-					const rawValue = fieldValueMap.get(indicator.numerator_field_id);
-
-					// ES001 is a Yes/No field - form uses "1" for Yes, "0" for No
-					if (rawValue === "1" || rawValue === 1 || rawValue === true) {
-						actualValue = 1; // "1" = Yes = achieved
-					} else if (rawValue === "0" || rawValue === 0 || rawValue === false) {
-						actualValue = 0; // "0" = No = not achieved
-					} else {
-						actualValue = 0; // Default to not achieved for any other value
-					}
-				}
+				// Boolean values are already converted to 1/0 in fieldValueMap
+				const actualValue =
+					fieldValueMap.get(indicator.numerator_field_id) || 0;
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
