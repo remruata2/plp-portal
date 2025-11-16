@@ -53,6 +53,7 @@ export default function FieldsPage() {
 	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isEditMetaModalOpen, setIsEditMetaModalOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
 	const [updateForm, setUpdateForm] = useState({
 		fieldName: "",
 		value: "",
@@ -74,6 +75,7 @@ export default function FieldsPage() {
 	});
 
 	const [editForm, setEditForm] = useState({
+		code: "",
 		name: "",
 		description: "",
 		user_type: "ADMIN" as "ADMIN" | "FACILITY",
@@ -156,6 +158,7 @@ export default function FieldsPage() {
 	const handleEditFieldMeta = (field: Field) => {
 		setSelectedField(field);
 		setEditForm({
+			code: field.code || "",
 			name: field.name || "",
 			description: field.description || "",
 			user_type: field.user_type,
@@ -258,11 +261,17 @@ export default function FieldsPage() {
 	const handleSubmitEditMeta = async () => {
 		if (!selectedField) return;
 
+		if (!editForm.code || !editForm.name) {
+			toast.error("Code and name are required");
+			return;
+		}
+
 		try {
 			const response = await fetch(`/api/fields/${selectedField.id}`, {
 				method: "PATCH",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
+					code: editForm.code,
 					name: editForm.name,
 					description: editForm.description || null,
 					user_type: editForm.user_type,
@@ -309,6 +318,17 @@ export default function FieldsPage() {
 		}
 		return "Not set";
 	};
+
+	// Filter fields by search query
+	const filteredFields = fields.filter((field) => {
+		if (!searchQuery.trim()) return true;
+		const query = searchQuery.toLowerCase();
+		return (
+			field.name.toLowerCase().includes(query) ||
+			field.code.toLowerCase().includes(query) ||
+			(field.description && field.description.toLowerCase().includes(query))
+		);
+	});
 
 	const renderUpdateForm = () => {
 		if (!selectedField) return null;
@@ -609,69 +629,89 @@ export default function FieldsPage() {
 					</Button>
 				</div>
 
+				{/* Search/Filter Input */}
+				<div className="mb-6">
+					<Input
+						placeholder="Search fields by name, code, or description..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						className="max-w-md"
+					/>
+				</div>
+
 				<div className="grid gap-4">
-					{fields.map((field) => (
-						<Card key={field.id}>
-							<CardHeader className="pb-3">
-								<div className="flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<CardTitle className="text-lg">{field.name}</CardTitle>
-										<Badge variant="outline">{field.code}</Badge>
-										<Badge
-											variant={
-												field.user_type === "ADMIN" ? "default" : "secondary"
-											}
-										>
-											{field.user_type}
-										</Badge>
-										<Badge variant="outline">{field.field_type}</Badge>
-										<Badge
-											variant={
-												field.field_category === "DATA_FIELD"
-													? "default"
-													: "secondary"
-											}
-										>
-											{field.field_category}
-										</Badge>
-									</div>
-									<div className="flex items-center gap-2">
-										<div className="text-sm text-gray-600">
-											Current: {getValueDisplay(field)}
-										</div>
-										{getValueSourceBadge(field.valueSource)}
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleEditFieldMeta(field)}
-										>
-											<Settings className="h-4 w-4" />
-										</Button>
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleUpdateField(field)}
-										>
-											<Edit className="h-4 w-4" />
-										</Button>
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleDeleteField(field)}
-											className="text-red-600 hover:text-red-700"
-										>
-											<Trash2 className="h-4 w-4" />
-										</Button>
-									</div>
-								</div>
-								{field.description && (
-									<p className="text-sm text-gray-600 mt-1">
-										{field.description}
-									</p>
-								)}
-							</CardHeader>
+					{filteredFields.length === 0 ? (
+						<Card>
+							<CardContent className="py-8 text-center text-gray-500">
+								{searchQuery
+									? `No fields found matching "${searchQuery}"`
+									: "No fields available"}
+							</CardContent>
 						</Card>
-					))}
+					) : (
+						filteredFields.map((field) => (
+							<Card key={field.id}>
+								<CardHeader className="pb-3">
+									<div className="flex items-center justify-between">
+										<div className="flex items-center gap-3">
+											<CardTitle className="text-lg">{field.name}</CardTitle>
+											<Badge variant="outline">{field.code}</Badge>
+											<Badge
+												variant={
+													field.user_type === "ADMIN" ? "default" : "secondary"
+												}
+											>
+												{field.user_type}
+											</Badge>
+											<Badge variant="outline">{field.field_type}</Badge>
+											<Badge
+												variant={
+													field.field_category === "DATA_FIELD"
+														? "default"
+														: "secondary"
+												}
+											>
+												{field.field_category}
+											</Badge>
+										</div>
+										<div className="flex items-center gap-2">
+											<div className="text-sm text-gray-600">
+												Current: {getValueDisplay(field)}
+											</div>
+											{getValueSourceBadge(field.valueSource)}
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => handleEditFieldMeta(field)}
+											>
+												<Settings className="h-4 w-4" />
+											</Button>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => handleUpdateField(field)}
+											>
+												<Edit className="h-4 w-4" />
+											</Button>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => handleDeleteField(field)}
+												className="text-red-600 hover:text-red-700"
+											>
+												<Trash2 className="h-4 w-4" />
+											</Button>
+										</div>
+									</div>
+									{field.description && (
+										<p className="text-sm text-gray-600 mt-1">
+											{field.description}
+										</p>
+									)}
+								</CardHeader>
+							</Card>
+						))
+					)}
 				</div>
 
 				{/* Update Field Modal */}
@@ -722,6 +762,18 @@ export default function FieldsPage() {
 							<DialogTitle>Edit Field: {selectedField?.name}</DialogTitle>
 						</DialogHeader>
 						<div className="space-y-4">
+							<div>
+								<Label htmlFor="edit-code">Field Code</Label>
+								<Input
+									id="edit-code"
+									value={editForm.code}
+									onChange={(e) =>
+										setEditForm({ ...editForm, code: e.target.value })
+									}
+									placeholder="e.g., total_population"
+								/>
+							</div>
+
 							<div>
 								<Label htmlFor="edit-name">Field Name</Label>
 								<Input
