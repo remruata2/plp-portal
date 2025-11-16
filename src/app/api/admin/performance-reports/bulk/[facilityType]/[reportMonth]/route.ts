@@ -110,10 +110,12 @@ async function resolveDenominatorForIndicator(
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
 ): Promise<number> {
-	// Dynamic import using named exports to avoid tree-shaking issues
-	const { calculateDenominatorValue } = await import(
-		"@/lib/calculations/formula-calculator"
-	);
+	// Dynamic import with robust fallback
+	const FCMod: any = await import("@/lib/calculations/formula-calculator");
+	const FCClass = FCMod.FormulaCalculator;
+	const calculateDenominatorValue =
+		FCMod.calculateDenominatorValue ||
+		(FCClass && FCClass.calculateDenominatorValue?.bind(FCClass));
 
 	// Convert fieldValueMap to Map<number, any> for calculateDenominatorValue
 	const numberFieldValueMap = new Map<number, any>();
@@ -325,10 +327,12 @@ export async function GET(
 			const records = await prisma.facilityRemunerationRecord.findMany({
 				where: { facility_id: facility.id, report_month: reportMonth },
 			});
-			// Dynamic import using named exports to avoid tree-shaking issues
-			const { extractFieldValueForCalculation } = await import(
-				"@/lib/calculations/formula-calculator"
-			);
+			// Dynamic import with robust fallback
+			const FCMod: any = await import("@/lib/calculations/formula-calculator");
+			const FCClass = FCMod.FormulaCalculator;
+			const extractFieldValueForCalculation =
+				FCMod.extractFieldValueForCalculation ||
+				(FCClass && FCClass.extractFieldValueForCalculation?.bind(FCClass));
 			const fieldValueMap = new Map<string | number, any>();
 			for (const fv of fieldValues) {
 				const v = extractFieldValueForCalculation(fv as any);
@@ -483,9 +487,10 @@ export async function GET(
 						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
 					// Calculate using FormulaCalculator (single source of truth)
-					const { FormulaCalculator } = await import(
+					const FCMod2: any = await import(
 						"@/lib/calculations/formula-calculator"
 					);
+					const FormulaCalculator = FCMod2.FormulaCalculator;
 					const denominatorValue = await resolveDenominatorForIndicator(
 						indicator,
 						facility.facility_type.name,
@@ -497,10 +502,21 @@ export async function GET(
 					// 2. General formula_config targets
 					// 3. target_value column fallback
 					const formulaConfig = (indicator.formula_config as any) || {};
-					const {
-						extractTargetConfiguration: extractTarget,
-						buildCalculationConfig: buildConfig,
-					} = await import("@/lib/calculations/formula-calculator");
+					const FCMod3: any = await import(
+						"@/lib/calculations/formula-calculator"
+					);
+					const extractTarget =
+						FCMod3.extractTargetConfiguration ||
+						(FCMod3.FormulaCalculator &&
+							FCMod3.FormulaCalculator.extractTargetConfiguration?.bind(
+								FCMod3.FormulaCalculator
+							));
+					const buildConfig =
+						FCMod3.buildCalculationConfig ||
+						(FCMod3.FormulaCalculator &&
+							FCMod3.FormulaCalculator.buildCalculationConfig?.bind(
+								FCMod3.FormulaCalculator
+							));
 					const targetConfig = extractTarget(
 						{
 							target_type: indicator.target_type,

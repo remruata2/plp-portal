@@ -26,16 +26,28 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
-			// Dynamic import using named exports to avoid tree-shaking issues
-			const {
-				extractFieldValueForCalculation,
-				calculateDenominatorValue,
-				extractTargetConfiguration,
-				buildCalculationConfig,
-				calculateTbConditionalRemuneration,
-				mapStatusToReportStatus,
-				FormulaCalculator,
-			} = await import("@/lib/calculations/formula-calculator");
+			// Dynamic import with robust fallback for ESM/CJS and tree-shaking edge cases
+			const FCMod: any = await import("@/lib/calculations/formula-calculator");
+			const FCClass = FCMod.FormulaCalculator;
+			const extractFieldValueForCalculation =
+				FCMod.extractFieldValueForCalculation ||
+				(FCClass && FCClass.extractFieldValueForCalculation?.bind(FCClass));
+			const calculateDenominatorValue =
+				FCMod.calculateDenominatorValue ||
+				(FCClass && FCClass.calculateDenominatorValue?.bind(FCClass));
+			const extractTargetConfiguration =
+				FCMod.extractTargetConfiguration ||
+				(FCClass && FCClass.extractTargetConfiguration?.bind(FCClass));
+			const buildCalculationConfig =
+				FCMod.buildCalculationConfig ||
+				(FCClass && FCClass.buildCalculationConfig?.bind(FCClass));
+			const calculateTbConditionalRemuneration =
+				FCMod.calculateTbConditionalRemuneration ||
+				(FCClass && FCClass.calculateTbConditionalRemuneration?.bind(FCClass));
+			const mapStatusToReportStatus =
+				FCMod.mapStatusToReportStatus ||
+				(FCClass && FCClass.mapStatusToReportStatus?.bind(FCClass));
+			const FormulaCalculator = FCClass;
 			// Get facility information
 			const facility = await tx.facility.findUnique({
 				where: { id: facilityId },

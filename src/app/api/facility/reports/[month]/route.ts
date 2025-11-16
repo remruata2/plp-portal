@@ -2,15 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
-import {
-	FormulaCalculator,
-	extractFieldValueForCalculation,
-	calculateDenominatorValue,
-	extractTargetConfiguration,
-	buildCalculationConfig,
-	calculateTbConditionalRemuneration,
-	mapStatusToReportStatus,
-} from "@/lib/calculations/formula-calculator";
+import * as FC from "@/lib/calculations/formula-calculator";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
@@ -134,7 +126,7 @@ export async function GET(
 		// Create a map of field values for easy lookup
 		const fieldValueMap = new Map();
 		fieldValues.forEach((fv) => {
-			const value = extractFieldValueForCalculation(fv);
+			const value = FC.extractFieldValueForCalculation(fv);
 			fieldValueMap.set(fv.field_id, value);
 		});
 
@@ -180,7 +172,7 @@ export async function GET(
 
 				// Calculate denominator value (still needed for display)
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = calculateDenominatorValue(
+				const denominatorValue = FC.calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -195,7 +187,7 @@ export async function GET(
 
 				// Extract target description
 				const formulaConfig = (indicator.formula_config as any) || {};
-				const targetConfig = extractTargetConfiguration(
+				const targetConfig = FC.extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -301,7 +293,7 @@ export async function GET(
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = calculateDenominatorValue(
+				const denominatorValue = FC.calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -321,7 +313,7 @@ export async function GET(
 				// 1. Facility-specific targets
 				// 2. General formula_config targets
 				// 3. target_value column fallback
-				const targetConfig = extractTargetConfiguration(
+				const targetConfig = FC.extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -377,7 +369,7 @@ export async function GET(
 				}
 
 				// Build calculation config using centralized method
-				const calculationConfig = buildCalculationConfig(
+				const calculationConfig = FC.buildCalculationConfig(
 					indicator,
 					targetConfig,
 					formulaConfig
@@ -388,7 +380,7 @@ export async function GET(
 				const baseMaxRemuneration = parseFloat(
 					remuneration.base_amount.toString()
 				);
-				let result = FormulaCalculator.calculateRemuneration(
+				let result = FC.FormulaCalculator.calculateRemuneration(
 					actualValue,
 					denominatorValue,
 					baseMaxRemuneration,
@@ -399,7 +391,7 @@ export async function GET(
 				);
 
 				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = calculateTbConditionalRemuneration(
+				const tbResult = FC.calculateTbConditionalRemuneration(
 					remuneration,
 					fieldValues,
 					indicator.code,
@@ -410,7 +402,7 @@ export async function GET(
 				// Recalculate remuneration with effective max remuneration if different
 				if (tbResult.effectiveMaxRemuneration !== baseMaxRemuneration) {
 					try {
-						result = FormulaCalculator.calculateRemuneration(
+						result = FC.FormulaCalculator.calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							tbResult.effectiveMaxRemuneration,
@@ -428,7 +420,7 @@ export async function GET(
 				}
 
 				// Map status using centralized method
-				const status = mapStatusToReportStatus(result.status, {
+				const status = FC.mapStatusToReportStatus(result.status, {
 					achievedCount,
 					partialCount,
 					notAchievedCount,

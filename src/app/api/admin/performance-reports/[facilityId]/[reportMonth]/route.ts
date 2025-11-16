@@ -3,11 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
-import {
-	extractFieldValueForCalculation,
-	calculateDenominatorValue,
-	extractTargetConfiguration,
-} from "@/lib/calculations/formula-calculator";
+import * as FC from "@/lib/calculations/formula-calculator";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import * as XLSX from "xlsx";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
@@ -140,7 +136,7 @@ export async function GET(
 		// Create field value map for denominator calculation
 		const fieldValueMap = new Map<number, any>();
 		fieldValues.forEach((fv) => {
-			const value = extractFieldValueForCalculation(fv);
+			const value = FC.extractFieldValueForCalculation(fv);
 			fieldValueMap.set(fv.field_id, value);
 		});
 
@@ -160,7 +156,7 @@ export async function GET(
 			const cfg = (indicatorAny?.formula_config as any) || {};
 
 			// Extract target configuration using centralized method
-			const targetConfig = extractTargetConfiguration(
+			const targetConfig = FC.extractTargetConfiguration(
 				{
 					target_type: targetType || "",
 					target_value: indicatorAny?.target_value,
@@ -172,7 +168,7 @@ export async function GET(
 			// Calculate denominator value using centralized method
 			// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 			const denominatorField = indicatorAny?.denominator_field;
-			const finalDenominatorValue = calculateDenominatorValue(
+			const finalDenominatorValue = FC.calculateDenominatorValue(
 				{
 					code: indicatorAny?.code || "",
 					target_type: targetType || "",
