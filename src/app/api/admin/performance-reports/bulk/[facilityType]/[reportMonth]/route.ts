@@ -509,7 +509,7 @@ export async function GET(
 					);
 
 					try {
-						const result = FC2.FormulaCalculator.calculateRemuneration(
+						const result = FC2.calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							effectiveMaxRemuneration,

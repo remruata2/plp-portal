@@ -1,5 +1,5 @@
 import { PrismaClient } from "@/generated/prisma";
-import { FormulaCalculator, FormulaConfig } from "./formula-calculator";
+import { calculateRemuneration, type FormulaConfig } from "./formula-calculator";
 import { TargetType } from "@/generated/prisma";
 
 export interface AutoCalculationResult {
@@ -185,7 +185,7 @@ export class AutoIndicatorCalculator {
       const formulaConfig = this.buildFormulaConfig(indicator);
       const maxRemuneration = 500; // This should come from indicator remuneration config
 
-      const remunerationResult = FormulaCalculator.calculateRemuneration(
+      const remunerationResult = calculateRemuneration(
         calculatedValue,
         targetValue,
         maxRemuneration,

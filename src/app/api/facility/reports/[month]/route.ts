@@ -382,7 +382,7 @@ export async function GET(
 				const baseMaxRemuneration = parseFloat(
 					remuneration.base_amount.toString()
 				);
-				let result = FC.FormulaCalculator.calculateRemuneration(
+				let result = FC.calculateRemuneration(
 					actualValue,
 					denominatorValue,
 					baseMaxRemuneration,
@@ -404,7 +404,7 @@ export async function GET(
 				// Recalculate remuneration with effective max remuneration if different
 				if (tbResult.effectiveMaxRemuneration !== baseMaxRemuneration) {
 					try {
-						result = FC.FormulaCalculator.calculateRemuneration(
+						result = FC.calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							tbResult.effectiveMaxRemuneration,

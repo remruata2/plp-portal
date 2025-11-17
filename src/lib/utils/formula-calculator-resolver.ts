@@ -15,10 +15,16 @@
  *   - Detailed error information if resolution or execution fails
  */
 
-import type { FormulaCalculator } from "@/lib/calculations/formula-calculator";
-
 export interface ResolvedFormulaCalculator {
-	FormulaCalculator: typeof FormulaCalculator;
+	calculateRemuneration: (
+		submittedValue: number,
+		targetValue: number | string | object,
+		maxRemuneration: number,
+		formulaConfig: any,
+		facilityType?: string,
+		conditionMet?: boolean,
+		fieldValues?: { [key: string]: number }
+	) => any;
 	extractFieldValueForCalculation: (
 		fieldValue: {
 			string_value?: string | null;
@@ -106,32 +112,7 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 		resolved = module;
 	}
 
-	// Extract FormulaCalculator class
-	const FormulaCalculator =
-		resolved.FormulaCalculator ||
-		module.FormulaCalculator ||
-		(module.default && module.default.FormulaCalculator);
-
-	if (DEBUG) {
-		console.log("[FormulaCalculator Resolver] FormulaCalculator class found:", !!FormulaCalculator);
-		if (FormulaCalculator) {
-			console.log("[FormulaCalculator Resolver] FormulaCalculator static methods:", 
-				Object.getOwnPropertyNames(FormulaCalculator).filter(name => 
-					typeof FormulaCalculator[name] === "function" && name !== "length" && name !== "name" && name !== "prototype"
-				)
-			);
-		}
-	}
-
-	if (!FormulaCalculator) {
-		const errorMsg = "FormulaCalculator class not found in dynamic import. This indicates a build or export issue.";
-		console.error("[FormulaCalculator Resolver] ERROR:", errorMsg);
-		console.error("[FormulaCalculator Resolver] Available module exports:", Object.keys(module));
-		if (module.default) {
-			console.error("[FormulaCalculator Resolver] Default export keys:", Object.keys(module.default));
-		}
-		throw new Error(errorMsg);
-	}
+	// No longer need FormulaCalculator class - using standalone functions directly
 
 	// Helper function to resolve a function with multiple fallback strategies
 	const resolveFunction = (
@@ -142,7 +123,19 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 			console.log(`[FormulaCalculator Resolver] Resolving function: ${name}`);
 		}
 
-		// Try 1: Named export from module
+		// Try 1: From default export object first (most reliable in production builds)
+		if (resolved && resolved[name] && typeof resolved[name] === "function") {
+			if (DEBUG) {
+				console.log(`[FormulaCalculator Resolver] ✓ ${name} found via default export object`);
+			}
+			return resolved[name];
+		}
+
+		if (DEBUG && resolved && resolved[name]) {
+			console.log(`[FormulaCalculator Resolver] ✗ ${name} exists in resolved but is not a function (type: ${typeof resolved[name]})`);
+		}
+
+		// Try 2: Named export from module
 		if (module[name] && typeof module[name] === "function") {
 			if (DEBUG) {
 				console.log(`[FormulaCalculator Resolver] ✓ ${name} found via named export from module`);
@@ -154,26 +147,15 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 			console.log(`[FormulaCalculator Resolver] ✗ ${name} exists in module but is not a function (type: ${typeof module[name]})`);
 		}
 
-		// Try 2: From default export object
-		if (resolved[name] && typeof resolved[name] === "function") {
-			if (DEBUG) {
-				console.log(`[FormulaCalculator Resolver] ✓ ${name} found via default export object`);
-			}
-			return resolved[name];
-		}
-
-		if (DEBUG && resolved[name]) {
-			console.log(`[FormulaCalculator Resolver] ✗ ${name} exists in resolved but is not a function (type: ${typeof resolved[name]})`);
-		}
-
-		// Try 3: From class static method (if fallback enabled)
-		if (fallbackToClassMethod && FormulaCalculator[name]) {
-			const classMethod = FormulaCalculator[name];
+		// Try 3: From FormulaCalculator class static method (fallback for backward compatibility)
+		const FormulaCalculatorClass = resolved?.FormulaCalculator || module?.FormulaCalculator;
+		if (fallbackToClassMethod && FormulaCalculatorClass && FormulaCalculatorClass[name]) {
+			const classMethod = FormulaCalculatorClass[name];
 			if (typeof classMethod === "function") {
 				if (DEBUG) {
-					console.log(`[FormulaCalculator Resolver] ✓ ${name} found via FormulaCalculator class static method (bound)`);
+					console.log(`[FormulaCalculator Resolver] ✓ ${name} found via FormulaCalculator class static method`);
 				}
-				return classMethod.bind(FormulaCalculator);
+				return classMethod;
 			}
 			if (DEBUG) {
 				console.log(`[FormulaCalculator Resolver] ✗ ${name} exists on FormulaCalculator class but is not a function (type: ${typeof classMethod})`);
@@ -188,11 +170,14 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 			console.error("[FormulaCalculator Resolver] Default export keys:", Object.keys(module.default));
 		}
 		console.error("[FormulaCalculator Resolver] Resolved object keys:", Object.keys(resolved || {}));
-		console.error("[FormulaCalculator Resolver] FormulaCalculator static methods:", 
-			Object.getOwnPropertyNames(FormulaCalculator).filter(name => 
-				typeof FormulaCalculator[name] === "function" && name !== "length" && name !== "name" && name !== "prototype"
-			)
-		);
+		const FormulaCalculatorClassForError = resolved?.FormulaCalculator || module?.FormulaCalculator;
+		if (FormulaCalculatorClassForError) {
+			console.error("[FormulaCalculator Resolver] FormulaCalculator static methods:", 
+				Object.getOwnPropertyNames(FormulaCalculatorClassForError).filter(n => 
+					typeof FormulaCalculatorClassForError[n] === "function" && n !== "length" && n !== "name" && n !== "prototype"
+				)
+			);
+		}
 		throw new Error(errorMsg);
 	};
 
@@ -201,6 +186,7 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 		console.log("[FormulaCalculator Resolver] Resolving all required functions...");
 	}
 
+	const calculateRemuneration = resolveFunction("calculateRemuneration");
 	const extractFieldValueForCalculation = resolveFunction(
 		"extractFieldValueForCalculation"
 	);
@@ -216,6 +202,7 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 
 	// Validate all functions are callable
 	const functions = {
+		calculateRemuneration,
 		extractFieldValueForCalculation,
 		calculateDenominatorValue,
 		extractTargetConfiguration,
@@ -288,7 +275,10 @@ export async function resolveFormulaCalculator(): Promise<ResolvedFormulaCalcula
 	};
 
 	return {
-		FormulaCalculator,
+		calculateRemuneration: wrapWithDebugging(
+			"calculateRemuneration",
+			calculateRemuneration
+		),
 		extractFieldValueForCalculation: wrapWithDebugging(
 			"extractFieldValueForCalculation",
 			extractFieldValueForCalculation

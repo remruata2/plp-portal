@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { FormulaCalculator } from "@/lib/calculations/formula-calculator";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator";
 
 export interface PerformanceCalculationResult {
   facility_id: string;
@@ -13,11 +13,6 @@ export interface PerformanceCalculationResult {
 }
 
 export class FacilityPerformanceCalculator {
-  private formulaCalculator: FormulaCalculator;
-
-  constructor() {
-    this.formulaCalculator = new FormulaCalculator();
-  }
 
   /**
    * Calculate performance for all indicators in a facility for a specific month
@@ -189,7 +184,7 @@ export class FacilityPerformanceCalculator {
         // Pass 0 to indicate no remuneration budget available here.
         const maxRemuneration = 0;
 
-        const incentiveCalculation = FormulaCalculator.calculateRemuneration(
+        const incentiveCalculation = calculateRemuneration(
           Number(numerator || 0),
           Number(target_value || 0),
           maxRemuneration,

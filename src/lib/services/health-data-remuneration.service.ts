@@ -142,7 +142,7 @@ export class HealthDataRemunerationService {
 					const baseMaxRemuneration = parseFloat(
 						remuneration.base_amount.toString()
 					);
-					result = FC.FormulaCalculator.calculateRemuneration(
+					result = FC.calculateRemuneration(
 						actualValue,
 						denominatorValue,
 						baseMaxRemuneration,
@@ -182,16 +182,15 @@ export class HealthDataRemunerationService {
 					parseFloat(remuneration.base_amount.toString())
 				) {
 					try {
-						const recalculatedResult =
-							FC.FormulaCalculator.calculateRemuneration(
-								actualValue,
-								denominatorValue,
-								tbResult.effectiveMaxRemuneration,
-								calculationConfig,
-								facility.facility_type.name,
-								undefined,
-								Object.fromEntries(fieldValueMap)
-							);
+						const recalculatedResult = FC.calculateRemuneration(
+							actualValue,
+							denominatorValue,
+							tbResult.effectiveMaxRemuneration,
+							calculationConfig,
+							facility.facility_type.name,
+							undefined,
+							Object.fromEntries(fieldValueMap)
+						);
 						finalRemuneration = recalculatedResult.remuneration;
 					} catch (error) {
 						// Use original result if recalculation fails

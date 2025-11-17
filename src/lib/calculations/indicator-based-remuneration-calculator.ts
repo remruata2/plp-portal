@@ -1,5 +1,5 @@
 import { PrismaClient } from "@/generated/prisma";
-import { FormulaCalculator } from "./formula-calculator";
+import { calculateRemuneration } from "./formula-calculator";
 
 const prisma = new PrismaClient();
 
@@ -73,7 +73,7 @@ export class IndicatorBasedRemunerationCalculator {
           (indicator.formula_config as any)?.calculationFormula || "(A/B)*100",
       };
 
-      const calculationResult = FormulaCalculator.calculateRemuneration(
+      const calculationResult = calculateRemuneration(
         numeratorValue,
         targetValue,
         0, // maxRemuneration - using 0 as default

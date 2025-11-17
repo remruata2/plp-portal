@@ -1,7 +1,4 @@
-// Re-export all functions and types from the modular structure
-export * from "./formula-calculator/index";
-
-// Import all functions for FormulaCalculator class and default export
+// Import all functions for FormulaCalculator class and exports
 import {
 	calculateRemuneration,
 	calculateMathematicalFormula,
@@ -37,7 +34,7 @@ export class FormulaCalculator {
 	static parseFormula = parseFormula;
 }
 
-// Named exports (for explicit imports)
+// Named exports (for explicit imports) - MUST be explicit to prevent tree-shaking
 export {
 	calculateRemuneration,
 	calculateMathematicalFormula,
@@ -51,7 +48,9 @@ export {
 };
 
 // Default export aggregator for dynamic imports
-export default {
+// IMPORTANT: This object structure prevents tree-shaking in Next.js/SWC builds
+// All functions must be explicitly listed to ensure they're available in production
+const defaultExport = {
 	FormulaCalculator,
 	calculateRemuneration,
 	calculateMathematicalFormula,
@@ -63,3 +62,6 @@ export default {
 	mapStatusToReportStatus,
 	parseFormula,
 };
+
+// Use Object.freeze to prevent modifications and ensure all properties are preserved
+export default Object.freeze(defaultExport);

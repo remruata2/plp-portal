@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { ConfigurationSnapshot } from "./configuration-snapshot";
 import {
-	FormulaCalculator,
+	calculateRemuneration,
 	extractFieldValueForCalculation,
 } from "./formula-calculator";
 
@@ -202,7 +202,7 @@ export class RemunerationCalculator {
           };
 
           // Calculate individual indicator incentive using FormulaCalculator (same pattern as working code)
-          const result = FormulaCalculator.calculateRemuneration(
+          const result = calculateRemuneration(
             Number(actualValue), // numerator
             Number(targetValue), // denominator/target
             Number(indicatorRemuneration.base_amount), // max remuneration
@@ -1505,7 +1505,7 @@ export class RemunerationCalculator {
             };
 
             // Calculate remuneration using FormulaCalculator (EXACT same call as reports)
-            const result = FormulaCalculator.calculateRemuneration(
+            const result = calculateRemuneration(
               Number(actualValue), // numerator
               Number(denominatorValue), // denominator
               maxRemuneration, // max remuneration
