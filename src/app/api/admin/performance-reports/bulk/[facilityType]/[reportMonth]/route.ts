@@ -343,6 +343,7 @@ export async function GET(
 					"Target",
 					"Target Min",
 					"Target Max",
+					"Achievement %",
 					"Incentive Amount",
 				];
 
@@ -633,6 +634,11 @@ export async function GET(
 				}
 
 				row[`${indicatorKeyPrefix} - Indicator amount`] = Math.round(incentive);
+				row[`${indicatorKeyPrefix} - Achievement %`] = Number.isFinite(
+					achievementPercentage
+				)
+					? Number(achievementPercentage.toFixed(2))
+					: 0;
 				totalIncentiveForFacility += incentive;
 			}
 
@@ -678,6 +684,7 @@ export async function GET(
 				line.push(r[`${indicatorName} - Target`] ?? "");
 				line.push(r[`${indicatorName} - Target min`] ?? "");
 				line.push(r[`${indicatorName} - Target max`] ?? "");
+				line.push(r[`${indicatorName} - Achievement %`] ?? "");
 				line.push(r[`${indicatorName} - Indicator amount`] ?? "");
 			}
 			line.push(r["Total Facility Incentive"]);
@@ -726,6 +733,7 @@ export async function GET(
 			worksheet.getColumn(colIndex++).width = 14; // Target
 			worksheet.getColumn(colIndex++).width = 14; // Target Min
 			worksheet.getColumn(colIndex++).width = 14; // Target Max
+			worksheet.getColumn(colIndex++).width = 14; // Achievement %
 			worksheet.getColumn(colIndex++).width = 16; // Incentive Amount
 		}
 		worksheet.getColumn(colIndex).width = 20; // Total Facility Incentive
