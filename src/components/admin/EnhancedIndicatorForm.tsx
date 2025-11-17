@@ -480,9 +480,11 @@ export default function EnhancedIndicatorForm({
 										<span className="text-gray-500 text-sm">(Optional)</span>
 									</Label>
 									<Select
-										value={formData.denominator_field_id || ""}
+										value={formData.denominator_field_id || "none"}
 										onValueChange={(value) =>
-											updateFormData({ denominator_field_id: value || "" })
+											updateFormData({
+												denominator_field_id: value === "none" ? "" : value,
+											})
 										}
 									>
 										<SelectTrigger>
@@ -497,7 +499,9 @@ export default function EnhancedIndicatorForm({
 											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="">None (No denominator)</SelectItem>
+											<SelectItem value="none">
+												None (No denominator)
+											</SelectItem>
 											{fields.map((field) => (
 												<SelectItem key={field.id} value={field.id.toString()}>
 													{field.name}
