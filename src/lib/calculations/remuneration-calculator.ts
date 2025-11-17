@@ -1407,18 +1407,8 @@ export class RemunerationCalculator {
 										denominatorValue = 1;
 									}
 								} else {
-									// For non-binary indicators, use facility-type based population defaults
-									const defaultPopulationValues: Record<string, number> = {
-										PHC: 25000,
-										SC_HWC: 3000,
-										A_HWC: 3000,
-										U_HWC: 10000,
-										UPHC: 50000,
-									};
-
-									denominatorValue =
-										defaultPopulationValues[facility.facility_type.name] ||
-										5000;
+									// For non-binary indicators, return 0 if denominator is missing
+									denominatorValue = 0;
 								}
 							}
 						}
