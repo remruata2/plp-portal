@@ -94,9 +94,9 @@ export default function ViewFacilitySubmissionPage({
 			population_18_plus: { code: "POP001", name: "Population Data" },
 
 			// ANC indicators - facility-specific mappings
-			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
-			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
-			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
+			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall " },
+			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall " },
+			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall " },
 			anc_footfall_sc: {
 				code: "AF001_SC",
 				name: "Total ANC footfall - SC-HWC",
@@ -319,7 +319,7 @@ export default function ViewFacilitySubmissionPage({
 					fieldLower.includes("anc") ||
 					fieldLower.includes("antenatal")
 				) {
-					indicator = { code: "AF001_PHC", name: "Total ANC footfall - PHC" };
+					indicator = { code: "AF001_PHC", name: "Total ANC footfall " };
 				} else if (
 					fieldLower.includes("tb") ||
 					fieldLower.includes("tuberculosis")
@@ -370,7 +370,7 @@ export default function ViewFacilitySubmissionPage({
 			"WS001", // 2. Total Wellness sessions
 			"TC001", // 3. Teleconsultation
 			// ANC Footfall - facility-specific
-			"AF001_PHC", // 4. Total ANC footfall - PHC
+			"AF001_PHC", // 4. Total ANC footfall
 			"AF001_SC", // 4. Total ANC footfall - SC-HWC
 			"AF001_AHWC", // 4. Total ANC footfall - A-HWC
 			"HT001", // 5. Pregnant women tested for Hb

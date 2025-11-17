@@ -63,9 +63,9 @@ export default function ViewSubmissionPage({
 			population_30_plus_female: { code: "POP001", name: "Population Data" },
 			population_18_plus: { code: "POP001", name: "Population Data" },
 
-			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
-			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
-			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
+			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall " },
+			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall " },
+			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall " },
 			anc_footfall_sc: {
 				code: "AF001_SC",
 				name: "Total ANC footfall - SC-HWC",
@@ -270,7 +270,7 @@ export default function ViewSubmissionPage({
 					fieldLower.includes("anc") ||
 					fieldLower.includes("antenatal")
 				) {
-					indicator = { code: "AF001_PHC", name: "Total ANC footfall - PHC" };
+					indicator = { code: "AF001_PHC", name: "Total ANC footfall " };
 				} else if (
 					fieldLower.includes("tb") ||
 					fieldLower.includes("tuberculosis")

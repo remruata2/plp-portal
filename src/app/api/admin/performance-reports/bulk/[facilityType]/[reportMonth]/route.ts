@@ -306,6 +306,7 @@ export async function GET(
 		type IndicatorColumnConfig = {
 			indicatorId: number;
 			indicatorName: string;
+			submittedValueKey: string;
 			numeratorKey: string;
 			includeDenominator: boolean;
 			denominatorKey?: string;
@@ -315,10 +316,13 @@ export async function GET(
 
 		const indicatorColumnConfigs: IndicatorColumnConfig[] =
 			indicatorsSorted.map((indicator) => {
-				const numeratorLabel = resolveFieldLabel(
+				const submittedValueKey = `${indicator.name} - Submitted Value`;
+
+				const numeratorLabelRaw = resolveFieldLabel(
 					indicator.numerator_field as any,
 					"Submitted Value"
 				);
+				const numeratorLabel = `NUM - ${numeratorLabelRaw}`;
 				const numeratorKey = `${indicator.name} - ${numeratorLabel}`;
 
 				const hasAdminPrefilledDenominator =
@@ -331,13 +335,17 @@ export async function GET(
 					!hasAdminPrefilledDenominator;
 
 				const denominatorLabel = includeDenominator
-					? resolveFieldLabel(indicator.denominator_field as any, "Denominator")
+					? `DEN - ${resolveFieldLabel(
+							indicator.denominator_field as any,
+							"Denominator"
+					  )}`
 					: undefined;
 				const denominatorKey = includeDenominator
 					? `${indicator.name} - ${denominatorLabel}`
 					: undefined;
 
 				const subHeaders = [
+					"Submitted Value",
 					numeratorLabel,
 					...(includeDenominator && denominatorLabel ? [denominatorLabel] : []),
 					"Target",
@@ -350,6 +358,7 @@ export async function GET(
 				return {
 					indicatorId: indicator.id,
 					indicatorName: indicator.name,
+					submittedValueKey,
 					numeratorKey,
 					includeDenominator,
 					denominatorKey,
@@ -512,6 +521,8 @@ export async function GET(
 
 				const columnConfig = indicatorColumnConfigMap.get(indicator.id);
 				if (columnConfig) {
+					row[columnConfig.submittedValueKey] =
+						formatFieldValueForExport(actualValue) ?? "";
 					row[columnConfig.numeratorKey] =
 						formatFieldValueForExport(actualValue) ?? "";
 
@@ -677,6 +688,7 @@ export async function GET(
 			}
 			for (const config of indicatorColumnConfigs) {
 				const indicatorName = config.indicatorName;
+				line.push(r[config.submittedValueKey] ?? "");
 				line.push(r[config.numeratorKey] ?? "");
 				if (config.includeDenominator && config.denominatorKey) {
 					line.push(r[config.denominatorKey] ?? "");
@@ -726,6 +738,7 @@ export async function GET(
 			worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
 		}
 		for (const config of indicatorColumnConfigs) {
+			worksheet.getColumn(colIndex++).width = 16; // Submitted Value
 			worksheet.getColumn(colIndex++).width = 18; // Numerator value
 			if (config.includeDenominator && config.denominatorKey) {
 				worksheet.getColumn(colIndex++).width = 18; // Denominator value
