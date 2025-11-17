@@ -52,10 +52,13 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
   const getFormulaDisplay = () => {
     const targetType = indicator.target_type;
     const actual = indicator.actual;
-    const targetValue = indicator.target_value_for_calculation || 0;
+    const targetValue = indicator.target_value_for_calculation ?? 0;
     const percentage = indicator.raw_percentage || indicator.percentage || 0;
-    const numeratorValue = indicator.numerator_value || actual;
-    const denominatorValue = indicator.denominator_value || 1;
+    const numeratorValue = indicator.numerator_value ?? actual;
+    const denominatorValue =
+      indicator.denominator_value ??
+      indicator.target_value_for_calculation ??
+      1;
     const formulaConfig = indicator.formula_config || {};
     const calculationResult = indicator.calculation_result;
 
@@ -290,7 +293,7 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
               <div className="font-mono bg-white p-2 rounded border">
                 <div>1. Input Values:</div>
                 <div className="ml-4">{indicator.numerator_field?.name || "Numerator"} (A) = {indicator.numerator_value || indicator.actual}</div>
-                <div className="ml-4">{indicator.denominator_field?.name || "Denominator"} (B) = {indicator.denominator_value || 1}</div>
+                <div className="ml-4">{indicator.denominator_field?.name || "Denominator"} (B) = {indicator.denominator_value ?? indicator.target_value_for_calculation ?? 1}</div>
               </div>
               <div className="font-mono bg-white p-2 rounded border">
                 <div>2. Apply Formula:</div>
@@ -302,7 +305,7 @@ export function CalculationDetailsModal({ indicator, facilityType }: Calculation
                   {(() => {
                     const formula = indicator.formula_config?.calculationFormula || "(A/B)*100";
                     const numerator = indicator.numerator_value || indicator.actual;
-                    const denominator = indicator.denominator_value || 1;
+                    const denominator = indicator.denominator_value ?? indicator.target_value_for_calculation ?? 1;
                     
                     if (formula === "(A/(B/12))*100") {
                       // Population-based formula: A/(B/12)*100
