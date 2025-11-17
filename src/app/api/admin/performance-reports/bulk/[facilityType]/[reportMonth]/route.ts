@@ -31,6 +31,32 @@ function parseRangeFromTargetValue(
 	return null;
 }
 
+function formatFieldValueForExport(value: any): string | number {
+	if (value === undefined || value === null) return "";
+	if (typeof value === "boolean") return value ? 1 : 0;
+	if (typeof value === "number") {
+		if (Number.isNaN(value)) return "";
+		return value;
+	}
+	if (typeof value === "string") {
+		return value;
+	}
+	return `${value}`;
+}
+
+function resolveFieldLabel(
+	field:
+		| { name?: string | null; label?: string | null; code?: string | null }
+		| null
+		| undefined,
+	fallback: string
+): string {
+	if (!field) return fallback;
+	return (
+		field.name?.trim() || field.label?.trim() || field.code?.trim() || fallback
+	);
+}
+
 async function computeTargetAmountRange(
 	indicator: any,
 	facilityTypeName: string,
@@ -92,6 +118,11 @@ async function computeTargetAmountRange(
 }
 
 function buildTargetDisplay(indicator: any): string {
+	const targetFormula = indicator.target_formula;
+	if (targetFormula && String(targetFormula).trim().length > 0) {
+		return String(targetFormula);
+	}
+
 	const cfg = (indicator.formula_config as any) || {};
 	const targetType = indicator.target_type;
 	const raw = indicator.target_value
@@ -272,6 +303,65 @@ export async function GET(
 		// Apply the same indicator ordering as the detailed report page
 		const indicatorsSorted = sortIndicatorsBySourceOrder([...indicators]);
 
+		type IndicatorColumnConfig = {
+			indicatorId: number;
+			indicatorName: string;
+			numeratorKey: string;
+			includeDenominator: boolean;
+			denominatorKey?: string;
+			subHeaders: string[];
+			columnsCount: number;
+		};
+
+		const indicatorColumnConfigs: IndicatorColumnConfig[] =
+			indicatorsSorted.map((indicator) => {
+				const numeratorLabel = resolveFieldLabel(
+					indicator.numerator_field as any,
+					"Submitted Value"
+				);
+				const numeratorKey = `${indicator.name} - ${numeratorLabel}`;
+
+				const hasAdminPrefilledDenominator =
+					indicator.denominator_field?.default_value !== null &&
+					indicator.denominator_field?.default_value !== undefined &&
+					String(indicator.denominator_field?.default_value).trim() !== "";
+
+				const includeDenominator =
+					Boolean(indicator.denominator_field_id) &&
+					!hasAdminPrefilledDenominator;
+
+				const denominatorLabel = includeDenominator
+					? resolveFieldLabel(indicator.denominator_field as any, "Denominator")
+					: undefined;
+				const denominatorKey = includeDenominator
+					? `${indicator.name} - ${denominatorLabel}`
+					: undefined;
+
+				const subHeaders = [
+					numeratorLabel,
+					...(includeDenominator && denominatorLabel ? [denominatorLabel] : []),
+					"Target",
+					"Target Min",
+					"Target Max",
+					"Incentive Amount",
+				];
+
+				return {
+					indicatorId: indicator.id,
+					indicatorName: indicator.name,
+					numeratorKey,
+					includeDenominator,
+					denominatorKey,
+					subHeaders,
+					columnsCount: subHeaders.length,
+				};
+			});
+
+		const indicatorColumnConfigMap = new Map<number, IndicatorColumnConfig>();
+		for (const config of indicatorColumnConfigs) {
+			indicatorColumnConfigMap.set(config.indicatorId, config);
+		}
+
 		// Check if facility type has TB indicators (CT001 or DC001)
 		const hasTbIndicators = indicators.some(
 			(ind) => ind.code === "CT001" || ind.code === "DC001"
@@ -418,7 +508,20 @@ export async function GET(
 					else if (raw != null && !Number.isNaN(Number(raw)))
 						actualValue = Number(raw);
 				}
-				row[`${indicatorKeyPrefix} - Indicator`] = actualValue;
+
+				const columnConfig = indicatorColumnConfigMap.get(indicator.id);
+				if (columnConfig) {
+					row[columnConfig.numeratorKey] =
+						formatFieldValueForExport(actualValue) ?? "";
+
+					if (columnConfig.includeDenominator && columnConfig.denominatorKey) {
+						const denominatorRaw = indicator.denominator_field_id
+							? fieldValueMap.get(indicator.denominator_field_id)
+							: undefined;
+						row[columnConfig.denominatorKey] =
+							formatFieldValueForExport(denominatorRaw) ?? "";
+					}
+				}
 
 				// Target display
 				row[`${indicatorKeyPrefix} - Target`] = buildTargetDisplay(indicator);
@@ -432,7 +535,7 @@ export async function GET(
 				row[`${indicatorKeyPrefix} - Target amount`] = Number.isFinite(
 					targetAmount
 				)
-					? Math.round(targetAmount)
+					? Number(targetAmount.toFixed(2))
 					: 0;
 
 				// Target min/max amount (for clarity)
@@ -443,10 +546,10 @@ export async function GET(
 						fieldValueMap
 					);
 				row[`${indicatorKeyPrefix} - Target min`] = Number.isFinite(targetMin)
-					? Math.round(targetMin)
+					? Number(targetMin.toFixed(2))
 					: 0;
 				row[`${indicatorKeyPrefix} - Target max`] = Number.isFinite(targetMax)
-					? Math.round(targetMax)
+					? Number(targetMax.toFixed(2))
 					: 0;
 
 				// Indicator amount: prefer stored record; fallback to calculation using FormulaCalculator
@@ -548,16 +651,12 @@ export async function GET(
 			headerTop.push("HWO / AYUSH MO");
 			headerSub.push("");
 		}
-		for (const indicator of indicatorsSorted) {
-			const p = `${indicator.name}`;
-			headerTop.push(p, "", "", "", "");
-			headerSub.push(
-				"Submitted Value",
-				"Target",
-				"Target Min",
-				"Target Max",
-				"Incentive Amount"
-			);
+		for (const config of indicatorColumnConfigs) {
+			headerTop.push(config.indicatorName);
+			for (let i = 1; i < config.columnsCount; i++) {
+				headerTop.push("");
+			}
+			headerSub.push(...config.subHeaders);
 		}
 		headerTop.push("Total Facility Incentive");
 		headerSub.push("");
@@ -570,13 +669,16 @@ export async function GET(
 			if (hasHwoOrAyushMo) {
 				line.push(r["HWO / AYUSH MO"]);
 			}
-			for (const indicator of indicatorsSorted) {
-				const p = `${indicator.name}`;
-				line.push(r[`${p} - Indicator`]);
-				line.push(r[`${p} - Target`]);
-				line.push(r[`${p} - Target min`]);
-				line.push(r[`${p} - Target max`]);
-				line.push(r[`${p} - Indicator amount`]);
+			for (const config of indicatorColumnConfigs) {
+				const indicatorName = config.indicatorName;
+				line.push(r[config.numeratorKey] ?? "");
+				if (config.includeDenominator && config.denominatorKey) {
+					line.push(r[config.denominatorKey] ?? "");
+				}
+				line.push(r[`${indicatorName} - Target`] ?? "");
+				line.push(r[`${indicatorName} - Target min`] ?? "");
+				line.push(r[`${indicatorName} - Target max`] ?? "");
+				line.push(r[`${indicatorName} - Indicator amount`] ?? "");
 			}
 			line.push(r["Total Facility Incentive"]);
 			data.push(line);
@@ -588,8 +690,12 @@ export async function GET(
 		if (hasHwoOrAyushMo) {
 			grandRow.push("");
 		}
-		// Fill blanks for indicator groups (5 subcolumns per indicator)
-		for (let i = 0; i < indicatorsSorted.length * 5; i++) grandRow.push("");
+		const totalIndicatorColumns = indicatorColumnConfigs.reduce(
+			(sum, config) => sum + config.columnsCount,
+			0
+		);
+		// Fill blanks for indicator groups
+		for (let i = 0; i < totalIndicatorColumns; i++) grandRow.push("");
 		grandRow.push(Math.round(grandTotal));
 		data.push(grandRow);
 
@@ -612,8 +718,11 @@ export async function GET(
 		if (hasHwoOrAyushMo) {
 			worksheet.getColumn(colIndex++).width = 28; // HWO / AYUSH MO
 		}
-		for (let i = 0; i < indicatorsSorted.length; i++) {
-			worksheet.getColumn(colIndex++).width = 16; // Submitted Value
+		for (const config of indicatorColumnConfigs) {
+			worksheet.getColumn(colIndex++).width = 18; // Numerator value
+			if (config.includeDenominator && config.denominatorKey) {
+				worksheet.getColumn(colIndex++).width = 18; // Denominator value
+			}
 			worksheet.getColumn(colIndex++).width = 14; // Target
 			worksheet.getColumn(colIndex++).width = 14; // Target Min
 			worksheet.getColumn(colIndex++).width = 14; // Target Max
@@ -638,13 +747,14 @@ export async function GET(
 			baseColCount = 4;
 		}
 
-		// Merge each indicator group name across 5 columns in top row
-		for (let i = 0; i < indicatorsSorted.length; i++) {
-			const startCol = baseColCount + 1 + i * 5; // after base columns (1-indexed)
-			worksheet.mergeCells(1, startCol, 1, startCol + 4);
+		let indicatorColumnOffset = 0;
+		for (const config of indicatorColumnConfigs) {
+			const startCol = baseColCount + 1 + indicatorColumnOffset; // after base columns (1-indexed)
+			worksheet.mergeCells(1, startCol, 1, startCol + config.columnsCount - 1);
+			indicatorColumnOffset += config.columnsCount;
 		}
 		// Merge Total Facility Incentive over two rows (last column)
-		const totalCol = baseColCount + 1 + indicatorsSorted.length * 5;
+		const totalCol = baseColCount + 1 + indicatorColumnOffset;
 		worksheet.mergeCells(1, totalCol, 2, totalCol);
 
 		// Style header rows
