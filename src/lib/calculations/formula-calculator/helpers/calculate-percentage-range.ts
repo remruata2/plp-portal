@@ -22,37 +22,43 @@ export function calculatePercentageRange(
 ): CalculationResult {
 	const { min, max } = config.range || { min: 3, max: 5 };
 
-	// Extract numeric target value for calculations
-	let numericTargetValue: number = 0;
+	// Extract numeric denominator value for calculations
+	// NOTE: targetValue is the actual denominator value (from denominator field), NOT the percentage range max
+	// The range.min and range.max are percentages (e.g., 50%, 100%) used for comparison
+	let numericDenominatorValue: number = 0;
 	if (typeof targetValue === "number") {
-		numericTargetValue = targetValue;
+		numericDenominatorValue = targetValue;
 	} else if (typeof targetValue === "string") {
-		numericTargetValue = parseFloat(targetValue) || 0;
+		numericDenominatorValue = parseFloat(targetValue) || 0;
 	} else if (typeof targetValue === "object" && targetValue !== null) {
 		// If it's an object (e.g., {min: X, max: Y}), extract a numeric value
 		const targetObj = targetValue as any;
-		numericTargetValue =
+		numericDenominatorValue =
 			targetObj.value || targetObj.max || targetObj.min || 0;
 	}
 
-	if (numericTargetValue === 0) {
-		return {
-			achievement: 0,
-			remuneration: 0,
-			remunerationPercentage: 0,
-			status: "BELOW_TARGET",
-			message: "Target value is zero",
-		};
+	// Calculate the actual percentage achieved using the formula
+	// Handle cases where there's no denominator (formula might be "A" or "A*100")
+	let actualPercentage: number = 0;
+	
+	if (config.calculationFormula) {
+		// Use the formula (e.g., "(A/B)*100", "A", "A*100")
+		// If formula doesn't use B (denominator), it will work even if denominator is 0
+		actualPercentage = calculateMathematicalFormula(
+			submittedValue,
+			numericDenominatorValue || 1, // Use 1 as fallback to avoid division by zero in formula
+			config.calculationFormula
+		);
+	} else {
+		// Default formula: (numerator / denominator) * 100
+		if (numericDenominatorValue === 0) {
+			// No denominator - treat submittedValue as already a percentage
+			// This handles cases where indicator has no denominator field
+			actualPercentage = submittedValue;
+		} else {
+			actualPercentage = (submittedValue / numericDenominatorValue) * 100;
+		}
 	}
-
-	// Calculate the actual percentage achieved using the formula (user-facing)
-	const actualPercentage = config.calculationFormula
-		? calculateMathematicalFormula(
-				submittedValue,
-				numericTargetValue,
-				config.calculationFormula
-		  )
-		: (submittedValue / numericTargetValue) * 100; // Fallback
 
 	// Cap the achievement percentage at 100% to prevent inflation
 	const cappedActualPercentage = Math.min(actualPercentage, 100);

@@ -30,15 +30,15 @@ export function calculateDenominatorValue(
 		return 5;
 	}
 
-	// 3. For RANGE and PERCENTAGE_RANGE indicators, use extractTargetConfiguration() to get range with correct priority:
+	// 3. For RANGE indicators, use extractTargetConfiguration() to get range with correct priority:
 	//    Priority 1: Facility-specific range (formula_config.facilitySpecificTargets[facilityType].range)
 	//    Priority 2: General range (formula_config.range)
 	//    Priority 3: Range from target_value column
 	//    Priority 4: Field default value (if provided)
-	if (
-		indicator.target_type === "RANGE" ||
-		indicator.target_type === "PERCENTAGE_RANGE"
-	) {
+	// NOTE: For PERCENTAGE_RANGE, we do NOT use range.max as denominator.
+	//       The range.min and range.max are percentages (e.g., 50%, 100%) used for comparison,
+	//       not the actual denominator value. We use the actual denominator field value instead.
+	if (indicator.target_type === "RANGE") {
 		const targetConfig = extractTargetConfiguration(
 			{
 				target_type: indicator.target_type,
@@ -61,6 +61,9 @@ export function calculateDenominatorValue(
 			}
 		}
 	}
+
+	// For PERCENTAGE_RANGE, skip the range.max logic and continue to use actual denominator field value
+	// The range.min and range.max are percentages used for comparison, not the denominator itself
 
 	// 4. Handle missing denominator for binary indicators
 	if (denominatorValue === undefined || denominatorValue === null) {
