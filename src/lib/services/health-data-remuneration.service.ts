@@ -1,5 +1,13 @@
 import type { PrismaClient } from "@prisma/client";
-import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
+import {
+	extractFieldValueForCalculation,
+	calculateDenominatorValue,
+	extractTargetConfiguration,
+	buildCalculationConfig,
+	calculateRemuneration,
+	calculateTbConditionalRemuneration,
+	mapStatusToReportStatus,
+} from "@/lib/calculations/formula-calculator";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -27,8 +35,6 @@ export class HealthDataRemunerationService {
 		tx: any // This is already a transaction instance
 	): Promise<HealthDataRemunerationResult> {
 		try {
-			// Use unified resolver for consistent dynamic import resolution
-			const FC = await resolveFormulaCalculator();
 			// Get facility information
 			const facility = await tx.facility.findUnique({
 				where: { id: facilityId },
@@ -77,7 +83,7 @@ export class HealthDataRemunerationService {
 			// Create a map of field values for easy lookup - EXACT SAME AS PERFORMANCE REPORT
 			const fieldValueMap = new Map();
 			dbFieldValues.forEach((fv: any) => {
-				const value = FC.extractFieldValueForCalculation(fv);
+				const value = extractFieldValueForCalculation(fv);
 				fieldValueMap.set(fv.field_id, value);
 			});
 
@@ -98,7 +104,7 @@ export class HealthDataRemunerationService {
 
 				// Calculate denominator value using centralized method
 				// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-				const denominatorValue = FC.calculateDenominatorValue(
+				const denominatorValue = calculateDenominatorValue(
 					{
 						code: indicator.code,
 						target_type: indicator.target_type,
@@ -118,7 +124,7 @@ export class HealthDataRemunerationService {
 				// 1. Facility-specific targets
 				// 2. General formula_config targets
 				// 3. target_value column fallback
-				const targetConfig = FC.extractTargetConfiguration(
+				const targetConfig = extractTargetConfiguration(
 					{
 						target_type: indicator.target_type,
 						target_value: indicator.target_value,
@@ -128,7 +134,7 @@ export class HealthDataRemunerationService {
 				);
 
 				// Build calculation config using centralized method
-				const calculationConfig = FC.buildCalculationConfig(
+				const calculationConfig = buildCalculationConfig(
 					indicator,
 					targetConfig,
 					formulaConfig
@@ -142,7 +148,7 @@ export class HealthDataRemunerationService {
 					const baseMaxRemuneration = parseFloat(
 						remuneration.base_amount.toString()
 					);
-					result = FC.calculateRemuneration(
+					result = calculateRemuneration(
 						actualValue,
 						denominatorValue,
 						baseMaxRemuneration,
@@ -167,7 +173,7 @@ export class HealthDataRemunerationService {
 				}
 
 				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = FC.calculateTbConditionalRemuneration(
+				const tbResult = calculateTbConditionalRemuneration(
 					remuneration,
 					dbFieldValues,
 					indicator.code,
@@ -182,7 +188,7 @@ export class HealthDataRemunerationService {
 					parseFloat(remuneration.base_amount.toString())
 				) {
 					try {
-						const recalculatedResult = FC.calculateRemuneration(
+						const recalculatedResult = calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							tbResult.effectiveMaxRemuneration,
@@ -249,7 +255,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: FC.mapStatusToReportStatus(result.status),
+							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 						create: {
@@ -264,7 +270,7 @@ export class HealthDataRemunerationService {
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
 							max_remuneration: tbResult.effectiveMaxRemuneration,
-							status: FC.mapStatusToReportStatus(result.status),
+							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 					});

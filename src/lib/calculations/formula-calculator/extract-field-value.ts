@@ -39,3 +39,4 @@ export function extractFieldValueForCalculation(fieldValue: {
 	return null;
 }
 
+

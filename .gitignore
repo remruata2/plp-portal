@@ -62,3 +62,22 @@ src/generated/prisma/
 backups/
 *.backup
 *.bak
+
+# compiled javascript (when ts files are compiled alongside)
+src/**/*.js
+src/**/*.js.map
+!src/**/*.config.js
+
+# prisma generated files
+src/generated/prisma/
+**/prisma/generated/
+
+# prisma binaries
+*.so.node
+*.dylib.node
+*.dll.node
+
+# backups
+backups/
+*.backup
+*.bak

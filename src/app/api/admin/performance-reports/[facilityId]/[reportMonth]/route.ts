@@ -6,7 +6,11 @@ import { HealthDataRemunerationService } from "@/lib/services/health-data-remune
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import * as XLSX from "xlsx";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
-import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
+import {
+	extractFieldValueForCalculation,
+	extractTargetConfiguration,
+	calculateDenominatorValue,
+} from "@/lib/calculations/formula-calculator";
 
 const prisma = new PrismaClient();
 
@@ -15,8 +19,6 @@ export async function GET(
 	{ params }: { params: Promise<{ facilityId: string; reportMonth: string }> }
 ) {
 	try {
-		// Use unified resolver for consistent dynamic import resolution
-		const FC = await resolveFormulaCalculator();
 		const session = await getServerSession(authOptions);
 
 		if (!session || session.user.role !== "admin") {
@@ -138,7 +140,7 @@ export async function GET(
 		// Create field value map for denominator calculation
 		const fieldValueMap = new Map<number, any>();
 		fieldValues.forEach((fv) => {
-			const value = FC.extractFieldValueForCalculation(fv);
+			const value = extractFieldValueForCalculation(fv);
 			fieldValueMap.set(fv.field_id, value);
 		});
 
@@ -158,7 +160,7 @@ export async function GET(
 			const cfg = (indicatorAny?.formula_config as any) || {};
 
 			// Extract target configuration using centralized method
-			const targetConfig = FC.extractTargetConfiguration(
+			const targetConfig = extractTargetConfiguration(
 				{
 					target_type: targetType || "",
 					target_value: indicatorAny?.target_value,
@@ -170,7 +172,7 @@ export async function GET(
 			// Calculate denominator value using centralized method
 			// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
 			const denominatorField = indicatorAny?.denominator_field;
-			const finalDenominatorValue = FC.calculateDenominatorValue(
+			const finalDenominatorValue = calculateDenominatorValue(
 				{
 					code: indicatorAny?.code || "",
 					target_type: targetType || "",

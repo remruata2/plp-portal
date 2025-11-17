@@ -5,7 +5,13 @@ import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
-import { resolveFormulaCalculator } from "@/lib/utils/formula-calculator-resolver";
+import {
+	calculateDenominatorValue,
+	extractFieldValueForCalculation,
+	extractTargetConfiguration,
+	buildCalculationConfig,
+	calculateRemuneration,
+} from "@/lib/calculations/formula-calculator";
 
 const prisma = new PrismaClient();
 
@@ -111,9 +117,6 @@ async function resolveDenominatorForIndicator(
 	facilityTypeName: string,
 	fieldValueMap: Map<string | number, any>
 ): Promise<number> {
-	// Use unified resolver for consistent dynamic import resolution
-	const FC = await resolveFormulaCalculator();
-
 	// Convert fieldValueMap to Map<number, any> for calculateDenominatorValue
 	const numberFieldValueMap = new Map<number, any>();
 	fieldValueMap.forEach((value, key) => {
@@ -125,7 +128,7 @@ async function resolveDenominatorForIndicator(
 
 	// Use centralized denominator calculation
 	// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
-	return FC.calculateDenominatorValue(
+	return calculateDenominatorValue(
 		{
 			code: indicator.code || "",
 			target_type: indicator.target_type || "",
@@ -324,11 +327,9 @@ export async function GET(
 			const records = await prisma.facilityRemunerationRecord.findMany({
 				where: { facility_id: facility.id, report_month: reportMonth },
 			});
-			// Use unified resolver for consistent dynamic import resolution
-			const FC = await resolveFormulaCalculator();
 			const fieldValueMap = new Map<string | number, any>();
 			for (const fv of fieldValues) {
-				const v = FC.extractFieldValueForCalculation(fv as any);
+				const v = extractFieldValueForCalculation(fv as any);
 				fieldValueMap.set(fv.field_id, v);
 			}
 
@@ -480,7 +481,6 @@ export async function GET(
 						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
 
 					// Calculate using FormulaCalculator (single source of truth)
-					const FC2 = await resolveFormulaCalculator();
 					const denominatorValue = await resolveDenominatorForIndicator(
 						indicator,
 						facility.facility_type.name,
@@ -492,7 +492,7 @@ export async function GET(
 					// 2. General formula_config targets
 					// 3. target_value column fallback
 					const formulaConfig = (indicator.formula_config as any) || {};
-					const targetConfig = FC2.extractTargetConfiguration(
+					const targetConfig = extractTargetConfiguration(
 						{
 							target_type: indicator.target_type,
 							target_value: indicator.target_value,
@@ -502,14 +502,14 @@ export async function GET(
 					);
 
 					// Build calculation config using centralized method
-					const calculationConfig = FC2.buildCalculationConfig(
+					const calculationConfig = buildCalculationConfig(
 						indicator,
 						targetConfig,
 						formulaConfig
 					);
 
 					try {
-						const result = FC2.calculateRemuneration(
+						const result = calculateRemuneration(
 							actualValue,
 							denominatorValue,
 							effectiveMaxRemuneration,

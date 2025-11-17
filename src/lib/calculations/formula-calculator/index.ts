@@ -12,3 +12,4 @@ export { parseFormula } from "./parse-formula";
 // Re-export types
 export type { FormulaConfig, CalculationResult } from "./types";
 
+
