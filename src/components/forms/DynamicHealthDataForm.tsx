@@ -286,16 +286,16 @@ export default function DynamicHealthDataForm({
 			population_18_plus: { code: "POP001", name: "Population Data" },
 
 			// ANC indicators - facility-specific mappings
-			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall - PHC" }, // Will be mapped based on facility type
-			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall - PHC" }, // Will be mapped based on facility type
-			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall - PHC" },
+			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
+			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
+			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall" },
 			anc_footfall_sc: {
 				code: "AF001_SC",
-				name: "Total ANC footfall - SC-HWC",
+				name: "Total ANC footfall",
 			},
 			anc_footfall_ahwc: {
 				code: "AF001_AHWC",
-				name: "Total ANC footfall - A-HWC",
+				name: "Total ANC footfall",
 			},
 			anc_tested_hb: { code: "HT001", name: "Pregnant women tested for Hb" },
 
@@ -316,27 +316,27 @@ export default function DynamicHealthDataForm({
 			},
 			tb_screenings: {
 				code: "TS001_PHC",
-				name: "Individuals screened for TB - PHC",
+				name: "Individuals screened for TB",
 			}, // Will be mapped based on facility type
 			tb_screenings_phc: {
 				code: "TS001_PHC",
-				name: "Individuals screened for TB - PHC",
+				name: "Individuals screened for TB",
 			},
 			tb_screenings_sc: {
 				code: "TS001_SC",
-				name: "Individuals screened for TB - SC-HWC",
+				name: "Individuals screened for TB",
 			},
 			tb_screenings_uhwc: {
 				code: "TS001_UHWC",
-				name: "Individuals screened for TB - U-HWC",
+				name: "Individuals screened for TB",
 			},
 			tb_screenings_ahwc: {
 				code: "TS001_AHWC",
-				name: "Individuals screened for TB - A-HWC",
+				name: "Individuals screened for TB",
 			},
 			tb_screenings_uphc: {
 				code: "TS001_UPHC",
-				name: "Individuals screened for TB - UPHC",
+				name: "Individuals screened for TB",
 			},
 			tb_contact_tracing_households: {
 				code: "CT001",
@@ -378,26 +378,26 @@ export default function DynamicHealthDataForm({
 			},
 
 			// Service indicators
-			total_footfall: { code: "TF001_PHC", name: "Total Footfall (M&F) - PHC" }, // Will be mapped based on facility type
+			total_footfall: { code: "TF001_PHC", name: "Total Footfall (M&F)" }, // Will be mapped based on facility type
 			total_footfall_phc_colocated_sc: {
 				code: "TF001_PHC",
-				name: "Total Footfall (M&F) - PHC",
+				name: "Total Footfall (M&F)",
 			},
 			total_footfall_sc_clinic: {
 				code: "TF001_SC",
-				name: "Total Footfall (M&F) - SC-HWC",
+				name: "Total Footfall (M&F)",
 			},
 			total_footfall_uhwc: {
 				code: "TF001_UHWC",
-				name: "Total Footfall (M&F) - U-HWC",
+				name: "Total Footfall (M&F)",
 			},
 			total_footfall_ahwc: {
 				code: "TF001_AHWC",
-				name: "Total Footfall (M&F) - A-HWC",
+				name: "Total Footfall (M&F)",
 			},
 			total_footfall_uphc: {
 				code: "TF001_UPHC",
-				name: "Total Footfall (M&F) - UPHC",
+				name: "Total Footfall (M&F)",
 			},
 			wellness_sessions_conducted: {
 				code: "WS001",
@@ -442,23 +442,23 @@ export default function DynamicHealthDataForm({
 			},
 			dvdms_issues_generated: {
 				code: "DV001_PHC",
-				name: "No. of issues generated in DVDMS - PHC",
+				name: "No. of issues generated in DVDMS",
 			}, // Will be mapped based on facility type
 			dvdms_issues_generated_phc: {
 				code: "DV001_PHC",
-				name: "No. of issues generated in DVDMS - PHC",
+				name: "No. of issues generated in DVDMS",
 			},
 			dvdms_issues_generated_sc: {
 				code: "DV001_SC",
-				name: "No. of issues generated in DVDMS - SC-HWC",
+				name: "No. of issues generated in DVDMS",
 			},
 			dvdms_issues_generated_uhwc: {
 				code: "DV001_UHWC",
-				name: "No. of issues generated in DVDMS - U-HWC",
+				name: "No. of issues generated in DVDMS",
 			},
 			dvdms_issues_generated_ahwc: {
 				code: "DV001_AHWC",
-				name: "No. of issues generated in DVDMS - A-HWC",
+				name: "No. of issues generated in DVDMS",
 			},
 		};
 
@@ -486,24 +486,24 @@ export default function DynamicHealthDataForm({
 		const indicatorOrder = [
 			"POP001", // Population Data (foundational)
 			// Total Footfall - facility-specific
-			"TF001_PHC", // 1. Total Footfall (M&F) - PHC
-			"TF001_SC", // 1. Total Footfall (M&F) - SC-HWC
-			"TF001_UHWC", // 1. Total Footfall (M&F) - U-HWC
-			"TF001_AHWC", // 1. Total Footfall (M&F) - A-HWC
-			"TF001_UPHC", // 1. Total Footfall (M&F) - UPHC
+			"TF001_PHC", // 1. Total Footfall (M&F)
+			"TF001_SC", // 1. Total Footfall (M&F)
+			"TF001_UHWC", // 1. Total Footfall (M&F)
+			"TF001_AHWC", // 1. Total Footfall (M&F)
+			"TF001_UPHC", // 1. Total Footfall (M&F)
 			"WS001", // 2. Total Wellness sessions
 			"TC001", // 3. Teleconsultation
 			// ANC Footfall - facility-specific
-			"AF001_PHC", // 4. Total ANC footfall - PHC
-			"AF001_SC", // 4. Total ANC footfall - SC-HWC
-			"AF001_AHWC", // 4. Total ANC footfall - A-HWC
+			"AF001_PHC", // 4. Total ANC footfall
+			"AF001_SC", // 4. Total ANC footfall
+			"AF001_AHWC", // 4. Total ANC footfall
 			"HT001", // 5. Pregnant women tested for Hb
 			// TB Screenings - facility-specific
-			"TS001_PHC", // 6. Individuals screened for TB - PHC
-			"TS001_SC", // 6. Individuals screened for TB - SC-HWC
-			"TS001_UHWC", // 6. Individuals screened for TB - U-HWC
-			"TS001_AHWC", // 6. Individuals screened for TB - A-HWC
-			"TS001_UPHC", // 6. Individuals screened for TB - UPHC
+			"TS001_PHC", // 6. Individuals screened for TB
+			"TS001_SC", // 6. Individuals screened for TB
+			"TS001_UHWC", // 6. Individuals screened for TB
+			"TS001_AHWC", // 6. Individuals screened for TB
+			"TS001_UPHC", // 6. Individuals screened for TB
 			"CT001", // 7. Household visited for TB contact tracing
 			"DC001", // 8. TB patients visited for Differentiated TB Care
 			"RS001", // 9. RI sessions held
@@ -519,10 +519,10 @@ export default function DynamicHealthDataForm({
 			"EC001", // 19. Elderly clinic conducted
 			"JM001", // 20. JAS meeting conducted
 			// DVDMS Issues - facility-specific
-			"DV001_PHC", // 21. Issues generated in DVDMS - PHC
-			"DV001_SC", // 21. Issues generated in DVDMS - SC-HWC
-			"DV001_UHWC", // 21. Issues generated in DVDMS - U-HWC
-			"DV001_AHWC", // 21. Issues generated in DVDMS - A-HWC
+			"DV001_PHC", // 21. Issues generated in DVDMS
+			"DV001_SC", // 21. Issues generated in DVDMS
+			"DV001_UHWC", // 21. Issues generated in DVDMS
+			"DV001_AHWC", // 21. Issues generated in DVDMS
 			// AYUSH-specific indicators
 			"PP001", // 22. Prakriti Parikshan conducted
 			"ES001", // 23. Elderly Support Group formed
@@ -1312,10 +1312,10 @@ export default function DynamicHealthDataForm({
 			if (!response.ok) {
 				let errorMessage = "Failed to submit data";
 				let errorDescription = `HTTP ${response.status}`;
-				
+
 				// Read response as text first (can only read body once)
 				const errorText = await response.text();
-				
+
 				if (errorText) {
 					try {
 						// Try to parse as JSON
@@ -1335,9 +1335,13 @@ export default function DynamicHealthDataForm({
 				} else {
 					errorDescription = `HTTP ${response.status}: ${response.statusText}`;
 				}
-				
+
 				// Show specific error message for deadline
-				if (response.status === 403 && (errorMessage.includes("deadline") || errorDescription.includes("deadline"))) {
+				if (
+					response.status === 403 &&
+					(errorMessage.includes("deadline") ||
+						errorDescription.includes("deadline"))
+				) {
 					toast({
 						title: "Submission Deadline Passed",
 						description: errorDescription,
@@ -1350,7 +1354,7 @@ export default function DynamicHealthDataForm({
 						variant: "destructive",
 					});
 				}
-				
+
 				// Return early instead of throwing to avoid duplicate error toast
 				return;
 			}
@@ -1477,7 +1481,8 @@ export default function DynamicHealthDataForm({
 							Submission already completed
 						</h3>
 						<p className="mt-2 text-gray-600">
-							You have already submitted data for {prevMonthName} {prevYear}. The form is closed for this period.
+							You have already submitted data for {prevMonthName} {prevYear}.
+							The form is closed for this period.
 						</p>
 						{existingSubmissions.length > 0 && (
 							<div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md inline-block text-left">
@@ -1502,7 +1507,11 @@ export default function DynamicHealthDataForm({
 							</div>
 						)}
 						<div className="mt-6">
-							<Button type="button" onClick={() => history.back()} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+							<Button
+								type="button"
+								onClick={() => history.back()}
+								className="bg-indigo-600 hover:bg-indigo-700 text-white"
+							>
 								Go Back
 							</Button>
 						</div>
@@ -1519,7 +1528,11 @@ export default function DynamicHealthDataForm({
 									<Label htmlFor="month-select" className="text-sm">
 										Month
 									</Label>
-									<Select value={selectedMonth} onValueChange={setSelectedMonth} disabled>
+									<Select
+										value={selectedMonth}
+										onValueChange={setSelectedMonth}
+										disabled
+									>
 										<SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 h-10 sm:h-11">
 											<SelectValue placeholder={prevMonthName} />
 										</SelectTrigger>
@@ -1532,7 +1545,11 @@ export default function DynamicHealthDataForm({
 									<Label htmlFor="year-select" className="text-sm">
 										Year
 									</Label>
-									<Select value={selectedYear} onValueChange={setSelectedYear} disabled>
+									<Select
+										value={selectedYear}
+										onValueChange={setSelectedYear}
+										disabled
+									>
 										<SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 h-10 sm:h-11">
 											<SelectValue placeholder={prevYear} />
 										</SelectTrigger>
@@ -1672,9 +1689,6 @@ export default function DynamicHealthDataForm({
 											<div className="border-b border-gray-200 pb-2 sm:pb-3">
 												<h3 className="text-base sm:text-lg font-semibold text-gray-900">
 													{groupIndex + 1}. {group.indicatorName}
-													<span className="ml-2 text-sm font-normal text-gray-500">
-														({group.indicatorCode})
-													</span>
 												</h3>
 											</div>
 
