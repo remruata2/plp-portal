@@ -1,13 +1,11 @@
 import type { PrismaClient } from "@prisma/client";
-import {
-	extractFieldValueForCalculation,
-	calculateDenominatorValue,
-	extractTargetConfiguration,
-	buildCalculationConfig,
-	calculateRemuneration,
-	calculateTbConditionalRemuneration,
-	mapStatusToReportStatus,
-} from "@/lib/calculations/formula-calculator";
+import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
+import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
+import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
+import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
+import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
+import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;

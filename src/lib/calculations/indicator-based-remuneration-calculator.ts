@@ -1,5 +1,5 @@
 import { PrismaClient } from "@/generated/prisma";
-import { calculateRemuneration } from "./formula-calculator";
+import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
 
 const prisma = new PrismaClient();
 

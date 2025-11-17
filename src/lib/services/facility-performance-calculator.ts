@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { calculateRemuneration } from "@/lib/calculations/formula-calculator";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 
 export interface PerformanceCalculationResult {
   facility_id: string;

@@ -6,11 +6,9 @@ import { HealthDataRemunerationService } from "@/lib/services/health-data-remune
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import * as XLSX from "xlsx";
 import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
-import {
-	extractFieldValueForCalculation,
-	extractTargetConfiguration,
-	calculateDenominatorValue,
-} from "@/lib/calculations/formula-calculator";
+import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
+import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
+import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
 
 const prisma = new PrismaClient();
 

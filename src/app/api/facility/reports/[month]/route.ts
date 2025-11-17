@@ -5,15 +5,13 @@ import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
-import {
-	extractFieldValueForCalculation,
-	calculateDenominatorValue,
-	extractTargetConfiguration,
-	buildCalculationConfig,
-	calculateRemuneration,
-	calculateTbConditionalRemuneration,
-	mapStatusToReportStatus,
-} from "@/lib/calculations/formula-calculator";
+import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
+import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
+import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
+import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
+import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
+import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
 
 const prisma = new PrismaClient();
 

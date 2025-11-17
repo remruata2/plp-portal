@@ -5,13 +5,11 @@ import { PrismaClient } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
-import {
-	calculateDenominatorValue,
-	extractFieldValueForCalculation,
-	extractTargetConfiguration,
-	buildCalculationConfig,
-	calculateRemuneration,
-} from "@/lib/calculations/formula-calculator";
+import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
+import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
+import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
+import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 
 const prisma = new PrismaClient();
 

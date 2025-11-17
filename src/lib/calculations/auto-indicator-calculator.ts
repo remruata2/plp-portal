@@ -1,5 +1,6 @@
 import { PrismaClient } from "@/generated/prisma";
-import { calculateRemuneration, type FormulaConfig } from "./formula-calculator";
+import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
+import type { FormulaConfig } from "./formula-calculator/types";
 import { TargetType } from "@/generated/prisma";
 
 export interface AutoCalculationResult {
