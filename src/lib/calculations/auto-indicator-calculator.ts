@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
 import type { FormulaConfig } from "./formula-calculator/types";
 import { target_type } from "@/generated/prisma";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 export interface AutoCalculationResult {
   success: boolean;
@@ -331,7 +332,7 @@ export class AutoIndicatorCalculator {
     if (indicator.conditions) {
       if (indicator.conditions.includes("ANC due is 0")) {
         config.conditionType = "ANC_DUE_ZERO";
-        config.conditionField = "anc_due_list";
+        config.conditionField = getFieldCodeForFacilityType("anc_due_list", facilityType);
         config.conditionValue = 0;
       } else if (indicator.conditions.includes("Pulmonary TB patients")) {
         config.conditionType = "NO_PULMONARY_TB";
@@ -339,7 +340,7 @@ export class AutoIndicatorCalculator {
         config.conditionValue = 0;
       } else if (indicator.conditions.includes("TB patients")) {
         config.conditionType = "NO_TB_PATIENTS";
-        config.conditionField = "total_tb_patients";
+        config.conditionField = getFieldCodeForFacilityType("total_tb_patients", facilityType);
         config.conditionValue = 0;
       }
     }
@@ -355,12 +356,13 @@ export class AutoIndicatorCalculator {
       config.conditionField = "pulmonary_tb_patients";
     } else if (indicator.code === "DC001") {
       // No. of TB patients visited for Differentiated TB Care
+      const totalTbFieldCode = getFieldCodeForFacilityType("total_tb_patients", facilityType);
       config.conditionalQuestion = {
-        field: "total_tb_patients", // Updated to match source files
+        field: totalTbFieldCode, // Updated to match source files
         text: "Are there any patients with any type of TB ?"
       };
       config.conditionType = "TB_DIFFERENTIATED_CARE";
-      config.conditionField = "total_tb_patients";
+      config.conditionField = totalTbFieldCode;
     }
 
     return config;

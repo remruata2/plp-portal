@@ -248,7 +248,8 @@ export async function GET(
 				indicatorCode,
 				storedMaxRemuneration,
 				indicatorRemuneration,
-				fieldValues
+				fieldValues,
+				facility.facility_type.name
 			);
 
 			// Recalculate incentive amount if max remuneration has changed

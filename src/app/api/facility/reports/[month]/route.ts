@@ -13,6 +13,7 @@ import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/bu
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
 import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 export async function GET(
 	request: NextRequest,
@@ -148,8 +149,12 @@ export async function GET(
 		});
 
 		// Determine TB absence checkpoint using only total_tb_patients
+		const totalTbFieldCode = getFieldCodeForFacilityType(
+			"total_tb_patients",
+			facility.facility_type.name
+		);
 		const totalTbField = fieldValues.find(
-			(f) => f.field?.code === "total_tb_patients"
+			(f) => f.field?.code === totalTbFieldCode
 		);
 		const totalTbValueRaw = totalTbField
 			? totalTbField.string_value ||
@@ -413,7 +418,8 @@ export async function GET(
 					fieldValues,
 					indicator.code,
 					result.achievement,
-					denominatorValue
+					denominatorValue,
+					facility.facility_type.name
 				);
 				const effectiveMaxRemuneration =
 					conditionResult.effectiveMaxRemuneration;

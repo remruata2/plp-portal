@@ -1,28 +1,40 @@
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+
 /**
  * Determine which condition amount to use based on indicator code and boolean field values
  *
  * @param indicatorCode - Indicator code (e.g., "TS001", "CT001", "DC001")
  * @param remuneration - Remuneration object with condition amounts
  * @param fieldValues - Array of field values to check for boolean answers
+ * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
  * @returns The effective max remuneration amount to use
  */
 export function getConditionAmount(
 	indicatorCode: string,
 	remuneration: any,
-	fieldValues: any[]
+	fieldValues: any[],
+	facilityType?: string
 ): number {
 	const baseAmount = parseFloat(remuneration.base_amount.toString());
 
 	// Get boolean field values for indicators 7 and 8
 	// Treat null/undefined as false (user didn't select "Yes", so it's "No")
+	const ct001FieldCode = getFieldCodeForFacilityType(
+		"indicator_ct001_conditional_answer",
+		facilityType
+	);
 	const indicator7AnswerRaw = fieldValues.find(
-		(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
+		(f: any) => f.field?.code === ct001FieldCode
 	)?.boolean_value;
 	const indicator7Answer =
 		indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
+	const dc001FieldCode = getFieldCodeForFacilityType(
+		"indicator_dc001_conditional_answer",
+		facilityType
+	);
 	const indicator8AnswerRaw = fieldValues.find(
-		(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
+		(f: any) => f.field?.code === dc001FieldCode
 	)?.boolean_value;
 	const indicator8Answer =
 		indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
@@ -96,6 +108,7 @@ export function getConditionAmount(
  * @param indicatorCode - Indicator code (e.g., "TS001", "CT001", "DC001")
  * @param baseAchievement - Achievement percentage from FormulaCalculator
  * @param denominatorValue - Denominator value for display percentage calculation (optional)
+ * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
  * @returns Object with calculated remuneration/display values
  */
 export function calculateConditionalRemuneration(
@@ -103,7 +116,8 @@ export function calculateConditionalRemuneration(
 	fieldValues: any[],
 	indicatorCode: string,
 	baseAchievement: number,
-	denominatorValue?: number
+	denominatorValue?: number,
+	facilityType?: string
 ): {
 	effectiveMaxRemuneration: number;
 	displayPercentage: number;
@@ -112,7 +126,8 @@ export function calculateConditionalRemuneration(
 	const effectiveMaxRemuneration = getConditionAmount(
 		indicatorCode,
 		remuneration,
-		fieldValues
+		fieldValues,
+		facilityType
 	);
 
 	// Calculate display percentage
@@ -126,14 +141,22 @@ export function calculateConditionalRemuneration(
 	if (isTbContactTracing || isTbDifferentiatedCare || isTbScreening) {
 		// Check if the indicator should be NA based on boolean answers
 		// Treat null/undefined as false (user didn't select "Yes", so it's "No")
+		const ct001FieldCode = getFieldCodeForFacilityType(
+			"indicator_ct001_conditional_answer",
+			facilityType
+		);
 		const indicator7AnswerRaw = fieldValues.find(
-			(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
+			(f: any) => f.field?.code === ct001FieldCode
 		)?.boolean_value;
 		const indicator7Answer =
 			indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
+		const dc001FieldCode = getFieldCodeForFacilityType(
+			"indicator_dc001_conditional_answer",
+			facilityType
+		);
 		const indicator8AnswerRaw = fieldValues.find(
-			(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
+			(f: any) => f.field?.code === dc001FieldCode
 		)?.boolean_value;
 		const indicator8Answer =
 			indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false

@@ -644,7 +644,8 @@ export async function GET(
 						fieldValues,
 						indicator.code,
 						baseResult.achievement,
-						denominatorValue
+						denominatorValue,
+						facilityType
 					);
 					const effectiveMaxRemuneration =
 						conditionResult.effectiveMaxRemuneration;

@@ -176,7 +176,8 @@ export async function GET(
 				indicatorCode,
 				Number(perf.max_remuneration || 0),
 				indicatorRemuneration,
-				fieldValues
+				fieldValues,
+				facility.facility_type.name
 			);
 
 			return {

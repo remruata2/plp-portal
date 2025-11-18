@@ -6,6 +6,7 @@ import { calculateRemuneration } from "@/lib/calculations/formula-calculator/cal
 import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
 import { randomUUID } from "crypto";
 import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -176,7 +177,8 @@ export class HealthDataRemunerationService {
 					dbFieldValues,
 					indicator.code,
 					result.achievement,
-					denominatorValue
+					denominatorValue,
+					facility.facility_type.name
 				);
 				const effectiveMaxRemuneration =
 					conditionResult.effectiveMaxRemuneration;
@@ -296,8 +298,12 @@ export class HealthDataRemunerationService {
 			// Cap individual indicator percentages at 100% for overall calculation (matches performance report)
 
 			// Exclude TB-related indicators (CT001/DC001) from performance when total TB is zero
+			const totalTbFieldCode = getFieldCodeForFacilityType(
+				"total_tb_patients",
+				facility.facility_type.name
+			);
 			const totalTbFieldPerf = dbFieldValues.find(
-				(f: any) => f.field?.code === "total_tb_patients"
+				(f: any) => f.field?.code === totalTbFieldCode
 			);
 			const totalTbValuePerf = totalTbFieldPerf
 				? totalTbFieldPerf.string_value ||

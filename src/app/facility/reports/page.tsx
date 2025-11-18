@@ -367,7 +367,7 @@ export default function FacilityReportsPage() {
 													</SelectItem>
 												))
 											) : (
-												<SelectItem value="no-year" disabled>
+												<SelectItem value="no-year">
 													Select year first
 												</SelectItem>
 											)}

@@ -1,3 +1,5 @@
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+
 /**
  * Calculate TB-conditional remuneration and display percentage
  * Combines TB absence check, effective max remuneration calculation, and display percentage logic
@@ -7,6 +9,7 @@
  * @param indicatorCode - Indicator code (e.g., "CT001", "DC001")
  * @param baseAchievement - Achievement percentage from FormulaCalculator
  * @param denominatorValue - Denominator value for TB absence check (optional)
+ * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
  * @returns Object with TB-related values and calculated remuneration/display values
  */
 export function calculateTbConditionalRemuneration(
@@ -14,7 +17,8 @@ export function calculateTbConditionalRemuneration(
 	fieldValues: any[],
 	indicatorCode: string,
 	baseAchievement: number,
-	denominatorValue?: number
+	denominatorValue?: number,
+	facilityType?: string
 ): {
 	totalTbZero: boolean;
 	isTbContactTracing: boolean;
@@ -31,8 +35,12 @@ export function calculateTbConditionalRemuneration(
 			: 0;
 
 	// TB absence checkpoint: only total_tb_patients
+	const totalTbFieldCode = getFieldCodeForFacilityType(
+		"total_tb_patients",
+		facilityType
+	);
 	const totalTbField = fieldValues.find(
-		(f: any) => f.field?.code === "total_tb_patients"
+		(f: any) => f.field?.code === totalTbFieldCode
 	);
 	const totalTbValueRaw = totalTbField
 		? totalTbField.string_value ||

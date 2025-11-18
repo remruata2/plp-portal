@@ -1,6 +1,7 @@
 import { getConditionAmount } from "@/lib/calculations/formula-calculator/calculate-condition-amount";
 import { calculateConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-condition-amount";
 import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 /**
  * Centralized helper to get the effective max remuneration for an indicator
@@ -10,13 +11,15 @@ import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-c
  * @param storedMaxRemuneration - The stored max_remuneration from database
  * @param indicatorRemuneration - The indicator remuneration config from facility_type_remuneration
  * @param fieldValues - Array of field values with field relationships (for conditional logic)
+ * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
  * @returns The effective max remuneration amount
  */
 export function getEffectiveMaxRemuneration(
 	indicatorCode: string,
 	storedMaxRemuneration: number,
 	indicatorRemuneration: any | null,
-	fieldValues: any[]
+	fieldValues: any[],
+	facilityType?: string
 ): number {
 	// If no indicator remuneration config, return stored value
 	if (!indicatorRemuneration) {
@@ -26,11 +29,19 @@ export function getEffectiveMaxRemuneration(
 	// For TS001 variants, recalculate based on conditional answers
 	if (indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
 		// Get conditional answers for logging
+		const ct001FieldCode = getFieldCodeForFacilityType(
+			"indicator_ct001_conditional_answer",
+			facilityType
+		);
 		const indicator7Answer = fieldValues.find(
-			(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
+			(f: any) => f.field?.code === ct001FieldCode
 		)?.boolean_value;
+		const dc001FieldCode = getFieldCodeForFacilityType(
+			"indicator_dc001_conditional_answer",
+			facilityType
+		);
 		const indicator8Answer = fieldValues.find(
-			(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
+			(f: any) => f.field?.code === dc001FieldCode
 		)?.boolean_value;
 
 		const baseAmount = parseFloat(indicatorRemuneration.base_amount.toString());
@@ -50,7 +61,8 @@ export function getEffectiveMaxRemuneration(
 		const effectiveMax = getConditionAmount(
 			indicatorCode,
 			indicatorRemuneration,
-			fieldValues
+			fieldValues,
+			facilityType
 		);
 
 		console.log(`🔍 [TS001 Max Remuneration Calculation] ${indicatorCode}:`, {
@@ -86,6 +98,7 @@ export function getEffectiveMaxRemuneration(
  * @param indicatorCode - The indicator code
  * @param baseAchievement - The base achievement percentage
  * @param denominatorValue - Optional denominator value
+ * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
  * @returns Object with effectiveMaxRemuneration and displayPercentage
  */
 export function calculateEffectiveRemuneration(
@@ -93,7 +106,8 @@ export function calculateEffectiveRemuneration(
 	fieldValues: any[],
 	indicatorCode: string,
 	baseAchievement: number,
-	denominatorValue?: number
+	denominatorValue?: number,
+	facilityType?: string
 ): {
 	effectiveMaxRemuneration: number;
 	displayPercentage: number;
@@ -112,16 +126,25 @@ export function calculateEffectiveRemuneration(
 			fieldValues,
 			indicatorCode,
 			baseAchievement,
-			denominatorValue
+			denominatorValue,
+			facilityType
 		);
 
 		// Log TS001 variants during calculation
 		if (indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
+			const ct001FieldCode = getFieldCodeForFacilityType(
+				"indicator_ct001_conditional_answer",
+				facilityType
+			);
 			const indicator7Answer = fieldValues.find(
-				(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
+				(f: any) => f.field?.code === ct001FieldCode
 			)?.boolean_value;
+			const dc001FieldCode = getFieldCodeForFacilityType(
+				"indicator_dc001_conditional_answer",
+				facilityType
+			);
 			const indicator8Answer = fieldValues.find(
-				(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
+				(f: any) => f.field?.code === dc001FieldCode
 			)?.boolean_value;
 
 			const baseAmount = parseFloat(remuneration.base_amount.toString());
@@ -159,7 +182,8 @@ export function calculateEffectiveRemuneration(
 			fieldValues,
 			indicatorCode,
 			baseAchievement,
-			denominatorValue
+			denominatorValue,
+			facilityType
 		);
 		return {
 			effectiveMaxRemuneration: tbResult.effectiveMaxRemuneration,
