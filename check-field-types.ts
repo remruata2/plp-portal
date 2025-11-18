@@ -7,7 +7,7 @@ async function checkFieldTypes() {
     console.log("=== Checking Field Types ===");
 
     // Check fields that are mapped to PHC
-    const phcFields = await prisma.facilityFieldMapping.findMany({
+    const phcFields = await prisma.facility_fieldMapping.findMany({
       where: {
         facility_type: {
           name: "PHC",

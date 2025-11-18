@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 				_count: {
 					select: {
 						health_workers: true,
-						field_values: true,
+						field_value: true,
 					},
 				},
 			},
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
 
 		// Get remuneration calculations for each facility/month combination
 		const remunerationCalculations =
-			await prisma.remunerationCalculation.findMany({
+			await prisma.remuneration_calculations.findMany({
 				where: {
 					report_month: reportMonth || undefined,
 					facility: {
@@ -143,7 +143,7 @@ export async function GET(request: NextRequest) {
 			});
 
 		// Get facilities that have raw submissions (field values)
-		const fieldValueFacilities = await prisma.fieldValue.findMany({
+		const fieldValueFacilities = await prisma.field_value.findMany({
 			where: {
 				report_month: reportMonth || undefined,
 				facility: {
@@ -240,7 +240,7 @@ export async function GET(request: NextRequest) {
 					average_achievement: Math.round(averageAchievement * 100) / 100,
 					total_incentive: totalIncentive,
 					health_workers_count: facility._count.health_workers,
-					field_values_count: facility._count.field_values,
+					field_value_count: facility._count.field_value,
 					performance_details: facilityPerformanceCalcs,
 					remuneration_summary: facilityRemunerationCalc
 						? {

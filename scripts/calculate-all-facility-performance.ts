@@ -19,7 +19,7 @@ async function calculateAllFacilityPerformance() {
     console.log(`📊 Found ${facilities.length} active facilities`);
 
     // Get all report months from field values
-    const reportMonths = await prisma.fieldValue.findMany({
+    const reportMonths = await prisma.field_value.findMany({
       select: { report_month: true },
       distinct: ["report_month"],
       orderBy: { report_month: "desc" },
@@ -106,7 +106,7 @@ async function calculateAllFacilityPerformance() {
 
           // Update or create remuneration calculation record
           try {
-            await prisma.remunerationCalculation.upsert({
+            await prisma.remuneration_calculations.upsert({
               where: {
                 facility_id_report_month: {
                   facility_id: facility.id,

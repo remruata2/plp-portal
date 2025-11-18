@@ -7,7 +7,7 @@ async function testWorkerAllocation() {
 
   try {
     // Get all worker allocation configurations
-    const workerAllocations = await prisma.workerAllocationConfig.findMany({
+    const workerAllocations = await prisma.worker_allocation_config.findMany({
       include: {
         facility_type: true,
       },

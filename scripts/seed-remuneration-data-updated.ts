@@ -130,7 +130,7 @@ async function seedRemunerationData() {
     console.log("🌱 Starting remuneration data seeding...");
 
     // Get all facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
     });
 
@@ -150,8 +150,8 @@ async function seedRemunerationData() {
       console.log(`\n💰 Processing ${facilityType.name} (${facilityType.id})`);
 
       // Create or update facility type remuneration
-      let facilityTypeRemuneration =
-        await prisma.facilityTypeRemuneration.upsert({
+      const facilityTypeRemuneration =
+        await prisma.facility_typeRemuneration.upsert({
           where: { facility_type_id: facilityType.id },
           update: {
             total_amount: facilityData.total_amount,
@@ -179,7 +179,7 @@ async function seedRemunerationData() {
         }
 
         // Create or update indicator remuneration
-        await prisma.indicatorRemuneration.upsert({
+        await prisma.indicator_remuneration.upsert({
           where: {
             facility_type_remuneration_id_indicator_id: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -209,8 +209,8 @@ async function seedRemunerationData() {
     console.log("\n🎉 Remuneration data seeding completed successfully!");
 
     // Summary
-    const totalConfigs = await prisma.indicatorRemuneration.count();
-    const totalFacilityTypes = await prisma.facilityTypeRemuneration.count();
+    const totalConfigs = await prisma.indicator_remuneration.count();
+    const totalFacilityTypes = await prisma.facility_typeRemuneration.count();
 
     console.log(`\n📊 Summary:`);
     console.log(`  - Facility Types: ${totalFacilityTypes}`);

@@ -33,7 +33,7 @@ export class FacilityPerformanceCalculator {
       }
 
       // Get field mappings for this facility type
-      const fieldMappings = await prisma.facilityFieldMapping.findMany({
+      const fieldMappings = await prisma.facility_fieldMapping.findMany({
         where: {
           facility_type_id: facility.facility_type_id,
         },
@@ -86,7 +86,7 @@ export class FacilityPerformanceCalculator {
   ): Promise<PerformanceCalculationResult | null> {
     try {
       // Get field value for this month
-      const fieldValue = await prisma.fieldValue.findUnique({
+      const fieldValue = await prisma.field_value.findUnique({
         where: {
           field_id_facility_id_report_month: {
             field_id: fieldId,
@@ -149,7 +149,7 @@ export class FacilityPerformanceCalculator {
     remuneration_amount: number | null;
   }> {
     let numerator = null;
-    let denominator = null;
+    const denominator = null;
     let achievement = null;
     let target_value = null;
     let remuneration_amount = null;

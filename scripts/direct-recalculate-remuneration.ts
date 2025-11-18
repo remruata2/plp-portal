@@ -9,14 +9,14 @@ async function directRecalculateRemuneration() {
     
     // Clear all old remuneration records
     await prisma.facilityRemunerationRecord.deleteMany({});
-    await prisma.workerRemuneration.deleteMany({});
-    await prisma.remunerationCalculation.deleteMany({});
+    await prisma.worker_remunerations.deleteMany({});
+    await prisma.remuneration_calculations.deleteMany({});
     
     console.log("✅ Cleared all old remuneration data");
     
     // Build the set of facility-month pairs that actually have submissions.
     // We derive this from fieldValue to avoid creating zero rows for facilities without data.
-    const fvPairsRaw = await prisma.fieldValue.findMany({
+    const fvPairsRaw = await prisma.field_value.findMany({
       select: {
         facility_id: true,
         report_month: true,

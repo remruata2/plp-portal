@@ -1,4 +1,4 @@
-import { TargetType } from "../../../generated/prisma";
+import { target_type } from "../../../generated/prisma";
 import type { FormulaConfig, CalculationResult } from "./types";
 import { shouldReturnNA } from "./helpers/should-return-na";
 import { getFacilitySpecificConfig } from "./helpers/get-facility-specific-config";
@@ -35,7 +35,7 @@ export function calculateRemuneration(
 	const effectiveConfig = getFacilitySpecificConfig(formulaConfig, facilityType);
 
 	switch (effectiveConfig.type) {
-		case TargetType.RANGE:
+		case target_type.RANGE:
 			return calculateRangeBased(
 				submittedValue,
 				targetValue,
@@ -43,7 +43,7 @@ export function calculateRemuneration(
 				effectiveConfig
 			);
 
-		case TargetType.BINARY:
+		case target_type.BINARY:
 			return calculateBinary(
 				submittedValue,
 				targetValue,
@@ -52,7 +52,7 @@ export function calculateRemuneration(
 				fieldValues
 			);
 
-		case TargetType.PERCENTAGE_RANGE:
+		case target_type.PERCENTAGE_RANGE:
 			return calculatePercentageRange(
 				submittedValue,
 				targetValue,

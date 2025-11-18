@@ -30,7 +30,7 @@ export class FieldMappingService {
     console.log("Active fields from database:", activeFields);
 
     // Get facility types and their field mappings from database
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       include: {
         field_mappings: {

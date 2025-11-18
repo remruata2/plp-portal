@@ -208,6 +208,10 @@ export default function DynamicHealthDataForm({
 					initialData[mapping.formFieldName] = "";
 				});
 
+				// Initialize boolean fields for conditional answers
+				initialData.indicator_ct001_conditional_answer = "";
+				initialData.indicator_dc001_conditional_answer = "";
+
 				setFormData(initialData);
 
 				// Reset UI-only answers
@@ -311,6 +315,15 @@ export default function DynamicHealthDataForm({
 				name: "Household visited for TB contact tracing",
 			},
 			total_tb_patients: {
+				code: "DC001",
+				name: "No. of TB patients visited for Differentiated TB Care",
+			},
+			// Boolean conditional answer fields - positioned as 7th and 8th inputs
+			indicator_ct001_conditional_answer: {
+				code: "CT001",
+				name: "Household visited for TB contact tracing",
+			},
+			indicator_dc001_conditional_answer: {
 				code: "DC001",
 				name: "No. of TB patients visited for Differentiated TB Care",
 			},
@@ -482,6 +495,23 @@ export default function DynamicHealthDataForm({
 			groups[indicator.code].fields.push(mapping);
 		});
 
+		// Sort fields within each group to put boolean conditional answer fields first
+		Object.keys(groups).forEach((indicatorCode) => {
+			groups[indicatorCode].fields.sort((a, b) => {
+				// Put boolean conditional answer fields first
+				const aIsBoolean =
+					a.formFieldName === "indicator_ct001_conditional_answer" ||
+					a.formFieldName === "indicator_dc001_conditional_answer";
+				const bIsBoolean =
+					b.formFieldName === "indicator_ct001_conditional_answer" ||
+					b.formFieldName === "indicator_dc001_conditional_answer";
+
+				if (aIsBoolean && !bIsBoolean) return -1;
+				if (!aIsBoolean && bIsBoolean) return 1;
+				return 0;
+			});
+		});
+
 		// Convert to array and sort by proper indicator order (as per source files)
 		const indicatorOrder = [
 			"POP001", // Population Data (foundational)
@@ -560,6 +590,23 @@ export default function DynamicHealthDataForm({
 				// If group is not formed (false/"0"), clear the activity count
 				if (value === "0" || value === false) {
 					newData.elderly_support_group_activity = "";
+				}
+			}
+
+			// Sync boolean conditional answer fields with indicatorAnswers state
+			if (fieldName === "indicator_ct001_conditional_answer") {
+				const answer = value === "1" || value === true ? "yes" : "no";
+				setIndicatorAnswers((prev) => ({ ...prev, CT001: answer }));
+				// Also clear dependent field if "No"
+				if (answer === "no") {
+					newData.tb_contact_tracing_households = "";
+				}
+			} else if (fieldName === "indicator_dc001_conditional_answer") {
+				const answer = value === "1" || value === true ? "yes" : "no";
+				setIndicatorAnswers((prev) => ({ ...prev, DC001: answer }));
+				// Also clear dependent field if "No"
+				if (answer === "no") {
+					newData.tb_differentiated_care_visits = "";
 				}
 			}
 
@@ -823,7 +870,7 @@ export default function DynamicHealthDataForm({
 
 		// Handle other numeric and text fields with standard Input component
 		return (
-			<div className="space-y-2">
+			<div>
 				<Input
 					id={fieldId}
 					type={mapping.fieldType === "numeric" ? "number" : "text"}
@@ -841,16 +888,19 @@ export default function DynamicHealthDataForm({
 					} ${hasErrors ? "border-red-500 focus:border-red-500" : ""}`}
 				/>
 				{shouldDisableElderlyActivity && (
-					<p className="text-xs text-orange-600">
+					<p className="text-xs text-orange-600 mt-2">
 						This field is disabled because the Elderly Support Group is not
 						formed.
 					</p>
 				)}
 				{/* Validation messages */}
 				{hasErrors && (
-					<div className="space-y-1">
+					<div className="mt-2">
 						{errors.map((error, idx) => (
-							<p key={idx} className="text-xs text-red-600">
+							<p
+								key={idx}
+								className={`text-xs text-red-600 ${idx > 0 ? "mt-1" : ""}`}
+							>
 								{error.message}
 							</p>
 						))}
@@ -858,7 +908,7 @@ export default function DynamicHealthDataForm({
 				)}
 				{/* Validation hints */}
 				{validationMessage && !hasErrors && (
-					<p className="text-xs text-gray-500">{validationMessage}</p>
+					<p className="text-xs text-gray-500 mt-2">{validationMessage}</p>
 				)}
 			</div>
 		);
@@ -868,8 +918,21 @@ export default function DynamicHealthDataForm({
 		indicatorCode: string,
 		answer: "yes" | "no" | null
 	) => {
-		// Store only in UI state
+		// Store in UI state (for show/hide logic)
 		setIndicatorAnswers((prev) => ({ ...prev, [indicatorCode]: answer }));
+
+		// ALSO store in formData for database persistence
+		if (indicatorCode === "CT001") {
+			setFormData((prev) => ({
+				...prev,
+				indicator_ct001_conditional_answer: answer === "yes" ? "1" : "0",
+			}));
+		} else if (indicatorCode === "DC001") {
+			setFormData((prev) => ({
+				...prev,
+				indicator_dc001_conditional_answer: answer === "yes" ? "1" : "0",
+			}));
+		}
 
 		// When "No" or user clicks Change Answer (null), clear dependent numeric fields so they won't validate/submit
 		if (answer === "no" || answer === null) {
@@ -1262,6 +1325,11 @@ export default function DynamicHealthDataForm({
 				return fieldValue;
 			});
 
+			// Note: Boolean conditional answer fields (indicator_ct001_conditional_answer, indicator_dc001_conditional_answer)
+			// should be included in fieldMappings if they're mapped to the facility type.
+			// They are set programmatically when user answers Yes/No questions and will be submitted
+			// automatically if they're in fieldMappings.
+
 			console.log("Submitting fieldValues to API:", fieldValues);
 			console.log("Form data keys:", Object.keys(formData));
 			console.log("Selected month/year:", {
@@ -1399,6 +1467,9 @@ export default function DynamicHealthDataForm({
 			fieldMappings.forEach((mapping) => {
 				initialData[mapping.formFieldName] = "";
 			});
+			// Reset boolean fields for conditional answers
+			initialData.indicator_ct001_conditional_answer = "";
+			initialData.indicator_dc001_conditional_answer = "";
 			setFormData(initialData);
 
 			// Reset validation state
@@ -1442,7 +1513,10 @@ export default function DynamicHealthDataForm({
 	}
 
 	return (
-		<Card>
+		<Card
+			className="mb-0 min-h-0 overflow-hidden"
+			style={{ height: "auto", maxHeight: "none" }}
+		>
 			<CardHeader className="pb-4">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 					<CardTitle className="text-lg sm:text-xl">
@@ -1454,7 +1528,15 @@ export default function DynamicHealthDataForm({
 					/>
 				</div>
 			</CardHeader>
-			<CardContent className="p-4 sm:p-6">
+			<CardContent
+				className="px-4 sm:px-6 pt-4 sm:pt-6 pb-0"
+				style={{
+					paddingBottom: 0,
+					height: "auto",
+					maxHeight: "none",
+					minHeight: "auto",
+				}}
+			>
 				{fieldMappings.length === 0 ? (
 					<div className="text-center py-8">
 						<p className="text-gray-500 mb-4">
@@ -1517,7 +1599,11 @@ export default function DynamicHealthDataForm({
 						</div>
 					</div>
 				) : (
-					<form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+					<form
+						onSubmit={handleSubmit}
+						className="mb-0 pb-0 last:mb-0 last:pb-0"
+						style={{ height: "auto", maxHeight: "none", minHeight: "auto" }}
+					>
 						{/* Month and Year Selection */}
 						<div className="bg-gray-50 p-3 sm:p-4 rounded-lg border">
 							<h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
@@ -1617,113 +1703,167 @@ export default function DynamicHealthDataForm({
 								group.indicatorCode === "CT001" ||
 								group.indicatorCode === "DC001";
 
-							// No need to derive anything from formData for gating
+							// Get the boolean field value from formData for conditional indicators
+							const booleanFieldName =
+								group.indicatorCode === "CT001"
+									? "indicator_ct001_conditional_answer"
+									: "indicator_dc001_conditional_answer";
+							const booleanFieldValue = formData[booleanFieldName];
+							const booleanAnswer =
+								booleanFieldValue === "1" || booleanFieldValue === true
+									? "yes"
+									: booleanFieldValue === "0" || booleanFieldValue === false
+									? "no"
+									: null;
+
+							// Use boolean field value if available, otherwise fall back to indicatorAnswers
+							const effectiveAnswer =
+								booleanAnswer !== null
+									? booleanAnswer
+									: indicatorAnswers[group.indicatorCode] ?? null;
+
+							// Separate boolean fields from other fields
+							const booleanFields = group.fields.filter(
+								(mapping) =>
+									mapping.formFieldName ===
+										"indicator_ct001_conditional_answer" ||
+									mapping.formFieldName === "indicator_dc001_conditional_answer"
+							);
+							const otherFields = group.fields.filter(
+								(mapping) =>
+									mapping.formFieldName !==
+										"indicator_ct001_conditional_answer" &&
+									mapping.formFieldName !== "indicator_dc001_conditional_answer"
+							);
 
 							return (
 								<div
 									key={group.indicatorCode}
-									className="space-y-3 sm:space-y-4"
+									className={groupIndex > 0 ? "mt-6 sm:mt-8" : ""}
 								>
 									{isConditionalIndicator ? (
-										<ConditionalIndicatorDisplay
-											indicator={{
-												id: groupIndex,
-												code: group.indicatorCode,
-												name: group.indicatorName,
-												conditions: group.conditions,
-												source_of_verification: group.source_of_verification,
-												target_formula: group.target_formula,
-												target_value: group.target_value,
-											}}
-											// UI-only gating: pass external answer
-											answer={indicatorAnswers[group.indicatorCode] ?? null}
-											onConditionChange={(conditionMet) => {
-												// Handle condition change if needed
-												console.log(
-													`Condition for ${group.indicatorCode}:`,
-													conditionMet
-												);
-											}}
-											onYesNoChange={(answer) => {
-												// Handle Yes/No answer change or reset (null)
-												handleYesNoAnswer(group.indicatorCode, answer);
-											}}
-										>
-											{/* Render fields inside conditional component - only shown when "Yes" is selected */}
-											<div className="grid grid-cols-1 gap-4 mt-3 sm:mt-4">
-												{group.fields
-													.filter((mapping) => {
-														const indicatorForField: Record<string, string> = {
-															tb_contact_tracing_households: "CT001",
-															tb_differentiated_care_visits: "DC001",
-														};
-														const ind =
-															indicatorForField[mapping.formFieldName];
-														return !(ind && indicatorAnswers[ind] === "no");
-													})
-													.map((mapping, fieldIndex) => (
-														<div
-															key={mapping.databaseFieldId}
-															className="space-y-2"
-														>
-															<Label
-																htmlFor={mapping.formFieldName}
-																className="text-sm font-medium"
+										<>
+											{/* Render boolean field first as the 7th/8th input */}
+											{booleanFields.map((mapping, fieldIndex) => (
+												<div key={mapping.databaseFieldId} className="mb-4">
+													<div className="border-b border-gray-200 pb-2 sm:pb-3">
+														<h3 className="text-base sm:text-lg font-semibold text-gray-900">
+															{groupIndex + 1}. {group.indicatorName}
+														</h3>
+													</div>
+													<Label
+														htmlFor={mapping.formFieldName}
+														className="text-sm font-medium"
+													>
+														{mapping.description}
+													</Label>
+													{renderFieldInput(mapping, groupIndex, fieldIndex)}
+												</div>
+											))}
+
+											{/* Use ConditionalIndicatorDisplay but hide question UI when boolean field is present */}
+											<ConditionalIndicatorDisplay
+												indicator={{
+													id: groupIndex,
+													code: group.indicatorCode,
+													name: group.indicatorName,
+													conditions: group.conditions,
+													source_of_verification: group.source_of_verification,
+													target_formula: group.target_formula,
+													target_value: group.target_value,
+												}}
+												// Use effectiveAnswer from boolean field or indicatorAnswers
+												answer={effectiveAnswer}
+												showConditionalQuestion={false} // Hide the question UI since we're using boolean field
+												onConditionChange={(conditionMet) => {
+													// Handle condition change if needed
+													console.log(
+														`Condition for ${group.indicatorCode}:`,
+														conditionMet
+													);
+												}}
+												onYesNoChange={(answer) => {
+													// Handle Yes/No answer change or reset (null)
+													handleYesNoAnswer(group.indicatorCode, answer);
+													// Also update the boolean field directly
+													if (group.indicatorCode === "CT001") {
+														handleInputChange(
+															"indicator_ct001_conditional_answer",
+															answer === "yes" ? "1" : "0"
+														);
+													} else if (group.indicatorCode === "DC001") {
+														handleInputChange(
+															"indicator_dc001_conditional_answer",
+															answer === "yes" ? "1" : "0"
+														);
+													}
+												}}
+											>
+												{/* Render related fields inside conditional component - only shown when "Yes" is selected */}
+												<div className="grid grid-cols-1 mt-3 sm:mt-4">
+													{otherFields
+														.filter((mapping) => {
+															const indicatorForField: Record<string, string> =
+																{
+																	tb_contact_tracing_households: "CT001",
+																	tb_differentiated_care_visits: "DC001",
+																};
+															const ind =
+																indicatorForField[mapping.formFieldName];
+															// Check both effectiveAnswer and indicatorAnswers
+															const shouldHide =
+																(ind === "CT001" || ind === "DC001") &&
+																(effectiveAnswer === "no" ||
+																	indicatorAnswers[ind] === "no");
+															return !shouldHide;
+														})
+														.map((mapping, fieldIndex) => (
+															<div
+																key={mapping.databaseFieldId}
+																className="mb-4"
 															>
-																{groupIndex + 1}
-																{String.fromCharCode(97 + fieldIndex)}.{" "}
-																{mapping.description}
-															</Label>
-															{renderFieldInput(
-																mapping,
-																groupIndex,
-																fieldIndex
-															)}
-														</div>
-													))}
-											</div>
-										</ConditionalIndicatorDisplay>
+																<Label
+																	htmlFor={mapping.formFieldName}
+																	className="text-sm font-medium"
+																>
+																	{groupIndex + 1}
+																	{String.fromCharCode(
+																		97 + fieldIndex + booleanFields.length
+																	)}
+																	. {mapping.description}
+																</Label>
+																{renderFieldInput(
+																	mapping,
+																	groupIndex,
+																	fieldIndex + booleanFields.length
+																)}
+															</div>
+														))}
+												</div>
+											</ConditionalIndicatorDisplay>
+										</>
 									) : (
 										<>
-											{/* Regular indicator display */}
+											{/* Regular indicator rendering */}
 											<div className="border-b border-gray-200 pb-2 sm:pb-3">
 												<h3 className="text-base sm:text-lg font-semibold text-gray-900">
 													{groupIndex + 1}. {group.indicatorName}
 												</h3>
 											</div>
-
-											{/* Fields for this indicator */}
-											<div className="grid grid-cols-1 gap-4 mt-3 sm:mt-4">
-												{group.fields
-													.filter((mapping) => {
-														const indicatorForField: Record<string, string> = {
-															tb_contact_tracing_households: "CT001",
-															tb_differentiated_care_visits: "DC001",
-														};
-														const ind =
-															indicatorForField[mapping.formFieldName];
-														return !(ind && indicatorAnswers[ind] === "no");
-													})
-													.map((mapping, fieldIndex) => (
-														<div
-															key={mapping.databaseFieldId}
-															className="space-y-2"
+											<div className="grid grid-cols-1 mt-3 sm:mt-4">
+												{group.fields.map((mapping, fieldIndex) => (
+													<div key={mapping.databaseFieldId} className="mb-4">
+														<Label
+															htmlFor={mapping.formFieldName}
+															className="text-sm font-medium"
 														>
-															<Label
-																htmlFor={mapping.formFieldName}
-																className="text-sm font-medium"
-															>
-																{groupIndex + 1}
-																{String.fromCharCode(97 + fieldIndex)}.{" "}
-																{mapping.description}
-															</Label>
-															{renderFieldInput(
-																mapping,
-																groupIndex,
-																fieldIndex
-															)}
-														</div>
-													))}
+															{groupIndex + 1}
+															{String.fromCharCode(97 + fieldIndex)}.{" "}
+															{mapping.description}
+														</Label>
+														{renderFieldInput(mapping, groupIndex, fieldIndex)}
+													</div>
+												))}
 											</div>
 										</>
 									)}
@@ -1815,7 +1955,7 @@ export default function DynamicHealthDataForm({
 								</div>
 							)}
 
-						<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+						<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-0 pb-0 last:mb-0 last:pb-0">
 							<div className="text-sm text-gray-600 order-2 sm:order-1">
 								{hasAttemptedSubmit && validationErrors.length > 0 && (
 									<span className="text-red-600">
@@ -1845,7 +1985,7 @@ export default function DynamicHealthDataForm({
 											)
 									)
 								}
-								className="w-full sm:w-auto order-1 sm:order-2"
+								className="w-full sm:w-auto order-1 sm:order-2 mb-0"
 							>
 								{submitting ? "Submitting..." : "Submit Data"}
 							</Button>

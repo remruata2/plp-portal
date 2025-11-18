@@ -91,7 +91,12 @@ export default function FacilityLayout({
 				</div>
 
 				{/* Page content */}
-				<main className="flex-1 overflow-y-auto">{children}</main>
+				<main
+					className="flex-1 overflow-y-auto overflow-x-hidden min-h-0"
+					style={{ height: "100%", maxHeight: "100vh", overflowY: "auto" }}
+				>
+					<div style={{ minHeight: "auto", height: "auto" }}>{children}</div>
+				</main>
 			</div>
 		</div>
 	);

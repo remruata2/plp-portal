@@ -120,7 +120,7 @@ export class ConfigurationSnapshot {
    * Get current worker allocation configuration snapshot
    */
   static async getCurrentWorkerAllocationSnapshot(facilityTypeId: string): Promise<WorkerAllocationSnapshot> {
-    const workerConfigs = await prisma.workerAllocationConfig.findMany({
+    const workerConfigs = await prisma.worker_allocation_config.findMany({
       where: {
         facility_type_id: facilityTypeId,
         is_active: true,

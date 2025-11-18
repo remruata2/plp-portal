@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient, Prisma } from "@/generated/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
@@ -11,6 +11,7 @@ import { extractTargetConfiguration } from "@/lib/calculations/formula-calculato
 import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
+import { calculateConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-condition-amount";
 import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
 
 const prisma = new PrismaClient();
@@ -76,7 +77,7 @@ export async function GET(
 									numerator_field: true,
 									denominator_field: true,
 									target_field: true,
-									remunerations: {
+									indicator_remuneration: {
 										where: {
 											facility_type_remuneration: {
 												facility_type_id: facility.facility_type.id,
@@ -100,29 +101,41 @@ export async function GET(
 			}
 		}
 
-		// Get all indicators for this facility type
-		const indicators = await prisma.indicator.findMany({
-			where: {
-				applicable_facility_types: {
-					array_contains: [facility.facility_type.name],
-				},
-			},
+		type IndicatorWithRelations = Prisma.indicatorGetPayload<{
 			include: {
-				remunerations: {
-					where: {
-						facility_type_remuneration: {
-							facility_type_id: facility.facility_type.id,
-						},
+				indicator_remuneration: {
+					include: { facility_type_remuneration: true };
+				};
+				numerator_field: true;
+				denominator_field: true;
+				target_field: true;
+			};
+		}>;
+
+		// Get all indicators for this facility type
+		const indicators: IndicatorWithRelations[] =
+			await prisma.indicator.findMany({
+				where: {
+					applicable_facility_types: {
+						array_contains: [facility.facility_type.name],
 					},
-					include: { facility_type_remuneration: true },
 				},
-				numerator_field: true,
-				denominator_field: true,
-				target_field: true,
-			},
-		});
+				include: {
+					indicator_remuneration: {
+						where: {
+							facility_type_remuneration: {
+								facility_type_id: facility.facility_type.id,
+							},
+						},
+						include: { facility_type_remuneration: true },
+					},
+					numerator_field: true,
+					denominator_field: true,
+					target_field: true,
+				},
+			});
 		// Get field values for this facility and month
-		const fieldValues = await prisma.fieldValue.findMany({
+		const fieldValues = await prisma.field_value.findMany({
 			where: {
 				facility_id: facilityId,
 				report_month: month,
@@ -166,7 +179,7 @@ export async function GET(
 				if (!storedRecord.indicator) continue;
 
 				const indicator = storedRecord.indicator;
-				const remuneration = indicator.remunerations?.[0];
+				const remuneration = indicator.indicator_remuneration?.[0];
 				if (!remuneration) continue;
 
 				// Get actual value from stored record or field values
@@ -286,7 +299,7 @@ export async function GET(
 			// Calculate on-the-fly (original logic)
 			for (let i = 0; i < indicators.length; i++) {
 				const indicator = indicators[i];
-				const remuneration = indicator.remunerations[0];
+				const remuneration = indicator.indicator_remuneration[0];
 
 				// Skip indicators without remuneration configuration for now
 				if (!remuneration) {
@@ -396,22 +409,48 @@ export async function GET(
 					Object.fromEntries(fieldValueMap)
 				);
 
-				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = calculateTbConditionalRemuneration(
-					remuneration,
-					fieldValues,
-					indicator.code,
-					result.achievement,
-					denominatorValue
-				);
+				// Calculate conditional remuneration using new condition amount system
+				// Check if condition amounts are set (new system) or use old TB conditional logic (backward compatibility)
+				const hasConditionAmounts =
+					remuneration.condition_1_amount != null ||
+					remuneration.condition_2_amount != null ||
+					remuneration.condition_3_amount != null ||
+					remuneration.condition_4_amount != null;
+
+				let effectiveMaxRemuneration: number;
+				let displayPercentage: number;
+
+				if (hasConditionAmounts) {
+					// Use new condition amount system
+					const conditionResult = calculateConditionalRemuneration(
+						remuneration,
+						fieldValues,
+						indicator.code,
+						result.achievement,
+						denominatorValue
+					);
+					effectiveMaxRemuneration = conditionResult.effectiveMaxRemuneration;
+					displayPercentage = conditionResult.displayPercentage;
+				} else {
+					// Fallback to old TB conditional logic for backward compatibility
+					const tbResult = calculateTbConditionalRemuneration(
+						remuneration,
+						fieldValues,
+						indicator.code,
+						result.achievement,
+						denominatorValue
+					);
+					effectiveMaxRemuneration = tbResult.effectiveMaxRemuneration;
+					displayPercentage = tbResult.displayPercentage;
+				}
 
 				// Recalculate remuneration with effective max remuneration if different
-				if (tbResult.effectiveMaxRemuneration !== baseMaxRemuneration) {
+				if (effectiveMaxRemuneration !== baseMaxRemuneration) {
 					try {
 						result = calculateRemuneration(
 							actualValue,
 							denominatorValue,
-							tbResult.effectiveMaxRemuneration,
+							effectiveMaxRemuneration,
 							calculationConfig,
 							facility.facility_type.name,
 							undefined,
@@ -434,9 +473,6 @@ export async function GET(
 
 				totalIncentive += result.remuneration;
 
-				// Use display percentage from TB conditional calculation
-				const displayPercentage = tbResult.displayPercentage;
-
 				performanceIndicators.push({
 					id: indicator.id,
 					name: indicator.name,
@@ -454,7 +490,7 @@ export async function GET(
 					denominator_value: denominatorValue, // Already calculated correctly by calculateDenominatorValue
 					formula_config: indicator.formula_config,
 					calculation_result: result,
-					max_remuneration: tbResult.effectiveMaxRemuneration,
+					max_remuneration: effectiveMaxRemuneration,
 					raw_percentage: result.achievement, // Use achievement from FormulaCalculator (single source of truth)
 					// Add field information
 					numerator_field: indicator.numerator_field
@@ -482,7 +518,7 @@ export async function GET(
 			}
 		}
 		// Get all active workers for the facility
-		const workers = await prisma.healthWorker.findMany({
+		const workers = await prisma.health_workers.findMany({
 			where: {
 				facility_id: facilityId,
 				is_active: true,
@@ -490,7 +526,7 @@ export async function GET(
 		});
 
 		// Get worker allocation config to map worker types to roles
-		const workerConfigs = await prisma.workerAllocationConfig.findMany({
+		const workerConfigs = await prisma.worker_allocation_config.findMany({
 			where: {
 				facility_type_id: facility.facility_type_id,
 				is_active: true,

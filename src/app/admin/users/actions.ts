@@ -8,7 +8,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 
 export async function deleteUserAction(
 	id: number

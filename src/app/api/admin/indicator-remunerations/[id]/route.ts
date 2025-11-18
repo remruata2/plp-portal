@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 // GET /api/admin/indicator-remunerations/[id]
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		const session = await getServerSession(authOptions);
@@ -17,12 +17,13 @@ export async function GET(
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
-		const id = Number(params.id);
+		const { id: idParam } = await params;
+		const id = Number(idParam);
 		if (!Number.isFinite(id)) {
 			return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 		}
 
-		const item = await prisma.indicatorRemuneration.findUnique({
+		const item = await prisma.indicator_remuneration.findUnique({
 			where: { id },
 			include: {
 				indicator: { select: { id: true, name: true, code: true } },
@@ -55,7 +56,8 @@ export async function GET(
 // PATCH /api/admin/indicator-remunerations/[id]
 export async function PATCH(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		const session = await getServerSession(authOptions);
@@ -66,15 +68,82 @@ export async function PATCH(
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
-		const id = Number(params.id);
+		const { id: idParam } = await params;
+		const id = Number(idParam);
 		if (!Number.isFinite(id)) {
 			return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 		}
 
 		const body = await request.json();
-		const { base_amount, conditional_amount, condition_type } = body || {};
+		const {
+			facilityTypeId,
+			facility_type_id,
+			base_amount,
+			conditional_amount,
+			condition_type,
+			condition_1_amount,
+			condition_2_amount,
+			condition_3_amount,
+			condition_4_amount,
+		} = body || {};
+
+		// Get current remuneration to check if facility type is being changed
+		const currentRemuneration = await prisma.indicator_remuneration.findUnique({
+			where: { id },
+			include: {
+				facility_type_remuneration: {
+					select: { facility_type_id: true },
+				},
+			},
+		});
+
+		if (!currentRemuneration) {
+			return NextResponse.json({ error: "Not found" }, { status: 404 });
+		}
 
 		const data: any = {};
+
+		// Handle facility type change
+		const facilityTypeIdRaw = facilityTypeId ?? facility_type_id;
+		if (facilityTypeIdRaw !== undefined) {
+			const facilityTypeIdStr = String(facilityTypeIdRaw).trim();
+			if (facilityTypeIdStr) {
+				// Find or ensure FacilityTypeRemuneration exists for this facilityType
+				const ftr = await prisma.facility_type_remuneration.findUnique({
+					where: { facility_type_id: facilityTypeIdStr },
+				});
+				if (!ftr) {
+					return NextResponse.json(
+						{ error: "FacilityTypeRemuneration not found for facilityTypeId" },
+						{ status: 400 }
+					);
+				}
+
+				// Check if changing facility type would create a duplicate
+				if (ftr.id !== currentRemuneration.facility_type_remuneration_id) {
+					// Check if a remuneration already exists for the new facility type and same indicator
+					const existing = await prisma.indicator_remuneration.findFirst({
+						where: {
+							facility_type_remuneration_id: ftr.id,
+							indicator_id: currentRemuneration.indicator_id,
+							id: { not: id }, // Exclude current record
+						},
+					});
+
+					if (existing) {
+						return NextResponse.json(
+							{
+								error:
+									"Remuneration already exists for this indicator and facility type",
+							},
+							{ status: 409 }
+						);
+					}
+
+					data.facility_type_remuneration_id = ftr.id;
+				}
+			}
+		}
 		if (base_amount !== undefined) {
 			const baseAmountNum = Number(base_amount);
 			if (!Number.isFinite(baseAmountNum)) {
@@ -104,7 +173,65 @@ export async function PATCH(
 			data.condition_type = condition_type ?? null;
 		}
 
-		const updated = await prisma.indicatorRemuneration.update({
+		// Handle condition amounts
+		if (condition_1_amount !== undefined) {
+			if (condition_1_amount === null || condition_1_amount === "") {
+				data.condition_1_amount = null;
+			} else {
+				const condition1Amount = Number(condition_1_amount);
+				if (!Number.isFinite(condition1Amount)) {
+					return NextResponse.json(
+						{ error: "condition_1_amount must be a number" },
+						{ status: 400 }
+					);
+				}
+				data.condition_1_amount = condition1Amount;
+			}
+		}
+		if (condition_2_amount !== undefined) {
+			if (condition_2_amount === null || condition_2_amount === "") {
+				data.condition_2_amount = null;
+			} else {
+				const condition2Amount = Number(condition_2_amount);
+				if (!Number.isFinite(condition2Amount)) {
+					return NextResponse.json(
+						{ error: "condition_2_amount must be a number" },
+						{ status: 400 }
+					);
+				}
+				data.condition_2_amount = condition2Amount;
+			}
+		}
+		if (condition_3_amount !== undefined) {
+			if (condition_3_amount === null || condition_3_amount === "") {
+				data.condition_3_amount = null;
+			} else {
+				const condition3Amount = Number(condition_3_amount);
+				if (!Number.isFinite(condition3Amount)) {
+					return NextResponse.json(
+						{ error: "condition_3_amount must be a number" },
+						{ status: 400 }
+					);
+				}
+				data.condition_3_amount = condition3Amount;
+			}
+		}
+		if (condition_4_amount !== undefined) {
+			if (condition_4_amount === null || condition_4_amount === "") {
+				data.condition_4_amount = null;
+			} else {
+				const condition4Amount = Number(condition_4_amount);
+				if (!Number.isFinite(condition4Amount)) {
+					return NextResponse.json(
+						{ error: "condition_4_amount must be a number" },
+						{ status: 400 }
+					);
+				}
+				data.condition_4_amount = condition4Amount;
+			}
+		}
+
+		const updated = await prisma.indicator_remuneration.update({
 			where: { id },
 			data,
 		});
@@ -122,7 +249,7 @@ export async function PATCH(
 // DELETE /api/admin/indicator-remunerations/[id]
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		const session = await getServerSession(authOptions);
@@ -133,12 +260,13 @@ export async function DELETE(
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
-		const id = Number(params.id);
+		const { id: idParam } = await params;
+		const id = Number(idParam);
 		if (!Number.isFinite(id)) {
 			return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 		}
 
-		await prisma.indicatorRemuneration.delete({ where: { id } });
+		await prisma.indicator_remuneration.delete({ where: { id } });
 		return NextResponse.json({ success: true });
 	} catch (error) {
 		console.error("Error deleting indicator remuneration:", error);

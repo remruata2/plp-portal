@@ -17,13 +17,13 @@ export async function POST(request: NextRequest) {
 
     // Get or create facility type remuneration
     let facilityTypeRemuneration =
-      await prisma.facilityTypeRemuneration.findUnique({
+      await prisma.facility_typeRemuneration.findUnique({
         where: { facility_type_id },
       });
 
     if (!facilityTypeRemuneration) {
       // Create new facility type remuneration
-      facilityTypeRemuneration = await prisma.facilityTypeRemuneration.create({
+      facilityTypeRemuneration = await prisma.facility_typeRemuneration.create({
         data: {
           facility_type_id,
           total_amount: 0, // Will be calculated from individual configs
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         const { indicator_id, with_tb_patients, without_tb_patients } = config;
 
         // Upsert indicator remuneration
-        return await prisma.indicatorRemuneration.upsert({
+        return await prisma.indicator_remuneration.upsert({
           where: {
             facility_type_remuneration_id_indicator_id: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Update facility type remuneration total
-    await prisma.facilityTypeRemuneration.update({
+    await prisma.facility_typeRemuneration.update({
       where: { id: facilityTypeRemuneration.id },
       data: { total_amount: totalAmount },
     });
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
     }
 
     const facilityTypeRemuneration =
-      await prisma.facilityTypeRemuneration.findUnique({
+      await prisma.facility_typeRemuneration.findUnique({
         where: { facility_type_id },
         include: {
           indicator_remunerations: {

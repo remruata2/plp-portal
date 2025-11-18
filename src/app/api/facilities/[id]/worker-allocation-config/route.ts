@@ -26,7 +26,7 @@ export async function GET(
     }
 
     // Get worker allocation config for this facility type
-    const workerConfigs = await prisma.workerAllocationConfig.findMany({
+    const workerConfigs = await prisma.worker_allocation_config.findMany({
       where: {
         facility_type_id: facility.facility_type.id,
         is_active: true,

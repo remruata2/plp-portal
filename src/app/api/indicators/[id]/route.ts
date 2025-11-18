@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 
 const prisma = new PrismaClient();
 
@@ -147,12 +147,12 @@ export async function DELETE(
 		const indicatorId = parseInt(id);
 
 		// Check if indicator is being used in FacilityTarget
-		const facilityTargetCount = await prisma.facilityTarget.count({
+		const facilityTargetCount = await prisma.facility_target.count({
 			where: { indicator_id: indicatorId },
 		});
 
 		// Check if indicator is being used in IndicatorRemuneration
-		const indicatorRemunerationCount = await prisma.indicatorRemuneration.count(
+		const indicatorRemunerationCount = await prisma.indicator_remuneration.count(
 			{
 				where: { indicator_id: indicatorId },
 			}
@@ -167,7 +167,7 @@ export async function DELETE(
 		// Check if indicator is being used in IndicatorWorkerAllocation
 		// Note: This has onDelete: Cascade, so it will be auto-deleted, but we check for info
 		const indicatorWorkerAllocationCount =
-			await prisma.indicatorWorkerAllocation.count({
+			await prisma.indicator_worker_allocation.count({
 				where: { indicator_id: indicatorId },
     });
 

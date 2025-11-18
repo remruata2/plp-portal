@@ -130,7 +130,7 @@ async function seedRemunerationData() {
     console.log("🌱 Starting remuneration data seeding...");
 
     // Get all facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
     });
 
@@ -150,15 +150,17 @@ async function seedRemunerationData() {
       console.log(`\n💰 Processing ${facilityType.name} (${facilityType.id})`);
 
       // Create or update facility type remuneration
-      let facilityTypeRemuneration =
-        await prisma.facilityTypeRemuneration.upsert({
+      const facilityTypeRemuneration =
+        await prisma.facility_type_remuneration.upsert({
           where: { facility_type_id: facilityType.id },
           update: {
             total_amount: facilityData.total_amount,
+            updated_at: new Date(),
           },
           create: {
             facility_type_id: facilityType.id,
             total_amount: facilityData.total_amount,
+            updated_at: new Date(),
           },
         });
 
@@ -207,7 +209,7 @@ async function seedRemunerationData() {
         }
 
         // Create or update indicator remuneration
-        await prisma.indicatorRemuneration.upsert({
+        await prisma.indicator_remuneration.upsert({
           where: {
             facility_type_remuneration_id_indicator_id: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -218,6 +220,7 @@ async function seedRemunerationData() {
             base_amount: indicatorData.with_tb,
             conditional_amount: indicatorData.without_tb,
             condition_type: "WITH_TB_PATIENT",
+            updated_at: new Date(),
           },
           create: {
             facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -225,6 +228,7 @@ async function seedRemunerationData() {
             base_amount: indicatorData.with_tb,
             conditional_amount: indicatorData.without_tb,
             condition_type: "WITH_TB_PATIENT",
+            updated_at: new Date(),
           },
         });
 
@@ -237,8 +241,8 @@ async function seedRemunerationData() {
     console.log("\n🎉 Remuneration data seeding completed successfully!");
 
     // Summary
-    const totalConfigs = await prisma.indicatorRemuneration.count();
-    const totalFacilityTypes = await prisma.facilityTypeRemuneration.count();
+    const totalConfigs = await prisma.indicator_remuneration.count();
+    const totalFacilityTypes = await prisma.facility_type_remuneration.count();
 
     console.log(`\n📊 Summary:`);
     console.log(`  - Facility Types: ${totalFacilityTypes}`);

@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import IndicatorRemunerationListClient from "./IndicatorRemunerationListClient";
 
 export default async function IndicatorRemunerationsPage() {

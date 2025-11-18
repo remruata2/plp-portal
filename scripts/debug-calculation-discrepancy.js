@@ -26,7 +26,7 @@ async function debugCalculationDiscrepancy() {
     console.log(`Denominator field: ${indicator.denominator_field?.code}`);
 
     // Get field values for Zuangtui SC (the one with data)
-    const facilityValues = await prisma.fieldValue.findMany({
+    const facilityValues = await prisma.field_value.findMany({
       where: {
         facility: { name: 'Zuangtui SC' },
         field_id: { in: [indicator.numerator_field_id, indicator.denominator_field_id].filter(id => id) }

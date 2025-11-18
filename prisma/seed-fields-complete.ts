@@ -9,13 +9,13 @@ async function seedFieldsComplete() {
   console.log("🗑️ Clearing existing data...");
   
   // Clear dependent tables first (only those that exist in new schema)
-  await prisma.fieldValue.deleteMany();
-  await prisma.facilityTarget.deleteMany();
+  await prisma.field_value.deleteMany();
+  await prisma.facility_target.deleteMany();
   await prisma.facilityRemunerationRecord.deleteMany();
-  await prisma.workerRemuneration.deleteMany();
-  await prisma.remunerationCalculation.deleteMany();
-  await prisma.indicatorRemuneration.deleteMany();
-  await prisma.indicatorWorkerAllocation.deleteMany();
+  await prisma.worker_remunerations.deleteMany();
+  await prisma.remuneration_calculations.deleteMany();
+  await prisma.indicator_remuneration.deleteMany();
+  await prisma.indicator_worker_allocation.deleteMany();
   
   // Clear main tables
   await prisma.indicator.deleteMany();
@@ -430,7 +430,10 @@ async function seedFieldsComplete() {
   console.log("📝 Creating fields...");
   for (const fieldData of fields) {
     await prisma.field.create({
-      data: fieldData,
+      data: {
+        ...fieldData,
+        updated_at: new Date(),
+      },
     });
   }
 

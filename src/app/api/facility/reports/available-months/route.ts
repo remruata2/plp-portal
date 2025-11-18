@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all months where the facility has submitted data
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
       },

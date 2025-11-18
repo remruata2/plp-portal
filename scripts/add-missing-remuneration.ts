@@ -7,13 +7,13 @@ async function addMissingRemuneration() {
     console.log("🔧 Adding missing remuneration records...");
 
     // Get all facility types
-    const facilityTypes = await prisma.facilityType.findMany();
+    const facilityTypes = await prisma.facility_type.findMany();
     
     for (const facilityType of facilityTypes) {
       console.log(`\n📋 Processing ${facilityType.name}...`);
       
       // Get facility type remuneration
-      const facilityTypeRemuneration = await prisma.facilityTypeRemuneration.findUnique({
+      const facilityTypeRemuneration = await prisma.facility_typeRemuneration.findUnique({
         where: { facility_type_id: facilityType.id }
       });
 
@@ -40,7 +40,7 @@ async function addMissingRemuneration() {
         }
 
         // Check if remuneration already exists
-        const existingRemuneration = await prisma.indicatorRemuneration.findUnique({
+        const existingRemuneration = await prisma.indicator_remuneration.findUnique({
           where: {
             facility_type_remuneration_id_indicator_id: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -51,7 +51,7 @@ async function addMissingRemuneration() {
 
         if (!existingRemuneration) {
           // Create remuneration record
-          await prisma.indicatorRemuneration.create({
+          await prisma.indicator_remuneration.create({
             data: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
               indicator_id: indicator.id,

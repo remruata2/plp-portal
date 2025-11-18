@@ -142,7 +142,10 @@ export default function HealthDataFormPage() {
 	}
 
 	return (
-		<div className="max-w-6xl mx-auto p-4 sm:p-6">
+		<div
+			className="max-w-6xl mx-auto p-4 sm:p-6 pb-0 min-h-0 form-page-container"
+			style={{ height: "auto", maxHeight: "none", minHeight: "auto" }}
+		>
 			{/* Page Header */}
 			<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
 				<div className="flex-1">
@@ -166,7 +169,7 @@ export default function HealthDataFormPage() {
 			</div>
 
 			{/* Facility Information */}
-			<Card className="mb-6">
+			<Card className="mb-4">
 				<CardHeader className="pb-3">
 					<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 						<FileText className="h-5 w-5" />
@@ -196,13 +199,9 @@ export default function HealthDataFormPage() {
 			</Card>
 
 			{/* Data Submission Form */}
-			<Card>
-				<CardContent className="p-4 sm:p-6">
-					<SubmissionDeadlineGuard showDeadlineInfo={true}>
-						{getFormComponent()}
-					</SubmissionDeadlineGuard>
-				</CardContent>
-			</Card>
+			<SubmissionDeadlineGuard showDeadlineInfo={true}>
+				{getFormComponent()}
+			</SubmissionDeadlineGuard>
 		</div>
 	);
 }

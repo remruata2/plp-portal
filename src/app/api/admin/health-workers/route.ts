@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       whereClause.worker_type = workerType;
     }
 
-    const healthWorkers = await prisma.healthWorker.findMany({
+    const healthWorkers = await prisma.health_workers.findMany({
       where: whereClause,
       include: {
         facility: {
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create health worker
-    const healthWorker = await prisma.healthWorker.create({
+    const healthWorker = await prisma.health_workers.create({
       data: {
         facility_id: facilityId,
         name,
@@ -183,7 +183,7 @@ export async function PUT(request: NextRequest) {
     if (email !== undefined) updateData.email = email;
     if (isActive !== undefined) updateData.is_active = isActive;
 
-    const healthWorker = await prisma.healthWorker.update({
+    const healthWorker = await prisma.health_workers.update({
       where: { id: parseInt(id) },
       data: updateData,
       include: {
@@ -228,7 +228,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await prisma.healthWorker.delete({
+    await prisma.health_workers.delete({
       where: { id: parseInt(id) },
     });
 

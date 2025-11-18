@@ -17,7 +17,7 @@ export async function GET(_request: NextRequest) {
 		}
 
 		// Prefer remunerationCalculation months, but include performance and raw submissions months too
-		    const rcMonths = await prisma.remunerationCalculation.findMany({
+		    const rcMonths = await prisma.remuneration_calculations.findMany({
         select: { report_month: true },
         distinct: ["report_month"],
         orderBy: { report_month: "desc" },
@@ -30,14 +30,14 @@ export async function GET(_request: NextRequest) {
         orderBy: { report_month: "desc" },
         take: 120,
     });
-		    const fvMonths = await prisma.fieldValue.findMany({
+		    const fvMonths = await prisma.field_value.findMany({
         select: { report_month: true },
         distinct: ["report_month"],
         orderBy: { report_month: "desc" },
         take: 120,
     });
 
-		        let months = rcMonths
+		        const months = rcMonths
             .map((r) => r.report_month as string)
             .concat(frMonths.map((r) => r.report_month as string))
             .concat(fvMonths.map((r) => r.report_month as string))

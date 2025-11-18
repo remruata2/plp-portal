@@ -147,7 +147,7 @@ async function main() {
     }
 
     // Get all facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       select: { id: true, name: true },
     });
     const nameToId: Record<string, string> = {};
@@ -156,7 +156,7 @@ async function main() {
     }
 
     // Clear existing mappings
-    await prisma.facilityFieldMapping.deleteMany({});
+    await prisma.facility_field_mapping.deleteMany({});
 
     // Insert new mappings
     for (const [ftype, codes] of Object.entries(facilityTypeFieldCodes)) {
@@ -172,12 +172,13 @@ async function main() {
           console.warn(`Field code not found: ${code}`);
           continue;
         }
-        await prisma.facilityFieldMapping.create({
+        await prisma.facility_field_mapping.create({
           data: {
             facility_type_id: facilityTypeId,
             field_id: fieldId,
             is_required: false,
             display_order: order++,
+            updated_at: new Date(),
           },
         });
       }

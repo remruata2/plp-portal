@@ -1,9 +1,11 @@
 import { PrismaClient } from "@/generated/prisma";
+import { randomUUID } from "crypto";
 // FormulaCalculator no longer needed - using standalone functions directly where needed
 
 const prisma = new PrismaClient();
 
 export interface RemunerationRecordData {
+  id: string;
   facility_id: string;
   report_month: string;
   indicator_id?: number;
@@ -12,8 +14,8 @@ export interface RemunerationRecordData {
   percentage_achieved?: number;
   status: string;
   incentive_amount: number;
-  max_remuneration?: number;
-  raw_percentage?: number;
+  max_remuneration: number;
+  raw_percentage: number;
 }
 
 export interface WorkerRemunerationData {
@@ -47,7 +49,7 @@ export class RemunerationRecordsService {
       });
 
       // Delete existing worker remuneration records
-      await prisma.workerRemuneration.deleteMany({
+      await prisma.worker_remunerations.deleteMany({
         where: {
           facility_id: facilityId,
           report_month: month,
@@ -74,6 +76,7 @@ export class RemunerationRecordsService {
           }
 
           return {
+            id: randomUUID(),
             facility_id: facilityId,
             report_month: month,
             indicator_id: indicator.id,
@@ -105,7 +108,7 @@ export class RemunerationRecordsService {
           calculated_amount: worker.calculated_amount,
         }));
 
-        await prisma.workerRemuneration.createMany({
+        await prisma.worker_remunerations.createMany({
           data: workerRecords,
         });
       }
@@ -149,7 +152,7 @@ export class RemunerationRecordsService {
       });
 
       // Get worker records from WorkerRemuneration
-      const workerRecords = await prisma.workerRemuneration.findMany({
+      const workerRecords = await prisma.worker_remunerations.findMany({
         where: {
           facility_id: facilityId,
           report_month: month,
@@ -258,7 +261,7 @@ export class RemunerationRecordsService {
             report_month: month,
           },
         }),
-        prisma.workerRemuneration.count({
+        prisma.worker_remunerations.count({
           where: {
             facility_id: facilityId,
             report_month: month,
@@ -290,7 +293,7 @@ export class RemunerationRecordsService {
       });
 
       // Delete worker records
-      await prisma.workerRemuneration.deleteMany({
+      await prisma.worker_remunerations.deleteMany({
         where: {
           facility_id: facilityId,
           report_month: month,

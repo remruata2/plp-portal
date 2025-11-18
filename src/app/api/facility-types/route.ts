@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "../../../../src/generated/prisma";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       select: {
         id: true,
@@ -38,10 +39,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const facilityType = await prisma.facilityType.create({
+    const facilityType = await prisma.facility_type.create({
       data: {
+        id: randomUUID(),
         name,
         display_name: name, // Use name as display_name
+        updated_at: new Date(),
       },
     });
 

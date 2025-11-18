@@ -25,7 +25,7 @@ export async function GET(
       );
     }
 
-    const member = await prisma.familyMember.findFirst({
+    const member = await prisma.family_member.findFirst({
       where: {
         id: params.id,
         family: {
@@ -102,7 +102,7 @@ export async function PUT(
       );
     }
 
-    const existingMember = await prisma.familyMember.findFirst({
+    const existingMember = await prisma.family_member.findFirst({
       where: {
         id: params.id,
         family: {
@@ -180,7 +180,7 @@ export async function PUT(
       );
     }
 
-    const member = await prisma.familyMember.update({
+    const member = await prisma.family_member.update({
       where: {
         id: params.id,
       },
@@ -251,7 +251,7 @@ export async function DELETE(
       );
     }
 
-    const existingMember = await prisma.familyMember.findFirst({
+    const existingMember = await prisma.family_member.findFirst({
       where: {
         id: params.id,
         family: {
@@ -280,7 +280,7 @@ export async function DELETE(
       ? reason
       : "OTHER";
 
-    const member = await prisma.familyMember.update({
+    const member = await prisma.family_member.update({
       where: {
         id: params.id,
       },

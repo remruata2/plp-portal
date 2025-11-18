@@ -7,7 +7,7 @@ async function main() {
     console.log("Setting up Total Footfall remuneration configuration...");
 
     // Get facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       select: { id: true, name: true },
     });
 
@@ -48,13 +48,13 @@ async function main() {
 
       // Check if facility type remuneration already exists
       let facilityTypeRemuneration =
-        await prisma.facilityTypeRemuneration.findUnique({
+        await prisma.facility_typeRemuneration.findUnique({
           where: { facility_type_id: facilityType.id },
         });
 
       if (!facilityTypeRemuneration) {
         // Create new facility type remuneration
-        facilityTypeRemuneration = await prisma.facilityTypeRemuneration.create(
+        facilityTypeRemuneration = await prisma.facility_typeRemuneration.create(
           {
             data: {
               facility_type_id: facilityType.id,
@@ -67,7 +67,7 @@ async function main() {
         );
       } else {
         // Update existing remuneration
-        await prisma.facilityTypeRemuneration.update({
+        await prisma.facility_typeRemuneration.update({
           where: { id: facilityTypeRemuneration.id },
           data: { total_amount: amount },
         });
@@ -78,7 +78,7 @@ async function main() {
 
       // Check if indicator remuneration already exists
       const existingIndicatorRemuneration =
-        await prisma.indicatorRemuneration.findUnique({
+        await prisma.indicator_remuneration.findUnique({
           where: {
             facility_type_remuneration_id_indicator_id: {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
@@ -89,7 +89,7 @@ async function main() {
 
       if (!existingIndicatorRemuneration) {
         // Create indicator remuneration
-        await prisma.indicatorRemuneration.create({
+        await prisma.indicator_remuneration.create({
           data: {
             facility_type_remuneration_id: facilityTypeRemuneration.id,
             indicator_id: totalFootfallIndicator.id,
@@ -101,7 +101,7 @@ async function main() {
         );
       } else {
         // Update existing indicator remuneration
-        await prisma.indicatorRemuneration.update({
+        await prisma.indicator_remuneration.update({
           where: { id: existingIndicatorRemuneration.id },
           data: { base_amount: amount },
         });

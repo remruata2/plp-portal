@@ -6,7 +6,7 @@ async function checkFacilityTypes() {
   console.log("🔍 Checking facility types in database...");
 
   try {
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       select: {
         id: true,

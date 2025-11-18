@@ -22,8 +22,12 @@ type FormValues = {
 	facilityTypeId: string;
 	indicator_id: string;
 	base_amount: string;
-	conditional_amount?: string;
-	condition_type?: string;
+	conditional_amount?: string; // Keep for backward compatibility
+	condition_type?: string; // Keep for backward compatibility
+	condition_1_amount?: string;
+	condition_2_amount?: string;
+	condition_3_amount?: string;
+	condition_4_amount?: string;
 };
 
 export default function IndicatorRemunerationForm({
@@ -46,12 +50,34 @@ export default function IndicatorRemunerationForm({
 		base_amount: initialValues?.base_amount || "",
 		conditional_amount: initialValues?.conditional_amount || "",
 		condition_type: initialValues?.condition_type || "",
+		condition_1_amount: initialValues?.condition_1_amount || "",
+		condition_2_amount: initialValues?.condition_2_amount || "",
+		condition_3_amount: initialValues?.condition_3_amount || "",
+		condition_4_amount: initialValues?.condition_4_amount || "",
 	});
 
 	useEffect(() => {
 		loadFacilityTypes();
 		loadIndicators();
 	}, []);
+
+	// Update values when initialValues change (for edit mode)
+	useEffect(() => {
+		if (initialValues) {
+			setValues((prev) => ({
+				...prev,
+				facilityTypeId: initialValues.facilityTypeId || prev.facilityTypeId,
+				indicator_id: initialValues.indicator_id || prev.indicator_id,
+				base_amount: initialValues.base_amount || prev.base_amount,
+				conditional_amount: initialValues.conditional_amount || prev.conditional_amount,
+				condition_type: initialValues.condition_type || prev.condition_type,
+				condition_1_amount: initialValues.condition_1_amount || prev.condition_1_amount,
+				condition_2_amount: initialValues.condition_2_amount || prev.condition_2_amount,
+				condition_3_amount: initialValues.condition_3_amount || prev.condition_3_amount,
+				condition_4_amount: initialValues.condition_4_amount || prev.condition_4_amount,
+			}));
+		}
+	}, [initialValues]);
 
 	async function loadFacilityTypes() {
 		try {
@@ -65,17 +91,17 @@ export default function IndicatorRemunerationForm({
 		}
 	}
 
-	async function loadIndicators() {
-		try {
-			const res = await fetch("/api/indicators", { cache: "no-store" });
-			if (!res.ok) throw new Error(String(res.status));
-			const data = (await res.json()) as Indicator[];
-			setIndicators(data || []);
-		} catch (e) {
-			console.error(e);
-			toast.error("Failed to load indicators");
-		}
-	}
+  async function loadIndicators() {
+    try {
+      const res = await fetch("/api/indicators?minimal=true", { cache: "no-store" });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = (await res.json()) as Indicator[];
+      setIndicators(data || []);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to load indicators");
+    }
+  }
 
 	function onChange<K extends keyof FormValues>(key: K, val: FormValues[K]) {
 		setValues((v) => ({ ...v, [key]: val }));
@@ -103,6 +129,7 @@ export default function IndicatorRemunerationForm({
 				indicator_id: indicatorIdNum,
 				base_amount: Number(values.base_amount),
 			};
+			// Keep backward compatibility
 			if (
 				values.conditional_amount !== undefined &&
 				values.conditional_amount !== ""
@@ -114,6 +141,20 @@ export default function IndicatorRemunerationForm({
 			}
 			if (values.condition_type !== undefined)
 				payload.condition_type = values.condition_type || null;
+
+			// Add condition amounts
+			payload.condition_1_amount = values.condition_1_amount
+				? Number(values.condition_1_amount)
+				: null;
+			payload.condition_2_amount = values.condition_2_amount
+				? Number(values.condition_2_amount)
+				: null;
+			payload.condition_3_amount = values.condition_3_amount
+				? Number(values.condition_3_amount)
+				: null;
+			payload.condition_4_amount = values.condition_4_amount
+				? Number(values.condition_4_amount)
+				: null;
 
 			if (mode === "create") {
 				const res = await fetch("/api/admin/indicator-remunerations", {
@@ -131,9 +172,15 @@ export default function IndicatorRemunerationForm({
 					method: "PATCH",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
+						facilityTypeId: payload.facilityTypeId,
+						facility_type_id: payload.facility_type_id,
 						base_amount: payload.base_amount,
 						conditional_amount: payload.conditional_amount,
 						condition_type: payload.condition_type,
+						condition_1_amount: payload.condition_1_amount,
+						condition_2_amount: payload.condition_2_amount,
+						condition_3_amount: payload.condition_3_amount,
+						condition_4_amount: payload.condition_4_amount,
 					}),
 				});
 				if (!res.ok) {
@@ -182,7 +229,7 @@ export default function IndicatorRemunerationForm({
 							<Select
 								value={values.facilityTypeId}
 								onValueChange={(v) => onChange("facilityTypeId", v)}
-								disabled={mode === "edit"}
+								required
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select facility type" />
@@ -226,24 +273,62 @@ export default function IndicatorRemunerationForm({
 								onChange={(e) => onChange("base_amount", e.target.value)}
 								required
 							/>
-						</div>
-
-						<div>
-							<Label>Conditional Amount (₹)</Label>
-							<Input
-								type="number"
-								step="0.01"
-								value={values.conditional_amount || ""}
-								onChange={(e) => onChange("conditional_amount", e.target.value)}
-							/>
+							<p className="text-xs text-gray-500 mt-1">
+								Default amount (used when condition amounts are not set)
+							</p>
 						</div>
 
 						<div className="md:col-span-2">
-							<Label>Condition Type</Label>
+							<Label className="text-base font-semibold">
+								Condition Amounts (₹)
+							</Label>
+							<p className="text-sm text-gray-600 mb-3">
+								Set different amounts for each condition. Leave empty to use
+								base amount.
+							</p>
+						</div>
+
+						<div>
+							<Label>Condition 1 Amount (₹)</Label>
 							<Input
-								placeholder="e.g., performance >= 80%"
-								value={values.condition_type || ""}
-								onChange={(e) => onChange("condition_type", e.target.value)}
+								type="number"
+								step="0.01"
+								value={values.condition_1_amount || ""}
+								onChange={(e) => onChange("condition_1_amount", e.target.value)}
+								placeholder="Optional"
+							/>
+						</div>
+
+						<div>
+							<Label>Condition 2 Amount (₹)</Label>
+							<Input
+								type="number"
+								step="0.01"
+								value={values.condition_2_amount || ""}
+								onChange={(e) => onChange("condition_2_amount", e.target.value)}
+								placeholder="Optional"
+							/>
+						</div>
+
+						<div>
+							<Label>Condition 3 Amount (₹)</Label>
+							<Input
+								type="number"
+								step="0.01"
+								value={values.condition_3_amount || ""}
+								onChange={(e) => onChange("condition_3_amount", e.target.value)}
+								placeholder="Optional"
+							/>
+						</div>
+
+						<div>
+							<Label>Condition 4 Amount (₹)</Label>
+							<Input
+								type="number"
+								step="0.01"
+								value={values.condition_4_amount || ""}
+								onChange={(e) => onChange("condition_4_amount", e.target.value)}
+								placeholder="Optional"
 							/>
 						</div>
 					</div>

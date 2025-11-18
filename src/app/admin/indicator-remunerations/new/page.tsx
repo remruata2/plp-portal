@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import IndicatorRemunerationForm from "../IndicatorRemunerationForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

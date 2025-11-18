@@ -13,7 +13,7 @@ export async function GET(
     const { facilityTypeId } = await params;
 
     // Get facility type
-    const facilityType = await prisma.facilityType.findUnique({
+    const facilityType = await prisma.facility_type.findUnique({
       where: { id: facilityTypeId },
     });
 
@@ -25,7 +25,7 @@ export async function GET(
     }
 
     // Get existing mappings
-    const mappings = await prisma.facilityFieldMapping.findMany({
+    const mappings = await prisma.facility_fieldMapping.findMany({
       where: { facility_type_id: facilityTypeId },
       include: {
         field: true,

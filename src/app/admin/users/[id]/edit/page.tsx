@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
 import { getUserById } from "@/services/user-service";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import UserEditForm, { UserEditData } from "./UserEditForm"; // Import the new client component
 import { Loader2, ArrowLeft } from "lucide-react"; // For loading/error states before client component renders
 import Link from "next/link"; // For error state navigation

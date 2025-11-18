@@ -31,8 +31,12 @@ type IndicatorRemuneration = {
 	id: number;
 	indicator_id: number;
 	base_amount: number;
-	conditional_amount?: number | null;
-	condition_type?: string | null;
+	conditional_amount?: number | null; // Keep for backward compatibility
+	condition_type?: string | null; // Keep for backward compatibility
+	condition_1_amount?: number | null;
+	condition_2_amount?: number | null;
+	condition_3_amount?: number | null;
+	condition_4_amount?: number | null;
 	indicator?: Indicator;
 	facility_type_remuneration?: {
 		id: number;
@@ -282,9 +286,10 @@ export default function IndicatorRemunerationListClient() {
 						<TableRow>
 							<TableHead>Indicator</TableHead>
 							<TableHead>Facility Type</TableHead>
-							<TableHead className="text-right">Base Amount</TableHead>
-							<TableHead className="text-right">Conditional</TableHead>
-							<TableHead>Condition Type</TableHead>
+							<TableHead className="text-right">Condition 1</TableHead>
+							<TableHead className="text-right">Condition 2</TableHead>
+							<TableHead className="text-right">Condition 3</TableHead>
+							<TableHead className="text-right">Condition 4</TableHead>
 							<TableHead className="w-[120px]">Actions</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -292,59 +297,84 @@ export default function IndicatorRemunerationListClient() {
 						{!loading && filtered.length === 0 && (
 							<TableRow>
 								<TableCell
-									colSpan={6}
+									colSpan={7}
 									className="text-center text-gray-500 py-8"
 								>
 									No remunerations found
 								</TableCell>
 							</TableRow>
 						)}
-						{filtered.map((item) => (
-							<TableRow key={item.id}>
-								<TableCell className="font-medium">
-									<div className="flex items-center gap-2">
-										<Badge variant="outline">{item.indicator?.code}</Badge>
-										<span>{item.indicator?.name}</span>
-									</div>
-								</TableCell>
-								<TableCell>
-									{item.facility_type_remuneration?.facility_type
-										?.display_name ||
-										item.facility_type_remuneration?.facility_type?.name}
-								</TableCell>
-								<TableCell className="text-right">
-									₹{Number(item.base_amount).toLocaleString()}
-								</TableCell>
-								<TableCell className="text-right">
-									{item.conditional_amount != null
-										? `₹${Number(item.conditional_amount).toLocaleString()}`
-										: "-"}
-								</TableCell>
-								<TableCell>{item.condition_type || "-"}</TableCell>
-								<TableCell>
-									<div className="flex items-center gap-1">
-										<Button asChild variant="ghost" size="sm">
-											<Link
-												href={`/admin/indicator-remunerations/${item.id}/edit${
-													searchParams.toString()
-														? `?${searchParams.toString()}`
-														: ""
-												}`}
+						{filtered.map((item) => {
+							// Use condition amounts if set, otherwise fallback to base_amount
+							const condition1 =
+								item.condition_1_amount != null
+									? Number(item.condition_1_amount)
+									: Number(item.base_amount);
+							const condition2 =
+								item.condition_2_amount != null
+									? Number(item.condition_2_amount)
+									: Number(item.base_amount);
+							const condition3 =
+								item.condition_3_amount != null
+									? Number(item.condition_3_amount)
+									: Number(item.base_amount);
+							const condition4 =
+								item.condition_4_amount != null
+									? Number(item.condition_4_amount)
+									: Number(item.base_amount);
+
+							return (
+								<TableRow key={item.id}>
+									<TableCell className="font-medium">
+										<div className="flex items-center gap-2">
+											<Badge variant="outline">{item.indicator?.code}</Badge>
+											<span>{item.indicator?.name}</span>
+										</div>
+									</TableCell>
+									<TableCell>
+										{item.facility_type_remuneration?.facility_type
+											?.display_name ||
+											item.facility_type_remuneration?.facility_type?.name}
+									</TableCell>
+									<TableCell className="text-right">
+										₹{condition1.toLocaleString()}
+									</TableCell>
+									<TableCell className="text-right">
+										₹{condition2.toLocaleString()}
+									</TableCell>
+									<TableCell className="text-right">
+										₹{condition3.toLocaleString()}
+									</TableCell>
+									<TableCell className="text-right">
+										₹{condition4.toLocaleString()}
+									</TableCell>
+									<TableCell>
+										<div className="flex items-center gap-1">
+											<Button asChild variant="ghost" size="sm">
+												<Link
+													href={`/admin/indicator-remunerations/${
+														item.id
+													}/edit${
+														searchParams.toString()
+															? `?${searchParams.toString()}`
+															: ""
+													}`}
+												>
+													<Pencil className="h-4 w-4" />
+												</Link>
+											</Button>
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() => handleDelete(item.id)}
 											>
-												<Pencil className="h-4 w-4" />
-											</Link>
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => handleDelete(item.id)}
-										>
-											<Trash2 className="h-4 w-4" />
-										</Button>
-									</div>
-								</TableCell>
-							</TableRow>
-						))}
+												<Trash2 className="h-4 w-4" />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							);
+						})}
 					</TableBody>
 				</Table>
 			</div>

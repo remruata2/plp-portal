@@ -33,7 +33,7 @@ async function checkIndicatorFields() {
       .filter(id => id !== null);
 
     if (denominatorFieldIds.length > 0) {
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           field_id: { in: denominatorFieldIds },
         },
@@ -64,7 +64,7 @@ async function checkIndicatorFields() {
     console.log(`  'population_30_plus' field exists: ${!!actualField} (ID: ${actualField?.id})`);
 
     if (actualField) {
-      const actualFieldValues = await prisma.fieldValue.findMany({
+      const actualFieldValues = await prisma.field_value.findMany({
         where: { field_id: actualField.id },
         take: 5,
         include: { facility: true }

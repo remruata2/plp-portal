@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function listFacilityFields() {
   try {
     // Get all facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       orderBy: { name: "asc" },
     });
 
@@ -16,7 +16,7 @@ async function listFacilityFields() {
       console.log("=".repeat(50));
 
       // Get field mappings for this facility type
-      const mappings = await prisma.facilityFieldMapping.findMany({
+      const mappings = await prisma.facility_fieldMapping.findMany({
         where: {
           facility_type_id: facilityType.id,
         },
@@ -49,7 +49,7 @@ async function listFacilityFields() {
     console.log("=".repeat(50));
 
     for (const facilityType of facilityTypes) {
-      const count = await prisma.facilityFieldMapping.count({
+      const count = await prisma.facility_fieldMapping.count({
         where: {
           facility_type_id: facilityType.id,
         },

@@ -6,7 +6,7 @@ import { render, screen } from "@testing-library/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import RoleGuard from "../RoleGuard";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 
 // Mock next-auth
 jest.mock("next-auth/react");

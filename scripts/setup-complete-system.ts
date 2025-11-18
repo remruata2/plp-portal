@@ -16,27 +16,27 @@ async function setupCompleteSystem() {
 
     // Clear remuneration calculations
     console.log("💰 Clearing existing remuneration calculations...");
-    await prisma.remunerationCalculation.deleteMany();
+    await prisma.remuneration_calculations.deleteMany();
     console.log("✅ Remuneration calculations cleared");
 
     // Clear worker remunerations
     console.log("👥 Clearing existing worker remunerations...");
-    await prisma.workerRemuneration.deleteMany();
+    await prisma.worker_remunerations.deleteMany();
     console.log("✅ Worker remunerations cleared");
 
     // Clear field values
     console.log("📝 Clearing existing field values...");
-    await prisma.fieldValue.deleteMany();
+    await prisma.field_value.deleteMany();
     console.log("✅ Field values cleared");
 
     // Clear facility targets
     console.log("🎯 Clearing existing facility targets...");
-    await prisma.facilityTarget.deleteMany();
+    await prisma.facility_target.deleteMany();
     console.log("✅ Facility targets cleared");
 
     // Clear health workers
     console.log("🏥 Clearing existing health workers...");
-    await prisma.healthWorker.deleteMany();
+    await prisma.health_workers.deleteMany();
     console.log("✅ Health workers cleared");
 
     // Clear facilities
@@ -46,7 +46,7 @@ async function setupCompleteSystem() {
 
     // Clear facility types
     console.log("🏥 Clearing existing facility types...");
-    await prisma.facilityType.deleteMany();
+    await prisma.facility_type.deleteMany();
     console.log("✅ Facility types cleared");
 
     // Clear districts

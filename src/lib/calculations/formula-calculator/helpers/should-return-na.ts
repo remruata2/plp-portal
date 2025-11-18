@@ -1,4 +1,4 @@
-import { TargetType } from "../../../../generated/prisma";
+import { target_type } from "../../../../generated/prisma";
 import type { FormulaConfig } from "../types";
 
 /**
@@ -126,7 +126,7 @@ export function shouldReturnNA(
 	}
 
 	// Legacy condition checking (for backward compatibility)
-	if (config.type === TargetType.PERCENTAGE_RANGE && conditionMet === false) {
+	if (config.type === target_type.PERCENTAGE_RANGE && conditionMet === false) {
 		return {
 			shouldReturnNA: true,
 			remuneration: 0,

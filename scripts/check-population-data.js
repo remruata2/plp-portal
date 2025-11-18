@@ -26,7 +26,7 @@ async function checkPopulationData() {
     const populationFieldIds = populationFields.map(f => f.id);
     
     if (populationFieldIds.length > 0) {
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           field_id: { in: populationFieldIds },
         },

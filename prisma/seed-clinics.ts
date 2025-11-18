@@ -173,7 +173,7 @@ async function main() {
             const dob = getRandomAge(ageRange.min, ageRange.max);
             const age = new Date().getFullYear() - dob.getFullYear();
 
-            await prisma.familyMember.create({
+            await prisma.family_member.create({
               data: {
                 family_id: family.id,
                 name: generateName(),
@@ -227,7 +227,7 @@ async function main() {
     },
   });
 
-  const totalMembers = await prisma.familyMember.count({
+  const totalMembers = await prisma.family_member.count({
     where: {
       family: {
         section: {

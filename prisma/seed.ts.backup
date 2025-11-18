@@ -1,4 +1,5 @@
-import { PrismaClient, UserRole } from "../src/generated/prisma";
+import { PrismaClient } from "../src/generated/prisma";
+import { UserRole } from "../src/types/user";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -42,7 +43,7 @@ async function main() {
   ];
 
   for (const ft of facilityTypes) {
-    const facilityType = await prisma.facilityType.upsert({
+    const facilityType = await prisma.facility_type.upsert({
       where: { name: ft.name },
       update: {},
       create: ft,
@@ -79,7 +80,7 @@ async function main() {
 
   // Get all districts and facility types for seeding
   const allDistricts = await prisma.district.findMany();
-  const allFacilityTypes = await prisma.facilityType.findMany();
+  const allFacilityTypes = await prisma.facility_type.findMany();
 
   const districtMap = allDistricts.reduce((acc, district) => {
     acc[district.name] = district.id;

@@ -21,7 +21,7 @@ async function main() {
   console.log('🔧 Updating existing family members with required fields...');
 
   // Get all family members with NULL voter_id or phone
-  const members = await prisma.familyMember.findMany({
+  const members = await prisma.family_member.findMany({
     where: {
       OR: [
         { voter_id: null },
@@ -34,7 +34,7 @@ async function main() {
 
   let updated = 0;
   for (const member of members) {
-    await prisma.familyMember.update({
+    await prisma.family_member.update({
       where: { id: member.id },
       data: {
         voter_id: member.voter_id || generateVoterID(),

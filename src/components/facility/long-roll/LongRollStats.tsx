@@ -29,7 +29,7 @@ export default function LongRollStats() {
       
       const totalVillages = villagesData.count || 0;
       let totalSections = 0;
-      let totalFamilies = 0;
+      const totalFamilies = 0;
       
       // Count sections from villages
       if (villagesData.villages) {

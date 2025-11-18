@@ -8,8 +8,8 @@ async function clearAndRecalculateRemuneration() {
     
     // Clear all old remuneration records
     await prisma.facilityRemunerationRecord.deleteMany({});
-    await prisma.workerRemuneration.deleteMany({});
-    await prisma.remunerationCalculation.deleteMany({});
+    await prisma.worker_remunerations.deleteMany({});
+    await prisma.remuneration_calculations.deleteMany({});
     
     console.log("✅ Cleared all old remuneration data");
     
@@ -23,7 +23,7 @@ async function clearAndRecalculateRemuneration() {
     console.log(`📋 Found ${facilities.length} facilities to recalculate`);
     
     // Get all available report months
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       select: {
         report_month: true,
       },

@@ -10,7 +10,7 @@ const DEFAULT_SETTINGS = {
 export async function GET(req: NextRequest) {
   try {
     // Get all settings from the database
-    const settings = await prisma.systemSetting.findMany();
+    const settings = await prisma.system_setting.findMany();
     
     // Convert to key-value object and apply defaults for missing settings
     const settingsObject: Record<string, string> = {};
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     }
     
     // Update or create the setting
-    await prisma.systemSetting.upsert({
+    await prisma.system_setting.upsert({
       where: { key: "monthly_submission_deadline" },
       update: { 
         value: submissionDeadlineDay.toString(),

@@ -1,11 +1,12 @@
-import type { PrismaClient } from "@prisma/client";
 import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
 import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
 import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
 import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
+import { calculateConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-condition-amount";
 import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
+import { randomUUID } from "crypto";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -54,7 +55,7 @@ export class HealthDataRemunerationService {
 					},
 				},
 				include: {
-					remunerations: {
+					indicator_remuneration: {
 						where: {
 							facility_type_remuneration: {
 								facility_type_id: facility.facility_type.id,
@@ -70,7 +71,7 @@ export class HealthDataRemunerationService {
 			});
 
 			// Get field values for this facility and month - EXACT SAME AS PERFORMANCE REPORT
-			const dbFieldValues = await tx.fieldValue.findMany({
+			const dbFieldValues = await tx.field_value.findMany({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,
@@ -90,7 +91,7 @@ export class HealthDataRemunerationService {
 
 			// Process each indicator
 			for (const indicator of indicators) {
-				const remuneration = indicator.remunerations[0];
+				const remuneration = indicator.indicator_remuneration[0];
 				if (!remuneration) {
 					continue;
 				}
@@ -170,26 +171,52 @@ export class HealthDataRemunerationService {
 					};
 				}
 
-				// Calculate TB-conditional remuneration and display percentage using centralized method
-				const tbResult = calculateTbConditionalRemuneration(
-					remuneration,
-					dbFieldValues,
-					indicator.code,
-					result.achievement,
-					denominatorValue
-				);
+				// Calculate conditional remuneration using new condition amount system
+				// Check if condition amounts are set (new system) or use old TB conditional logic (backward compatibility)
+				const hasConditionAmounts =
+					remuneration.condition_1_amount != null ||
+					remuneration.condition_2_amount != null ||
+					remuneration.condition_3_amount != null ||
+					remuneration.condition_4_amount != null;
+
+				let effectiveMaxRemuneration: number;
+				let displayPercentage: number;
+
+				if (hasConditionAmounts) {
+					// Use new condition amount system
+					const conditionResult = calculateConditionalRemuneration(
+						remuneration,
+						dbFieldValues,
+						indicator.code,
+						result.achievement,
+						denominatorValue
+					);
+					effectiveMaxRemuneration = conditionResult.effectiveMaxRemuneration;
+					displayPercentage = conditionResult.displayPercentage;
+				} else {
+					// Fallback to old TB conditional logic for backward compatibility
+					const tbResult = calculateTbConditionalRemuneration(
+						remuneration,
+						dbFieldValues,
+						indicator.code,
+						result.achievement,
+						denominatorValue
+					);
+					effectiveMaxRemuneration = tbResult.effectiveMaxRemuneration;
+					displayPercentage = tbResult.displayPercentage;
+				}
 
 				// Recalculate remuneration with effective max remuneration if different
 				let finalRemuneration = result.remuneration;
 				if (
-					tbResult.effectiveMaxRemuneration !==
+					effectiveMaxRemuneration !==
 					parseFloat(remuneration.base_amount.toString())
 				) {
 					try {
 						const recalculatedResult = calculateRemuneration(
 							actualValue,
 							denominatorValue,
-							tbResult.effectiveMaxRemuneration,
+							effectiveMaxRemuneration,
 							calculationConfig,
 							facility.facility_type.name,
 							undefined,
@@ -205,8 +232,6 @@ export class HealthDataRemunerationService {
 					}
 				}
 
-				const displayPercentage = tbResult.displayPercentage;
-
 				// Use finalRemuneration (adjusted for TB conditions if needed)
 				// FormulaCalculator already handles:
 				// - BINARY: 0 or full (all-or-nothing)
@@ -218,7 +243,7 @@ export class HealthDataRemunerationService {
 				// Ensure we never exceed effectiveMaxRemuneration (safety check)
 				incentiveAmount = Math.min(
 					Math.max(incentiveAmount, 0),
-					Math.round(tbResult.effectiveMaxRemuneration)
+					Math.round(effectiveMaxRemuneration)
 				);
 
 				// Now that incentiveAmount is finalized, add to total
@@ -252,11 +277,12 @@ export class HealthDataRemunerationService {
 								undefined,
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
-							max_remuneration: tbResult.effectiveMaxRemuneration,
+							max_remuneration: effectiveMaxRemuneration,
 							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
 						create: {
+							id: randomUUID(),
 							facility_id: facilityId,
 							indicator_id: indicator.id,
 							report_month: reportMonth,
@@ -267,7 +293,7 @@ export class HealthDataRemunerationService {
 								undefined,
 							percentage_achieved: displayPercentage || undefined,
 							incentive_amount: incentiveAmount || 0,
-							max_remuneration: tbResult.effectiveMaxRemuneration,
+							max_remuneration: effectiveMaxRemuneration,
 							status: mapStatusToReportStatus(result.status),
 							calculation_date: new Date(),
 						},
@@ -288,7 +314,7 @@ export class HealthDataRemunerationService {
 
 			// Use the sum of individual indicator incentives as facility remuneration
 			// (totalIncentive was calculated by summing all indicator incentives above)
-			let facilityRemuneration = totalIncentive;
+			const facilityRemuneration = totalIncentive;
 
 			// Calculate overall performance percentage for worker incentives
 			// Cap individual indicator percentages at 100% for overall calculation (matches performance report)
@@ -324,12 +350,12 @@ export class HealthDataRemunerationService {
 					: 0;
 
 			// Get health workers for this facility
-			const healthWorkers = await tx.healthWorker.findMany({
+			const healthWorkers = await tx.health_workers.findMany({
 				where: { facility_id: facilityId },
 			});
 
 			// Get worker allocation configs for proper worker role mapping
-			const workerConfigs = await tx.workerAllocationConfig.findMany({
+			const workerConfigs = await tx.worker_allocation_config.findMany({
 				where: {
 					facility_type_id: facility.facility_type.id,
 					is_active: true,
@@ -369,7 +395,7 @@ export class HealthDataRemunerationService {
 
 					// Store in WorkerRemuneration table
 
-					const workerRecord = await tx.workerRemuneration.upsert({
+					const workerRecord = await tx.worker_remunerations.upsert({
 						where: {
 							health_worker_id_report_month: {
 								health_worker_id: worker.id,
@@ -401,7 +427,7 @@ export class HealthDataRemunerationService {
 					workerRecords.push(workerRecord);
 				} else if (workerType === "hwo" || workerType === "ayush_mo") {
 					// Individual-based: store full facility remuneration for the worker
-					const workerRecord = await tx.workerRemuneration.upsert({
+					const workerRecord = await tx.worker_remunerations.upsert({
 						where: {
 							health_worker_id_report_month: {
 								health_worker_id: worker.id,
@@ -435,7 +461,7 @@ export class HealthDataRemunerationService {
 			}
 
 			// Store remuneration calculation summary
-			const remunerationCalculation = await tx.remunerationCalculation.upsert({
+			const remunerationCalculation = await tx.remuneration_calculations.upsert({
 				where: {
 					facility_id_report_month: {
 						facility_id: facilityId,

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import { hash } from "bcryptjs";
 
 /**

@@ -6,7 +6,7 @@ async function main() {
   console.log("\n⚙️  Updating WorkerAllocationConfig for ASHA to allocated_amount = 1000 where needed...\n");
 
   // Preview
-  const mismatches = await prisma.workerAllocationConfig.findMany({
+  const mismatches = await prisma.worker_allocation_config.findMany({
     where: {
       worker_type: "asha",
       NOT: { allocated_amount: 1000 },
@@ -30,7 +30,7 @@ async function main() {
       )
     );
 
-    const result = await prisma.workerAllocationConfig.updateMany({
+    const result = await prisma.worker_allocation_config.updateMany({
       where: { worker_type: "asha", NOT: { allocated_amount: 1000 } },
       data: { allocated_amount: 1000 },
     });
@@ -39,7 +39,7 @@ async function main() {
   }
 
   // Summary
-  const summary = await prisma.workerAllocationConfig.findMany({
+  const summary = await prisma.worker_allocation_config.findMany({
     where: { worker_type: "asha" },
     select: {
       allocated_amount: true,

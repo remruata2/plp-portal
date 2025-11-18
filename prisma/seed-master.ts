@@ -102,7 +102,7 @@ async function createFacilityTargets() {
       for (const indicator of indicators) {
         try {
           // Check if target already exists
-          const existingTarget = await prisma.facilityTarget.findUnique({
+          const existingTarget = await prisma.facility_target.findUnique({
             where: {
               facility_id_indicator_id_report_month: {
                 facility_id: facility.id,
@@ -113,7 +113,7 @@ async function createFacilityTargets() {
           });
           
           if (!existingTarget) {
-            await prisma.facilityTarget.create({
+            await prisma.facility_target.create({
               data: {
                 facility_id: facility.id,
                 indicator_id: indicator.id,
@@ -147,13 +147,13 @@ async function printFinalSummary() {
     const indicators = await prisma.indicator.count();
     const fields = await prisma.field.count();
     const facilities = await prisma.facility.count();
-    const facilityTypes = await prisma.facilityType.count();
+    const facilityTypes = await prisma.facility_type.count();
     const districts = await prisma.district.count();
     const users = await prisma.user.count();
-    const facilityFieldMappings = await prisma.facilityFieldMapping.count();
-    const workerAllocationConfigs = await prisma.workerAllocationConfig.count();
-    const facilityTypeRemunerations = await prisma.facilityTypeRemuneration.count();
-    const facilityTargets = await prisma.facilityTarget.count();
+    const facilityFieldMappings = await prisma.facility_field_mapping.count();
+    const workerAllocationConfigs = await prisma.worker_allocation_config.count();
+    const facilityTypeRemunerations = await prisma.facility_type_remuneration.count();
+    const facilityTargets = await prisma.facility_target.count();
 
     console.log("   📊 Final Database Summary:");
     console.log(`      • Indicators: ${indicators}`);

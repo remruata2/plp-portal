@@ -12,7 +12,7 @@ async function main() {
   console.log("\n⚙️  Fixing ASHA remunerations: setting allocated_amount to 1000 and recalculating calculated_amount...\n");
 
   // Find all ASHA worker remunerations that are not already set to 1000
-  const toFix = await prisma.workerRemuneration.findMany({
+  const toFix = await prisma.worker_remunerations.findMany({
     where: {
       worker_type: "asha",
       NOT: { allocated_amount: 1000 },
@@ -44,7 +44,7 @@ async function main() {
         const newAllocated = 1000;
         const newCalculated = computeCalculatedAmount(newAllocated, performance);
 
-        return prisma.workerRemuneration.update({
+        return prisma.worker_remunerations.update({
           where: { id: rec.id },
           data: {
             allocated_amount: newAllocated,
@@ -61,7 +61,7 @@ async function main() {
   console.log(`\n✅ Completed. Updated ${updated} ASHA remuneration records.`);
 
   // Optional: show a quick summary by report_month
-  const summary = await prisma.workerRemuneration.groupBy({
+  const summary = await prisma.worker_remunerations.groupBy({
     by: ["report_month"],
     where: { worker_type: "asha" },
     _count: { _all: true },

@@ -65,7 +65,7 @@ async function seedHealthWorkers() {
     // Create health workers
     const createdWorkers = [];
     for (const workerData of healthWorkersData) {
-      const worker = await prisma.healthWorker.create({
+      const worker = await prisma.health_workers.create({
         data: {
           facility_id: facility.id,
           name: workerData.name,

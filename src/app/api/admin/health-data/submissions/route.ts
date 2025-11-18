@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Get all field values grouped by facility and report month
-		const fieldValues = await prisma.fieldValue.findMany({
+		const fieldValues = await prisma.field_value.findMany({
 			where,
 			include: {
 				field: true,
@@ -129,7 +129,7 @@ export async function GET(request: NextRequest) {
 		);
 
 		// Fetch remuneration calculations in bulk to get performance percentage
-		const remunerationRows = await prisma.remunerationCalculation.findMany({
+		const remunerationRows = await prisma.remuneration_calculations.findMany({
 			where: {
 				facility_id: { in: facilityIds },
 				report_month: { in: reportMonths },

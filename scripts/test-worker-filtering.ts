@@ -22,7 +22,7 @@ async function testWorkerFiltering() {
     console.log(`🏥 Facility: ${facility.name} (${facility.facility_type.name})`);
     
     // Get all workers for this facility
-    const workers = await prisma.healthWorker.findMany({
+    const workers = await prisma.health_workers.findMany({
       where: {
         facility_id: facility.id,
         is_active: true,
@@ -35,7 +35,7 @@ async function testWorkerFiltering() {
     });
     
     // Get worker allocation config
-    const workerConfigs = await prisma.workerAllocationConfig.findMany({
+    const workerConfigs = await prisma.worker_allocation_config.findMany({
       where: {
         facility_type_id: facility.facility_type_id,
         is_active: true,

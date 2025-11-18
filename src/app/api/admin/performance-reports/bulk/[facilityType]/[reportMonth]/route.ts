@@ -238,7 +238,7 @@ export async function GET(
 		const facilityTypeParam = decodeURIComponent(facilityTypeParamRaw);
 
 		// Find facility type by name
-		const facilityType = await prisma.facilityType.findFirst({
+		const facilityType = await prisma.facility_type.findFirst({
 			where: { name: facilityTypeParam },
 		});
 		if (!facilityType) {
@@ -287,7 +287,7 @@ export async function GET(
 				applicable_facility_types: { array_contains: [facilityType.name] },
 			},
 			include: {
-				remunerations: {
+				indicator_remuneration: {
 					where: {
 						facility_type_remuneration: { facility_type_id: facilityType.id },
 					},
@@ -396,7 +396,7 @@ export async function GET(
 
 		for (const facility of facilities) {
 			// Fetch field values first to determine if the facility has submitted anything
-			const fieldValues = await prisma.fieldValue.findMany({
+			const fieldValues = await prisma.field_value.findMany({
 				where: { facility_id: facility.id, report_month: reportMonth },
 				include: { field: true },
 			});
@@ -435,7 +435,7 @@ export async function GET(
 			let leaderNames = "";
 			if (hasHwoOrAyushMo) {
 				try {
-					const leaders = await prisma.healthWorker.findMany({
+					const leaders = await prisma.health_workers.findMany({
 						where: {
 							facility_id: facility.id,
 							worker_type: { in: ["hwo", "ayush_mo"] },
@@ -574,7 +574,7 @@ export async function GET(
 					achievementPercentage = Number(rec.percentage_achieved || 0);
 				} else {
 					// If record doesn't exist, calculate using FormulaCalculator (same as service)
-					const remuneration = indicator.remunerations?.[0];
+					const remuneration = indicator.indicator_remuneration?.[0];
 					const baseMaxRemuneration = remuneration
 						? parseFloat(
 								(remuneration.base_amount as any)?.toString?.() ??
@@ -837,14 +837,14 @@ export async function GET(
 
 		// Gather worker remuneration rows for included facilities
 		for (const f of includedFacilities) {
-			const wrs = await prisma.workerRemuneration.findMany({
+			const wrs = await prisma.worker_remunerations.findMany({
 				where: { facility_id: f.id, report_month: reportMonth.substring(0, 7) },
 			});
 			if (!wrs || wrs.length === 0) continue;
 
 			const workerIds = wrs.map((w: any) => w.health_worker_id).filter(Boolean);
 			const workers = workerIds.length
-				? await prisma.healthWorker.findMany({
+				? await prisma.health_workers.findMany({
 						where: { id: { in: workerIds } },
 				  })
 				: [];

@@ -1001,22 +1001,24 @@ async function seedFinalCorrectedIndicators() {
           source_of_verification,
           formula_config: indicatorData.formula_config,
           applicable_facility_types: applicable_facility_types || [],
+          updated_at: new Date(),
         },
       });
 
       // Delete existing worker allocations for this indicator
-      await prisma.indicatorWorkerAllocation.deleteMany({
+      await prisma.indicator_worker_allocation.deleteMany({
         where: { indicator_id: existingIndicator.id },
       });
 
       // Create new worker allocations
       for (const [workerType, amount] of Object.entries(worker_allocation)) {
         if (Number(amount) > 0) {
-          await prisma.indicatorWorkerAllocation.create({
+          await prisma.indicator_worker_allocation.create({
             data: {
               indicator_id: existingIndicator.id,
               worker_type: workerType,
               allocated_amount: Number(amount),
+              updated_at: new Date(),
             },
           });
         }
@@ -1043,17 +1045,19 @@ async function seedFinalCorrectedIndicators() {
           source_of_verification,
           formula_config: indicatorData.formula_config,
           applicable_facility_types: applicable_facility_types || [],
+          updated_at: new Date(),
         },
       });
 
       // Create worker allocations
       for (const [workerType, amount] of Object.entries(worker_allocation)) {
         if (Number(amount) > 0) {
-          await prisma.indicatorWorkerAllocation.create({
+          await prisma.indicator_worker_allocation.create({
             data: {
               indicator_id: newIndicator.id,
               worker_type: workerType,
               allocated_amount: Number(amount),
+              updated_at: new Date(),
             },
           });
         }

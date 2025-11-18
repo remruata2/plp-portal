@@ -181,7 +181,7 @@ export async function GET(request: NextRequest) {
     let age30PlusFemale = 0;
     
     let eligibleCouples = 0;
-    let coupleBreakdown = {
+    const coupleBreakdown = {
       hofSpouse: 0,
       sonDIL: 0,
       daughterSIL: 0,

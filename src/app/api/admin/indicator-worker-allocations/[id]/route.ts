@@ -31,7 +31,7 @@ export async function GET(
 
 		const { id } = await params;
 
-		const allocation = await prisma.indicatorWorkerAllocation.findUnique({
+		const allocation = await prisma.indicator_worker_allocation.findUnique({
 			where: { id },
 			include: {
 				indicator: {
@@ -80,7 +80,7 @@ export async function PATCH(
 		const { indicator_id, worker_type, allocated_amount } = body;
 
 		// Check if allocation exists
-		const existing = await prisma.indicatorWorkerAllocation.findUnique({
+		const existing = await prisma.indicator_worker_allocation.findUnique({
 			where: { id },
 		});
 
@@ -164,7 +164,7 @@ export async function PATCH(
 				data.worker_type ?? existing.worker_type;
 
 			// Check if this would create a duplicate (excluding current record)
-			const duplicate = await prisma.indicatorWorkerAllocation.findFirst({
+			const duplicate = await prisma.indicator_worker_allocation.findFirst({
 				where: {
 					indicator_id: finalIndicatorId,
 					worker_type: finalWorkerType,
@@ -184,7 +184,7 @@ export async function PATCH(
 		}
 
 		// Update allocation
-		const updated = await prisma.indicatorWorkerAllocation.update({
+		const updated = await prisma.indicator_worker_allocation.update({
 			where: { id },
 			data,
 			include: {
@@ -237,7 +237,7 @@ export async function DELETE(
 		const { id } = await params;
 
 		// Check if allocation exists
-		const existing = await prisma.indicatorWorkerAllocation.findUnique({
+		const existing = await prisma.indicator_worker_allocation.findUnique({
 			where: { id },
 		});
 
@@ -248,7 +248,7 @@ export async function DELETE(
 			);
 		}
 
-		await prisma.indicatorWorkerAllocation.delete({ where: { id } });
+		await prisma.indicator_worker_allocation.delete({ where: { id } });
 
 		return NextResponse.json({ success: true });
 	} catch (error) {

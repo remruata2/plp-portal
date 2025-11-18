@@ -10,11 +10,11 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const facilityType = await prisma.facilityType.findUnique({
+    const facilityType = await prisma.facility_type.findUnique({
       where: { id },
       include: {
         _count: {
-          select: { facilities: true },
+          select: { facility: true },
         },
       },
     });
@@ -52,12 +52,12 @@ export async function PUT(
       );
     }
 
-    const facilityType = await prisma.facilityType.update({
+    const facilityType = await prisma.facility_type.update({
       where: { id },
       data: { name },
       include: {
         _count: {
-          select: { facilities: true },
+          select: { facility: true },
         },
       },
     });
@@ -101,7 +101,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.facilityType.delete({
+    await prisma.facility_type.delete({
       where: { id },
     });
 

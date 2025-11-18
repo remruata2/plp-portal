@@ -71,7 +71,7 @@ export async function GET(
 		}
 
 		// Get all field values for this facility and report month
-		const fieldValues = await prisma.fieldValue.findMany({
+		const fieldValues = await prisma.field_value.findMany({
 			where: {
 				facility_id: facilityId,
 				report_month: reportMonth,
@@ -248,7 +248,7 @@ export async function PUT(
 				updateData.remarks = fieldValue.remarks;
 			}
 
-			return prisma.fieldValue.update({
+			return prisma.field_value.update({
 				where: {
 					id: fieldValue.id,
 				},
@@ -353,7 +353,7 @@ export async function DELETE(
 			const breakdown: Record<string, number> = {};
 
 			// 1. Delete all field values for this facility and report month
-			const fieldValueResult = await tx.fieldValue.deleteMany({
+			const fieldValueResult = await tx.field_value.deleteMany({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,
@@ -365,7 +365,7 @@ export async function DELETE(
 
 			// 2. Delete remuneration calculations for this facility and report month
 			const remunerationCalculationResult =
-				await tx.remunerationCalculation.deleteMany({
+				await tx.remuneration_calculations.deleteMany({
 					where: {
 						facility_id: facilityId,
 						report_month: reportMonth,
@@ -378,7 +378,7 @@ export async function DELETE(
 			);
 
 			// 3. Delete worker remunerations for this facility and report month
-			const workerRemunerationResult = await tx.workerRemuneration.deleteMany({
+			const workerRemunerationResult = await tx.worker_remunerations.deleteMany({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,

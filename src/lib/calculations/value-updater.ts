@@ -185,22 +185,8 @@ export class ValueUpdater {
     facilityId: number,
     reportMonth: string
   ): Promise<number | undefined> {
-    try {
-      // Get the referenced indicator's value for this facility and month
-      const referencedData = await prisma.monthlyHealthData.findFirst({
-        where: {
-          facility_id: facilityId,
-          report_month: reportMonth,
-          // This would need to be configured based on which indicator references which
-          // For now, we'll need to implement this based on specific rules
-        },
-      });
-
-      return referencedData ? Number(referencedData.value) : undefined;
-    } catch (error) {
-      console.error("Error calculating from referenced indicator:", error);
-      return undefined;
-    }
+    // Since monthlyHealthData table was removed, return undefined
+    return undefined;
   }
 
   /**
@@ -209,38 +195,12 @@ export class ValueUpdater {
   private static async getPopulationData(
     facilityId: number
   ): Promise<PopulationData | null> {
-    try {
-      // Try to get from population data table if it exists
-      const populationData = (await prisma.$queryRaw`
-        SELECT total_population, district, facility_type 
-        FROM population_data 
-        WHERE facility_id = ${facilityId}
-        LIMIT 1
-      `) as any;
-
-      if (populationData && populationData.length > 0) {
-        return {
-          totalPopulation: Number(populationData[0].total_population),
-          district: populationData[0].district,
-          facilityType: populationData[0].facility_type,
-        };
-      }
-
-      // Fallback: return default values
-      return {
-        totalPopulation: 2500, // Default population
-        district: "Unknown",
-        facilityType: "PHC",
-      };
-    } catch (error) {
-      console.error("Error getting population data:", error);
-      // Return default values if table doesn't exist
-      return {
-        totalPopulation: 2500,
-        district: "Unknown",
-        facilityType: "PHC",
-      };
-    }
+    // Since population_data table doesn't exist, return default values
+    return {
+      totalPopulation: 2500, // Default population
+      district: "Unknown",
+      facilityType: "PHC",
+    };
   }
 
   /**
@@ -258,41 +218,8 @@ export class ValueUpdater {
     remarks?: string;
     uploadedBy: number;
   }) {
-    return await prisma.monthlyHealthData.upsert({
-      where: {
-        facility_id_sub_centre_id_indicator_id_report_month: {
-          facility_id: data.facilityId,
-          sub_centre_id: null as any,
-          indicator_id: data.indicatorId,
-          report_month: data.reportMonth,
-        },
-      },
-      update: {
-        numerator: data.numeratorValue,
-        denominator: data.denominatorValue,
-        value: data.calculatedValue,
-        target_value: data.targetValue,
-        achievement: data.achievementPercentage,
-        remarks: data.remarks,
-        uploaded_by: data.uploadedBy,
-        updated_at: new Date(),
-      },
-      create: {
-        facility_id: data.facilityId,
-        indicator_id: data.indicatorId,
-        report_month: data.reportMonth,
-        district_id: 1, // Default district - should be fetched from facility
-        numerator: data.numeratorValue,
-        denominator: data.denominatorValue,
-        value: data.calculatedValue,
-        target_value: data.targetValue,
-        achievement: data.achievementPercentage,
-        remarks: data.remarks,
-        uploaded_by: data.uploadedBy,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    });
+    // Since monthlyHealthData table was removed, skip upsert
+    return null;
   }
 
   /**
@@ -339,34 +266,7 @@ export class ValueUpdater {
     };
     errors?: string[];
   }> {
-    try {
-      const data = await prisma.monthlyHealthData.findFirst({
-        where: {
-          facility_id: facilityId,
-          indicator_id: indicatorId,
-          report_month: reportMonth,
-        },
-      });
-
-      if (!data) {
-        return { success: true, data: {} };
-      }
-
-      return {
-        success: true,
-        data: {
-          numerator: data.numerator ? Number(data.numerator) : undefined,
-          denominator: data.denominator ? Number(data.denominator) : undefined,
-          value: data.value ? Number(data.value) : undefined,
-          achievement: data.achievement ? Number(data.achievement) : undefined,
-        },
-      };
-    } catch (error) {
-      console.error("Error getting current values:", error);
-      return {
-        success: false,
-        errors: [error instanceof Error ? error.message : "Unknown error"],
-      };
-    }
+    // Since monthlyHealthData table was removed, return empty data
+    return { success: true, data: {} };
   }
 }

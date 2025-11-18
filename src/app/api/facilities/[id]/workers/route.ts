@@ -19,7 +19,7 @@ export async function GET(
 		const { id: facilityId } = await params;
 
 		// Get all workers for the facility
-		const workers = await prisma.healthWorker.findMany({
+		const workers = await prisma.health_workers.findMany({
 			where: {
 				facility_id: facilityId,
 				is_active: true,
@@ -50,7 +50,7 @@ export async function GET(
 		}
 
 		// Get worker allocation config for this facility type
-		const workerConfigs = await prisma.workerAllocationConfig.findMany({
+		const workerConfigs = await prisma.worker_allocation_config.findMany({
 			where: {
 				facility_type_id: facility.facility_type.id,
 				is_active: true,
@@ -105,14 +105,14 @@ export async function POST(
 		}
 
 		// Get existing workers to determine which to update vs create
-		const existingWorkers = await prisma.healthWorker.findMany({
+		const existingWorkers = await prisma.health_workers.findMany({
 			where: {
 				facility_id: facilityId,
 			},
 		});
 
 		// Get worker allocation config for allocation amounts
-		const workerConfigs = await prisma.workerAllocationConfig.findMany({
+		const workerConfigs = await prisma.worker_allocation_config.findMany({
 			where: {
 				facility_type_id: facility.facility_type_id,
 				is_active: true,
@@ -120,7 +120,7 @@ export async function POST(
 		});
 
 		// First, mark all existing workers as inactive
-		await prisma.healthWorker.updateMany({
+		await prisma.health_workers.updateMany({
 			where: {
 				facility_id: facilityId,
 			},
@@ -138,7 +138,7 @@ export async function POST(
 
 			if (worker.id) {
 				// Update existing worker
-				return prisma.healthWorker.update({
+				return prisma.health_workers.update({
 					where: { id: worker.id },
 					data: {
 						name: worker.name,
@@ -151,7 +151,7 @@ export async function POST(
 				});
 			} else {
 				// Create new worker
-				return prisma.healthWorker.create({
+				return prisma.health_workers.create({
 					data: {
 						name: worker.name,
 						worker_type: worker.worker_type,

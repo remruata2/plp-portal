@@ -1,7 +1,7 @@
 import { PrismaClient } from "@/generated/prisma";
 import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
 import type { FormulaConfig } from "./formula-calculator/types";
-import { TargetType } from "@/generated/prisma";
+import { target_type } from "@/generated/prisma";
 
 export interface AutoCalculationResult {
   success: boolean;
@@ -138,7 +138,7 @@ export class AutoIndicatorCalculator {
       const fieldValues: { [key: string]: number } = {};
       
       // Get all fields for this facility and month
-      const allFieldValues = await this.prisma.fieldValue.findMany({
+      const allFieldValues = await this.prisma.field_value.findMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,
@@ -222,7 +222,7 @@ export class AutoIndicatorCalculator {
     facilityId: string,
     reportMonth: string
   ): Promise<any> {
-    const fieldValue = await this.prisma.fieldValue.findFirst({
+    const fieldValue = await this.prisma.field_value.findFirst({
       where: {
         field_id: fieldId,
         facility_id: facilityId,
@@ -259,20 +259,20 @@ export class AutoIndicatorCalculator {
    * Build formula config from indicator
    */
   private buildFormulaConfig(indicator: any): FormulaConfig {
-    // Map target_type to TargetType
-    let formulaType: TargetType;
+    // Map target_type to target_type
+    let formulaType: target_type;
     switch (indicator.target_type) {
       case "BINARY":
-        formulaType = TargetType.BINARY;
+        formulaType = target_type.BINARY;
         break;
       case "RANGE":
-        formulaType = TargetType.RANGE;
+        formulaType = target_type.RANGE;
         break;
       case "PERCENTAGE":
-        formulaType = TargetType.PERCENTAGE_RANGE;
+        formulaType = target_type.PERCENTAGE_RANGE;
         break;
       default:
-        formulaType = TargetType.RANGE;
+        formulaType = target_type.RANGE;
     }
 
     const config: FormulaConfig = {

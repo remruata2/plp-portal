@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get existing field value submissions for this facility
-    const submissions = await prisma.fieldValue.findMany({
+    const submissions = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
       },

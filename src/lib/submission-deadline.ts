@@ -34,7 +34,7 @@ export function formatDeadlineDate(
  */
 export async function getSubmissionDeadlineDay(): Promise<number> {
 	try {
-		const setting = await prisma.systemSetting.findUnique({
+		const setting = await prisma.system_setting.findUnique({
 			where: { key: "monthly_submission_deadline" },
 		});
 

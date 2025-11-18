@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get facilities that have submitted data in the previous month
-    const submittedThisMonth = await prisma.fieldValue.groupBy({
+    const submittedThisMonth = await prisma.field_value.groupBy({
       by: ["facility_id"],
       where: {
         report_month: previousMonth,
@@ -40,14 +40,14 @@ export async function GET(request: NextRequest) {
     const notSubmittedThisMonth = totalFacilities - submittedFacilityIds.length;
 
     // Get worker counts from HealthWorker table
-    const healthWorkers = await prisma.healthWorker.count({
+    const healthWorkers = await prisma.health_workers.count({
       where: {
         is_active: true,
         worker_type: "health_worker",
       },
     });
 
-    const ashaWorkers = await prisma.healthWorker.count({
+    const ashaWorkers = await prisma.health_workers.count({
       where: {
         is_active: true,
         worker_type: "asha",
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 
     // Get other basic stats
     const districts = await prisma.district.count();
-    const facilityTypes = await prisma.facilityType.count();
+    const facilityTypes = await prisma.facility_type.count();
     const indicators = await prisma.indicator.count();
     const users = await prisma.user.count();
 

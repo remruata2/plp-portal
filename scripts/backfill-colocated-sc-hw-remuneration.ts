@@ -19,7 +19,7 @@ async function backfillColocatedScHwRemuneration() {
     console.log("\n🔄 Starting backfill for colocated_sc_hw workers in PHC facilities...\n");
 
     // Find PHC facility type
-    const phcFacilityType = await prisma.facilityType.findFirst({
+    const phcFacilityType = await prisma.facility_type.findFirst({
       where: { name: "PHC" },
     });
 
@@ -42,7 +42,7 @@ async function backfillColocatedScHwRemuneration() {
     console.log(`📋 Found ${phcFacilities.length} active PHC facilities`);
 
     // Find PHC facilities that have colocated_sc_hw workers
-    const facilitiesWithColocatedHw = await prisma.healthWorker.findMany({
+    const facilitiesWithColocatedHw = await prisma.health_workers.findMany({
       where: {
         facility_id: { in: phcFacilities.map((f) => f.id) },
         worker_type: "colocated_sc_hw",
@@ -68,7 +68,7 @@ async function backfillColocatedScHwRemuneration() {
     }
 
     // Find all report months where these facilities have submissions
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         facility_id: { in: Array.from(facilityIdsWithColocatedHw) },
       },
@@ -143,7 +143,7 @@ async function backfillColocatedScHwRemuneration() {
 
     // Verify the results
     console.log("\n🔍 Verifying results...");
-    const colocatedHwRemunerations = await prisma.workerRemuneration.findMany({
+    const colocatedHwRemunerations = await prisma.worker_remunerations.findMany({
       where: {
         worker_type: "colocated_sc_hw",
       },
@@ -160,7 +160,7 @@ async function backfillColocatedScHwRemuneration() {
 
     if (colocatedHwRemunerations.length > 0) {
       console.log("\n📋 Sample records:");
-      const sample = await prisma.workerRemuneration.findMany({
+      const sample = await prisma.worker_remunerations.findMany({
         where: {
           worker_type: "colocated_sc_hw",
         },

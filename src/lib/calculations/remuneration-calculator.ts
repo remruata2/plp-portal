@@ -54,7 +54,7 @@ export class RemunerationCalculator {
 			}
 
 			// Get all workers for the facility
-			const allWorkers = await prisma.healthWorker.findMany({
+			const allWorkers = await prisma.health_workers.findMany({
 				where: {
 					facility_id: facilityId,
 					is_active: true,
@@ -77,7 +77,7 @@ export class RemunerationCalculator {
 			// Calculate facility incentive using the EXACT same logic as performance reports
 			// Get facility type remuneration configuration
 			const facilityTypeRemuneration =
-				await prisma.facilityTypeRemuneration.findUnique({
+				await prisma.facility_typeRemuneration.findUnique({
 					where: { facility_type_id: facility.facility_type.id },
 					include: {
 						indicator_remunerations: {
@@ -131,7 +131,7 @@ export class RemunerationCalculator {
 			);
 
 			// Get worker allocation config for proper worker roles
-			const workerConfigs = await prisma.workerAllocationConfig.findMany({
+			const workerConfigs = await prisma.worker_allocation_config.findMany({
 				where: {
 					facility_type_id: facility.facility_type.id,
 					is_active: true,
@@ -389,7 +389,7 @@ export class RemunerationCalculator {
 		forceRecalculation: boolean = false
 	): Promise<RemunerationCalculation | null> {
 		try {
-			const stored = await prisma.remunerationCalculation.findUnique({
+			const stored = await prisma.remuneration_calculations.findUnique({
 				where: {
 					facility_id_report_month: {
 						facility_id: facilityId,
@@ -491,7 +491,7 @@ export class RemunerationCalculator {
 		storedId: number,
 		calculation: RemunerationCalculation
 	): Promise<void> {
-		await prisma.remunerationCalculation.update({
+		await prisma.remuneration_calculations.update({
 			where: { id: storedId },
 			data: {
 				performance_percentage: calculation.performancePercentage,
@@ -592,7 +592,7 @@ export class RemunerationCalculator {
 				console.log(`📝 Querying database for field values...`);
 
 				// First get the field values
-				const basicFieldValues = await prisma.fieldValue.findMany({
+				const basicFieldValues = await prisma.field_value.findMany({
 					where: {
 						facility_id: facilityId,
 						report_month: reportMonth,
@@ -978,7 +978,7 @@ export class RemunerationCalculator {
 	): Promise<RemunerationCalculation[]> {
 		try {
 			// Get all stored remuneration calculations for the month
-			const storedCalculations = await prisma.remunerationCalculation.findMany({
+			const storedCalculations = await prisma.remuneration_calculations.findMany({
 				where: {
 					report_month: reportMonth,
 				},
@@ -1071,7 +1071,7 @@ export class RemunerationCalculator {
 		}>;
 	}> {
 		try {
-			const storedCalculations = await prisma.remunerationCalculation.findMany({
+			const storedCalculations = await prisma.remuneration_calculations.findMany({
 				where: {
 					report_month: reportMonth,
 					facility: {
@@ -1190,7 +1190,7 @@ export class RemunerationCalculator {
 				`  💰 Total Remuneration: ₹${calculation.totalRemuneration.toFixed(2)}`
 			);
 
-			await prisma.remunerationCalculation.upsert({
+			await prisma.remuneration_calculations.upsert({
 				where: {
 					facility_id_report_month: {
 						facility_id: facilityId,
@@ -1228,7 +1228,7 @@ export class RemunerationCalculator {
 			});
 
 			// Verify the stored data
-			const storedCalculation = await prisma.remunerationCalculation.findUnique(
+			const storedCalculation = await prisma.remuneration_calculations.findUnique(
 				{
 					where: {
 						facility_id_report_month: {
@@ -1259,7 +1259,7 @@ export class RemunerationCalculator {
 
 			// Store individual worker remuneration details
 			for (const worker of calculation.workers) {
-				await prisma.workerRemuneration.upsert({
+				await prisma.worker_remunerations.upsert({
 					where: {
 						health_worker_id_report_month: {
 							health_worker_id: worker.id,
@@ -1305,7 +1305,7 @@ export class RemunerationCalculator {
 				});
 
 				// Get field values for the facility and report month
-				const fieldValues = await prisma.fieldValue.findMany({
+				const fieldValues = await prisma.field_value.findMany({
 					where: {
 						facility_id: facilityId,
 						report_month: reportMonth,
@@ -1325,7 +1325,7 @@ export class RemunerationCalculator {
 				for (const indicator of indicators) {
 					try {
 						// Get remuneration configuration for this indicator (same as reports)
-						const remuneration = await prisma.indicatorRemuneration.findFirst({
+						const remuneration = await prisma.indicator_remuneration.findFirst({
 							where: {
 								indicator_id: indicator.id,
 								facility_type_remuneration: {

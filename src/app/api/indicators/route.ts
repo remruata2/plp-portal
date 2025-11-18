@@ -2,14 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const minimal = searchParams.get('minimal') === 'true';
+
     const indicators = await prisma.indicator.findMany({
-      select: {
+      select: minimal ? {
+        id: true,
+        code: true,
+        name: true,
+      } : {
         id: true,
         code: true,
         name: true,
@@ -113,6 +120,7 @@ export async function POST(request: NextRequest) {
           ? applicable_facility_types
           : [],
         type: "PERCENTAGE", // Default type for field-based indicators
+        updated_at: new Date(),
       },
     });
 

@@ -118,6 +118,7 @@ export async function POST(request: NextRequest) {
           default_value: default_value || null,
           sort_order: sort_order || 0,
           is_active: true,
+          updated_at: new Date(),
         },
       });
 

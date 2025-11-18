@@ -7,7 +7,7 @@ async function fixSatisfactionScoreValues() {
 
   try {
     // Get all patient satisfaction score values
-    const scoreValues = await prisma.fieldValue.findMany({
+    const scoreValues = await prisma.field_value.findMany({
       where: {
         field: { code: 'patient_satisfaction_score' }
       },
@@ -34,7 +34,7 @@ async function fixSatisfactionScoreValues() {
         console.log(`    🔧 Converting ${currentScore}% to ${correctedScore}/5 scale`);
         
         // Update the score value
-        await prisma.fieldValue.update({
+        await prisma.field_value.update({
           where: { id: scoreValue.id },
           data: { numeric_value: correctedScore }
         });
@@ -49,7 +49,7 @@ async function fixSatisfactionScoreValues() {
 
     // Test the calculation after fixes
     console.log(`\n🧮 Testing calculation after fixes:`);
-    const updatedScores = await prisma.fieldValue.findMany({
+    const updatedScores = await prisma.field_value.findMany({
       where: {
         field: { code: 'patient_satisfaction_score' }
       },

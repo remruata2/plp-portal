@@ -1,5 +1,5 @@
 import { type DefaultSession } from "next-auth";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 
 // Define the role hierarchy
 const ROLE_HIERARCHY = {

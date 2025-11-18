@@ -7,7 +7,7 @@ async function checkWorkers() {
     console.log("🔍 Checking workers in database...\n");
     
     // Get all workers
-    const workers = await prisma.healthWorker.findMany({
+    const workers = await prisma.health_workers.findMany({
       include: {
         facility: {
           include: {
@@ -49,7 +49,7 @@ async function checkWorkers() {
     
     // Check worker allocation config
     console.log("⚙️ Worker Allocation Configuration:");
-    const configs = await prisma.workerAllocationConfig.findMany({
+    const configs = await prisma.worker_allocation_config.findMany({
       include: {
         facility_type: true,
       },

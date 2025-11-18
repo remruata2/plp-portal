@@ -144,7 +144,7 @@ CREATE TABLE health_workers (
 
 ```typescript
 // Get health workers for the facility
-const healthWorkers = await prisma.healthWorker.findMany({
+const healthWorkers = await prisma.health_workers.findMany({
   where: {
     facility_id: facilityId,
     is_active: true,

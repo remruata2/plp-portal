@@ -44,7 +44,7 @@ async function investigateCB001Denominator() {
     if (cb001.denominator_field) {
       console.log(`\n🔍 Checking field values for denominator field ${cb001.denominator_field.code}:`);
       
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           field_id: cb001.denominator_field.id,
         },

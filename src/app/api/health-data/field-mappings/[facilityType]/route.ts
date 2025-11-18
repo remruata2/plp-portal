@@ -24,7 +24,7 @@ export async function GET(
     );
 
     // Get facility type and its field mappings
-    const facilityTypeData = await prisma.facilityType.findFirst({
+    const facilityTypeData = await prisma.facility_type.findFirst({
       where: {
         name: facilityType,
         is_active: true,

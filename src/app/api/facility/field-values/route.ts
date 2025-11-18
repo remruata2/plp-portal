@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Check if field is applicable to this facility type
-      const fieldMapping = await prisma.facilityFieldMapping.findFirst({
+      const fieldMapping = await prisma.facility_fieldMapping.findFirst({
         where: {
           facility_type_id: facility.facility_type.id,
           field_id: field.id,
@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get field values for this facility and month
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         facility_id: parseInt(facility_id),
         report_month,
@@ -215,7 +215,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get applicable fields for this facility type
-    const applicableFields = await prisma.facilityFieldMapping.findMany({
+    const applicableFields = await prisma.facility_fieldMapping.findMany({
       where: {
         facility_type_id: facility.facility_type.id,
       },

@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma"; // For role comparison
+import { UserRole } from "@/types/user"; // For role comparison
 import { getAllUsers } from "@/services/user-service";
 import UserListClient, { UserListData } from "./UserListClient";
 

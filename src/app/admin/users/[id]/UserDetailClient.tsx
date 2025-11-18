@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { UserRole } from '@/generated/prisma';
+import { UserRole } from '@/types/user';
 import { Loader2, ArrowLeft, Pencil } from 'lucide-react';
 
 export type UserDetailProps = {

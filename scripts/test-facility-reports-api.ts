@@ -61,7 +61,7 @@ async function testFacilityReportsAPI() {
     console.log(`📊 Set ${fieldValueMap.size} field values for testing`);
 
     // Get health workers
-    const healthWorkers = await prisma.healthWorker.findMany({
+    const healthWorkers = await prisma.health_workers.findMany({
       where: {
         facility_id: facility.id,
         is_active: true,

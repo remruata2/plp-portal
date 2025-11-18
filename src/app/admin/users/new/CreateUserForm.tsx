@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import { Loader2, ArrowLeft, Save } from "lucide-react";
 import { createUserAction } from "../actions"; // Adjusted path to actions.ts
 import { toast } from "sonner";

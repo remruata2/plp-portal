@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     
     try {
       // Get all remuneration calculations for this facility and sum the total remuneration
-      const allRemunerations = await prisma.remunerationCalculation.findMany({
+      const allRemunerations = await prisma.remuneration_calculations.findMany({
         where: {
           facility_id: facilityId,
         },
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total workers (count unique workers from all months)
-    const totalWorkersResult = await prisma.healthWorker.count({
+    const totalWorkersResult = await prisma.health_workers.count({
       where: {
         facility_id: facilityId,
       },
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     console.log("Total workers count:", totalWorkersResult);
 
     // Calculate total submissions (count unique report months with data)
-    const totalSubmissionsResult = await prisma.fieldValue.findMany({
+    const totalSubmissionsResult = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
       },
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
     const lastMonthString = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}`;
     
-    const lastMonthSubmissionsResult = await prisma.fieldValue.findMany({
+    const lastMonthSubmissionsResult = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
         report_month: lastMonthString,
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
       });
       
       if (footfallField) {
-        const footfallValues = await prisma.fieldValue.findMany({
+        const footfallValues = await prisma.field_value.findMany({
           where: {
             facility_id: facilityId,
             field_id: footfallField.id,
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
       });
       
       if (footfallField) {
-        const footfallValues = await prisma.fieldValue.findMany({
+        const footfallValues = await prisma.field_value.findMany({
           where: {
             facility_id: facilityId,
             field_id: footfallField.id,

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RoleGuard } from "@/components/auth";
 import { deleteUserAction } from "./actions"; // Import the server action
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import { Loader2, PlusCircle, Pencil, Trash2, Eye, Download, Search, Filter, Users, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

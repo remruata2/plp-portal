@@ -102,8 +102,8 @@ export default function ConditionalIndicatorDisplay({
 		}
 	};
 
-	// Show Yes/No question if no answer has been given yet
-	if (conditionalQuestion && yesNoAnswer === null) {
+	// Show Yes/No question if no answer has been given yet and showConditionalQuestion is true
+	if (conditionalQuestion && yesNoAnswer === null && showConditionalQuestion) {
 		return (
 			<Card className="border-blue-200 bg-blue-50">
 				<CardHeader className="pb-3">
@@ -151,8 +151,8 @@ export default function ConditionalIndicatorDisplay({
 		);
 	}
 
-	// Show NA state if user answered "No"
-	if (conditionalQuestion && yesNoAnswer === "no") {
+	// Show NA state if user answered "No" and showConditionalQuestion is true
+	if (conditionalQuestion && yesNoAnswer === "no" && showConditionalQuestion) {
 		return (
 			<Card className="border-orange-200 bg-orange-50">
 				<CardHeader className="pb-3">
@@ -203,8 +203,8 @@ export default function ConditionalIndicatorDisplay({
 		);
 	}
 
-	// Show indicator fields if user answered "Yes"
-	if (conditionalQuestion && yesNoAnswer === "yes") {
+	// Show indicator fields if user answered "Yes" and showConditionalQuestion is true
+	if (conditionalQuestion && yesNoAnswer === "yes" && showConditionalQuestion) {
 		return (
 			<Card className="border-green-200 bg-green-50">
 				<CardHeader className="pb-3">
@@ -300,6 +300,15 @@ export default function ConditionalIndicatorDisplay({
 				</CardContent>
 			</Card>
 		);
+	}
+
+	// When showConditionalQuestion is false, just render children directly based on answer
+	if (!showConditionalQuestion && conditionalQuestion) {
+		if (yesNoAnswer === "yes" && shouldShowIndicator) {
+			return <>{children}</>;
+		}
+		// If answer is "no" or null, don't show children
+		return null;
 	}
 
 	// Default case - show normally (for non-conditional indicators)

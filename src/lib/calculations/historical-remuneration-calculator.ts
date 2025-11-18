@@ -177,7 +177,7 @@ export class HistoricalRemunerationCalculator {
     );
 
     // Get all workers for the facility
-    const allWorkers = await prisma.healthWorker.findMany({
+    const allWorkers = await prisma.health_workers.findMany({
       where: {
         facility_id: facilityId,
         is_active: true,
@@ -336,7 +336,7 @@ export class HistoricalRemunerationCalculator {
     kpiConfig: any
   ): Promise<number> {
     try {
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,

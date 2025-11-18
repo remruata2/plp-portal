@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
 
 // Import UserRole directly from Prisma
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import { hasRequiredRole, isAdmin, getUserRole } from "@/lib/auth";
 
 interface RoleGuardProps {

@@ -11,7 +11,7 @@ async function testRemunerationManagement() {
     console.log("\n📊 Test 1: Facility Types");
     console.log("─".repeat(50));
 
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       select: { id: true, name: true, display_name: true },
     });
@@ -93,10 +93,10 @@ async function testRemunerationManagement() {
     console.log("\n📊 Test 4: Database Structure Verification");
     console.log("─".repeat(50));
 
-    const facilityTypeCount = await prisma.facilityType.count();
+    const facilityTypeCount = await prisma.facility_type.count();
     const indicatorCount = await prisma.indicator.count();
-    const facilityTypeRemunerationCount = await prisma.facilityTypeRemuneration.count();
-    const indicatorRemunerationCount = await prisma.indicatorRemuneration.count();
+    const facilityTypeRemunerationCount = await prisma.facility_typeRemuneration.count();
+    const indicatorRemunerationCount = await prisma.indicator_remuneration.count();
 
     console.log("✅ Database Structure:");
     console.log(`  - Facility Types: ${facilityTypeCount}`);

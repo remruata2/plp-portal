@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
-		const allocations = await prisma.indicatorWorkerAllocation.findMany({
+		const allocations = await prisma.indicator_worker_allocation.findMany({
 			include: {
 				indicator: {
 					select: {
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Check for duplicate (indicator_id + worker_type)
-		const existing = await prisma.indicatorWorkerAllocation.findUnique({
+		const existing = await prisma.indicator_worker_allocation.findUnique({
 			where: {
 				indicator_id_worker_type: {
 					indicator_id,
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Create allocation
-		const allocation = await prisma.indicatorWorkerAllocation.create({
+		const allocation = await prisma.indicator_worker_allocation.create({
 			data: {
 				indicator_id,
 				worker_type: worker_type as WorkerType,

@@ -60,11 +60,11 @@ export async function GET(
 		});
 
 		const remunerationCalculation =
-			await prisma.remunerationCalculation.findFirst({
+			await prisma.remuneration_calculations.findFirst({
 				where: { facility_id: facilityId, report_month: month },
 			});
 
-		const workerRems = await prisma.workerRemuneration.findMany({
+		const workerRems = await prisma.worker_remunerations.findMany({
 			where: { facility_id: facilityId, report_month: month },
 			include: { health_worker: true },
 			orderBy: { health_worker: { name: "asc" } },

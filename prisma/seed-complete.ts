@@ -45,7 +45,7 @@ async function seedEnhancedFacilityTypes() {
   let skippedCount = 0;
 
   for (const facilityType of facilityTypes) {
-    const existingType = await prisma.facilityType.findUnique({
+    const existingType = await prisma.facility_type.findUnique({
       where: { name: facilityType.name },
     });
 
@@ -55,7 +55,7 @@ async function seedEnhancedFacilityTypes() {
       );
       skippedCount++;
     } else {
-      await prisma.facilityType.create({
+      await prisma.facility_type.create({
         data: {
           name: facilityType.name,
           display_name: facilityType.display_name,
@@ -75,7 +75,7 @@ async function seedFacilities() {
 
   // First, get the districts and facility types for reference
   const districts = await prisma.district.findMany();
-  const facilityTypes = await prisma.facilityType.findMany();
+  const facilityTypes = await prisma.facility_type.findMany();
 
   // Get the existing facilities to avoid duplicates
   const existingFacilities = await prisma.facility.findMany();
@@ -837,7 +837,7 @@ async function seedRemunerationSystem() {
 
 async function printDatabaseSummary() {
   const indicators = await prisma.indicator.count();
-  const facilityTypes = await prisma.facilityType.count();
+  const facilityTypes = await prisma.facility_type.count();
   const districts = await prisma.district.count();
   const facilities = await prisma.facility.count();
 

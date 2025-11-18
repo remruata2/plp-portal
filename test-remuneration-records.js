@@ -66,7 +66,7 @@ async function testRemunerationRecords() {
     console.log('\n5. Checking relationships...');
     const facilities = await prisma.facility.findMany({ take: 1 });
     const indicators = await prisma.indicator.findMany({ take: 1 });
-    const workers = await prisma.healthWorker.findMany({ take: 1 });
+    const workers = await prisma.health_workers.findMany({ take: 1 });
 
     console.log('🔗 Related data available:');
     console.log(`   - Facilities: ${facilities.length > 0 ? '✅' : '❌'}`);

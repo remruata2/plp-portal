@@ -19,7 +19,7 @@ async function main() {
   console.log(`Include rows with all zero totals: ${includeZeroTotals}`);
 
   // 1) Build set of valid facility-month pairs from fieldValue (actual submissions)
-  const fvPairsRaw = await prisma.fieldValue.findMany({
+  const fvPairsRaw = await prisma.field_value.findMany({
     select: { facility_id: true, report_month: true },
     distinct: ["facility_id", "report_month"],
   });
@@ -30,7 +30,7 @@ async function main() {
   );
 
   // 2) Get existing remunerationCalculation pairs
-  const rcPairsRaw = await prisma.remunerationCalculation.findMany({
+  const rcPairsRaw = await prisma.remuneration_calculations.findMany({
     select: { facility_id: true, report_month: true, total_worker_remuneration: true, facility_remuneration: true, total_remuneration: true },
   });
 
@@ -77,13 +77,13 @@ async function main() {
   }
 
   console.log("Deleting workerRemuneration...");
-  const delWR = await prisma.workerRemuneration.deleteMany({ where: { OR: orPairs } });
+  const delWR = await prisma.worker_remunerations.deleteMany({ where: { OR: orPairs } });
 
   console.log("Deleting facilityRemunerationRecord...");
   const delFRR = await prisma.facilityRemunerationRecord.deleteMany({ where: { OR: orPairs } });
 
   console.log("Deleting remunerationCalculation...");
-  const delRC = await prisma.remunerationCalculation.deleteMany({ where: { OR: orPairs } });
+  const delRC = await prisma.remuneration_calculations.deleteMany({ where: { OR: orPairs } });
 
   console.log("Deletion summary:");
   console.log({ workerRemuneration: delWR.count, facilityRemunerationRecord: delFRR.count, remunerationCalculation: delRC.count });

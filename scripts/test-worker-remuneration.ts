@@ -21,7 +21,7 @@ async function testWorkerRemuneration() {
     );
 
     // Get health workers for this facility
-    const healthWorkers = await prisma.healthWorker.findMany({
+    const healthWorkers = await prisma.health_workers.findMany({
       where: {
         facility_id: facility.id,
         is_active: true,

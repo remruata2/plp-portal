@@ -2,8 +2,11 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { db } from "./db";
-// Import UserRole from the generated Prisma client
-import { UserRole } from "../generated/prisma";
+// Import user_role from the generated Prisma client
+import { user_role } from "../generated/prisma";
+
+// Type alias for backward compatibility
+type UserRole = typeof user_role[keyof typeof user_role];
 
 // Define custom types for NextAuth
 type AppUser = {

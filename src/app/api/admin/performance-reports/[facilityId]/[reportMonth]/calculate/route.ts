@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { facilityId: string; reportMonth: string } }
+  { params }: { params: Promise<{ facilityId: string; reportMonth: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -20,7 +20,7 @@ export async function POST(
       );
     }
 
-    const { facilityId, reportMonth } = params;
+    const { facilityId, reportMonth } = await params;
 
     // Verify facility exists
     const facility = await prisma.facility.findUnique({
@@ -49,6 +49,8 @@ export async function POST(
           [], // Empty array - service will fetch field values from database
           tx
         );
+      }, {
+        timeout: 30000, // Increase timeout to 30 seconds
       });
     } catch (error) {
       console.error("Error calculating remuneration:", error);
@@ -63,7 +65,7 @@ export async function POST(
     }
 
     // Get worker remuneration data for summary
-    const workerRemunerations = await prisma.workerRemuneration.findMany({
+    const workerRemunerations = await prisma.worker_remunerations.findMany({
       where: {
         facility_id: facilityId,
         report_month: reportMonth,
@@ -76,7 +78,7 @@ export async function POST(
     );
 
     // Get stored remuneration calculation for summary
-    const remunerationCalculation = await prisma.remunerationCalculation.findUnique({
+    const remunerationCalculation = await prisma.remuneration_calculations.findUnique({
       where: {
         facility_id_report_month: {
           facility_id: facilityId,

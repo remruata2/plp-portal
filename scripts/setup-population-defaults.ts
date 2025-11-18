@@ -69,7 +69,7 @@ async function setupPopulationDefaults() {
 
       for (const field of populationFields) {
         // Check if default already exists
-        const existingDefault = await prisma.facilityFieldDefaults.findFirst({
+        const existingDefault = await prisma.facility_fieldDefaults.findFirst({
           where: {
             facility_id: facility.id,
             field_id: field.id,
@@ -93,7 +93,7 @@ async function setupPopulationDefaults() {
         }
 
         if (defaultValue) {
-          await prisma.facilityFieldDefaults.create({
+          await prisma.facility_fieldDefaults.create({
             data: {
               facility_id: facility.id,
               field_id: field.id,

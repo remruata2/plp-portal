@@ -51,7 +51,7 @@ export class SmartFieldService {
     reportMonth: string
   ): Promise<SmartFieldValue | null> {
     try {
-      const fieldValue = await prisma.fieldValue.findUnique({
+      const fieldValue = await prisma.field_value.findUnique({
         where: {
           field_id_facility_id_report_month: {
             field_id: fieldId,
@@ -90,7 +90,7 @@ export class SmartFieldService {
     reportMonth: string
   ): Promise<SmartFieldValue[]> {
     try {
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,
@@ -142,7 +142,7 @@ export class SmartFieldService {
     reportMonth: string
   ): Promise<Record<string, SmartFieldValue | null>> {
     try {
-      const fieldValues = await prisma.fieldValue.findMany({
+      const fieldValues = await prisma.field_value.findMany({
         where: {
           field_id: fieldId,
           facility_id: { in: facilityIds },
@@ -210,7 +210,7 @@ export class SmartFieldService {
         facilityIds && facilityIds.length > 0
           ? facilityIds.length
           : prisma.facility.count({ where: { is_active: true } }),
-        prisma.fieldValue.count({
+        prisma.field_value.count({
           where: {
             field_id: fieldId,
             report_month: reportMonth,
@@ -218,7 +218,7 @@ export class SmartFieldService {
             ...(facilityIds && facilityIds.length > 0 && { facility_id: { in: facilityIds } }),
           },
         }),
-        prisma.fieldValue.aggregate({
+        prisma.field_value.aggregate({
           where: whereClause,
           _avg: { numeric_value: true },
           _min: { numeric_value: true },
@@ -281,7 +281,7 @@ export class SmartFieldService {
       }
 
       // Upsert the field value
-      await prisma.fieldValue.upsert({
+      await prisma.field_value.upsert({
         where: {
           field_id_facility_id_report_month: {
             field_id: fieldId,

@@ -1,121 +1,236 @@
 "use client";
 
 import * as React from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { Dialog as HeadlessDialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Dialog = DialogPrimitive.Root;
+export interface DialogProps {
+	open?: boolean;
+	defaultOpen?: boolean;
+	onOpenChange?: (open: boolean) => void;
+	children: React.ReactNode;
+}
 
-const DialogTrigger = DialogPrimitive.Trigger;
+const Dialog = ({ open, defaultOpen, onOpenChange, children }: DialogProps) => {
+	const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
+	const isOpen = open !== undefined ? open : internalOpen;
 
-const DialogPortal = DialogPrimitive.Portal;
+	const handleOpenChange = (newOpen: boolean) => {
+		if (open === undefined) {
+			setInternalOpen(newOpen);
+		}
+		onOpenChange?.(newOpen);
+	};
 
-const DialogClose = DialogPrimitive.Close;
+	return (
+		<HeadlessDialog open={isOpen} onClose={() => handleOpenChange(false)}>
+			{children}
+		</HeadlessDialog>
+	);
+};
+
+const DialogTrigger = React.forwardRef<
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>(({ asChild, children, onClick, ...props }, ref) => {
+	const context = React.useContext(DialogContext);
+	
+	const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		onClick?.(e);
+		context?.onOpenChange?.(true);
+	};
+
+	if (asChild && React.isValidElement(children)) {
+		return React.cloneElement(children, {
+			...props,
+			onClick: handleClick,
+			ref,
+		});
+	}
+
+	return (
+		<button ref={ref} onClick={handleClick} {...props}>
+			{children}
+		</button>
+	);
+});
+DialogTrigger.displayName = "DialogTrigger";
+
+const DialogContext = React.createContext<{
+	onOpenChange?: (open: boolean) => void;
+}>({});
+
+const DialogPortal = ({ children }: { children: React.ReactNode }) => {
+	return <>{children}</>;
+};
+
+const DialogClose = React.forwardRef<
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, onClick, ...props }, ref) => {
+	const context = React.useContext(DialogContext);
+
+	return (
+		<button
+			ref={ref}
+			className={cn(
+				"absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none",
+				className
+			)}
+			onClick={(e) => {
+				onClick?.(e);
+				context?.onOpenChange?.(false);
+			}}
+			{...props}
+		/>
+	);
+});
+DialogClose.displayName = "DialogClose";
 
 const DialogOverlay = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    ref={ref}
-    className={cn(
-      "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      className
-    )}
-    {...props}
-  />
-));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+	return (
+		<Transition.Child
+			as={React.Fragment}
+			enter="ease-out duration-200"
+			enterFrom="opacity-0"
+			enterTo="opacity-100"
+			leave="ease-in duration-200"
+			leaveFrom="opacity-100"
+			leaveTo="opacity-0"
+		>
+			<div
+				ref={ref}
+				className={cn(
+					"fixed inset-0 z-50 bg-background/80 backdrop-blur-sm",
+					className
+				)}
+				{...props}
+			/>
+		</Transition.Child>
+	);
+});
+DialogOverlay.displayName = "DialogOverlay";
 
 const DialogContent = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => {
+	return (
+		<DialogPortal>
+			<DialogOverlay />
+			<Transition.Child
+				as={React.Fragment}
+				enter="ease-out duration-200"
+				enterFrom="opacity-0 scale-95"
+				enterTo="opacity-100 scale-100"
+				leave="ease-in duration-200"
+				leaveFrom="opacity-100 scale-100"
+				leaveTo="opacity-0 scale-95"
+			>
+				<HeadlessDialog.Panel
+					ref={ref}
+					className={cn(
+						"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg",
+						className
+					)}
+					{...props}
+				>
+					{children}
+					<DialogClose>
+						<X className="h-4 w-4" />
+						<span className="sr-only">Close</span>
+					</DialogClose>
+				</HeadlessDialog.Panel>
+			</Transition.Child>
+		</DialogPortal>
+	);
+});
+DialogContent.displayName = "DialogContent";
 
 const DialogHeader = ({
-  className,
-  ...props
+	className,
+	...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
-      className
-    )}
-    {...props}
-  />
+	<div
+		className={cn(
+			"flex flex-col space-y-1.5 text-center sm:text-left",
+			className
+		)}
+		{...props}
+	/>
 );
 DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({
-  className,
-  ...props
+	className,
+	...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
-    {...props}
-  />
+	<div
+		className={cn(
+			"flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+			className
+		)}
+		{...props}
+	/>
 );
 DialogFooter.displayName = "DialogFooter";
 
 const DialogTitle = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+	HTMLHeadingElement,
+	React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
+	<HeadlessDialog.Title
+		ref={ref}
+		className={cn(
+			"text-lg font-semibold leading-none tracking-tight",
+			className
+		)}
+		{...props}
+	/>
 ));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
+DialogTitle.displayName = "DialogTitle";
 
 const DialogDescription = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+	HTMLParagraphElement,
+	React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
+	<HeadlessDialog.Description
+		ref={ref}
+		className={cn("text-sm text-muted-foreground", className)}
+		{...props}
+	/>
 ));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
+DialogDescription.displayName = "DialogDescription";
+
+// Wrap Dialog to provide context
+const DialogWithContext = ({
+	open,
+	defaultOpen,
+	onOpenChange,
+	children,
+}: DialogProps) => {
+	return (
+		<DialogContext.Provider value={{ onOpenChange }}>
+			<Dialog open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+				{children}
+			</Dialog>
+		</DialogContext.Provider>
+	);
+};
 
 export {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogClose,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
+	DialogWithContext as Dialog,
+	DialogPortal,
+	DialogOverlay,
+	DialogClose,
+	DialogTrigger,
+	DialogContent,
+	DialogHeader,
+	DialogFooter,
+	DialogTitle,
+	DialogDescription,
 };

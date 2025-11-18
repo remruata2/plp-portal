@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const members = await prisma.familyMember.findMany({
+    const members = await prisma.family_member.findMany({
       where: {
         family_id,
         is_active: true,
@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const member = await prisma.familyMember.create({
+    const member = await prisma.family_member.create({
       data: {
         family_id,
         name: name.trim(),

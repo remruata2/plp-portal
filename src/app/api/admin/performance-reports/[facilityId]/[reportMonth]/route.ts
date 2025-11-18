@@ -100,7 +100,7 @@ export async function GET(
 
 		// Get remuneration calculation for this facility/month
 		const remunerationCalculation =
-			await prisma.remunerationCalculation.findFirst({
+			await prisma.remuneration_calculations.findFirst({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,
@@ -108,21 +108,21 @@ export async function GET(
 			});
 
 		// Get worker remunerations for this facility/month
-		const workerRemunerations = await prisma.workerRemuneration.findMany({
+		const workerRemunerations = await prisma.worker_remunerations.findMany({
 			where: {
 				facility_id: facilityId,
 				report_month: reportMonth,
 			},
 			include: {
-				health_worker: true,
+				health_workers: true,
 			},
 			orderBy: {
-				health_worker: { name: "asc" },
+				health_workers: { name: "asc" },
 			},
 		});
 
 		// Get field values for denominator calculation (needed before transforming indicators)
-		const fieldValues = await prisma.fieldValue.findMany({
+		const fieldValues = await prisma.field_value.findMany({
 			where: {
 				facility_id: facilityId,
 				report_month: reportMonth,
@@ -269,8 +269,8 @@ export async function GET(
 
 		// Transform worker remunerations
 		const workers = workerRemunerations.map((workerRem) => ({
-			id: workerRem.health_worker.id,
-			name: workerRem.health_worker.name,
+			id: workerRem.health_workers.id,
+			name: workerRem.health_workers.name,
 			worker_type: workerRem.worker_type,
 			worker_role: workerRem.worker_role,
 			allocated_amount: Number(workerRem.allocated_amount),

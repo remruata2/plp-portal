@@ -2,7 +2,7 @@
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth-options';
-import { UserRole } from '@/generated/prisma';
+import { UserRole } from '@/types/user';
 import CreateUserForm from './CreateUserForm'; // Import the new client component
 
 export default async function CreateUserPage() {

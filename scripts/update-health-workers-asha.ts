@@ -6,7 +6,7 @@ async function main() {
   console.log("\n⚙️  Updating HealthWorker allocated_amount for ASHA to 1000 where needed...\n");
 
   // Preview
-  const mismatches = await prisma.healthWorker.findMany({
+  const mismatches = await prisma.health_workers.findMany({
     where: {
       worker_type: "asha",
       is_active: true,
@@ -33,7 +33,7 @@ async function main() {
       console.log(`   ...and ${mismatches.length - 10} more`);
     }
 
-    const result = await prisma.healthWorker.updateMany({
+    const result = await prisma.health_workers.updateMany({
       where: { worker_type: "asha", is_active: true, NOT: { allocated_amount: 1000 } },
       data: { allocated_amount: 1000 },
     });
@@ -42,7 +42,7 @@ async function main() {
   }
 
   // Summary
-  const summary = await prisma.healthWorker.groupBy({
+  const summary = await prisma.health_workers.groupBy({
     by: ["worker_type", "allocated_amount"],
     where: { worker_type: "asha" },
     _count: { _all: true },

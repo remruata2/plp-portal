@@ -32,12 +32,13 @@ async function main() {
   ];
 
   for (const facilityType of facilityTypes) {
-    await prisma.facilityType.upsert({
+    await prisma.facility_type.upsert({
       where: { name: facilityType.name },
       update: {},
       create: {
         name: facilityType.name,
         display_name: facilityType.display_name,
+        updated_at: new Date(),
       },
     });
   }
@@ -64,7 +65,10 @@ async function main() {
     await prisma.district.upsert({
       where: { name: districtName },
       update: {},
-      create: { name: districtName },
+      create: { 
+        name: districtName,
+        updated_at: new Date(),
+      },
     });
   }
 

@@ -18,7 +18,7 @@ export async function GET(
     }
 
     const facilityTypeRemuneration =
-      await prisma.facilityTypeRemuneration.findUnique({
+      await prisma.facility_typeRemuneration.findUnique({
         where: { facility_type_id },
         include: {
           indicator_remunerations: {

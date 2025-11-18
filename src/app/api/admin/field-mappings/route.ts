@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const fieldMappings = await prisma.facilityFieldMapping.findMany({
+    const fieldMappings = await prisma.facility_fieldMapping.findMany({
       where: whereClause,
       include: {
         facility_type: {

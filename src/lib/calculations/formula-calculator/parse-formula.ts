@@ -1,4 +1,4 @@
-import { TargetType } from "../../../generated/prisma";
+import { target_type } from "../../../generated/prisma";
 import type { FormulaConfig } from "./types";
 
 /**
@@ -12,7 +12,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/upto\s*(\d+)%-(\d+)%/i);
 		if (match) {
 			return {
-				type: TargetType.PERCENTAGE_RANGE,
+				type: target_type.PERCENTAGE_RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: parseInt(match[2]),
@@ -26,7 +26,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/(\d+)%-(\d+)%/i);
 		if (match) {
 			return {
-				type: TargetType.PERCENTAGE_RANGE,
+				type: target_type.PERCENTAGE_RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: parseInt(match[2]),
@@ -43,7 +43,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/(\d+)\s*above\s*(?:to\s*)?(\d+)/i);
 		if (match) {
 			return {
-				type: TargetType.RANGE,
+				type: target_type.RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: parseInt(match[2]),
@@ -60,7 +60,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/upto\s*(\d+)%/i);
 		if (match) {
 			return {
-				type: TargetType.PERCENTAGE_RANGE,
+				type: target_type.PERCENTAGE_RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: 100,
@@ -78,7 +78,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/upto\s*(\d+)%\s*above/i);
 		if (match) {
 			return {
-				type: TargetType.PERCENTAGE_RANGE,
+				type: target_type.PERCENTAGE_RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: 100,
@@ -91,7 +91,7 @@ export function parseFormula(formula: string): FormulaConfig {
 		const match = formula.match(/(\d+)%\s*above\s*only/i);
 		if (match) {
 			return {
-				type: TargetType.PERCENTAGE_RANGE,
+				type: target_type.PERCENTAGE_RANGE,
 				range: {
 					min: parseInt(match[1]),
 					max: 100,
@@ -107,14 +107,14 @@ export function parseFormula(formula: string): FormulaConfig {
 		lowerFormula === "yes"
 	) {
 		return {
-			type: TargetType.BINARY,
+			type: target_type.BINARY,
 			minThreshold: 100,
 		};
 	}
 
 	// Default to binary if no pattern matches
 	return {
-		type: TargetType.BINARY,
+		type: target_type.BINARY,
 		minThreshold: 100,
 	};
 }

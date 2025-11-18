@@ -19,7 +19,7 @@ async function fixPS001Denominator() {
     console.log(`✅ Found field: ${maxScoreField.name} (ID: ${maxScoreField.id})`);
 
     // Get all facilities that have patient_satisfaction_score values
-    const scoreValues = await prisma.fieldValue.findMany({
+    const scoreValues = await prisma.field_value.findMany({
       where: {
         field: { code: 'patient_satisfaction_score' }
       },
@@ -34,7 +34,7 @@ async function fixPS001Denominator() {
 
     for (const scoreValue of scoreValues) {
       // Check if max value already exists
-      const existingMax = await prisma.fieldValue.findFirst({
+      const existingMax = await prisma.field_value.findFirst({
         where: {
           field_id: maxScoreField.id,
           facility_id: scoreValue.facility_id,
@@ -48,7 +48,7 @@ async function fixPS001Denominator() {
       }
 
       // Add the max value (always 5 for satisfaction scores)
-      await prisma.fieldValue.create({
+      await prisma.field_value.create({
         data: {
           field_id: maxScoreField.id,
           facility_id: scoreValue.facility_id,

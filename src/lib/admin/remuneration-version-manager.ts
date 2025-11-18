@@ -138,7 +138,7 @@ export class RemunerationVersionManager {
   }> {
     try {
       // Get all facilities that have data for this month
-      const facilitiesWithData = await prisma.fieldValue.findMany({
+      const facilitiesWithData = await prisma.field_value.findMany({
         where: {
           report_month: reportMonth,
         },

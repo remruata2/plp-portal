@@ -7,7 +7,7 @@ async function checkDatabase() {
     const indicators = await prisma.indicator.count();
     const fields = await prisma.field.count();
     const facilities = await prisma.facility.count();
-    const facilityTypes = await prisma.facilityType.count();
+    const facilityTypes = await prisma.facility_type.count();
     const districts = await prisma.district.count();
     
     console.log('📊 Database Summary:');

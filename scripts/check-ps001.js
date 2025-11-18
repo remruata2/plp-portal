@@ -33,7 +33,7 @@ async function checkPS001() {
     }
 
     // Check field values for PS001
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         field_id: { in: [ps001.numerator_field_id, ps001.denominator_field_id].filter(id => id) }
       },

@@ -14,7 +14,7 @@ export async function GET(
       where: { id },
       include: {
         _count: {
-          select: { facilities: true },
+          select: { facility: true },
         },
       },
     });
@@ -57,7 +57,7 @@ export async function PUT(
       data: { name },
       include: {
         _count: {
-          select: { facilities: true },
+          select: { facility: true },
         },
       },
     });

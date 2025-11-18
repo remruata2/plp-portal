@@ -55,7 +55,7 @@ export class FieldBasedUpdater {
         } = fieldValue;
 
         // Create or update the field value
-        await this.prisma.fieldValue.upsert({
+        await this.prisma.field_value.upsert({
           where: {
             field_id_facility_id_report_month: {
               field_id,
@@ -227,7 +227,7 @@ export class FieldBasedUpdater {
     facilityId?: number,
     reportMonth?: string
   ): Promise<any> {
-    const fieldValue = await this.prisma.fieldValue.findUnique({
+    const fieldValue = await this.prisma.field_value.findUnique({
       where: {
         field_id_facility_id_report_month: {
           field_id: fieldId,
@@ -289,7 +289,7 @@ export class FieldBasedUpdater {
     facilityId?: number,
     reportMonth?: string
   ): Promise<any[]> {
-    return await this.prisma.fieldValue.findMany({
+    return await this.prisma.field_value.findMany({
       where: {
         facility_id: facilityId || null,
         report_month: reportMonth || "",

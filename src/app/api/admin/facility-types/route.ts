@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get facility types from the database
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       select: {
         id: true,

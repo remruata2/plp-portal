@@ -143,7 +143,7 @@ export async function GET(request: NextRequest) {
         house_no: true,
         floor_no: true,
         no_of_couples: true,
-        members: {
+        family_member: {
           where: {
             is_active: true,
             deleted_at: null,
@@ -180,7 +180,7 @@ export async function GET(request: NextRequest) {
     let age30PlusFemale = 0;
     
     let eligibleCouples = 0;
-    let coupleBreakdown = {
+    const coupleBreakdown = {
       hofSpouse: 0,
       sonDIL: 0,
       daughterSIL: 0,
@@ -197,7 +197,7 @@ export async function GET(request: NextRequest) {
       distinctHouses.add(family.house_no);
       
       // Count members by sex
-      for (const member of family.members) {
+      for (const member of family.family_member) {
         totalPopulation++;
         
         if (member.sex === 'MALE') maleCount++;
@@ -260,10 +260,10 @@ export async function GET(request: NextRequest) {
       }
       
       // Calculate eligible couples for this family
-      const membersByRelationship: Record<string, typeof family.members> = {};
+      const membersByRelationship: Record<string, typeof family.family_member> = {};
       
       // Group members by relationship
-      for (const member of family.members) {
+      for (const member of family.family_member) {
         if (!membersByRelationship[member.relationship_with_hof]) {
           membersByRelationship[member.relationship_with_hof] = [];
         }

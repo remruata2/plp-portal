@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ export async function GET() {
         name: true,
         created_at: true,
         _count: {
-          select: { facilities: true },
+          select: { facility: true },
         },
       },
     });
@@ -44,7 +45,9 @@ export async function POST(request: NextRequest) {
 
     const district = await prisma.district.create({
       data: {
+        id: randomUUID(),
         name,
+        updated_at: new Date(),
       },
     });
 

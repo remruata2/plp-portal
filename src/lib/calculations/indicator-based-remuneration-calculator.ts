@@ -163,7 +163,7 @@ export class IndicatorBasedRemunerationCalculator {
     if (!fieldId) return null;
 
     try {
-      const fieldValue = await prisma.fieldValue.findFirst({
+      const fieldValue = await prisma.field_value.findFirst({
         where: {
           field_id: fieldId,
           facility_id: facilityId,
@@ -188,7 +188,7 @@ export class IndicatorBasedRemunerationCalculator {
   ): Promise<number> {
     try {
       // First try to get facility-specific target
-      const facilityTarget = await prisma.facilityTarget.findFirst({
+      const facilityTarget = await prisma.facility_target.findFirst({
         where: {
           indicator_id: indicatorId,
           facility_id: facilityId,

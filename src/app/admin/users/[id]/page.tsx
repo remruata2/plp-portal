@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth-options';
 import { getUserById } from '@/services/user-service';
-import { UserRole } from '@/generated/prisma';
+import { UserRole } from '@/types/user';
 import UserDetailClient, { UserDetailProps } from './UserDetailClient'; // Import the new client component
 
 interface UserDetailPageProps {

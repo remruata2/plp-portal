@@ -48,7 +48,7 @@ export async function shouldRecalculate(
 		});
 
 		// Check if RemunerationCalculation exists
-		const remunerationCalculation = await prisma.remunerationCalculation.findUnique({
+		const remunerationCalculation = await prisma.remuneration_calculations.findUnique({
 			where: {
 				facility_id_report_month: {
 					facility_id: facilityId,
@@ -77,7 +77,7 @@ export async function shouldRecalculate(
 		}
 
 		// Check if any field values were updated after the last calculation
-		const latestFieldUpdate = await prisma.fieldValue.findFirst({
+		const latestFieldUpdate = await prisma.field_value.findFirst({
 			where: {
 				facility_id: facilityId,
 				report_month: reportMonth,

@@ -13,12 +13,12 @@ async function recalculateIncentives() {
 
     // Step 2: Clear existing remuneration calculations
     console.log("🗑️ Clearing existing remuneration calculations...");
-    const deletedRemunerationCount = await prisma.remunerationCalculation.deleteMany();
+    const deletedRemunerationCount = await prisma.remuneration_calculations.deleteMany();
     console.log(`✅ Deleted ${deletedRemunerationCount.count} existing remuneration calculations`);
 
     // Step 3: Clear existing worker remuneration records
     console.log("🗑️ Clearing existing worker remuneration records...");
-    const deletedWorkerRemunerationCount = await prisma.workerRemuneration.deleteMany();
+    const deletedWorkerRemunerationCount = await prisma.worker_remunerations.deleteMany();
     console.log(`✅ Deleted ${deletedWorkerRemunerationCount.count} existing worker remuneration records`);
 
     // Step 4: Get all facilities with submitted data

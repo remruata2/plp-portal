@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Start transaction to ensure data consistency
     const result = await prisma.$transaction(async (tx) => {
       // Delete existing field values for this facility and report month
-      await tx.fieldValue.deleteMany({
+      await tx.field_value.deleteMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       // Insert new field values
       const createdFieldValues = [];
       for (const fieldValue of fieldValues) {
-        const created = await tx.fieldValue.create({
+        const created = await tx.field_value.create({
           data: {
             field_id: fieldValue.fieldId,
             facility_id: facilityId,
@@ -351,7 +351,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get field values for the facility and report month
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
         report_month: reportMonth,
@@ -363,7 +363,7 @@ export async function GET(request: NextRequest) {
 
     // Get remuneration calculation if available
     const remunerationCalculation =
-      await prisma.remunerationCalculation.findUnique({
+      await prisma.remuneration_calculations.findUnique({
         where: {
           facility_id_report_month: {
             facility_id: facilityId,

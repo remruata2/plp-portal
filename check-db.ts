@@ -7,7 +7,7 @@ async function checkDatabase() {
     console.log("=== Checking Database State ===");
 
     // Check facility types
-    const facilityTypes = await prisma.facilityType.findMany({
+    const facilityTypes = await prisma.facility_type.findMany({
       select: { id: true, name: true, is_active: true },
     });
     console.log("Facility Types:", facilityTypes);
@@ -20,7 +20,7 @@ async function checkDatabase() {
     console.log("First 10 Fields:", fields);
 
     // Check field mappings for PHC
-    const phcMappings = await prisma.facilityFieldMapping.findMany({
+    const phcMappings = await prisma.facility_fieldMapping.findMany({
       where: {
         facility_type: {
           name: "PHC",

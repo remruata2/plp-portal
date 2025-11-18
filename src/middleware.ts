@@ -2,7 +2,10 @@ import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { UserRole } from "./generated/prisma";
+import { user_role } from "./generated/prisma";
+
+// Type alias for backward compatibility
+type UserRole = typeof user_role[keyof typeof user_role];
 
 // First, handle public routes that don't need auth checks
 export async function middleware(req: NextRequest) {
@@ -46,9 +49,9 @@ export async function middleware(req: NextRequest) {
 
   // If user is on root page and authenticated, redirect based on role
   if (isRootRoute && token) {
-    if (token.role === UserRole.facility) {
+    if (token.role === user_role.facility) {
       return NextResponse.redirect(new URL("/facility/dashboard", req.url));
-    } else if (token.role === UserRole.admin) {
+    } else if (token.role === user_role.admin) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
     // Default fallback
@@ -57,9 +60,9 @@ export async function middleware(req: NextRequest) {
 
   // If user is on login page but already authenticated, redirect based on role
   if (isAuthRoute && token) {
-    if (token.role === UserRole.facility) {
+    if (token.role === user_role.facility) {
       return NextResponse.redirect(new URL("/facility/dashboard", req.url));
-    } else if (token.role === UserRole.admin) {
+    } else if (token.role === user_role.admin) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
     // Default fallback
@@ -75,7 +78,7 @@ export async function middleware(req: NextRequest) {
   if (
     isDashboardRoute &&
     token &&
-    token.role === UserRole.admin &&
+    token.role === user_role.admin &&
     !req.headers.get("x-middleware-rewrite")
   ) {
     // Redirect /dashboard to /admin only for admin users
@@ -92,12 +95,12 @@ export async function middleware(req: NextRequest) {
   // Route protection based on user role
   if (token) {
     // Admin routes - only admin users can access
-    if (isAdminRoute && token.role !== UserRole.admin) {
+    if (isAdminRoute && token.role !== user_role.admin) {
       return NextResponse.redirect(new URL("/facility/dashboard", req.url));
     }
 
     // Facility routes - only facility users can access
-    if (isFacilityRoute && token.role !== UserRole.facility) {
+    if (isFacilityRoute && token.role !== user_role.facility) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
   }

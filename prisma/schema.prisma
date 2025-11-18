@@ -8,324 +8,99 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id              Int                 @id @default(autoincrement())
-  username        String              @unique @db.VarChar(100)
-  password_hash   String              @db.VarChar(255)
-  role            UserRole            @default(facility)
-  is_active       Boolean?            @default(true)
-  last_login      DateTime?           @db.Timestamptz(6)
-  created_at      DateTime?           @db.Timestamptz(6)
-  email           String?             @unique @db.VarChar(255)
-  facility_id     String?
-  field_values    FieldValue[]
-  facility        Facility?           @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+model FacilityRemunerationRecord {
+  id                            String     @id @default(cuid())
+  facility_id                   String
+  report_month                  String
+  indicator_id                  Int?
+  actual_value                  Float?
+  target_value                  Json?
+  percentage_achieved           Float?
+  status                        String
+  incentive_amount              Float      @default(0)
+  max_remuneration              Float?
+  raw_percentage                Float?
+  calculation_date              DateTime   @default(now())
+  calculation_version           String     @default("1.0")
+  kpi_config_snapshot           Json?
+  remuneration_formula_snapshot Json?
+  worker_allocation_snapshot    Json?
+  calculation_metadata          Json?
+  facility                      facility   @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  indicator                     indicator? @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
 
-  @@index([facility_id])
-  @@index([role, is_active])
-  @@index([email])
-  @@index([last_login])
-  @@map("user")
+  @@unique([facility_id, report_month, indicator_id])
+  @@index([calculation_date])
+  @@index([calculation_version])
+  @@index([facility_id, report_month])
+  @@index([facility_id, status])
+  @@index([indicator_id])
+  @@index([report_month])
+  @@index([status])
 }
 
-model District {
-  id           String              @id @default(cuid())
-  name         String              @unique @db.VarChar(100)
-  created_at   DateTime            @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime            @updatedAt @db.Timestamptz(6)
-  facilities   Facility[]
-
-  @@map("district")
+model district {
+  id         String     @id @default(cuid())
+  name       String     @unique @db.VarChar(100)
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
+   updated_at DateTime   @db.Timestamptz(6)
+  facility   facility[]
 }
 
-model FacilityType {
-  id                 String                    @id @default(cuid())
-  name               String                    @unique @db.VarChar(100)
-  created_at         DateTime                  @default(now()) @db.Timestamptz(6)
-  description        String?                   @db.VarChar(500)
-  display_name       String                    @db.VarChar(200)
-  is_active          Boolean                   @default(true)
-  updated_at         DateTime                  @updatedAt @db.Timestamptz(6)
-  facilities         Facility[]
-  field_mappings     FacilityFieldMapping[]
-  remunerations      FacilityTypeRemuneration?
-  worker_allocations WorkerAllocationConfig[]
-
-  @@map("facility_type")
-}
-
-model Facility {
-  id                        String                       @id @default(cuid())
-  name                      String                       @db.VarChar(200)
-  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
-  description               String?                      @db.VarChar(500)
-  display_name              String                       @db.VarChar(200)
-  district_id               String
-  facility_type_id          String
-  is_active                 Boolean                      @default(true)
-  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
-  parent_facility_id        String?                      // NULL = subcentre, NOT NULL = clinic under subcentre
-  has_clinic                Boolean                      @default(false) // Indicates if facility has clinic infrastructure for Long Roll
-  remuneration_records      FacilityRemunerationRecord[]
-  worker_remunerations      WorkerRemuneration[]
-  district                  District                     @relation(fields: [district_id], references: [id])
-  facility_type             FacilityType                 @relation(fields: [facility_type_id], references: [id])
-  facility_targets          FacilityTarget[]
-  field_values              FieldValue[]
-  health_workers            HealthWorker[]
-  remuneration_calculations RemunerationCalculation[]
-  users                     User[]
-  parent_facility           Facility?                    @relation("FacilityHierarchy", fields: [parent_facility_id], references: [id], onDelete: Restrict)
-  child_facilities          Facility[]                   @relation("FacilityHierarchy")
-  villages                  Village[]
+model facility {
+  id                         String                       @id @default(cuid())
+  name                       String                       @db.VarChar(200)
+  created_at                 DateTime                     @default(now()) @db.Timestamptz(6)
+  description                String?                      @db.VarChar(500)
+  display_name               String                       @db.VarChar(200)
+  district_id                String
+  facility_type_id           String
+  is_active                  Boolean                      @default(true)
+  updated_at                 DateTime                     @db.Timestamptz(6)
+  parent_facility_id         String?
+  has_clinic                 Boolean                      @default(false)
+  FacilityRemunerationRecord FacilityRemunerationRecord[]
+  district                   district                     @relation(fields: [district_id], references: [id])
+  facility_type              facility_type                @relation(fields: [facility_type_id], references: [id])
+  facility                   facility?                    @relation("facilityTofacility", fields: [parent_facility_id], references: [id], onDelete: Restrict)
+  other_facility             facility[]                   @relation("facilityTofacility")
+  facility_target            facility_target[]
+  field_value                field_value[]
+  health_workers             health_workers[]
+  remuneration_calculations  remuneration_calculations[]
+  user                       user[]
+  village                    village[]
+  worker_remunerations       worker_remunerations[]
 
   @@unique([name, district_id])
   @@index([district_id])
-  @@index([facility_type_id])
-  @@index([is_active])
   @@index([district_id, is_active])
+  @@index([facility_type_id])
   @@index([facility_type_id, is_active])
-  @@index([parent_facility_id])
   @@index([has_clinic])
-  @@map("facility")
-}
-
-model Indicator {
-  id                        Int                          @id @default(autoincrement())
-  name                      String                       @db.VarChar(200)
-  description               String?
-  type                      String                       @db.VarChar(20)
-  structure                 Json?
-  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
-  code                      String                       @unique @db.VarChar(50)
-  applicable_facility_types Json?
-  conditions                String?                      @db.VarChar(1000)
-  denominator_field_id      Int?
-  denominator_label         String?                      @db.VarChar(200)
-  formula_config            Json?
-  formula_type              formula_type                 @default(RANGE_BASED)
-  numerator_field_id        Int?
-  numerator_label           String?                      @db.VarChar(200)
-  target_formula            String?                      @db.VarChar(500)
-  target_type               TargetType                   @default(PERCENTAGE)
-  target_value              String?                      @db.VarChar(100)
-  target_field_id           Int?
-  source_of_verification    String?                      @db.VarChar(100)
-  remuneration_records      FacilityRemunerationRecord[]
-  facility_targets          FacilityTarget[]
-  denominator_field         Field?                       @relation("DenominatorField", fields: [denominator_field_id], references: [id])
-  numerator_field           Field?                       @relation("NumeratorField", fields: [numerator_field_id], references: [id])
-  target_field              Field?                       @relation("TargetField", fields: [target_field_id], references: [id])
-  remunerations             IndicatorRemuneration[]
-  worker_allocations        IndicatorWorkerAllocation[]
-
-  @@index([type])
-  @@index([formula_type])
-  @@index([target_type])
-  @@index([denominator_field_id])
-  @@index([numerator_field_id])
-  @@index([target_field_id])
-  @@index([created_at])
-  @@map("indicator")
-}
-
-model Field {
-  id                         Int                     @id @default(autoincrement())
-  code                       String                  @unique @db.VarChar(50)
-  name                       String                  @db.VarChar(200)
-  description                String?                 @db.VarChar(500)
-  created_at                 DateTime                @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime                @updatedAt @db.Timestamptz(6)
-  calculation_formula        String?                 @db.VarChar(500)
-  default_value              String?                 @db.VarChar(100)
-  facility_type_targets      Json?
-  field_type                 FieldType
-  is_active                  Boolean                 @default(true)
-  sort_order                 Int                     @default(0)
-  user_type                  UserType
-  validation_rules           Json?
-  field_category             FieldCategory           @default(DATA_FIELD)
-  facility_field_mappings    FacilityFieldMapping[]
-  field_values               FieldValue[]
-  denominator_for_indicators Indicator[]             @relation("DenominatorField")
-  numerator_for_indicators   Indicator[]             @relation("NumeratorField")
-  target_for_indicators      Indicator[]             @relation("TargetField")
-
-  @@index([field_type])
   @@index([is_active])
-  @@index([user_type])
-  @@index([field_category])
-  @@index([sort_order])
-  @@map("field")
+  @@index([parent_facility_id])
 }
 
-model FieldValue {
-  id              Int       @id @default(autoincrement())
-  field_id        Int
-  report_month    String    @db.VarChar(7)
-  string_value    String?   @db.VarChar(500)
-  numeric_value   Decimal?  @db.Decimal(15, 2)
-  boolean_value   Boolean?
-  json_value      Json?
-  uploaded_by     Int
-  remarks         String?
-  created_at      DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
-  is_override     Boolean   @default(false)
-  override_reason String?   @db.VarChar(200)
-  facility_id     String?
-  facility        Facility? @relation(fields: [facility_id], references: [id])
-  field           Field     @relation(fields: [field_id], references: [id])
-  uploader        User      @relation(fields: [uploaded_by], references: [id])
-
-  @@unique([field_id, facility_id, report_month])
-  @@index([facility_id, report_month])
-  @@index([field_id, report_month])
-  @@index([uploaded_by])
-  @@index([created_at])
-  @@index([facility_id, field_id])
-  @@index([report_month, is_override])
-  @@map("field_value")
-}
-
-model FacilityFieldMapping {
-  id               Int          @id @default(autoincrement())
+model facility_field_mapping {
+  id               Int           @id @default(autoincrement())
   field_id         Int
-  is_required      Boolean      @default(false)
-  display_order    Int          @default(0)
-  created_at       DateTime     @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime     @updatedAt @db.Timestamptz(6)
+  is_required      Boolean       @default(false)
+  display_order    Int           @default(0)
+  created_at       DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime      @db.Timestamptz(6)
   facility_type_id String
-  facility_type    FacilityType @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
-  field            Field        @relation(fields: [field_id], references: [id], onDelete: Cascade)
+  facility_type    facility_type @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
+  field            field         @relation(fields: [field_id], references: [id], onDelete: Cascade)
 
   @@unique([facility_type_id, field_id])
-  @@index([field_id])
-  @@index([facility_type_id])
-  @@index([is_required])
   @@index([display_order])
-  @@map("facility_field_mapping")
-}
-
-model HealthWorker {
-  id                        Int                          @id @default(autoincrement())
-  facility_id               String
-  name                      String
-  worker_type               String
-  allocated_amount          Decimal                      @db.Decimal(10, 2)
-  contact_number            String?
-  email                     String?
-  is_active                 Boolean                      @default(true)
-  created_at                DateTime                     @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime                     @updatedAt @db.Timestamptz(6)
-  facility                  Facility                     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-  remuneration_calculations WorkerRemuneration[]
-
-  @@index([facility_id])
-  @@index([worker_type])
-  @@index([is_active])
-  @@map("health_workers")
-}
-
-model RemunerationCalculation {
-  id                        Int      @id @default(autoincrement())
-  facility_id               String
-  report_month              String   @db.VarChar(7)
-  performance_percentage    Decimal  @db.Decimal(5, 2)
-  facility_remuneration     Decimal  @db.Decimal(10, 2)
-  total_worker_remuneration Decimal  @db.Decimal(10, 2)
-  total_remuneration        Decimal  @db.Decimal(10, 2)
-  health_workers_count      Int      @default(0)
-  asha_workers_count        Int      @default(0)
-  calculated_at             DateTime @default(now()) @db.Timestamptz(6)
-  facility                  Facility @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-
-  @@unique([facility_id, report_month])
-  @@index([facility_id])
-  @@index([report_month])
-  @@index([calculated_at])
-  @@map("remuneration_calculations")
-}
-
-model WorkerRemuneration {
-  id                     Int          @id @default(autoincrement())
-  health_worker_id       Int
-  facility_id            String       // Add facility_id for better querying
-  report_month           String       @db.VarChar(7)
-  worker_type            String       // Add worker type (hw, asha, hwo, etc.)
-  worker_role            String       // Add worker role (HW, ASHA, HWO, etc.)
-  allocated_amount       Decimal      @db.Decimal(10, 2)
-  performance_percentage Decimal      @db.Decimal(5, 2)
-  calculated_amount      Decimal      @db.Decimal(10, 2)
-  calculated_at          DateTime     @default(now()) @db.Timestamptz(6)
-  
-  // Relations
-  health_worker          HealthWorker @relation(fields: [health_worker_id], references: [id], onDelete: Cascade)
-  facility               Facility     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-
-  @@unique([health_worker_id, report_month])
-  @@index([facility_id, report_month])
-  @@index([worker_type])
-  @@map("worker_remunerations")
-}
-
-model WorkerAllocationConfig {
-  id                   Int                        @id @default(autoincrement())
-  facility_type_id     String
-  worker_type          String
-  worker_role          String
-  max_count            Int                        @default(1)
-  allocated_amount     Decimal                    @db.Decimal(10, 2)
-  description          String?
-  is_active            Boolean                    @default(true)
-  created_at           DateTime                   @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime                   @updatedAt @db.Timestamptz(6)
-  facility_type        FacilityType               @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
-
-  @@unique([facility_type_id, worker_type, worker_role])
   @@index([facility_type_id])
-  @@index([worker_type])
-  @@index([worker_role])
-  @@index([is_active])
-  @@index([facility_type_id, is_active])
-  @@map("worker_allocation_config")
+  @@index([field_id])
+  @@index([is_required])
 }
 
-model FacilityTypeRemuneration {
-  id                      Int                     @id @default(autoincrement())
-  total_amount            Decimal                 @db.Decimal(10, 2)
-  effective_from          DateTime                @default(now()) @db.Timestamptz(6)
-  effective_to            DateTime?               @db.Timestamptz(6)
-  created_at              DateTime                @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime                @updatedAt @db.Timestamptz(6)
-  facility_type_id        String                  @unique
-  facility_type           FacilityType            @relation(fields: [facility_type_id], references: [id])
-  indicator_remunerations IndicatorRemuneration[]
-
-  @@map("facility_type_remuneration")
-}
-
-model IndicatorRemuneration {
-  id                            Int                      @id @default(autoincrement())
-  facility_type_remuneration_id Int
-  indicator_id                  Int
-  base_amount                   Decimal                  @db.Decimal(10, 2)
-  conditional_amount            Decimal?                 @db.Decimal(10, 2)
-  condition_type                String?                  @db.VarChar(50)
-  created_at                    DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at                    DateTime                 @updatedAt @db.Timestamptz(6)
-  facility_type_remuneration    FacilityTypeRemuneration @relation(fields: [facility_type_remuneration_id], references: [id])
-  indicator                     Indicator                @relation(fields: [indicator_id], references: [id])
-
-  @@unique([facility_type_remuneration_id, indicator_id])
-  @@index([facility_type_remuneration_id])
-  @@index([indicator_id])
-  @@index([condition_type])
-  @@map("indicator_remuneration")
-}
-
-model FacilityTarget {
+model facility_target {
   id                Int       @id @default(autoincrement())
   indicator_id      Int
   report_month      String    @db.VarChar(7)
@@ -333,240 +108,67 @@ model FacilityTarget {
   numerator_label   String    @db.VarChar(200)
   denominator_label String    @db.VarChar(200)
   created_at        DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime  @updatedAt @db.Timestamptz(6)
+  updated_at        DateTime  @db.Timestamptz(6)
   facility_id       String
-  facility          Facility  @relation(fields: [facility_id], references: [id])
-  indicator         Indicator @relation(fields: [indicator_id], references: [id])
+  facility          facility  @relation(fields: [facility_id], references: [id])
+  indicator         indicator @relation(fields: [indicator_id], references: [id])
 
   @@unique([facility_id, indicator_id, report_month])
+  @@index([created_at])
   @@index([facility_id, report_month])
   @@index([indicator_id, report_month])
-  @@index([created_at])
-  @@map("facility_target")
 }
 
-model IndicatorWorkerAllocation {
-  id               String    @id @default(cuid())
-  indicator_id     Int
-  worker_type      String    @db.VarChar(50)
-  allocated_amount Int
-  created_at       DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime  @updatedAt @db.Timestamptz(6)
-  indicator        Indicator @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
-
-  @@unique([indicator_id, worker_type])
-  @@index([indicator_id])
-  @@index([worker_type])
-  @@map("indicator_worker_allocation")
+model facility_type {
+  id                         String                      @id @default(cuid())
+  name                       String                      @unique @db.VarChar(100)
+  created_at                 DateTime                    @default(now()) @db.Timestamptz(6)
+  description                String?                     @db.VarChar(500)
+  display_name               String                      @db.VarChar(200)
+  is_active                  Boolean                     @default(true)
+  updated_at                 DateTime                    @db.Timestamptz(6)
+  facility                   facility[]
+  facility_field_mapping     facility_field_mapping[]
+  facility_type_remuneration facility_type_remuneration?
+  worker_allocation_config   worker_allocation_config[]
 }
 
-model FacilityRemunerationRecord {
-  id                     String        @id @default(cuid())
-  facility_id            String
-  report_month           String
-  indicator_id           Int?
-  
-  // Performance data (for indicators)
-  actual_value           Float?
-  target_value           Json?         // JSON to store min/max ranges like indicators table
-  percentage_achieved    Float?
-  status                 String        // "achieved", "partial", "not_achieved"
-  
-  // Remuneration data (for indicators)
-  incentive_amount       Float         @default(0)
-  max_remuneration       Float?
-  raw_percentage         Float?
-  
-  // Metadata
-  calculation_date       DateTime      @default(now())
-  calculation_version    String        @default("1.0")
-  
-  // Historical accuracy fields
-  kpi_config_snapshot    Json?
-  remuneration_formula_snapshot Json?
-  worker_allocation_snapshot Json?
-  calculation_metadata   Json?
-  
-  facility               Facility      @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-  indicator              Indicator?    @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
-
-  @@unique([facility_id, report_month, indicator_id])
-  @@index([facility_id, report_month])
-  @@index([report_month])
-  @@index([indicator_id])
-  @@index([calculation_version])
-  @@index([status])
-  @@index([calculation_date])
-  @@index([facility_id, status])
+model facility_type_remuneration {
+  id                     Int                      @id @default(autoincrement())
+  total_amount           Decimal                  @db.Decimal(10, 2)
+  effective_from         DateTime                 @default(now()) @db.Timestamptz(6)
+  effective_to           DateTime?                @db.Timestamptz(6)
+  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                 @db.Timestamptz(6)
+  facility_type_id       String                   @unique
+  facility_type          facility_type            @relation(fields: [facility_type_id], references: [id])
+  indicator_remuneration indicator_remuneration[]
 }
 
-model SystemSetting {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @updatedAt @db.Timestamptz(6)
+model family {
+  id              String          @id @default(cuid())
+  section_id      String
+  house_no        String          @db.VarChar(50)
+  floor_no        String?         @db.VarChar(20)
+  no_of_couples   Int             @default(0)
+  habitation_type HabitationType  @default(PERMANENT)
+  is_active       Boolean         @default(true)
+  deleted_at      DateTime?       @db.Timestamptz(6)
+  deleted_reason  DeletionReason?
+  deleted_remarks String?         @db.VarChar(500)
+  created_at      DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime        @db.Timestamptz(6)
+  section         section         @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  family_member   family_member[]
 
-  @@map("system_setting")
-}
-
-enum UserRole {
-  admin
-  facility
-
-  @@map("user_role")
-}
-
-enum UserType {
-  ADMIN
-  FACILITY
-}
-
-enum FieldType {
-  CONSTANT
-  FACILITY_SPECIFIC
-  MONTHLY_COUNT
-  BINARY
-  PERCENTAGE
-  CALCULATED
-  INDICATOR_REFERENCE
-  FACILITY_TYPE_SPECIFIC
-}
-
-enum ValidationRule {
-  REQUIRED
-  POSITIVE_NUMBER
-  PERCENTAGE_RANGE
-  DATE_RANGE
-  CUSTOM_FORMULA
-  BINARY_ONLY
-  MIN_VALUE
-  MAX_VALUE
-}
-
-enum CalculationType {
-  DIRECT_INPUT
-  CALCULATED
-  AGGREGATED
-  PERCENTAGE
-
-  @@map("calculation_type")
-}
-
-enum DataQuality {
-  PENDING
-  VALIDATED
-  APPROVED
-  REJECTED
-
-  @@map("data_quality")
-}
-
-enum UploadStatus {
-  PROCESSING
-  COMPLETED
-  FAILED
-  CANCELLED
-
-  @@map("upload_status")
-}
-
-enum TargetType {
-  PERCENTAGE
-  CONSTANT_VALUE
-  BINARY
-  RANGE
-  MINIMUM_THRESHOLD
-  MAXIMUM_THRESHOLD
-  PERCENTAGE_RANGE
-
-  @@map("target_type")
-}
-
-enum FieldCategory {
-  DATA_FIELD
-  TARGET_FIELD
-
-  @@map("field_category")
-}
-
-enum formula_type {
-  RANGE_BASED
-  PERCENTAGE_CAP
-  BINARY
-  THRESHOLD_BONUS
-  MINIMUM_THRESHOLD
-  PERCENTAGE_RANGE
-}
-
-// Long Roll Registration Models
-
-model Village {
-  id              String    @id @default(cuid())
-  name            String    @db.VarChar(200)
-  facility_id     String
-  is_active       Boolean   @default(true)
-  deleted_at      DateTime? @db.Timestamptz(6)
-  deleted_reason  String?   @db.VarChar(500)
-  created_at      DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
-  
-  facility        Facility  @relation(fields: [facility_id], references: [id], onDelete: Cascade)
-  sections        Section[]
-  
-  @@unique([name, facility_id])
-  @@index([facility_id])
-  @@index([is_active])
-  @@index([deleted_at])
-  @@map("village")
-}
-
-model Section {
-  id              String    @id @default(cuid())
-  name            String    @db.VarChar(200)
-  village_id      String
-  is_active       Boolean   @default(true)
-  deleted_at      DateTime? @db.Timestamptz(6)
-  deleted_reason  String?   @db.VarChar(500)
-  created_at      DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
-  
-  village         Village   @relation(fields: [village_id], references: [id], onDelete: Cascade)
-  families        Family[]
-  
-  @@unique([name, village_id])
-  @@index([village_id])
-  @@index([is_active])
-  @@index([deleted_at])
-  @@map("section")
-}
-
-model Family {
-  id                String          @id @default(cuid())
-  section_id        String
-  house_no          String          @db.VarChar(50)
-  floor_no          String?         @db.VarChar(20)
-  no_of_couples     Int             @default(0)
-  habitation_type   HabitationType  @default(PERMANENT)
-  is_active         Boolean         @default(true)
-  deleted_at        DateTime?       @db.Timestamptz(6)
-  deleted_reason    DeletionReason?
-  deleted_remarks   String?         @db.VarChar(500)
-  created_at        DateTime        @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime        @updatedAt @db.Timestamptz(6)
-  
-  section           Section         @relation(fields: [section_id], references: [id], onDelete: Cascade)
-  members           FamilyMember[]
-  
   @@unique([section_id, house_no])
-  @@index([section_id])
-  @@index([is_active])
   @@index([deleted_at])
   @@index([habitation_type])
-  @@map("family")
+  @@index([is_active])
+  @@index([section_id])
 }
 
-model FamilyMember {
+model family_member {
   id                    String          @id @default(cuid())
   family_id             String
   name                  String          @db.VarChar(200)
@@ -583,31 +185,289 @@ model FamilyMember {
   deleted_reason        DeletionReason?
   deleted_remarks       String?         @db.VarChar(500)
   created_at            DateTime        @default(now()) @db.Timestamptz(6)
-  updated_at            DateTime        @updatedAt @db.Timestamptz(6)
-  
-  family                Family          @relation(fields: [family_id], references: [id], onDelete: Cascade)
-  
+  updated_at            DateTime        @db.Timestamptz(6)
+  family                family          @relation(fields: [family_id], references: [id], onDelete: Cascade)
+
+  @@index([abha_id])
+  @@index([deleted_at])
   @@index([family_id])
   @@index([is_active])
-  @@index([deleted_at])
-  @@index([sex])
   @@index([relationship_with_hof])
+  @@index([sex])
   @@index([voter_id])
-  @@index([abha_id])
-  @@map("family_member")
 }
 
-// Enums for Long Roll
+model field {
+  id                                              Int                      @id @default(autoincrement())
+  code                                            String                   @unique @db.VarChar(50)
+  name                                            String                   @db.VarChar(200)
+  description                                     String?                  @db.VarChar(500)
+  created_at                                      DateTime                 @default(now()) @db.Timestamptz(6)
+  updated_at                                      DateTime                 @db.Timestamptz(6)
+  calculation_formula                             String?                  @db.VarChar(500)
+  default_value                                   String?                  @db.VarChar(100)
+  facility_type_targets                           Json?
+  field_type                                      FieldType
+  is_active                                       Boolean                  @default(true)
+  sort_order                                      Int                      @default(0)
+  user_type                                       UserType
+  validation_rules                                Json?
+  field_category                                  field_category           @default(DATA_FIELD)
+  facility_field_mapping                          facility_field_mapping[]
+  field_value                                     field_value[]
+  indicator_indicator_denominator_field_idTofield indicator[]              @relation("indicator_denominator_field_idTofield")
+  indicator_indicator_numerator_field_idTofield   indicator[]              @relation("indicator_numerator_field_idTofield")
+  indicator_indicator_target_field_idTofield      indicator[]              @relation("indicator_target_field_idTofield")
 
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
+  @@index([field_category])
+  @@index([field_type])
+  @@index([is_active])
+  @@index([sort_order])
+  @@index([user_type])
 }
 
-enum HabitationType {
-  PERMANENT
-  TEMPORARY
+model field_value {
+  id              Int       @id @default(autoincrement())
+  field_id        Int
+  report_month    String    @db.VarChar(7)
+  string_value    String?   @db.VarChar(500)
+  numeric_value   Decimal?  @db.Decimal(15, 2)
+  boolean_value   Boolean?
+  json_value      Json?
+  uploaded_by     Int
+  remarks         String?
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @db.Timestamptz(6)
+  is_override     Boolean   @default(false)
+  override_reason String?   @db.VarChar(200)
+  facility_id     String?
+  facility        facility? @relation(fields: [facility_id], references: [id])
+  field           field     @relation(fields: [field_id], references: [id])
+  user            user      @relation(fields: [uploaded_by], references: [id])
+
+  @@unique([field_id, facility_id, report_month])
+  @@index([created_at])
+  @@index([facility_id, field_id])
+  @@index([facility_id, report_month])
+  @@index([field_id, report_month])
+  @@index([report_month, is_override])
+  @@index([uploaded_by])
+}
+
+model health_workers {
+  id                   Int                    @id @default(autoincrement())
+  facility_id          String
+  name                 String
+  worker_type          String
+  allocated_amount     Decimal                @db.Decimal(10, 2)
+  contact_number       String?
+  email                String?
+  is_active            Boolean                @default(true)
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime               @db.Timestamptz(6)
+  facility             facility               @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  worker_remunerations worker_remunerations[]
+
+  @@index([facility_id])
+  @@index([is_active])
+  @@index([worker_type])
+}
+
+model indicator {
+  id                                          Int                           @id @default(autoincrement())
+  name                                        String                        @db.VarChar(200)
+  description                                 String?
+  type                                        String                        @db.VarChar(20)
+  structure                                   Json?
+  created_at                                  DateTime                      @default(now()) @db.Timestamptz(6)
+  updated_at                                  DateTime                      @db.Timestamptz(6)
+  code                                        String                        @unique @db.VarChar(50)
+  applicable_facility_types                   Json?
+  conditions                                  String?                       @db.VarChar(1000)
+  denominator_field_id                        Int?
+  denominator_label                           String?                       @db.VarChar(200)
+  formula_config                              Json?
+  formula_type                                formula_type                  @default(RANGE_BASED)
+  numerator_field_id                          Int?
+  numerator_label                             String?                       @db.VarChar(200)
+  target_formula                              String?                       @db.VarChar(500)
+  target_type                                 target_type                   @default(PERCENTAGE)
+  target_value                                String?                       @db.VarChar(100)
+  target_field_id                             Int?
+  source_of_verification                      String?                       @db.VarChar(100)
+  FacilityRemunerationRecord                  FacilityRemunerationRecord[]
+  facility_target                             facility_target[]
+  denominator_field                           field?                        @relation("indicator_denominator_field_idTofield", fields: [denominator_field_id], references: [id])
+  numerator_field                             field?                        @relation("indicator_numerator_field_idTofield", fields: [numerator_field_id], references: [id])
+  target_field                                field?                        @relation("indicator_target_field_idTofield", fields: [target_field_id], references: [id])
+  indicator_remuneration                      indicator_remuneration[]
+  indicator_worker_allocation                 indicator_worker_allocation[]
+
+  @@index([created_at])
+  @@index([denominator_field_id])
+  @@index([formula_type])
+  @@index([numerator_field_id])
+  @@index([target_field_id])
+  @@index([target_type])
+  @@index([type])
+}
+
+model indicator_remuneration {
+  id                            Int                        @id @default(autoincrement())
+  facility_type_remuneration_id Int
+  indicator_id                  Int
+  base_amount                   Decimal                    @db.Decimal(10, 2)
+  conditional_amount            Decimal?                   @db.Decimal(10, 2)
+  condition_type                String?                    @db.VarChar(50)
+  created_at                    DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                    DateTime                   @db.Timestamptz(6)
+  condition_1_amount            Decimal?                   @db.Decimal(10, 2)
+  condition_2_amount            Decimal?                   @db.Decimal(10, 2)
+  condition_3_amount            Decimal?                   @db.Decimal(10, 2)
+  condition_4_amount            Decimal?                   @db.Decimal(10, 2)
+  facility_type_remuneration    facility_type_remuneration @relation(fields: [facility_type_remuneration_id], references: [id])
+  indicator                     indicator                  @relation(fields: [indicator_id], references: [id])
+
+  @@unique([facility_type_remuneration_id, indicator_id])
+  @@index([condition_type])
+  @@index([facility_type_remuneration_id])
+  @@index([indicator_id])
+}
+
+model indicator_worker_allocation {
+  id               String    @id @default(cuid())
+  indicator_id     Int
+  worker_type      String    @db.VarChar(50)
+  allocated_amount Int
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime  @db.Timestamptz(6)
+  indicator        indicator @relation(fields: [indicator_id], references: [id], onDelete: Cascade)
+
+  @@unique([indicator_id, worker_type])
+  @@index([indicator_id])
+  @@index([worker_type])
+}
+
+model remuneration_calculations {
+  id                        Int      @id @default(autoincrement())
+  facility_id               String
+  report_month              String   @db.VarChar(7)
+  performance_percentage    Decimal  @db.Decimal(5, 2)
+  facility_remuneration     Decimal  @db.Decimal(10, 2)
+  total_worker_remuneration Decimal  @db.Decimal(10, 2)
+  total_remuneration        Decimal  @db.Decimal(10, 2)
+  health_workers_count      Int      @default(0)
+  asha_workers_count        Int      @default(0)
+  calculated_at             DateTime @default(now()) @db.Timestamptz(6)
+  facility                  facility @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+
+  @@unique([facility_id, report_month])
+  @@index([calculated_at])
+  @@index([facility_id])
+  @@index([report_month])
+}
+
+model section {
+  id             String    @id @default(cuid())
+  name           String    @db.VarChar(200)
+  village_id     String
+  is_active      Boolean   @default(true)
+  deleted_at     DateTime? @db.Timestamptz(6)
+  deleted_reason String?   @db.VarChar(500)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @db.Timestamptz(6)
+  family         family[]
+  village        village   @relation(fields: [village_id], references: [id], onDelete: Cascade)
+
+  @@unique([name, village_id])
+  @@index([deleted_at])
+  @@index([is_active])
+  @@index([village_id])
+}
+
+model system_setting {
+  id         String   @id @default(cuid())
+  key        String   @unique
+  value      String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @db.Timestamptz(6)
+}
+
+model user {
+  id            Int           @id @default(autoincrement())
+  username      String        @unique @db.VarChar(100)
+  password_hash String        @db.VarChar(255)
+  role          user_role     @default(facility)
+  is_active     Boolean?      @default(true)
+  last_login    DateTime?     @db.Timestamptz(6)
+  created_at    DateTime?     @db.Timestamptz(6)
+  email         String?       @unique @db.VarChar(255)
+  facility_id   String?
+  field_value   field_value[]
+  facility      facility?     @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([facility_id])
+  @@index([last_login])
+  @@index([role, is_active])
+}
+
+model village {
+  id             String    @id @default(cuid())
+  name           String    @db.VarChar(200)
+  facility_id    String
+  is_active      Boolean   @default(true)
+  deleted_at     DateTime? @db.Timestamptz(6)
+  deleted_reason String?   @db.VarChar(500)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @db.Timestamptz(6)
+  section        section[]
+  facility       facility  @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+
+  @@unique([name, facility_id])
+  @@index([deleted_at])
+  @@index([facility_id])
+  @@index([is_active])
+}
+
+model worker_allocation_config {
+  id               Int           @id @default(autoincrement())
+  facility_type_id String
+  worker_type      String
+  worker_role      String
+  max_count        Int           @default(1)
+  allocated_amount Decimal       @db.Decimal(10, 2)
+  description      String?
+  is_active        Boolean       @default(true)
+  created_at       DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime      @db.Timestamptz(6)
+  facility_type    facility_type @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
+
+  @@unique([facility_type_id, worker_type, worker_role])
+  @@index([facility_type_id])
+  @@index([facility_type_id, is_active])
+  @@index([is_active])
+  @@index([worker_role])
+  @@index([worker_type])
+}
+
+model worker_remunerations {
+  id                     Int            @id @default(autoincrement())
+  health_worker_id       Int
+  report_month           String         @db.VarChar(7)
+  allocated_amount       Decimal        @db.Decimal(10, 2)
+  performance_percentage Decimal        @db.Decimal(5, 2)
+  calculated_amount      Decimal        @db.Decimal(10, 2)
+  calculated_at          DateTime       @default(now()) @db.Timestamptz(6)
+  facility_id            String
+  worker_role            String
+  worker_type            String
+  facility               facility       @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  health_workers         health_workers @relation(fields: [health_worker_id], references: [id], onDelete: Cascade)
+
+  @@unique([health_worker_id, report_month])
+  @@index([facility_id, report_month])
+  @@index([worker_type])
 }
 
 enum DeletionReason {
@@ -617,8 +477,25 @@ enum DeletionReason {
   OTHER
 }
 
+enum FieldType {
+  CONSTANT
+  FACILITY_SPECIFIC
+  MONTHLY_COUNT
+  BINARY
+  PERCENTAGE
+  CALCULATED
+  INDICATOR_REFERENCE
+  FACILITY_TYPE_SPECIFIC
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 enum HOFRelationship {
-  SELF              // Head of Family
+  SELF
   HUSBAND
   WIFE
   SON
@@ -643,4 +520,75 @@ enum HOFRelationship {
   NIECE
   COUSIN
   OTHER
+}
+
+enum HabitationType {
+  PERMANENT
+  TEMPORARY
+}
+
+enum UserType {
+  ADMIN
+  FACILITY
+}
+
+enum ValidationRule {
+  REQUIRED
+  POSITIVE_NUMBER
+  PERCENTAGE_RANGE
+  DATE_RANGE
+  CUSTOM_FORMULA
+  BINARY_ONLY
+  MIN_VALUE
+  MAX_VALUE
+}
+
+enum calculation_type {
+  DIRECT_INPUT
+  CALCULATED
+  AGGREGATED
+  PERCENTAGE
+}
+
+enum data_quality {
+  PENDING
+  VALIDATED
+  APPROVED
+  REJECTED
+}
+
+enum field_category {
+  DATA_FIELD
+  TARGET_FIELD
+}
+
+enum formula_type {
+  RANGE_BASED
+  PERCENTAGE_CAP
+  BINARY
+  THRESHOLD_BONUS
+  MINIMUM_THRESHOLD
+  PERCENTAGE_RANGE
+}
+
+enum target_type {
+  PERCENTAGE
+  CONSTANT_VALUE
+  BINARY
+  RANGE
+  MINIMUM_THRESHOLD
+  MAXIMUM_THRESHOLD
+  PERCENTAGE_RANGE
+}
+
+enum upload_status {
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum user_role {
+  admin
+  facility
 }

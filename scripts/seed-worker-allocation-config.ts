@@ -7,7 +7,7 @@ async function seedWorkerAllocationConfig() {
 
   try {
     // Get facility types
-    const facilityTypes = await prisma.facilityType.findMany();
+    const facilityTypes = await prisma.facility_type.findMany();
     console.log(`📋 Found ${facilityTypes.length} facility types`);
 
     // Define worker allocation configuration based on requirements
@@ -132,7 +132,7 @@ async function seedWorkerAllocationConfig() {
       }
 
       try {
-        const workerConfig = await prisma.workerAllocationConfig.create({
+        const workerConfig = await prisma.worker_allocation_config.create({
           data: {
             facility_type_id: facilityType.id,
             worker_type: config.workerType,

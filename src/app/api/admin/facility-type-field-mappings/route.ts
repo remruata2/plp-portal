@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get facility type
-    const facilityType = await prisma.facilityType.findUnique({
+    const facilityType = await prisma.facility_type.findUnique({
       where: { id: facilityTypeId },
     });
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get existing mappings
-    const mappings = await prisma.facilityFieldMapping.findMany({
+    const mappings = await prisma.facility_fieldMapping.findMany({
       where: { facility_type_id: facilityTypeId },
       include: {
         field: true,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify facility type exists (using string ID)
-    const facilityType = await prisma.facilityType.findUnique({
+    const facilityType = await prisma.facility_type.findUnique({
       where: { id: facilityTypeId },
     });
 
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Delete existing mappings
-    await prisma.facilityFieldMapping.deleteMany({
+    await prisma.facility_fieldMapping.deleteMany({
       where: { facility_type_id: facilityTypeId },
     });
 
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
         display_order: parseInt(String(mapping.display_order), 10) || 0,
     }));
 
-    await prisma.facilityFieldMapping.createMany({
+    await prisma.facility_fieldMapping.createMany({
       data: mappingsData,
     });
     }

@@ -59,7 +59,7 @@ export async function GET(
     console.log("Looking for submission:", { facilityId, reportMonth });
 
     // Get all field values for this facility and report month
-    const fieldValues = await prisma.fieldValue.findMany({
+    const fieldValues = await prisma.field_value.findMany({
       where: {
         facility_id: facilityId,
         report_month: reportMonth,

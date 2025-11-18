@@ -87,7 +87,7 @@ async function main() {
 
       // Delete family members
       for (const family of families) {
-        await prisma.familyMember.deleteMany({
+        await prisma.family_member.deleteMany({
           where: { family_id: family.id },
         });
       }
@@ -180,7 +180,7 @@ async function main() {
         const hofSex: 'MALE' | 'FEMALE' = Math.random() > 0.5 ? 'MALE' : 'FEMALE';
         const hofAge = Math.floor(Math.random() * 40) + 25; // 25-65 years
         
-        await prisma.familyMember.create({
+        await prisma.family_member.create({
           data: {
             family_id: family.id,
             name: generateName(hofSex),
@@ -201,7 +201,7 @@ async function main() {
           const spouseSex: 'MALE' | 'FEMALE' = hofSex === 'MALE' ? 'FEMALE' : 'MALE';
           const spouseRelation = hofSex === 'MALE' ? 'WIFE' : 'HUSBAND';
           
-          await prisma.familyMember.create({
+          await prisma.family_member.create({
             data: {
               family_id: family.id,
               name: generateName(spouseSex),
@@ -225,7 +225,7 @@ async function main() {
           const childRelation = childSex === 'MALE' ? 'SON' : 'DAUGHTER';
           const childAge = Math.floor(Math.random() * 25); // 0-25 years
           
-          await prisma.familyMember.create({
+          await prisma.family_member.create({
             data: {
               family_id: family.id,
               name: generateName(childSex),
@@ -247,7 +247,7 @@ async function main() {
           const parentSex: 'MALE' | 'FEMALE' = Math.random() > 0.5 ? 'MALE' : 'FEMALE';
           const parentRelation = parentSex === 'MALE' ? 'FATHER' : 'MOTHER';
           
-          await prisma.familyMember.create({
+          await prisma.family_member.create({
             data: {
               family_id: family.id,
               name: generateName(parentSex),
@@ -268,7 +268,7 @@ async function main() {
           const marriedChildSex: 'MALE' | 'FEMALE' = Math.random() > 0.5 ? 'MALE' : 'FEMALE';
           
           // Add married child
-          await prisma.familyMember.create({
+          await prisma.family_member.create({
             data: {
               family_id: family.id,
               name: generateName(marriedChildSex),
@@ -287,7 +287,7 @@ async function main() {
           const spouseOfChildSex: 'MALE' | 'FEMALE' = marriedChildSex === 'MALE' ? 'FEMALE' : 'MALE';
           const spouseOfChildRelation = marriedChildSex === 'MALE' ? 'DAUGHTER_IN_LAW' : 'SON_IN_LAW';
           
-          await prisma.familyMember.create({
+          await prisma.family_member.create({
             data: {
               family_id: family.id,
               name: generateName(spouseOfChildSex),

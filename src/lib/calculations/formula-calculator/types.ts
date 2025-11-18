@@ -1,7 +1,7 @@
-import { TargetType } from "../../../generated/prisma";
+import { target_type } from "../../../generated/prisma";
 
 export interface FormulaConfig {
-	type: TargetType;
+	type: target_type;
 	minThreshold?: number;
 	maxThreshold?: number;
 	targetValue?: number;
@@ -48,7 +48,7 @@ export interface CalculationResult {
 
 
 export interface FormulaConfig {
-	type: TargetType;
+	type: target_type;
 	minThreshold?: number;
 	maxThreshold?: number;
 	targetValue?: number;

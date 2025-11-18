@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { UserRole } from "@/generated/prisma";
+import { UserRole } from "@/types/user";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
 
 const prisma = new PrismaClient();
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const facilityTypeId = searchParams.get("facilityTypeId");
     const includeConfigs = searchParams.get("includeConfigs") === "true";
 
-    let indicatorsQuery: any = {
+    const indicatorsQuery: any = {
       where: {
         type: "enhanced", // Only get enhanced indicators
       },
