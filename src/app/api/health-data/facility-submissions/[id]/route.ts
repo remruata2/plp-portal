@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { canFacilityEditSubmission } from "@/lib/submission-deadline";
 
-const prisma = new PrismaClient();
 
 // GET - Get a specific submission by ID for facilities to edit
 export async function GET(
@@ -405,7 +404,7 @@ export async function DELETE(
 			);
 
 			// 5. Delete facility targets for this facility and report month
-			const facilityTargetResult = await tx.facilityTarget.deleteMany({
+			const facilityTargetResult = await tx.facility_target.deleteMany({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,

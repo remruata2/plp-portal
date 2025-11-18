@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
-
-const prisma = new PrismaClient();
+import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
+import {
+	getEffectiveMaxRemuneration,
+	getIndicatorRemunerationFromFacilityType,
+} from "@/lib/services/indicator-remuneration-helper";
 
 export async function GET(
 	request: NextRequest,
@@ -70,17 +73,54 @@ export async function GET(
 			orderBy: { health_workers: { name: "asc" } },
 		});
 
+		// Get field values for denominator calculation and conditional amount calculation
+		const fieldValues = await prisma.field_value.findMany({
+			where: {
+				facility_id: facilityId,
+				report_month: month,
+			},
+			include: {
+				field: true,
+			},
+		});
+
+		// Build field value map for denominator calculation
+		const fieldValueMap = new Map<number, any>();
+		fieldValues.forEach((fv) => {
+			const value =
+				fv.numeric_value !== null
+					? Number(fv.numeric_value)
+					: fv.string_value !== null
+					? fv.string_value
+					: fv.boolean_value;
+			fieldValueMap.set(fv.field_id, value);
+		});
+
+		// Get facility type remuneration to fetch indicator remunerations
+		const facilityTypeRemuneration =
+			await prisma.facility_type_remuneration.findUnique({
+				where: { facility_type_id: facility.facility_type.id },
+				include: {
+					indicator_remuneration: {
+						include: {
+							indicator: true,
+						},
+					},
+				},
+			});
+
 		// Transform indicators similar to admin detail route
 		const indicators = perfRecords.map((perf) => {
 			const achievementPercentage = Number(perf.percentage_achieved || 0);
-			
+
 			// Use stored status directly, but validate for binary indicators
-			let status: "achieved" | "partial" | "not_achieved" = 
-				(perf.status as "achieved" | "partial" | "not_achieved") || "not_achieved";
+			let status: "achieved" | "partial" | "not_achieved" =
+				(perf.status as "achieved" | "partial" | "not_achieved") ||
+				"not_achieved";
 
 			const indicatorAny: any = perf.indicator as any;
 			const targetType = indicatorAny?.target_type;
-			
+
 			// For binary indicators, validate status based on percentage
 			// Binary indicators are all-or-nothing: 100% = achieved, <100% = not_achieved
 			if (targetType === "BINARY") {
@@ -110,6 +150,35 @@ export async function GET(
 				}
 			}
 
+			// Calculate denominator value using centralized method
+			// Pass field default_value if available (for admin-set fields like target_wellness_sessions)
+			const denominatorField = indicatorAny?.denominator_field;
+			const finalDenominatorValue = calculateDenominatorValue(
+				{
+					code: indicatorAny?.code || "",
+					target_type: targetType || "",
+					denominator_field_id: indicatorAny?.denominator_field_id,
+					target_value: indicatorAny?.target_value,
+					formula_config: cfg,
+				},
+				fieldValueMap,
+				facility.facility_type.name,
+				denominatorField?.default_value || null
+			);
+
+			// Get effective max remuneration using centralized helper
+			const indicatorCode = indicatorAny?.code || "";
+			const indicatorRemuneration = getIndicatorRemunerationFromFacilityType(
+				facilityTypeRemuneration,
+				perf.indicator_id || 0
+			);
+			const finalMaxRemuneration = getEffectiveMaxRemuneration(
+				indicatorCode,
+				Number(perf.max_remuneration || 0),
+				indicatorRemuneration,
+				fieldValues
+			);
+
 			return {
 				id: perf.id,
 				name: perf.indicator?.name || "Unknown",
@@ -119,10 +188,10 @@ export async function GET(
 				percentage: achievementPercentage,
 				status,
 				incentive_amount: Number(perf.incentive_amount || 0),
-				max_remuneration: Number(perf.max_remuneration || 0),
+				max_remuneration: finalMaxRemuneration,
 				// extra fields for details modal
 				numerator_value: Number((perf as any).actual_value ?? 0),
-				denominator_value: undefined,
+				denominator_value: finalDenominatorValue,
 				target_type: (perf.indicator as any)?.target_type || undefined,
 				target_description:
 					(perf.indicator as any)?.target_description || undefined,

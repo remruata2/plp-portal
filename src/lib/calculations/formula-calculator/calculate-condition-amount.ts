@@ -14,24 +14,30 @@ export function getConditionAmount(
 	const baseAmount = parseFloat(remuneration.base_amount.toString());
 
 	// Get boolean field values for indicators 7 and 8
-	const indicator7Answer = fieldValues.find(
+	// Treat null/undefined as false (user didn't select "Yes", so it's "No")
+	const indicator7AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
 	)?.boolean_value;
+	const indicator7Answer =
+		indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
-	const indicator8Answer = fieldValues.find(
+	const indicator8AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
 	)?.boolean_value;
+	const indicator8Answer =
+		indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
 	// For Indicator 6 (TS001) - Individuals screened for TB
 	// Condition logic based on Indicator 7 and Indicator 8 answers
-	if (indicatorCode === "TS001") {
+	// Handle both TS001 and TS001_SC, TS001_PHC, TS001_UHWC, etc.
+	if (indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
 		// Condition 1: If 7 & 8 are both Yes
 		if (indicator7Answer === true && indicator8Answer === true) {
 			return remuneration.condition_1_amount != null
 				? Number(remuneration.condition_1_amount)
 				: baseAmount;
 		}
-		// Condition 2: If 7 & 8 are both No
+		// Condition 2: If 7 & 8 are both No (or null/undefined, treated as false)
 		if (indicator7Answer === false && indicator8Answer === false) {
 			return remuneration.condition_2_amount != null
 				? Number(remuneration.condition_2_amount)
@@ -55,25 +61,25 @@ export function getConditionAmount(
 
 	// For Indicator 7 (CT001) - Household visited for TB contact tracing
 	// If Indicator CT001 Conditional Answer = Yes, use base_amount
-	// If No, user can't fill and gets 0 incentive (handled by displayPercentage logic)
+	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
 	if (indicatorCode === "CT001") {
 		// If conditional answer is Yes, use base_amount
 		if (indicator7Answer === true) {
 			return baseAmount;
 		}
-		// If No, return 0 (displayPercentage already handles this, but we need valid amount for calculation)
+		// If No or null/undefined (treated as false), return 0
 		return 0;
 	}
 
 	// For Indicator 8 (DC001) - TB patients visited for Differentiated TB Care
 	// If Indicator DC001 Conditional Answer = Yes, use base_amount
-	// If No, user can't fill and gets 0 incentive (handled by displayPercentage logic)
+	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
 	if (indicatorCode === "DC001") {
 		// If conditional answer is Yes, use base_amount
 		if (indicator8Answer === true) {
 			return baseAmount;
 		}
-		// If No, return 0 (displayPercentage already handles this, but we need valid amount for calculation)
+		// If No or null/undefined (treated as false), return 0
 		return 0;
 	}
 
@@ -115,23 +121,28 @@ export function calculateConditionalRemuneration(
 	// For TB-related indicators, check if they should show NA
 	const isTbContactTracing = indicatorCode === "CT001";
 	const isTbDifferentiatedCare = indicatorCode === "DC001";
-	const isTbScreening = indicatorCode === "TS001";
+	const isTbScreening = indicatorCode === "TS001" || indicatorCode.startsWith("TS001_");
 
 	if (isTbContactTracing || isTbDifferentiatedCare || isTbScreening) {
 		// Check if the indicator should be NA based on boolean answers
-		const indicator7Answer = fieldValues.find(
+		// Treat null/undefined as false (user didn't select "Yes", so it's "No")
+		const indicator7AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === "indicator_ct001_conditional_answer"
 		)?.boolean_value;
+		const indicator7Answer =
+			indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
-		const indicator8Answer = fieldValues.find(
+		const indicator8AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === "indicator_dc001_conditional_answer"
 		)?.boolean_value;
+		const indicator8Answer =
+			indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
-		// For CT001: NA if no pulmonary TB patients (Indicator 7 = No)
+		// For CT001: NA if no pulmonary TB patients (Indicator 7 = No or null)
 		if (isTbContactTracing && indicator7Answer === false) {
 			displayPercentage = 0;
 		}
-		// For DC001: NA if no TB patients (Indicator 8 = No)
+		// For DC001: NA if no TB patients (Indicator 8 = No or null)
 		else if (isTbDifferentiatedCare && indicator8Answer === false) {
 			displayPercentage = 0;
 		}

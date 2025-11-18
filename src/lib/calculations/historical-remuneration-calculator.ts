@@ -1,7 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { ConfigurationSnapshot } from "./configuration-snapshot";
-
-const prisma = new PrismaClient();
 
 export interface HistoricalRemunerationCalculation {
   facilityId: string;

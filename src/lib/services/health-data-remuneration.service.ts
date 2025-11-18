@@ -3,10 +3,9 @@ import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator
 import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
 import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
-import { calculateTbConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-tb-conditional";
-import { calculateConditionalRemuneration } from "@/lib/calculations/formula-calculator/calculate-condition-amount";
 import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/map-status-to-report";
 import { randomUUID } from "crypto";
+import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -171,40 +170,17 @@ export class HealthDataRemunerationService {
 					};
 				}
 
-				// Calculate conditional remuneration using new condition amount system
-				// Check if condition amounts are set (new system) or use old TB conditional logic (backward compatibility)
-				const hasConditionAmounts =
-					remuneration.condition_1_amount != null ||
-					remuneration.condition_2_amount != null ||
-					remuneration.condition_3_amount != null ||
-					remuneration.condition_4_amount != null;
-
-				let effectiveMaxRemuneration: number;
-				let displayPercentage: number;
-
-				if (hasConditionAmounts) {
-					// Use new condition amount system
-					const conditionResult = calculateConditionalRemuneration(
-						remuneration,
-						dbFieldValues,
-						indicator.code,
-						result.achievement,
-						denominatorValue
-					);
-					effectiveMaxRemuneration = conditionResult.effectiveMaxRemuneration;
-					displayPercentage = conditionResult.displayPercentage;
-				} else {
-					// Fallback to old TB conditional logic for backward compatibility
-					const tbResult = calculateTbConditionalRemuneration(
-						remuneration,
-						dbFieldValues,
-						indicator.code,
-						result.achievement,
-						denominatorValue
-					);
-					effectiveMaxRemuneration = tbResult.effectiveMaxRemuneration;
-					displayPercentage = tbResult.displayPercentage;
-				}
+				// Calculate conditional remuneration using centralized helper
+				const conditionResult = calculateEffectiveRemuneration(
+					remuneration,
+					dbFieldValues,
+					indicator.code,
+					result.achievement,
+					denominatorValue
+				);
+				const effectiveMaxRemuneration =
+					conditionResult.effectiveMaxRemuneration;
+				const displayPercentage = conditionResult.displayPercentage;
 
 				// Recalculate remuneration with effective max remuneration if different
 				let finalRemuneration = result.remuneration;
@@ -461,42 +437,44 @@ export class HealthDataRemunerationService {
 			}
 
 			// Store remuneration calculation summary
-			const remunerationCalculation = await tx.remuneration_calculations.upsert({
-				where: {
-					facility_id_report_month: {
+			const remunerationCalculation = await tx.remuneration_calculations.upsert(
+				{
+					where: {
+						facility_id_report_month: {
+							facility_id: facilityId,
+							report_month: reportMonth.substring(0, 7), // Truncate to 7 chars (VarChar(7) in schema)
+						},
+					},
+					update: {
+						performance_percentage: performancePercentage,
+						facility_remuneration: facilityRemuneration,
+						total_worker_remuneration: totalWorkerRemuneration,
+						total_remuneration: facilityRemuneration + totalWorkerRemuneration,
+						health_workers_count: healthWorkers.filter(
+							(w: any) => w.worker_type === "hw"
+						).length,
+						asha_workers_count: healthWorkers.filter(
+							(w: any) => w.worker_type === "asha"
+						).length,
+						calculated_at: new Date(),
+					},
+					create: {
 						facility_id: facilityId,
 						report_month: reportMonth.substring(0, 7), // Truncate to 7 chars (VarChar(7) in schema)
+						performance_percentage: performancePercentage,
+						facility_remuneration: facilityRemuneration,
+						total_worker_remuneration: totalWorkerRemuneration,
+						total_remuneration: facilityRemuneration + totalWorkerRemuneration,
+						health_workers_count: healthWorkers.filter(
+							(w: any) => w.worker_type === "hw"
+						).length,
+						asha_workers_count: healthWorkers.filter(
+							(w: any) => w.worker_type === "asha"
+						).length,
+						calculated_at: new Date(),
 					},
-				},
-				update: {
-					performance_percentage: performancePercentage,
-					facility_remuneration: facilityRemuneration,
-					total_worker_remuneration: totalWorkerRemuneration,
-					total_remuneration: facilityRemuneration + totalWorkerRemuneration,
-					health_workers_count: healthWorkers.filter(
-						(w: any) => w.worker_type === "hw"
-					).length,
-					asha_workers_count: healthWorkers.filter(
-						(w: any) => w.worker_type === "asha"
-					).length,
-					calculated_at: new Date(),
-				},
-				create: {
-					facility_id: facilityId,
-					report_month: reportMonth.substring(0, 7), // Truncate to 7 chars (VarChar(7) in schema)
-					performance_percentage: performancePercentage,
-					facility_remuneration: facilityRemuneration,
-					total_worker_remuneration: totalWorkerRemuneration,
-					total_remuneration: facilityRemuneration + totalWorkerRemuneration,
-					health_workers_count: healthWorkers.filter(
-						(w: any) => w.worker_type === "hw"
-					).length,
-					asha_workers_count: healthWorkers.filter(
-						(w: any) => w.worker_type === "asha"
-					).length,
-					calculated_at: new Date(),
-				},
-			});
+				}
+			);
 
 			const healthWorkersCount = healthWorkers.filter(
 				(w: any) => w.worker_type === "hw"

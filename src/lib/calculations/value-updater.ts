@@ -1,7 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { IndicatorClassifier, DataSourceType } from "./indicator-classifier";
-
-const prisma = new PrismaClient();
 
 export interface ValueUpdateRequest {
   facilityId: number;

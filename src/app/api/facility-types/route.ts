@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "../../../../src/generated/prisma";
 import { randomUUID } from "crypto";
 
-const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {

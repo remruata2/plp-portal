@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import ExcelJS from "exceljs";
 import { sortIndicatorsBySourceOrder } from "@/lib/utils/indicator-sort-order";
@@ -10,8 +10,7 @@ import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calc
 import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
 import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
-
-const prisma = new PrismaClient();
+import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
 
 // Utilities to parse target display and amounts
 function parseRangeFromTargetValue(
@@ -589,10 +588,6 @@ export async function GET(
 							  )
 							: 0;
 
-					// For DVDMS and most indicators here, TB condition does not apply; keep simple effective cap
-					const effectiveMaxRemuneration =
-						baseMaxRemuneration > 0 ? baseMaxRemuneration : 0;
-
 					// Calculate using FormulaCalculator (single source of truth)
 					const denominatorValue = await resolveDenominatorForIndicator(
 						indicator,
@@ -621,18 +616,55 @@ export async function GET(
 						formulaConfig
 					);
 
+					// Calculate base achievement first
+					let baseResult;
 					try {
-						const result = calculateRemuneration(
+						baseResult = calculateRemuneration(
 							actualValue,
 							denominatorValue,
-							effectiveMaxRemuneration,
+							baseMaxRemuneration,
 							calculationConfig,
 							facility.facility_type.name,
 							undefined,
 							Object.fromEntries(fieldValueMap)
 						);
+					} catch (error) {
+						console.error(
+							`Error calculating base remuneration for indicator ${indicator.code}:`,
+							error
+						);
+						achievementPercentage = 0;
+						incentive = 0;
+						continue;
+					}
 
-						achievementPercentage = result.achievement;
+					// Calculate effective max remuneration using centralized helper
+					const conditionResult = calculateEffectiveRemuneration(
+						remuneration,
+						fieldValues,
+						indicator.code,
+						baseResult.achievement,
+						denominatorValue
+					);
+					const effectiveMaxRemuneration =
+						conditionResult.effectiveMaxRemuneration;
+
+					// Recalculate with effective max remuneration if different
+					try {
+						const result =
+							effectiveMaxRemuneration !== baseMaxRemuneration
+								? calculateRemuneration(
+										actualValue,
+										denominatorValue,
+										effectiveMaxRemuneration,
+										calculationConfig,
+										facility.facility_type.name,
+										undefined,
+										Object.fromEntries(fieldValueMap)
+								  )
+								: baseResult;
+
+						achievementPercentage = conditionResult.displayPercentage;
 						incentive = Math.round(result.remuneration);
 					} catch (error) {
 						console.error(

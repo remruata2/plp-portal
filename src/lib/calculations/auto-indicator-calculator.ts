@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
 import type { FormulaConfig } from "./formula-calculator/types";
 import { target_type } from "@/generated/prisma";
@@ -23,10 +23,7 @@ export interface CalculatedIndicator {
 }
 
 export class AutoIndicatorCalculator {
-  private prisma: PrismaClient;
-
   constructor() {
-    this.prisma = new PrismaClient();
   }
 
   /**
@@ -38,7 +35,7 @@ export class AutoIndicatorCalculator {
   ): Promise<AutoCalculationResult> {
     try {
       // Get facility info
-      const facility = await this.prisma.facility.findUnique({
+      const facility = await prisma.facility.findUnique({
         where: { id: facilityId },
         include: { facility_type: true },
       });
@@ -52,7 +49,7 @@ export class AutoIndicatorCalculator {
       }
 
       // Get all indicators applicable to this facility type
-      const indicators = await this.prisma.indicator.findMany({
+      const indicators = await prisma.indicator.findMany({
         where: {
           applicable_facility_types: {
             array_contains: [facility.facility_type.name],
@@ -138,7 +135,7 @@ export class AutoIndicatorCalculator {
       const fieldValues: { [key: string]: number } = {};
       
       // Get all fields for this facility and month
-      const allFieldValues = await this.prisma.field_value.findMany({
+      const allFieldValues = await prisma.field_value.findMany({
         where: {
           facility_id: facilityId,
           report_month: reportMonth,
@@ -222,7 +219,7 @@ export class AutoIndicatorCalculator {
     facilityId: string,
     reportMonth: string
   ): Promise<any> {
-    const fieldValue = await this.prisma.field_value.findFirst({
+    const fieldValue = await prisma.field_value.findFirst({
       where: {
         field_id: fieldId,
         facility_id: facilityId,
@@ -379,7 +376,7 @@ export class AutoIndicatorCalculator {
   ): Promise<void> {
     for (const indicator of calculatedIndicators) {
       // First check if record exists
-      const existingRecord = await this.prisma.monthlyHealthData.findFirst({
+      const existingRecord = await prisma.monthlyHealthData.findFirst({
         where: {
           facility_id: facilityId,
           indicator_id: indicator.indicator_id,
@@ -389,7 +386,7 @@ export class AutoIndicatorCalculator {
 
       if (existingRecord) {
         // Update existing record
-        await this.prisma.monthlyHealthData.update({
+        await prisma.monthlyHealthData.update({
           where: { id: existingRecord.id },
           data: {
             value: indicator.calculated_value,
@@ -402,7 +399,7 @@ export class AutoIndicatorCalculator {
         });
       } else {
         // Create new record
-        await this.prisma.monthlyHealthData.create({
+        await prisma.monthlyHealthData.create({
           data: {
             facility_id: facilityId,
             indicator_id: indicator.indicator_id,

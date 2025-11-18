@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 
-const prisma = new PrismaClient();
 
 /**
  * Admin API endpoint for managing health data submissions
@@ -375,7 +374,7 @@ export async function DELETE(
 			breakdown.facilityRemunerationRecords = facilityRemunerationResult.count;
 
 			// 5. Delete facility targets for this facility and report month
-			const facilityTargetResult = await tx.facilityTarget.deleteMany({
+			const facilityTargetResult = await tx.facility_target.deleteMany({
 				where: {
 					facility_id: facilityId,
 					report_month: reportMonth,

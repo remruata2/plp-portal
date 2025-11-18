@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
             },
           },
           include: {
-            remunerations: {
+            indicator_remuneration: {
               where: {
                 facility_type_remuneration: {
                   facility_type_id: facility.facility_type.id,
@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
                 },
               },
               include: {
-                remunerations: {
+                indicator_remuneration: {
                   where: {
                     facility_type_remuneration: {
                       facility_type_id: facility.facility_type.id,
@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
           console.log("⚠️ No indicators found with any facility type name, getting all indicators as fallback...");
           indicators = await tx.indicator.findMany({
             include: {
-              remunerations: {
+              indicator_remuneration: {
                 where: {
                   facility_type_remuneration: {
                     facility_type_id: facility.facility_type.id,

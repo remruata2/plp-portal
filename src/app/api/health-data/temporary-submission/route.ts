@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { SmartFieldService } from "@/lib/services/smart-field-service";
 import { FieldMappingService } from "@/lib/services/field-mapping-service";
 import { checkSubmissionAllowed } from "@/lib/submission-deadline";
 
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {

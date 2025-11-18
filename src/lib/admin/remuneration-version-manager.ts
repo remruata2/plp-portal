@@ -1,8 +1,6 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { ConfigurationSnapshot } from "../calculations/configuration-snapshot";
 import { HistoricalRemunerationCalculator } from "../calculations/historical-remuneration-calculator";
-
-const prisma = new PrismaClient();
 
 export interface VersionChangeRequest {
   newVersion: string;

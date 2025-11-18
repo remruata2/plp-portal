@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient, Gender, HOFRelationship, DeletionReason } from "@/generated/prisma";
 
-const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,

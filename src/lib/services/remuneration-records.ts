@@ -1,8 +1,6 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { randomUUID } from "crypto";
 // FormulaCalculator no longer needed - using standalone functions directly where needed
-
-const prisma = new PrismaClient();
 
 export interface RemunerationRecordData {
   id: string;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { HealthDataRemunerationService } from "@/lib/services/health-data-remuneration.service";
 import { shouldRecalculate } from "@/lib/utils/recalculation-check";
 import * as XLSX from "xlsx";
@@ -9,8 +9,12 @@ import { getIndicatorNumber } from "@/lib/utils/indicator-sort-order";
 import { extractFieldValueForCalculation } from "@/lib/calculations/formula-calculator/extract-field-value";
 import { extractTargetConfiguration } from "@/lib/calculations/formula-calculator/extract-target-configuration";
 import { calculateDenominatorValue } from "@/lib/calculations/formula-calculator/calculate-denominator-value";
-
-const prisma = new PrismaClient();
+import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
+import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
+import {
+	getEffectiveMaxRemuneration,
+	getIndicatorRemunerationFromFacilityType,
+} from "@/lib/services/indicator-remuneration-helper";
 
 export async function GET(
 	request: NextRequest,
@@ -142,6 +146,19 @@ export async function GET(
 			fieldValueMap.set(fv.field_id, value);
 		});
 
+		// Get facility type remuneration to fetch indicator remunerations for conditional amount calculation
+		const facilityTypeRemuneration =
+			await prisma.facility_type_remuneration.findUnique({
+				where: { facility_type_id: facility.facility_type.id },
+				include: {
+					indicator_remuneration: {
+						include: {
+							indicator: true,
+						},
+					},
+				},
+			});
+
 		// Transform performance data into indicators format
 		const indicators = performanceData.map((perf) => {
 			const achievementPercentage = Number(perf.percentage_achieved || 0);
@@ -220,6 +237,54 @@ export async function GET(
 				}
 			}
 
+			// Get effective max remuneration using centralized helper
+			const indicatorCode = indicatorAny?.code || "";
+			const indicatorRemuneration = getIndicatorRemunerationFromFacilityType(
+				facilityTypeRemuneration,
+				perf.indicator_id || 0
+			);
+			const storedMaxRemuneration = Number(perf.max_remuneration || 0);
+			const finalMaxRemuneration = getEffectiveMaxRemuneration(
+				indicatorCode,
+				storedMaxRemuneration,
+				indicatorRemuneration,
+				fieldValues
+			);
+
+			// Recalculate incentive amount if max remuneration has changed
+			let finalIncentiveAmount = Number(perf.incentive_amount || 0);
+			if (
+				finalMaxRemuneration !== storedMaxRemuneration &&
+				finalMaxRemuneration > 0
+			) {
+				try {
+					const actualValue = Number((perf as any).actual_value ?? 0);
+					const calculationConfig = buildCalculationConfig(
+						indicatorAny,
+						targetConfig,
+						cfg
+					);
+
+					const recalculatedResult = calculateRemuneration(
+						actualValue,
+						finalDenominatorValue,
+						finalMaxRemuneration,
+						calculationConfig,
+						facility.facility_type.name,
+						undefined,
+						Object.fromEntries(fieldValueMap)
+					);
+
+					finalIncentiveAmount = Math.round(recalculatedResult.remuneration);
+				} catch (error) {
+					console.error(
+						`Error recalculating incentive for indicator ${indicatorCode}:`,
+						error
+					);
+					// Use stored value if recalculation fails
+				}
+			}
+
 			return {
 				id: perf.id,
 				name: perf.indicator?.name || "Unknown",
@@ -230,8 +295,8 @@ export async function GET(
 				actual: Number((perf as any).actual_value ?? 0),
 				percentage: achievementPercentage,
 				status,
-				incentive_amount: Number(perf.incentive_amount || 0),
-				max_remuneration: Number(perf.max_remuneration || 0),
+				incentive_amount: finalIncentiveAmount,
+				max_remuneration: finalMaxRemuneration,
 				numerator_value: Number((perf as any).actual_value ?? 0),
 				denominator_value: finalDenominatorValue,
 				remarks: (perf as any).remarks || null,

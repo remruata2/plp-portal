@@ -1,7 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { calculateRemuneration } from "./formula-calculator/calculate-remuneration";
-
-const prisma = new PrismaClient();
 
 export interface IndicatorRemunerationCalculation {
   facility_id: string;

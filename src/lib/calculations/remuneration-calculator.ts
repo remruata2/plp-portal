@@ -77,10 +77,10 @@ export class RemunerationCalculator {
 			// Calculate facility incentive using the EXACT same logic as performance reports
 			// Get facility type remuneration configuration
 			const facilityTypeRemuneration =
-				await prisma.facility_typeRemuneration.findUnique({
+				await prisma.facility_type_remuneration.findUnique({
 					where: { facility_type_id: facility.facility_type.id },
 					include: {
-						indicator_remunerations: {
+						indicator_remuneration: {
 							include: {
 								indicator: true,
 							},
@@ -96,7 +96,7 @@ export class RemunerationCalculator {
 
 			// Calculate total facility incentive by summing all indicator base amounts (max remunerations)
 			const facilityIncentive =
-				facilityTypeRemuneration.indicator_remunerations.reduce(
+				facilityTypeRemuneration.indicator_remuneration.reduce(
 					(total, indicatorRem) => {
 						const baseAmount = Number(indicatorRem.base_amount);
 						return total + (isNaN(baseAmount) ? 0 : baseAmount);
@@ -161,7 +161,7 @@ export class RemunerationCalculator {
 				for (const indicator of indicators) {
 					// Find the corresponding indicator remuneration
 					const indicatorRemuneration =
-						facilityTypeRemuneration.indicator_remunerations.find(
+						facilityTypeRemuneration.indicator_remuneration.find(
 							(ir) => ir.indicator_id === indicator.id
 						);
 

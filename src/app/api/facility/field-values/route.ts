@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { FieldBasedUpdater } from "@/lib/calculations/field-based-updater";
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { 
   FieldValueSerializer, 
   FieldValueInputDTO, 
@@ -10,7 +10,6 @@ import {
   FieldValueResponseDTO 
 } from "@/lib/dto/field-value.dto";
 
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {

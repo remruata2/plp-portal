@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { AutoIndicatorCalculator } from "./auto-indicator-calculator";
@@ -26,11 +26,9 @@ export interface IndicatorCalculation {
 }
 
 export class FieldBasedUpdater {
-  private prisma: PrismaClient;
   private autoCalculator: AutoIndicatorCalculator;
 
   constructor() {
-    this.prisma = new PrismaClient();
     this.autoCalculator = new AutoIndicatorCalculator();
   }
 
@@ -55,7 +53,7 @@ export class FieldBasedUpdater {
         } = fieldValue;
 
         // Create or update the field value
-        await this.prisma.field_value.upsert({
+        await prisma.field_value.upsert({
           where: {
             field_id_facility_id_report_month: {
               field_id,
@@ -123,7 +121,7 @@ export class FieldBasedUpdater {
     calculation: IndicatorCalculation
   ): Promise<{ success: boolean; message: string }> {
     try {
-      const indicator = await this.prisma.indicator.findUnique({
+      const indicator = await prisma.indicator.findUnique({
         where: { id: calculation.indicator_id },
         include: {
           numerator_field: true,
@@ -175,7 +173,7 @@ export class FieldBasedUpdater {
       }
 
       // Update or create monthly health data
-      await this.prisma.monthlyHealthData.upsert({
+      await prisma.monthlyHealthData.upsert({
         where: {
           facility_id_sub_centre_id_indicator_id_report_month: {
             facility_id: calculation.facility_id || null,
@@ -228,7 +226,7 @@ export class FieldBasedUpdater {
     facilityId?: number,
     reportMonth?: string
   ): Promise<any> {
-    const fieldValue = await this.prisma.field_value.findUnique({
+    const fieldValue = await prisma.field_value.findUnique({
       where: {
         field_id_facility_id_report_month: {
           field_id: fieldId,
@@ -267,7 +265,7 @@ export class FieldBasedUpdater {
    * Get all fields for admin management
    */
   async getAdminFields(): Promise<any[]> {
-    return await this.prisma.field.findMany({
+    return await prisma.field.findMany({
       where: { user_type: "ADMIN" },
       orderBy: { created_at: "asc" },
     });
@@ -277,7 +275,7 @@ export class FieldBasedUpdater {
    * Get all fields for facility submission
    */
   async getFacilityFields(): Promise<any[]> {
-    return await this.prisma.field.findMany({
+    return await prisma.field.findMany({
       where: { user_type: "FACILITY" },
       orderBy: { created_at: "asc" },
     });
@@ -290,7 +288,7 @@ export class FieldBasedUpdater {
     facilityId?: number,
     reportMonth?: string
   ): Promise<any[]> {
-    return await this.prisma.field_value.findMany({
+    return await prisma.field_value.findMany({
       where: {
         facility_id: facilityId || null,
         report_month: reportMonth || "",
@@ -305,7 +303,7 @@ export class FieldBasedUpdater {
    * Get indicators with their field configurations
    */
   async getIndicatorsWithFields(): Promise<any[]> {
-    return await this.prisma.indicator.findMany({
+    return await prisma.indicator.findMany({
       include: {
         numerator_field: true,
         denominator_field: true,
@@ -321,7 +319,7 @@ export class FieldBasedUpdater {
     facilityId?: number,
     reportMonth?: string
   ): Promise<any[]> {
-    return await this.prisma.monthlyHealthData.findMany({
+    return await prisma.monthlyHealthData.findMany({
       where: {
         facility_id: facilityId || null,
         report_month: reportMonth || "",
