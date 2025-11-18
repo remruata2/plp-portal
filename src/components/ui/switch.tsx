@@ -28,16 +28,18 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 					)
 				}
 			>
-				{({ checked }) => (
-					<>
-						<input
-							type="checkbox"
-							ref={ref}
-							checked={checked}
-							disabled={disabled}
-							className="sr-only"
-							{...props}
-						/>
+			{({ checked }) => (
+				<>
+					<input
+						type="checkbox"
+						ref={ref}
+						checked={checked}
+						onChange={() => {}} // Controlled by HeadlessSwitch
+						readOnly
+						disabled={disabled}
+						className="sr-only"
+						{...props}
+					/>
 						<span
 							className={cn(
 								"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow-lg ring-0 transition-transform",

@@ -31,6 +31,7 @@ async function addConditionalAnswerFields() {
 					field_category: "DATA_FIELD",
 					sort_order: 303,
 					is_active: true,
+					updated_at: new Date(),
 				},
 			});
 			console.log("✅ Created indicator_ct001_conditional_answer field");
@@ -52,6 +53,7 @@ async function addConditionalAnswerFields() {
 					field_category: "DATA_FIELD",
 					sort_order: 304,
 					is_active: true,
+					updated_at: new Date(),
 				},
 			});
 			console.log("✅ Created indicator_dc001_conditional_answer field");

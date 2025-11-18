@@ -82,6 +82,7 @@ export class FieldBasedUpdater {
             json_value,
             remarks,
             uploaded_by: uploadedBy,
+            updated_at: new Date(),
           },
         });
       }

@@ -66,8 +66,8 @@ export async function GET(
 
 		const workerRems = await prisma.worker_remunerations.findMany({
 			where: { facility_id: facilityId, report_month: month },
-			include: { health_worker: true },
-			orderBy: { health_worker: { name: "asc" } },
+			include: { health_workers: true },
+			orderBy: { health_workers: { name: "asc" } },
 		});
 
 		// Transform indicators similar to admin detail route
@@ -155,8 +155,8 @@ export async function GET(
 		});
 
 		const workers = workerRems.map((wr) => ({
-			id: wr.health_worker.id,
-			name: wr.health_worker.name,
+			id: wr.health_workers.id,
+			name: wr.health_workers.name,
 			worker_type: wr.worker_type,
 			worker_role: wr.worker_role,
 			allocated_amount: Number(wr.allocated_amount),

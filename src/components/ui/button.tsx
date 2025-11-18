@@ -7,13 +7,13 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: "bg-primary text-primary-foreground hover:bg-primary/90",
-				destructive: "bg-red-600 text-white hover:bg-red-700",
+				default: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80",
+				destructive: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800",
 				outline:
-					"border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+					"border border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
 				secondary:
-					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
-				ghost: "hover:bg-accent hover:text-accent-foreground",
+					"bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/70",
+				ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
 				link: "text-primary underline-offset-4 hover:underline",
 			},
 			size: {
@@ -49,6 +49,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			});
 		}
 		
+		// Use native button for better compatibility with cloning (e.g., DialogTrigger)
+		// Native buttons work reliably when cloned by other components
 		return (
 			<button
 				className={cn(buttonVariants({ variant, size, className }))}

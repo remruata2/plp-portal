@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Check if field is applicable to this facility type
-      const fieldMapping = await prisma.facility_fieldMapping.findFirst({
+      const fieldMapping = await prisma.facility_field_mapping.findFirst({
         where: {
           facility_type_id: facility.facility_type.id,
           field_id: field.id,
@@ -215,7 +215,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get applicable fields for this facility type
-    const applicableFields = await prisma.facility_fieldMapping.findMany({
+    const applicableFields = await prisma.facility_field_mapping.findMany({
       where: {
         facility_type_id: facility.facility_type.id,
       },

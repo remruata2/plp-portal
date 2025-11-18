@@ -158,7 +158,7 @@ export class RemunerationRecordsService {
           report_month: month,
         },
         include: {
-          health_worker: true,
+          health_workers: true,
         },
         orderBy: [
           { health_worker_id: "asc" },
@@ -210,7 +210,7 @@ export class RemunerationRecordsService {
       // Process worker records
       const workers = workerRecords.map((record) => ({
         id: record.health_worker_id,
-        name: record.health_worker?.name || "",
+        name: record.health_workers?.name || "",
         worker_type: record.worker_type || "",
         worker_role: record.worker_role || "",
         allocated_amount: Number(record.allocated_amount) || 0,

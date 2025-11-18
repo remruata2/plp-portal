@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Check if facility exists and user has access
     const facility = await prisma.facility.findUnique({
       where: { id: facilityId },
-      include: { users: true },
+      include: { user: true },
     });
 
     if (!facility) {
@@ -94,6 +94,7 @@ export async function POST(request: NextRequest) {
             override_reason: fieldValue.overrideReason || null,
             uploaded_by: parseInt(session.user.id),
             remarks: fieldValue.remarks || null,
+            updated_at: new Date(),
           },
         });
         createdFieldValues.push(created);
@@ -106,13 +107,13 @@ export async function POST(request: NextRequest) {
         const fieldWithRelations = await tx.field.findUnique({
           where: { id: fieldValue.field_id },
           include: {
-            numerator_for_indicators: {
+            indicator_indicator_numerator_field_idTofield: {
               select: { id: true, code: true, name: true },
             },
-            denominator_for_indicators: {
+            indicator_indicator_denominator_field_idTofield: {
               select: { id: true, code: true, name: true },
             },
-            target_for_indicators: {
+            indicator_indicator_target_field_idTofield: {
               select: { id: true, code: true, name: true },
             },
           },

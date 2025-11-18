@@ -289,8 +289,14 @@ export class SmartFieldService {
             report_month: reportMonth,
           },
         },
-        update: valueData,
-        create: valueData,
+        update: {
+          ...valueData,
+          updated_at: new Date(),
+        },
+        create: {
+          ...valueData,
+          updated_at: new Date(),
+        },
       });
 
       console.log(`Successfully set field value for field ${fieldId}, facility ${facilityId}, month ${reportMonth}`);

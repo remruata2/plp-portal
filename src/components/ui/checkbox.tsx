@@ -35,6 +35,8 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 							type="checkbox"
 							ref={ref}
 							checked={checked}
+							onChange={() => {}} // Controlled by HeadlessCheckbox
+							readOnly
 							disabled={disabled}
 							className="sr-only"
 							{...props}

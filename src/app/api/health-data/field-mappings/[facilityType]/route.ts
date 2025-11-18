@@ -30,7 +30,7 @@ export async function GET(
         is_active: true,
       },
       include: {
-        field_mappings: {
+        facility_field_mapping: {
           include: {
             field: true,
           },
@@ -47,7 +47,7 @@ export async function GET(
     }
 
     // Convert to the format expected by the frontend
-    const mappings = facilityTypeData.field_mappings.map((mapping) => {
+    const mappings = facilityTypeData.facility_field_mapping.map((mapping) => {
       // Map database field types to frontend field types
       let frontendFieldType: string;
       switch (mapping.field.field_type) {

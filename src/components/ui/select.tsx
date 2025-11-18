@@ -27,14 +27,14 @@ function Select({
 	disabled,
 	children,
 }: SelectProps) {
-	const [internalValue, setInternalValue] = React.useState<string | undefined>(
-		value || defaultValue
+	const [internalValue, setInternalValue] = React.useState<string>(
+		value || defaultValue || ""
 	);
 	const [items, setItems] = React.useState<Map<string, React.ReactNode>>(
 		new Map()
 	);
 
-	const currentValue = value !== undefined ? value : internalValue;
+	const currentValue = value !== undefined ? value : internalValue || "";
 
 	const handleValueChange = (newValue: string) => {
 		if (value === undefined) {

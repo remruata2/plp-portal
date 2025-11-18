@@ -20,6 +20,8 @@ const facilityTypeFieldCodes: Record<string, string[]> = {
     "anc_footfall",
     "anc_tested_hb",
     "tb_screenings",
+    "indicator_ct001_conditional_answer", // Conditional answer for CT001
+    "indicator_dc001_conditional_answer", // Conditional answer for DC001
     "tb_contact_tracing_households",
     "tb_differentiated_care_visits",
     "ri_sessions_held",
@@ -65,6 +67,8 @@ const facilityTypeFieldCodes: Record<string, string[]> = {
     "anc_footfall",
     "anc_tested_hb",
     "tb_screenings",
+    "indicator_ct001_conditional_answer", // Conditional answer for CT001
+    "indicator_dc001_conditional_answer", // Conditional answer for DC001
     "tb_contact_tracing_households",
     "tb_differentiated_care_visits",
     "ri_sessions_held",
@@ -91,6 +95,8 @@ const facilityTypeFieldCodes: Record<string, string[]> = {
     "wellness_sessions_conducted",
     "teleconsultation_conducted",
     "tb_screenings",
+    "indicator_ct001_conditional_answer", // Conditional answer for CT001
+    "indicator_dc001_conditional_answer", // Conditional answer for DC001
     "tb_contact_tracing_households",
     "tb_differentiated_care_visits",
     "elderly_palliative_visits",
@@ -116,6 +122,8 @@ const facilityTypeFieldCodes: Record<string, string[]> = {
     "anc_footfall",
     "anc_tested_hb",
     "tb_screenings",
+    "indicator_ct001_conditional_answer", // Conditional answer for CT001
+    "indicator_dc001_conditional_answer", // Conditional answer for DC001
     "tb_contact_tracing_households",
     "tb_differentiated_care_visits",
     "ri_sessions_held",

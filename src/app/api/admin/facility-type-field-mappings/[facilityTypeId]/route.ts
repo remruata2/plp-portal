@@ -25,7 +25,7 @@ export async function GET(
     }
 
     // Get existing mappings
-    const mappings = await prisma.facility_fieldMapping.findMany({
+    const mappings = await prisma.facility_field_mapping.findMany({
       where: { facility_type_id: facilityTypeId },
       include: {
         field: true,

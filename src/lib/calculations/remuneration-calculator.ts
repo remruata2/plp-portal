@@ -614,13 +614,13 @@ export class RemunerationCalculator {
 				const fieldRelationships = await prisma.field.findMany({
 					where: { id: { in: fieldIds } },
 					include: {
-						denominator_for_indicators: {
+						indicator_indicator_denominator_field_idTofield: {
 							select: { id: true, code: true, name: true },
 						},
-						numerator_for_indicators: {
+						indicator_indicator_numerator_field_idTofield: {
 							select: { id: true, code: true, name: true },
 						},
-						target_for_indicators: {
+						indicator_indicator_target_field_idTofield: {
 							select: { id: true, code: true, name: true },
 						},
 					},
@@ -676,9 +676,9 @@ export class RemunerationCalculator {
 				console.log(`     Field ID: ${field.id}`);
 
 				// Check each relationship type individually
-				const numeratorIndicators = field.numerator_for_indicators;
-				const denominatorIndicators = field.denominator_for_indicators;
-				const targetIndicators = field.target_for_indicators;
+				const numeratorIndicators = field.indicator_indicator_numerator_field_idTofield;
+				const denominatorIndicators = field.indicator_indicator_denominator_field_idTofield;
+				const targetIndicators = field.indicator_indicator_target_field_idTofield;
 
 				console.log(`     Raw numerator_for_indicators:`, numeratorIndicators);
 				console.log(
@@ -750,9 +750,9 @@ export class RemunerationCalculator {
 						try {
 							// Check if this field is related to the indicator through any of the relations
 							// Handle both database field values (with IDs) and submitted field values (with codes)
-							const numeratorIndicators = field.numerator_for_indicators;
-							const denominatorIndicators = field.denominator_for_indicators;
-							const targetIndicators = field.target_for_indicators;
+							const numeratorIndicators = field.indicator_indicator_numerator_field_idTofield;
+							const denominatorIndicators = field.indicator_indicator_denominator_field_idTofield;
+							const targetIndicators = field.indicator_indicator_target_field_idTofield;
 
 							console.log(
 								`    🔍 Checking field ${field.code} against indicator ${indicator.code} (ID: ${indicator.id})`
@@ -1313,9 +1313,9 @@ export class RemunerationCalculator {
 					include: {
 						field: {
 							include: {
-								numerator_for_indicators: true,
-								denominator_for_indicators: true,
-								target_for_indicators: true,
+								indicator_indicator_numerator_field_idTofield: true,
+								indicator_indicator_denominator_field_idTofield: true,
+								indicator_indicator_target_field_idTofield: true,
 							},
 						},
 					},

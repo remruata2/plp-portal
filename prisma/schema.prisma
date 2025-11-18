@@ -9,7 +9,7 @@ datasource db {
 }
 
 model FacilityRemunerationRecord {
-  id                            String     @id @default(cuid())
+  id                            String     @id
   facility_id                   String
   report_month                  String
   indicator_id                  Int?
@@ -146,7 +146,7 @@ model facility_type_remuneration {
 }
 
 model family {
-  id              String          @id @default(cuid())
+  id              String          @id
   section_id      String
   house_no        String          @db.VarChar(50)
   floor_no        String?         @db.VarChar(20)
@@ -169,7 +169,7 @@ model family {
 }
 
 model family_member {
-  id                    String          @id @default(cuid())
+  id                    String          @id
   family_id             String
   name                  String          @db.VarChar(200)
   relationship_with_hof HOFRelationship
@@ -368,7 +368,7 @@ model remuneration_calculations {
 }
 
 model section {
-  id             String    @id @default(cuid())
+  id             String    @id
   name           String    @db.VarChar(200)
   village_id     String
   is_active      Boolean   @default(true)
@@ -386,7 +386,7 @@ model section {
 }
 
 model system_setting {
-  id         String   @id @default(cuid())
+  id         String   @id
   key        String   @unique
   value      String
   created_at DateTime @default(now()) @db.Timestamptz(6)
@@ -413,7 +413,7 @@ model user {
 }
 
 model village {
-  id             String    @id @default(cuid())
+  id             String    @id
   name           String    @db.VarChar(200)
   facility_id    String
   is_active      Boolean   @default(true)

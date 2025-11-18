@@ -33,7 +33,7 @@ export class FieldMappingService {
     const facilityTypes = await prisma.facility_type.findMany({
       where: { is_active: true },
       include: {
-        field_mappings: {
+        facility_field_mapping: {
           include: {
             field: true,
           },
@@ -44,7 +44,7 @@ export class FieldMappingService {
 
     // Create mappings for each facility type based on database
     for (const facilityType of facilityTypes) {
-      const mappings: FieldMapping[] = facilityType.field_mappings.map(
+      const mappings: FieldMapping[] = facilityType.facility_field_mapping.map(
         (mapping) => ({
           formFieldName: mapping.field.code.toLowerCase().replace(/\s+/g, ""), // Convert to camelCase
           databaseFieldId: mapping.field.id,

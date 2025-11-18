@@ -42,11 +42,13 @@ const DialogTrigger = React.forwardRef<
 	};
 
 	if (asChild && React.isValidElement(children)) {
+		// Clone the child and pass the ref and onClick handler
+		// React will handle ref forwarding through the Button's forwardRef
 		return React.cloneElement(children, {
 			...props,
 			onClick: handleClick,
-			ref,
-		});
+			ref: ref,
+		} as any);
 	}
 
 	return (

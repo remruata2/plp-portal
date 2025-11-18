@@ -33,7 +33,7 @@ export class FacilityPerformanceCalculator {
       }
 
       // Get field mappings for this facility type
-      const fieldMappings = await prisma.facility_fieldMapping.findMany({
+      const fieldMappings = await prisma.facility_field_mapping.findMany({
         where: {
           facility_type_id: facility.facility_type_id,
         },
