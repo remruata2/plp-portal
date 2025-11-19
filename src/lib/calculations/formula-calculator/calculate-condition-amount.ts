@@ -1,4 +1,5 @@
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 /**
  * Determine which condition amount to use based on indicator code and boolean field values
@@ -26,8 +27,7 @@ export function getConditionAmount(
 	const indicator7AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === ct001FieldCode
 	)?.boolean_value;
-	const indicator7Answer =
-		indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+	const indicator7Answer = indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
 	const dc001FieldCode = getFieldCodeForFacilityType(
 		"indicator_dc001_conditional_answer",
@@ -36,8 +36,7 @@ export function getConditionAmount(
 	const indicator8AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === dc001FieldCode
 	)?.boolean_value;
-	const indicator8Answer =
-		indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+	const indicator8Answer = indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
 	// For Indicator 6 (TS001) - Individuals screened for TB
 	// Condition logic based on Indicator 7 and Indicator 8 answers
@@ -74,7 +73,7 @@ export function getConditionAmount(
 	// For Indicator 7 (CT001) - Household visited for TB contact tracing
 	// If Indicator CT001 Conditional Answer = Yes, use base_amount
 	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
-	if (indicatorCode === "CT001") {
+	if (matchesIndicatorCode(indicatorCode, "CT001")) {
 		// If conditional answer is Yes, use base_amount
 		if (indicator7Answer === true) {
 			return baseAmount;
@@ -86,7 +85,7 @@ export function getConditionAmount(
 	// For Indicator 8 (DC001) - TB patients visited for Differentiated TB Care
 	// If Indicator DC001 Conditional Answer = Yes, use base_amount
 	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
-	if (indicatorCode === "DC001") {
+	if (matchesIndicatorCode(indicatorCode, "DC001")) {
 		// If conditional answer is Yes, use base_amount
 		if (indicator8Answer === true) {
 			return baseAmount;
@@ -134,9 +133,10 @@ export function calculateConditionalRemuneration(
 	let displayPercentage = baseAchievement;
 
 	// For TB-related indicators, check if they should show NA
-	const isTbContactTracing = indicatorCode === "CT001";
-	const isTbDifferentiatedCare = indicatorCode === "DC001";
-	const isTbScreening = indicatorCode === "TS001" || indicatorCode.startsWith("TS001_");
+	const isTbContactTracing = matchesIndicatorCode(indicatorCode, "CT001");
+	const isTbDifferentiatedCare = matchesIndicatorCode(indicatorCode, "DC001");
+	const isTbScreening =
+		indicatorCode === "TS001" || indicatorCode.startsWith("TS001_");
 
 	if (isTbContactTracing || isTbDifferentiatedCare || isTbScreening) {
 		// Check if the indicator should be NA based on boolean answers
@@ -148,8 +148,7 @@ export function calculateConditionalRemuneration(
 		const indicator7AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === ct001FieldCode
 		)?.boolean_value;
-		const indicator7Answer =
-			indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+		const indicator7Answer = indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
 		const dc001FieldCode = getFieldCodeForFacilityType(
 			"indicator_dc001_conditional_answer",
@@ -158,8 +157,7 @@ export function calculateConditionalRemuneration(
 		const indicator8AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === dc001FieldCode
 		)?.boolean_value;
-		const indicator8Answer =
-			indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+		const indicator8Answer = indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
 
 		// For CT001: NA if no pulmonary TB patients (Indicator 7 = No or null)
 		if (isTbContactTracing && indicator7Answer === false) {

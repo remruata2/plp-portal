@@ -720,13 +720,15 @@ export default function DynamicHealthDataForm({
 			(() => {
 				const data: Record<string, any> = {};
 				Object.keys(formData).forEach((key) => {
-					// Map of indicator to its dependent field names
-					const indicatorForField: Record<string, string> = {
-						tb_contact_tracing_households: "CT001",
-						tb_differentiated_care_visits: "DC001",
-					};
-					const ind = indicatorForField[key];
-					if (ind && indicatorAnswers[ind] === "no") {
+					// Check field names directly instead of mapping to indicator codes
+					const isCt001Field = key === "tb_contact_tracing_households";
+					const isDc001Field = key === "tb_differentiated_care_visits";
+
+					// Skip hidden fields if their conditional answer is "no"
+					if (isCt001Field && indicatorAnswers["CT001"] === "no") {
+						return; // Skip hidden field
+					}
+					if (isDc001Field && indicatorAnswers["DC001"] === "no") {
 						return; // Skip hidden field
 					}
 					data[key] = (formData as any)[key];
@@ -962,7 +964,13 @@ export default function DynamicHealthDataForm({
 		setIndicatorAnswers((prev) => ({ ...prev, [indicatorCode]: answer }));
 
 		// ALSO store in formData for database persistence - use facility-aware field codes
-		if (indicatorCode === "CT001") {
+		// Check if this is CT001 conditional answer field (check field names, not indicator codes)
+		const isCt001Conditional =
+			indicatorCode === "CT001" || indicatorCode.includes("CT001");
+		const isDc001Conditional =
+			indicatorCode === "DC001" || indicatorCode.includes("DC001");
+
+		if (isCt001Conditional) {
 			const fieldName =
 				facilityType === "PHC"
 					? "indicator_ct001_conditional_answer_phc"
@@ -971,7 +979,7 @@ export default function DynamicHealthDataForm({
 				...prev,
 				[fieldName]: answer === "yes" ? "1" : "0",
 			}));
-		} else if (indicatorCode === "DC001") {
+		} else if (isDc001Conditional) {
 			const fieldName =
 				facilityType === "PHC"
 					? "indicator_dc001_conditional_answer_phc"
@@ -986,10 +994,10 @@ export default function DynamicHealthDataForm({
 		if (answer === "no" || answer === null) {
 			setFormData((prev) => {
 				const next = { ...prev };
-				if (indicatorCode === "CT001") {
+				if (isCt001Conditional) {
 					next.tb_contact_tracing_households = "";
 				}
-				if (indicatorCode === "DC001") {
+				if (isDc001Conditional) {
 					next.tb_differentiated_care_visits = "";
 				}
 				return next;
@@ -1751,20 +1759,28 @@ export default function DynamicHealthDataForm({
 						</div>
 
 						{indicatorGroups.map((group, groupIndex) => {
-							// Check if this indicator has conditional logic
+							// Check if this indicator has conditional logic by checking if group contains conditional answer fields
+							const hasCt001ConditionalField = group.fields.some(
+								(f) =>
+									f.formFieldName === "indicator_ct001_conditional_answer" ||
+									f.formFieldName === "indicator_ct001_conditional_answer_phc"
+							);
+							const hasDc001ConditionalField = group.fields.some(
+								(f) =>
+									f.formFieldName === "indicator_dc001_conditional_answer" ||
+									f.formFieldName === "indicator_dc001_conditional_answer_phc"
+							);
 							const isConditionalIndicator =
-								group.indicatorCode === "CT001" ||
-								group.indicatorCode === "DC001";
+								hasCt001ConditionalField || hasDc001ConditionalField;
 
 							// Get the boolean field value from formData for conditional indicators - use facility-aware field codes
-							const booleanFieldName =
-								group.indicatorCode === "CT001"
-									? facilityType === "PHC"
-										? "indicator_ct001_conditional_answer_phc"
-										: "indicator_ct001_conditional_answer"
-									: facilityType === "PHC"
-									? "indicator_dc001_conditional_answer_phc"
-									: "indicator_dc001_conditional_answer";
+							const booleanFieldName = hasCt001ConditionalField
+								? facilityType === "PHC"
+									? "indicator_ct001_conditional_answer_phc"
+									: "indicator_ct001_conditional_answer"
+								: facilityType === "PHC"
+								? "indicator_dc001_conditional_answer_phc"
+								: "indicator_dc001_conditional_answer";
 							const booleanFieldValue = formData[booleanFieldName];
 							const booleanAnswer =
 								booleanFieldValue === "1" || booleanFieldValue === true
@@ -1854,7 +1870,7 @@ export default function DynamicHealthDataForm({
 													// Handle Yes/No answer change or reset (null)
 													handleYesNoAnswer(group.indicatorCode, answer);
 													// Also update the boolean field directly - use facility-aware field code
-													if (group.indicatorCode === "CT001") {
+													if (hasCt001ConditionalField) {
 														const fieldName =
 															facilityType === "PHC"
 																? "indicator_ct001_conditional_answer_phc"
@@ -1863,7 +1879,7 @@ export default function DynamicHealthDataForm({
 															fieldName,
 															answer === "yes" ? "1" : "0"
 														);
-													} else if (group.indicatorCode === "DC001") {
+													} else if (hasDc001ConditionalField) {
 														const fieldName =
 															facilityType === "PHC"
 																? "indicator_dc001_conditional_answer_phc"
@@ -1879,18 +1895,20 @@ export default function DynamicHealthDataForm({
 												<div className="grid grid-cols-1 mt-3 sm:mt-4">
 													{otherFields
 														.filter((mapping) => {
-															const indicatorForField: Record<string, string> =
-																{
-																	tb_contact_tracing_households: "CT001",
-																	tb_differentiated_care_visits: "DC001",
-																};
-															const ind =
-																indicatorForField[mapping.formFieldName];
+															// Check field names directly instead of mapping to indicator codes
+															const isCt001Field =
+																mapping.formFieldName ===
+																"tb_contact_tracing_households";
+															const isDc001Field =
+																mapping.formFieldName ===
+																"tb_differentiated_care_visits";
+
 															// Check both effectiveAnswer and indicatorAnswers
 															const shouldHide =
-																(ind === "CT001" || ind === "DC001") &&
+																(isCt001Field || isDc001Field) &&
 																(effectiveAnswer === "no" ||
-																	indicatorAnswers[ind] === "no");
+																	indicatorAnswers[group.indicatorCode] ===
+																		"no");
 															return !shouldHide;
 														})
 														.map((mapping, fieldIndex) => (

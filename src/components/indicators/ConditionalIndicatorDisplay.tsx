@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Info, AlertCircle, CheckCircle } from "lucide-react";
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 interface ConditionalIndicatorDisplayProps {
 	indicator: {
@@ -50,26 +51,27 @@ export default function ConditionalIndicatorDisplay({
 
 	// Check for conditional questions based on indicator code
 	const getConditionalQuestion = () => {
-		switch (indicator.code) {
-			case "CT001": // Household visited for TB contact tracing
-				return {
-					field: "pulmonary_tb_patients", // This field doesn't have PHC variant
-					text: "Are there any patients with Pulmonary TB in your catchment area (co-located SC)?",
-					conditionField: "pulmonary_tb_patients",
-				};
-			case "DC001": // No. of TB patients visited for Differentiated TB Care
-				const totalTbFieldCode = getFieldCodeForFacilityType(
-					"total_tb_patients",
-					facilityType
-				);
-				return {
-					field: totalTbFieldCode, // Use facility-aware field code
-					text: "Are there any patients with any type of TB ?",
-					conditionField: totalTbFieldCode,
-				};
-			default:
-				return null;
+		if (matchesIndicatorCode(indicator.code, "CT001")) {
+			// Household visited for TB contact tracing
+			return {
+				field: "pulmonary_tb_patients", // This field doesn't have PHC variant
+				text: "Are there any patients with Pulmonary TB in your catchment area (co-located SC)?",
+				conditionField: "pulmonary_tb_patients",
+			};
 		}
+		if (matchesIndicatorCode(indicator.code, "DC001")) {
+			// No. of TB patients visited for Differentiated TB Care
+			const totalTbFieldCode = getFieldCodeForFacilityType(
+				"total_tb_patients",
+				facilityType
+			);
+			return {
+				field: totalTbFieldCode, // Use facility-aware field code
+				text: "Are there any patients with any type of TB ?",
+				conditionField: totalTbFieldCode,
+			};
+		}
+		return null;
 	};
 
 	const conditionalQuestion = getConditionalQuestion();
@@ -179,7 +181,7 @@ export default function ConditionalIndicatorDisplay({
 								</p>
 								<p className="text-sm text-orange-700">
 									This indicator is not applicable because there are no{" "}
-									{indicator.code === "CT001" ? "pulmonary TB" : "TB"} patients
+									{matchesIndicatorCode(indicator.code, "CT001") ? "pulmonary TB" : "TB"} patients
 									in your catchment area.
 								</p>
 								<Badge

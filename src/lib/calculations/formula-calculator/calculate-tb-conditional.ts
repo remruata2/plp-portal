@@ -1,4 +1,5 @@
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 /**
  * Calculate TB-conditional remuneration and display percentage
@@ -56,8 +57,8 @@ export function calculateTbConditionalRemuneration(
 			: baseMaxRemuneration;
 
 	// Identify TB-related indicators
-	const isTbContactTracing = indicatorCode === "CT001";
-	const isTbDifferentiatedCare = indicatorCode === "DC001";
+	const isTbContactTracing = matchesIndicatorCode(indicatorCode, "CT001");
+	const isTbDifferentiatedCare = matchesIndicatorCode(indicatorCode, "DC001");
 
 	// Calculate display percentage
 	let displayPercentage = baseAchievement;

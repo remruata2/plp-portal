@@ -38,30 +38,39 @@ export function sortIndicatorsBySourceOrder(indicators: any[]) {
     
     // 7. Household visited for TB contact tracing - All facility types
     ['CT001', 7],
+    ['CT001_PHC', 7],    // PHC variant
     
     // 8. TB patients visited for Differentiated TB Care - All facility types
     ['DC001', 8],
+    ['DC001_PHC', 8],    // PHC variant
     
     // 9. RI sessions held - SC-HWC, PHC, A-HWC
     ['RS001', 9],
+    ['RS001_PHC', 9],    // PHC variant
     
     // 10. RI footfall - SC-HWC, PHC, A-HWC
     ['RF001', 10],
+    ['RF001_PHC', 10],   // PHC variant
     
     // 11. CBAC filled for the month - SC-HWC, PHC, A-HWC
     ['CB001', 11],
+    ['CB001_PHC', 11],   // PHC variant
     
     // 12. HTN screened for the month - SC-HWC, PHC, A-HWC
     ['HS001', 12],
+    ['HS001_PHC', 12],   // PHC variant
     
     // 13. DM screened for the month - SC-HWC, PHC, A-HWC
     ['DS001', 13],
+    ['DS001_PHC', 13],   // PHC variant
     
     // 14. Oral Ca. Screened for the month - SC-HWC, PHC, A-HWC
     ['OC001', 14],
+    ['OC001_PHC', 14],   // PHC variant
     
     // 15. Breast & Cervical Ca. screened for the month - SC-HWC, PHC, A-HWC
     ['BC001', 15],
+    ['BC001_PHC', 15],   // PHC variant
     
     // 16. NCD Diagnosed & Tx completed - PHC, UPHC, A-HWC
     ['ND001', 16],
@@ -71,6 +80,7 @@ export function sortIndicatorsBySourceOrder(indicators: any[]) {
     
     // 18. Elderly & Palliative patients visited - All facility types
     ['EP001', 18],
+    ['EP001_PHC', 18],   // PHC variant
     
     // 19. Elderly clinic conducted - All facility types
     ['EC001', 19],
@@ -148,30 +158,39 @@ export function getIndicatorNumber(indicator: any): number {
     
     // 7. Household visited for TB contact tracing - All facility types
     ['CT001', 7],
+    ['CT001_PHC', 7],    // PHC variant
     
     // 8. TB patients visited for Differentiated TB Care - All facility types
     ['DC001', 8],
+    ['DC001_PHC', 8],    // PHC variant
     
     // 9. RI sessions held - SC-HWC, PHC, A-HWC
     ['RS001', 9],
+    ['RS001_PHC', 9],    // PHC variant
     
     // 10. RI footfall - SC-HWC, PHC, A-HWC
     ['RF001', 10],
+    ['RF001_PHC', 10],   // PHC variant
     
     // 11. CBAC filled for the month - SC-HWC, PHC, A-HWC
     ['CB001', 11],
+    ['CB001_PHC', 11],   // PHC variant
     
     // 12. HTN screened for the month - SC-HWC, PHC, A-HWC
     ['HS001', 12],
+    ['HS001_PHC', 12],   // PHC variant
     
     // 13. DM screened for the month - SC-HWC, PHC, A-HWC
     ['DS001', 13],
+    ['DS001_PHC', 13],   // PHC variant
     
     // 14. Oral Ca. Screened for the month - SC-HWC, PHC, A-HWC
     ['OC001', 14],
+    ['OC001_PHC', 14],   // PHC variant
     
     // 15. Breast & Cervical Ca. screened for the month - SC-HWC, PHC, A-HWC
     ['BC001', 15],
+    ['BC001_PHC', 15],   // PHC variant
     
     // 16. NCD Diagnosed & Tx completed - PHC, UPHC, A-HWC
     ['ND001', 16],
@@ -181,6 +200,7 @@ export function getIndicatorNumber(indicator: any): number {
     
     // 18. Elderly & Palliative patients visited - All facility types
     ['EP001', 18],
+    ['EP001_PHC', 18],   // PHC variant
     
     // 19. Elderly clinic conducted - All facility types
     ['EC001', 19],

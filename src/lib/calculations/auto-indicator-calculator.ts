@@ -3,6 +3,7 @@ import { calculateRemuneration } from "./formula-calculator/calculate-remunerati
 import type { FormulaConfig } from "./formula-calculator/types";
 import { target_type } from "@/generated/prisma";
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 export interface AutoCalculationResult {
   success: boolean;
@@ -346,7 +347,7 @@ export class AutoIndicatorCalculator {
     }
 
     // Handle conditional questions for TB-related indicators
-    if (indicator.code === "CT001") {
+    if (matchesIndicatorCode(indicator.code, "CT001")) {
       // Household visited for TB contact tracing
       config.conditionalQuestion = {
         field: "pulmonary_tb_patients", // Updated to match source files
@@ -354,7 +355,7 @@ export class AutoIndicatorCalculator {
       };
       config.conditionType = "TB_CONTACT_TRACING";
       config.conditionField = "pulmonary_tb_patients";
-    } else if (indicator.code === "DC001") {
+    } else if (matchesIndicatorCode(indicator.code, "DC001")) {
       // No. of TB patients visited for Differentiated TB Care
       const totalTbFieldCode = getFieldCodeForFacilityType("total_tb_patients", facilityType);
       config.conditionalQuestion = {

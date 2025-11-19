@@ -11,6 +11,7 @@ import { extractTargetConfiguration } from "@/lib/calculations/formula-calculato
 import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/build-calculation-config";
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 // Utilities to parse target display and amounts
 function parseRangeFromTargetValue(
@@ -373,7 +374,9 @@ export async function GET(
 
 		// Check if facility type has TB indicators (CT001 or DC001)
 		const hasTbIndicators = indicators.some(
-			(ind) => ind.code === "CT001" || ind.code === "DC001"
+			(ind) =>
+				matchesIndicatorCode(ind.code, "CT001") ||
+				matchesIndicatorCode(ind.code, "DC001")
 		);
 
 		// Check if facility type has HWO or AYUSH MO workers
