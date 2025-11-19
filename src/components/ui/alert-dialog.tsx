@@ -35,7 +35,7 @@ function AlertDialog({
 		onOpenChange?.(newOpen);
 	};
 
-	return (
+  return (
 		<AlertDialogContext.Provider value={{ onOpenChange: handleOpenChange }}>
 			<HeadlessDialog open={isOpen} onClose={() => handleOpenChange(false)}>
 				{children}
@@ -79,7 +79,7 @@ const AlertDialogOverlay = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-	return (
+  return (
 		<Transition.Child
 			as={React.Fragment}
 			enter="ease-out duration-200"
@@ -91,12 +91,12 @@ const AlertDialogOverlay = React.forwardRef<
 		>
 			<div
 				ref={ref}
-				className={cn(
+      className={cn(
 					"fixed inset-0 z-50 bg-black/50",
-					className
-				)}
-				{...props}
-			/>
+        className
+      )}
+      {...props}
+    />
 		</Transition.Child>
 	);
 });
@@ -106,9 +106,9 @@ const AlertDialogContent = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
-	return (
-		<AlertDialogPortal>
-			<AlertDialogOverlay />
+  return (
+    <AlertDialogPortal>
+      <AlertDialogOverlay />
 			<Transition.Child
 				as={React.Fragment}
 				enter="ease-out duration-200"
@@ -120,42 +120,42 @@ const AlertDialogContent = React.forwardRef<
 			>
 				<HeadlessDialog.Panel
 					ref={ref}
-					className={cn(
+        className={cn(
 						"fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 sm:max-w-lg",
-						className
-					)}
-					{...props}
+          className
+        )}
+        {...props}
 				>
 					{children}
 				</HeadlessDialog.Panel>
 			</Transition.Child>
-		</AlertDialogPortal>
+    </AlertDialogPortal>
 	);
 });
 AlertDialogContent.displayName = "AlertDialogContent";
 
 const AlertDialogHeader = ({
-	className,
-	...props
+  className,
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div
-		className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
-		{...props}
-	/>
+    <div
+      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      {...props}
+    />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
 
 const AlertDialogFooter = ({
-	className,
-	...props
+  className,
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div
-		className={cn(
-			"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-			className
-		)}
-		{...props}
-	/>
+    <div
+      className={cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      )}
+      {...props}
+    />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";
 
@@ -165,9 +165,9 @@ const AlertDialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<HeadlessDialog.Title
 		ref={ref}
-		className={cn("text-lg font-semibold", className)}
-		{...props}
-	/>
+      className={cn("text-lg font-semibold", className)}
+      {...props}
+    />
 ));
 AlertDialogTitle.displayName = "AlertDialogTitle";
 
@@ -177,9 +177,9 @@ const AlertDialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<HeadlessDialog.Description
 		ref={ref}
-		className={cn("text-muted-foreground text-sm", className)}
-		{...props}
-	/>
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
 ));
 AlertDialogDescription.displayName = "AlertDialogDescription";
 
@@ -189,16 +189,16 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => {
 	const context = React.useContext(AlertDialogContext);
 
-	return (
+  return (
 		<button
 			ref={ref}
-			className={cn(buttonVariants(), className)}
+      className={cn(buttonVariants(), className)}
 			onClick={(e) => {
 				props.onClick?.(e);
 				context?.onOpenChange?.(false);
 			}}
-			{...props}
-		/>
+      {...props}
+    />
 	);
 });
 AlertDialogAction.displayName = "AlertDialogAction";
@@ -209,30 +209,30 @@ const AlertDialogCancel = React.forwardRef<
 >(({ className, ...props }, ref) => {
 	const context = React.useContext(AlertDialogContext);
 
-	return (
+  return (
 		<button
 			ref={ref}
-			className={cn(buttonVariants({ variant: "outline" }), className)}
+      className={cn(buttonVariants({ variant: "outline" }), className)}
 			onClick={(e) => {
 				props.onClick?.(e);
 				context?.onOpenChange?.(false);
 			}}
-			{...props}
-		/>
+      {...props}
+    />
 	);
 });
 AlertDialogCancel.displayName = "AlertDialogCancel";
 
 export {
-	AlertDialog,
-	AlertDialogPortal,
-	AlertDialogOverlay,
-	AlertDialogTrigger,
-	AlertDialogContent,
-	AlertDialogHeader,
-	AlertDialogFooter,
-	AlertDialogTitle,
-	AlertDialogDescription,
-	AlertDialogAction,
-	AlertDialogCancel,
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
 };

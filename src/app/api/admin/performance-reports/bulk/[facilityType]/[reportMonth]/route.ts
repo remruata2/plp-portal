@@ -12,6 +12,7 @@ import { buildCalculationConfig } from "@/lib/calculations/formula-calculator/bu
 import { calculateRemuneration } from "@/lib/calculations/formula-calculator/calculate-remuneration";
 import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
 import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 // Utilities to parse target display and amounts
 function parseRangeFromTargetValue(
@@ -379,6 +380,14 @@ export async function GET(
 				matchesIndicatorCode(ind.code, "DC001")
 		);
 
+		// Check if CT001 and DC001 indicators exist for this facility type (used for conditional answer columns)
+		const hasCt001Indicator = indicators.some((ind) =>
+			matchesIndicatorCode(ind.code, "CT001")
+		);
+		const hasDc001Indicator = indicators.some((ind) =>
+			matchesIndicatorCode(ind.code, "DC001")
+		);
+
 		// Check if facility type has HWO or AYUSH MO workers
 		// Only SC_HWC has HWO, A_HWC has AYUSH MO
 		// PHC, UPHC, U_HWC have MO (team-based, not shown individually)
@@ -452,50 +461,51 @@ export async function GET(
 				} catch {}
 			}
 
-			// Determine TB status based on actual indicator values (numerator fields)
-			// These represent actual work done (visits), which proves they have TB patients
-			// Using numerator fields prevents gaming: selecting "Yes" but entering 0 visits
-			let tbStatus = "";
-			if (hasTbIndicators) {
-				// Check CT001 numerator (tb_contact_tracing_households)
-				// This is the actual indicator - if > 0, they visited households (have TB patients)
-				const ct001Numerator = fieldValues.find(
-					(fv) => fv.field?.code === "tb_contact_tracing_households"
-				);
-				const ct001Value = ct001Numerator
-					? ct001Numerator.string_value ||
-					  ct001Numerator.numeric_value ||
-					  ct001Numerator.boolean_value
-					: null;
+			// Extract conditional answer field values (CT001 and DC001)
+			const ct001ConditionalFieldCode = getFieldCodeForFacilityType(
+				"indicator_ct001_conditional_answer",
+				facility.facility_type.name
+			);
+			const dc001ConditionalFieldCode = getFieldCodeForFacilityType(
+				"indicator_dc001_conditional_answer",
+				facility.facility_type.name
+			);
 
-				// Check DC001 numerator (tb_differentiated_care_visits)
-				// This is the actual indicator - if > 0, they visited patients (have TB patients)
-				const dc001Numerator = fieldValues.find(
-					(fv) => fv.field?.code === "tb_differentiated_care_visits"
-				);
-				const dc001Value = dc001Numerator
-					? dc001Numerator.string_value ||
-					  dc001Numerator.numeric_value ||
-					  dc001Numerator.boolean_value
-					: null;
+			const ct001ConditionalField = fieldValues.find(
+				(fv) => fv.field?.code === ct001ConditionalFieldCode
+			);
+			const dc001ConditionalField = fieldValues.find(
+				(fv) => fv.field?.code === dc001ConditionalFieldCode
+			);
 
-				// Must have actual visits > 0 to be considered "Yes"
-				// This prevents gaming: selecting "Yes" but entering 0 visits
-				const hasActualTbVisits =
-					Number(ct001Value || 0) > 0 || Number(dc001Value || 0) > 0;
+			// Convert boolean values to "Yes"/"No"
+			// null/undefined are treated as "No"
+			const ct001ConditionalValue = ct001ConditionalField
+				? ct001ConditionalField.boolean_value === true
+					? "Yes"
+					: "No" // false, null, or undefined all show as "No"
+				: "No"; // Field doesn't exist, show as "No"
+			const dc001ConditionalValue = dc001ConditionalField
+				? dc001ConditionalField.boolean_value === true
+					? "Yes"
+					: "No" // false, null, or undefined all show as "No"
+				: "No"; // Field doesn't exist, show as "No"
 
-				tbStatus = hasActualTbVisits ? "Yes" : "No";
-			} else {
-				// Facility type doesn't have TB indicators
-				tbStatus = "";
-			}
-
-			// Build row data - conditionally include HWO/AYUSH MO column
+			// Build row data - conditionally include conditional answer fields and HWO/AYUSH MO column
 			const row: Record<string, any> = {
 				Facility: facility.display_name || facility.name,
 				District: facility.district?.name || "N/A",
-				"With TB(Yes/No)": tbStatus,
 			};
+
+			// Add conditional answer fields if TB indicators exist
+			if (hasTbIndicators) {
+				if (hasCt001Indicator) {
+					row["CT001 Conditional Answer"] = ct001ConditionalValue;
+				}
+				if (hasDc001Indicator) {
+					row["DC001 Conditional Answer"] = dc001ConditionalValue;
+				}
+			}
 
 			// Only add HWO/AYUSH MO column if facility type has these workers
 			if (hasHwoOrAyushMo) {
@@ -720,9 +730,21 @@ export async function GET(
 		}
 
 		// Build worksheet with compact merged headers
-		// Column order: Facility, District, With TB(Yes/No), [HWO/AYUSH MO if applicable]
-		const headerTop: any[] = ["Facility", "District", "With TB(Yes/No)"];
-		const headerSub: any[] = ["", "", ""];
+		// Column order: Facility, District, [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
+		const headerTop: any[] = ["Facility", "District"];
+		const headerSub: any[] = ["", ""];
+
+		// Add conditional answer columns if TB indicators exist
+		if (hasTbIndicators) {
+			if (hasCt001Indicator) {
+				headerTop.push("CT001 Conditional Answer");
+				headerSub.push("");
+			}
+			if (hasDc001Indicator) {
+				headerTop.push("DC001 Conditional Answer");
+				headerSub.push("");
+			}
+		}
 
 		// Only add HWO/AYUSH MO column if facility type has these workers
 		if (hasHwoOrAyushMo) {
@@ -741,7 +763,17 @@ export async function GET(
 
 		const data: any[][] = [headerTop, headerSub];
 		for (const r of rows) {
-			const line: any[] = [r["Facility"], r["District"], r["With TB(Yes/No)"]];
+			const line: any[] = [r["Facility"], r["District"]];
+
+			// Add conditional answer columns if TB indicators exist
+			if (hasTbIndicators) {
+				if (hasCt001Indicator) {
+					line.push(r["CT001 Conditional Answer"] ?? "");
+				}
+				if (hasDc001Indicator) {
+					line.push(r["DC001 Conditional Answer"] ?? "");
+				}
+			}
 
 			// Only add HWO/AYUSH MO column if facility type has these workers
 			if (hasHwoOrAyushMo) {
@@ -765,8 +797,16 @@ export async function GET(
 		}
 
 		// Add grand total row
-		// Start with Facility, District, With TB(Yes/No), [HWO/AYUSH MO if applicable]
-		const grandRow: any[] = ["GRAND TOTAL", "", ""];
+		// Start with Facility, District, [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
+		const grandRow: any[] = ["GRAND TOTAL", ""];
+		if (hasTbIndicators) {
+			if (hasCt001Indicator) {
+				grandRow.push("");
+			}
+			if (hasDc001Indicator) {
+				grandRow.push("");
+			}
+		}
 		if (hasHwoOrAyushMo) {
 			grandRow.push("");
 		}
@@ -792,7 +832,16 @@ export async function GET(
 		let colIndex = 1;
 		worksheet.getColumn(colIndex++).width = 24; // Facility
 		worksheet.getColumn(colIndex++).width = 18; // District
-		worksheet.getColumn(colIndex++).width = 16; // With TB(Yes/No)
+
+		// Set width for conditional answer columns if TB indicators exist
+		if (hasTbIndicators) {
+			if (hasCt001Indicator) {
+				worksheet.getColumn(colIndex++).width = 24; // CT001 Conditional Answer
+			}
+			if (hasDc001Indicator) {
+				worksheet.getColumn(colIndex++).width = 24; // DC001 Conditional Answer
+			}
+		}
 
 		// Only set width for HWO/AYUSH MO column if facility type has these workers
 		if (hasHwoOrAyushMo) {
@@ -817,16 +866,27 @@ export async function GET(
 		worksheet.getRow(2).height = 28;
 
 		// Merge header cells
-		// Column order: Facility (1), District (2), With TB(Yes/No) (3), [HWO/AYUSH MO (4) if applicable]
+		// Column order: Facility (1), District (2), [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
 		worksheet.mergeCells(1, 1, 2, 1); // Facility
 		worksheet.mergeCells(1, 2, 2, 2); // District
-		worksheet.mergeCells(1, 3, 2, 3); // With TB(Yes/No)
+
+		// Merge conditional answer columns if TB indicators exist
+		let baseColCount = 2; // Facility, District
+		if (hasTbIndicators) {
+			if (hasCt001Indicator) {
+				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // CT001 Conditional Answer
+				baseColCount++;
+			}
+			if (hasDc001Indicator) {
+				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // DC001 Conditional Answer
+				baseColCount++;
+			}
+		}
 
 		// Only merge HWO/AYUSH MO column if facility type has these workers
-		let baseColCount = 3; // Facility, District, With TB(Yes/No)
 		if (hasHwoOrAyushMo) {
-			worksheet.mergeCells(1, 4, 2, 4); // HWO / AYUSH MO
-			baseColCount = 4;
+			worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // HWO / AYUSH MO
+			baseColCount++;
 		}
 
 		let indicatorColumnOffset = 0;

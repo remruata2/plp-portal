@@ -105,13 +105,13 @@ const DialogOverlay = React.forwardRef<
 			leaveTo="opacity-0"
 		>
 			<div
-				ref={ref}
-				className={cn(
+    ref={ref}
+    className={cn(
 					"fixed inset-0 z-50 bg-background/80 backdrop-blur-sm",
-					className
-				)}
-				{...props}
-			/>
+      className
+    )}
+    {...props}
+  />
 		</Transition.Child>
 	);
 });
@@ -122,8 +122,8 @@ const DialogContent = React.forwardRef<
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
 	return (
-		<DialogPortal>
-			<DialogOverlay />
+  <DialogPortal>
+    <DialogOverlay />
 			<Transition.Child
 				as={React.Fragment}
 				enter="ease-out duration-200"
@@ -134,50 +134,50 @@ const DialogContent = React.forwardRef<
 				leaveTo="opacity-0 scale-95"
 			>
 				<HeadlessDialog.Panel
-					ref={ref}
-					className={cn(
+      ref={ref}
+      className={cn(
 						"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg",
-						className
-					)}
-					{...props}
-				>
-					{children}
+        className
+      )}
+      {...props}
+    >
+      {children}
 					<DialogClose>
-						<X className="h-4 w-4" />
-						<span className="sr-only">Close</span>
+        <X className="h-4 w-4" />
+        <span className="sr-only">Close</span>
 					</DialogClose>
 				</HeadlessDialog.Panel>
 			</Transition.Child>
-		</DialogPortal>
+  </DialogPortal>
 	);
 });
 DialogContent.displayName = "DialogContent";
 
 const DialogHeader = ({
-	className,
-	...props
+  className,
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div
-		className={cn(
-			"flex flex-col space-y-1.5 text-center sm:text-left",
-			className
-		)}
-		{...props}
-	/>
+  <div
+    className={cn(
+      "flex flex-col space-y-1.5 text-center sm:text-left",
+      className
+    )}
+    {...props}
+  />
 );
 DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({
-	className,
-	...props
+  className,
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div
-		className={cn(
-			"flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-			className
-		)}
-		{...props}
-	/>
+  <div
+    className={cn(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    )}
+    {...props}
+  />
 );
 DialogFooter.displayName = "DialogFooter";
 
@@ -186,13 +186,13 @@ const DialogTitle = React.forwardRef<
 	React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
 	<HeadlessDialog.Title
-		ref={ref}
-		className={cn(
-			"text-lg font-semibold leading-none tracking-tight",
-			className
-		)}
-		{...props}
-	/>
+    ref={ref}
+    className={cn(
+      "text-lg font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
 ));
 DialogTitle.displayName = "DialogTitle";
 
@@ -201,10 +201,10 @@ const DialogDescription = React.forwardRef<
 	React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
 	<HeadlessDialog.Description
-		ref={ref}
-		className={cn("text-sm text-muted-foreground", className)}
-		{...props}
-	/>
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
 ));
 DialogDescription.displayName = "DialogDescription";
 
@@ -226,13 +226,13 @@ const DialogWithContext = ({
 
 export {
 	DialogWithContext as Dialog,
-	DialogPortal,
-	DialogOverlay,
-	DialogClose,
-	DialogTrigger,
-	DialogContent,
-	DialogHeader,
-	DialogFooter,
-	DialogTitle,
-	DialogDescription,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
 };
