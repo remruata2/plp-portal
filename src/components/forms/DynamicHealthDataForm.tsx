@@ -208,9 +208,14 @@ export default function DynamicHealthDataForm({
 					initialData[mapping.formFieldName] = "";
 				});
 
-				// Initialize boolean fields for conditional answers
-				initialData.indicator_ct001_conditional_answer = "";
-				initialData.indicator_dc001_conditional_answer = "";
+				// Initialize boolean fields for conditional answers - use facility-aware field codes
+				if (facilityType === "PHC") {
+					initialData.indicator_ct001_conditional_answer_phc = "";
+					initialData.indicator_dc001_conditional_answer_phc = "";
+				} else {
+					initialData.indicator_ct001_conditional_answer = "";
+					initialData.indicator_dc001_conditional_answer = "";
+				}
 
 				setFormData(initialData);
 
@@ -285,12 +290,19 @@ export default function DynamicHealthDataForm({
 		const indicatorMapping: Record<string, { code: string; name: string }> = {
 			// Population data (foundational demographic information)
 			total_population: { code: "POP001", name: "Population Data" },
+			total_population_phc: { code: "POP001", name: "Population Data" }, // PHC-specific
 			population_30_plus: { code: "POP001", name: "Population Data" },
+			population_30_plus_phc: { code: "POP001", name: "Population Data" }, // PHC-specific
 			population_30_plus_female: { code: "POP001", name: "Population Data" },
+			population_30_plus_female_phc: {
+				code: "POP001",
+				name: "Population Data",
+			}, // PHC-specific
 			population_18_plus: { code: "POP001", name: "Population Data" },
 
 			// ANC indicators - facility-specific mappings
 			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
+			anc_due_list_phc: { code: "AF001_PHC", name: "Total ANC footfall" }, // PHC-specific
 			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
 			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall" },
 			anc_footfall_sc: {
@@ -305,9 +317,11 @@ export default function DynamicHealthDataForm({
 
 			// RI indicators
 			ri_sessions_planned: { code: "RS001", name: "RI sessions held" },
+			ri_sessions_planned_phc: { code: "RS001", name: "RI sessions held" }, // PHC-specific
 			ri_sessions_held: { code: "RS001", name: "RI sessions held" },
 			ri_beneficiaries_due: { code: "RF001", name: "RI footfall" },
 			ri_footfall: { code: "RF001", name: "RI footfall" },
+			ri_footfall_phc: { code: "RF001", name: "RI footfall" }, // PHC-specific
 
 			// TB indicators - facility-specific mappings
 			pulmonary_tb_patients: {
@@ -318,15 +332,27 @@ export default function DynamicHealthDataForm({
 				code: "DC001",
 				name: "No. of TB patients visited for Differentiated TB Care",
 			},
+			total_tb_patients_phc: {
+				code: "DC001",
+				name: "No. of TB patients visited for Differentiated TB Care",
+			}, // PHC-specific
 			// Boolean conditional answer fields - positioned as 7th and 8th inputs
 			indicator_ct001_conditional_answer: {
 				code: "CT001",
 				name: "Household visited for TB contact tracing",
 			},
+			indicator_ct001_conditional_answer_phc: {
+				code: "CT001",
+				name: "Household visited for TB contact tracing",
+			}, // PHC-specific
 			indicator_dc001_conditional_answer: {
 				code: "DC001",
 				name: "No. of TB patients visited for Differentiated TB Care",
 			},
+			indicator_dc001_conditional_answer_phc: {
+				code: "DC001",
+				name: "No. of TB patients visited for Differentiated TB Care",
+			}, // PHC-specific
 			tb_screenings: {
 				code: "TS001_PHC",
 				name: "Individuals screened for TB",
@@ -431,6 +457,10 @@ export default function DynamicHealthDataForm({
 				code: "EP001",
 				name: "No of Elderly & Palliative patients visited",
 			},
+			bedridden_patients_phc: {
+				code: "EP001",
+				name: "No of Elderly & Palliative patients visited",
+			}, // PHC-specific
 			elderly_palliative_visits: {
 				code: "EP001",
 				name: "No of Elderly & Palliative patients visited",
@@ -498,13 +528,17 @@ export default function DynamicHealthDataForm({
 		// Sort fields within each group to put boolean conditional answer fields first
 		Object.keys(groups).forEach((indicatorCode) => {
 			groups[indicatorCode].fields.sort((a, b) => {
-				// Put boolean conditional answer fields first
+				// Put boolean conditional answer fields first (both regular and PHC variants)
 				const aIsBoolean =
 					a.formFieldName === "indicator_ct001_conditional_answer" ||
-					a.formFieldName === "indicator_dc001_conditional_answer";
+					a.formFieldName === "indicator_dc001_conditional_answer" ||
+					a.formFieldName === "indicator_ct001_conditional_answer_phc" ||
+					a.formFieldName === "indicator_dc001_conditional_answer_phc";
 				const bIsBoolean =
 					b.formFieldName === "indicator_ct001_conditional_answer" ||
-					b.formFieldName === "indicator_dc001_conditional_answer";
+					b.formFieldName === "indicator_dc001_conditional_answer" ||
+					b.formFieldName === "indicator_ct001_conditional_answer_phc" ||
+					b.formFieldName === "indicator_dc001_conditional_answer_phc";
 
 				if (aIsBoolean && !bIsBoolean) return -1;
 				if (!aIsBoolean && bIsBoolean) return 1;
@@ -593,15 +627,21 @@ export default function DynamicHealthDataForm({
 				}
 			}
 
-			// Sync boolean conditional answer fields with indicatorAnswers state
-			if (fieldName === "indicator_ct001_conditional_answer") {
+			// Sync boolean conditional answer fields with indicatorAnswers state (both regular and PHC variants)
+			if (
+				fieldName === "indicator_ct001_conditional_answer" ||
+				fieldName === "indicator_ct001_conditional_answer_phc"
+			) {
 				const answer = value === "1" || value === true ? "yes" : "no";
 				setIndicatorAnswers((prev) => ({ ...prev, CT001: answer }));
 				// Also clear dependent field if "No"
 				if (answer === "no") {
 					newData.tb_contact_tracing_households = "";
 				}
-			} else if (fieldName === "indicator_dc001_conditional_answer") {
+			} else if (
+				fieldName === "indicator_dc001_conditional_answer" ||
+				fieldName === "indicator_dc001_conditional_answer_phc"
+			) {
 				const answer = value === "1" || value === true ? "yes" : "no";
 				setIndicatorAnswers((prev) => ({ ...prev, DC001: answer }));
 				// Also clear dependent field if "No"
@@ -921,16 +961,24 @@ export default function DynamicHealthDataForm({
 		// Store in UI state (for show/hide logic)
 		setIndicatorAnswers((prev) => ({ ...prev, [indicatorCode]: answer }));
 
-		// ALSO store in formData for database persistence
+		// ALSO store in formData for database persistence - use facility-aware field codes
 		if (indicatorCode === "CT001") {
+			const fieldName =
+				facilityType === "PHC"
+					? "indicator_ct001_conditional_answer_phc"
+					: "indicator_ct001_conditional_answer";
 			setFormData((prev) => ({
 				...prev,
-				indicator_ct001_conditional_answer: answer === "yes" ? "1" : "0",
+				[fieldName]: answer === "yes" ? "1" : "0",
 			}));
 		} else if (indicatorCode === "DC001") {
+			const fieldName =
+				facilityType === "PHC"
+					? "indicator_dc001_conditional_answer_phc"
+					: "indicator_dc001_conditional_answer";
 			setFormData((prev) => ({
 				...prev,
-				indicator_dc001_conditional_answer: answer === "yes" ? "1" : "0",
+				[fieldName]: answer === "yes" ? "1" : "0",
 			}));
 		}
 
@@ -1467,9 +1515,14 @@ export default function DynamicHealthDataForm({
 			fieldMappings.forEach((mapping) => {
 				initialData[mapping.formFieldName] = "";
 			});
-			// Reset boolean fields for conditional answers
-			initialData.indicator_ct001_conditional_answer = "";
-			initialData.indicator_dc001_conditional_answer = "";
+			// Reset boolean fields for conditional answers - use facility-aware field codes
+			if (facilityType === "PHC") {
+				initialData.indicator_ct001_conditional_answer_phc = "";
+				initialData.indicator_dc001_conditional_answer_phc = "";
+			} else {
+				initialData.indicator_ct001_conditional_answer = "";
+				initialData.indicator_dc001_conditional_answer = "";
+			}
 			setFormData(initialData);
 
 			// Reset validation state
@@ -1703,10 +1756,14 @@ export default function DynamicHealthDataForm({
 								group.indicatorCode === "CT001" ||
 								group.indicatorCode === "DC001";
 
-							// Get the boolean field value from formData for conditional indicators
+							// Get the boolean field value from formData for conditional indicators - use facility-aware field codes
 							const booleanFieldName =
 								group.indicatorCode === "CT001"
-									? "indicator_ct001_conditional_answer"
+									? facilityType === "PHC"
+										? "indicator_ct001_conditional_answer_phc"
+										: "indicator_ct001_conditional_answer"
+									: facilityType === "PHC"
+									? "indicator_dc001_conditional_answer_phc"
 									: "indicator_dc001_conditional_answer";
 							const booleanFieldValue = formData[booleanFieldName];
 							const booleanAnswer =
@@ -1722,18 +1779,28 @@ export default function DynamicHealthDataForm({
 									? booleanAnswer
 									: indicatorAnswers[group.indicatorCode] ?? null;
 
-							// Separate boolean fields from other fields
+							// Separate boolean fields from other fields (both regular and PHC variants)
 							const booleanFields = group.fields.filter(
 								(mapping) =>
 									mapping.formFieldName ===
 										"indicator_ct001_conditional_answer" ||
-									mapping.formFieldName === "indicator_dc001_conditional_answer"
+									mapping.formFieldName ===
+										"indicator_dc001_conditional_answer" ||
+									mapping.formFieldName ===
+										"indicator_ct001_conditional_answer_phc" ||
+									mapping.formFieldName ===
+										"indicator_dc001_conditional_answer_phc"
 							);
 							const otherFields = group.fields.filter(
 								(mapping) =>
 									mapping.formFieldName !==
 										"indicator_ct001_conditional_answer" &&
-									mapping.formFieldName !== "indicator_dc001_conditional_answer"
+									mapping.formFieldName !==
+										"indicator_dc001_conditional_answer" &&
+									mapping.formFieldName !==
+										"indicator_ct001_conditional_answer_phc" &&
+									mapping.formFieldName !==
+										"indicator_dc001_conditional_answer_phc"
 							);
 
 							return (
@@ -1775,6 +1842,7 @@ export default function DynamicHealthDataForm({
 												// Use effectiveAnswer from boolean field or indicatorAnswers
 												answer={effectiveAnswer}
 												showConditionalQuestion={false} // Hide the question UI since we're using boolean field
+												facilityType={facilityType} // Pass facility type for field code resolution
 												onConditionChange={(conditionMet) => {
 													// Handle condition change if needed
 													console.log(
@@ -1785,15 +1853,23 @@ export default function DynamicHealthDataForm({
 												onYesNoChange={(answer) => {
 													// Handle Yes/No answer change or reset (null)
 													handleYesNoAnswer(group.indicatorCode, answer);
-													// Also update the boolean field directly
+													// Also update the boolean field directly - use facility-aware field code
 													if (group.indicatorCode === "CT001") {
+														const fieldName =
+															facilityType === "PHC"
+																? "indicator_ct001_conditional_answer_phc"
+																: "indicator_ct001_conditional_answer";
 														handleInputChange(
-															"indicator_ct001_conditional_answer",
+															fieldName,
 															answer === "yes" ? "1" : "0"
 														);
 													} else if (group.indicatorCode === "DC001") {
+														const fieldName =
+															facilityType === "PHC"
+																? "indicator_dc001_conditional_answer_phc"
+																: "indicator_dc001_conditional_answer";
 														handleInputChange(
-															"indicator_dc001_conditional_answer",
+															fieldName,
 															answer === "yes" ? "1" : "0"
 														);
 													}

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Info, AlertCircle, CheckCircle } from "lucide-react";
+import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 
 interface ConditionalIndicatorDisplayProps {
 	indicator: {
@@ -29,6 +30,8 @@ interface ConditionalIndicatorDisplayProps {
 	onYesNoChange?: (answer: "yes" | "no" | null) => void;
 	// New: external Yes/No selection controlled by parent, purely for visibility gating
 	answer?: "yes" | "no" | null;
+	// Facility type for field code resolution
+	facilityType?: string;
 }
 
 export default function ConditionalIndicatorDisplay({
@@ -39,6 +42,7 @@ export default function ConditionalIndicatorDisplay({
 	children,
 	onYesNoChange,
 	answer,
+	facilityType,
 }: ConditionalIndicatorDisplayProps) {
 	const [conditionMet, setConditionMet] = useState<boolean | null>(null);
 	const [shouldShowIndicator, setShouldShowIndicator] = useState(false);
@@ -49,15 +53,19 @@ export default function ConditionalIndicatorDisplay({
 		switch (indicator.code) {
 			case "CT001": // Household visited for TB contact tracing
 				return {
-					field: "pulmonary_tb_patients", // Updated to match source files
+					field: "pulmonary_tb_patients", // This field doesn't have PHC variant
 					text: "Are there any patients with Pulmonary TB in your catchment area (co-located SC)?",
 					conditionField: "pulmonary_tb_patients",
 				};
 			case "DC001": // No. of TB patients visited for Differentiated TB Care
+				const totalTbFieldCode = getFieldCodeForFacilityType(
+					"total_tb_patients",
+					facilityType
+				);
 				return {
-					field: "total_tb_patients", // Updated to match source files
+					field: totalTbFieldCode, // Use facility-aware field code
 					text: "Are there any patients with any type of TB ?",
-					conditionField: "total_tb_patients",
+					conditionField: totalTbFieldCode,
 				};
 			default:
 				return null;
