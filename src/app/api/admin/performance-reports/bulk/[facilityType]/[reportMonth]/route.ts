@@ -388,6 +388,37 @@ export async function GET(
 			matchesIndicatorCode(ind.code, "DC001")
 		);
 
+		// Fetch actual field names for conditional answer fields to use as column headers
+		let ct001FieldName = "CT001 Conditional Answer"; // Default fallback
+		let dc001FieldName = "DC001 Conditional Answer"; // Default fallback
+
+		if (hasTbIndicators) {
+			const ct001FieldCode = getFieldCodeForFacilityType(
+				"indicator_ct001_conditional_answer",
+				facilityType.name
+			);
+			const dc001FieldCode = getFieldCodeForFacilityType(
+				"indicator_dc001_conditional_answer",
+				facilityType.name
+			);
+
+			const ct001Field = await prisma.field.findFirst({
+				where: { code: ct001FieldCode, is_active: true },
+				select: { name: true },
+			});
+			const dc001Field = await prisma.field.findFirst({
+				where: { code: dc001FieldCode, is_active: true },
+				select: { name: true },
+			});
+
+			if (ct001Field) {
+				ct001FieldName = ct001Field.name;
+			}
+			if (dc001Field) {
+				dc001FieldName = dc001Field.name;
+			}
+		}
+
 		// Check if facility type has HWO or AYUSH MO workers
 		// Only SC_HWC has HWO, A_HWC has AYUSH MO
 		// PHC, UPHC, U_HWC have MO (team-based, not shown individually)
@@ -500,10 +531,10 @@ export async function GET(
 			// Add conditional answer fields if TB indicators exist
 			if (hasTbIndicators) {
 				if (hasCt001Indicator) {
-					row["CT001 Conditional Answer"] = ct001ConditionalValue;
+					row[ct001FieldName] = ct001ConditionalValue;
 				}
 				if (hasDc001Indicator) {
-					row["DC001 Conditional Answer"] = dc001ConditionalValue;
+					row[dc001FieldName] = dc001ConditionalValue;
 				}
 			}
 
@@ -730,18 +761,18 @@ export async function GET(
 		}
 
 		// Build worksheet with compact merged headers
-		// Column order: Facility, District, [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
+		// Column order: Facility, District, [conditional answer fields if applicable], [HWO/AYUSH MO if applicable]
 		const headerTop: any[] = ["Facility", "District"];
 		const headerSub: any[] = ["", ""];
 
 		// Add conditional answer columns if TB indicators exist
 		if (hasTbIndicators) {
 			if (hasCt001Indicator) {
-				headerTop.push("CT001 Conditional Answer");
+				headerTop.push(ct001FieldName);
 				headerSub.push("");
 			}
 			if (hasDc001Indicator) {
-				headerTop.push("DC001 Conditional Answer");
+				headerTop.push(dc001FieldName);
 				headerSub.push("");
 			}
 		}
@@ -768,10 +799,10 @@ export async function GET(
 			// Add conditional answer columns if TB indicators exist
 			if (hasTbIndicators) {
 				if (hasCt001Indicator) {
-					line.push(r["CT001 Conditional Answer"] ?? "");
+					line.push(r[ct001FieldName] ?? "");
 				}
 				if (hasDc001Indicator) {
-					line.push(r["DC001 Conditional Answer"] ?? "");
+					line.push(r[dc001FieldName] ?? "");
 				}
 			}
 
@@ -797,7 +828,7 @@ export async function GET(
 		}
 
 		// Add grand total row
-		// Start with Facility, District, [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
+		// Start with Facility, District, [conditional answer fields if applicable], [HWO/AYUSH MO if applicable]
 		const grandRow: any[] = ["GRAND TOTAL", ""];
 		if (hasTbIndicators) {
 			if (hasCt001Indicator) {
@@ -836,10 +867,10 @@ export async function GET(
 		// Set width for conditional answer columns if TB indicators exist
 		if (hasTbIndicators) {
 			if (hasCt001Indicator) {
-				worksheet.getColumn(colIndex++).width = 24; // CT001 Conditional Answer
+				worksheet.getColumn(colIndex++).width = 24; // Conditional answer field
 			}
 			if (hasDc001Indicator) {
-				worksheet.getColumn(colIndex++).width = 24; // DC001 Conditional Answer
+				worksheet.getColumn(colIndex++).width = 24; // Conditional answer field
 			}
 		}
 
@@ -866,7 +897,7 @@ export async function GET(
 		worksheet.getRow(2).height = 28;
 
 		// Merge header cells
-		// Column order: Facility (1), District (2), [CT001 Conditional Answer if applicable], [DC001 Conditional Answer if applicable], [HWO/AYUSH MO if applicable]
+		// Column order: Facility (1), District (2), [conditional answer fields if applicable], [HWO/AYUSH MO if applicable]
 		worksheet.mergeCells(1, 1, 2, 1); // Facility
 		worksheet.mergeCells(1, 2, 2, 2); // District
 
@@ -874,11 +905,11 @@ export async function GET(
 		let baseColCount = 2; // Facility, District
 		if (hasTbIndicators) {
 			if (hasCt001Indicator) {
-				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // CT001 Conditional Answer
+				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // Conditional answer field
 				baseColCount++;
 			}
 			if (hasDc001Indicator) {
-				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // DC001 Conditional Answer
+				worksheet.mergeCells(1, baseColCount + 1, 2, baseColCount + 1); // Conditional answer field
 				baseColCount++;
 			}
 		}
