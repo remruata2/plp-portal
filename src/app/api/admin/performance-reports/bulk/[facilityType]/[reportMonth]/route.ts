@@ -639,16 +639,40 @@ export async function GET(
 					}
 
 					// Calculate effective max remuneration using centralized helper
-					const conditionResult = calculateEffectiveRemuneration(
-						remuneration,
-						fieldValues,
-						indicator.code,
-						baseResult.achievement,
-						denominatorValue,
-						facilityType
-					);
-					const effectiveMaxRemuneration =
-						conditionResult.effectiveMaxRemuneration;
+					// Only if remuneration exists, otherwise use base result
+					let conditionResult;
+					let effectiveMaxRemuneration = baseMaxRemuneration;
+					if (remuneration) {
+						try {
+							conditionResult = calculateEffectiveRemuneration(
+								remuneration,
+								fieldValues,
+								indicator.code,
+								baseResult.achievement,
+								denominatorValue,
+								facility.facility_type.name
+							);
+							effectiveMaxRemuneration =
+								conditionResult.effectiveMaxRemuneration;
+						} catch (error) {
+							console.error(
+								`Error calculating effective remuneration for indicator ${indicator.code}:`,
+								error
+							);
+							// Fallback to base result if calculation fails
+							conditionResult = {
+								effectiveMaxRemuneration: baseMaxRemuneration,
+								displayPercentage: baseResult.achievement,
+							};
+							effectiveMaxRemuneration = baseMaxRemuneration;
+						}
+					} else {
+						// No remuneration config, use base result
+						conditionResult = {
+							effectiveMaxRemuneration: baseMaxRemuneration,
+							displayPercentage: baseResult.achievement,
+						};
+					}
 
 					// Recalculate with effective max remuneration if different
 					try {
@@ -665,7 +689,8 @@ export async function GET(
 								  )
 								: baseResult;
 
-						achievementPercentage = conditionResult.displayPercentage;
+						achievementPercentage =
+							conditionResult?.displayPercentage ?? baseResult.achievement;
 						incentive = Math.round(result.remuneration);
 					} catch (error) {
 						console.error(

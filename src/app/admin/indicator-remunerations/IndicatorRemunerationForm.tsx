@@ -174,6 +174,8 @@ export default function IndicatorRemunerationForm({
 					body: JSON.stringify({
 						facilityTypeId: payload.facilityTypeId,
 						facility_type_id: payload.facility_type_id,
+						indicatorId: payload.indicatorId,
+						indicator_id: payload.indicator_id,
 						base_amount: payload.base_amount,
 						conditional_amount: payload.conditional_amount,
 						condition_type: payload.condition_type,
@@ -249,7 +251,7 @@ export default function IndicatorRemunerationForm({
 							<Select
 								value={values.indicator_id}
 								onValueChange={(v) => onChange("indicator_id", v)}
-								disabled={mode === "edit"}
+								required
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select indicator" />

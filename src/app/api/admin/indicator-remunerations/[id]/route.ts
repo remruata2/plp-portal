@@ -78,6 +78,8 @@ export async function PATCH(
 		const {
 			facilityTypeId,
 			facility_type_id,
+			indicatorId,
+			indicator_id,
 			base_amount,
 			conditional_amount,
 			condition_type,
@@ -103,8 +105,23 @@ export async function PATCH(
 
 		const data: any = {};
 
+		// Handle indicator change
+		const indicatorIdRaw = indicatorId ?? indicator_id;
+		let newIndicatorId: number | undefined;
+		if (indicatorIdRaw !== undefined) {
+			const indicatorIdNum = Number(indicatorIdRaw);
+			if (!Number.isFinite(indicatorIdNum)) {
+				return NextResponse.json(
+					{ error: "indicator_id must be a number" },
+					{ status: 400 }
+				);
+			}
+			newIndicatorId = indicatorIdNum;
+		}
+
 		// Handle facility type change
 		const facilityTypeIdRaw = facilityTypeId ?? facility_type_id;
+		let newFacilityTypeRemunerationId: number | undefined;
 		if (facilityTypeIdRaw !== undefined) {
 			const facilityTypeIdStr = String(facilityTypeIdRaw).trim();
 			if (facilityTypeIdStr) {
@@ -119,30 +136,48 @@ export async function PATCH(
 					);
 				}
 
-				// Check if changing facility type would create a duplicate
 				if (ftr.id !== currentRemuneration.facility_type_remuneration_id) {
-					// Check if a remuneration already exists for the new facility type and same indicator
-					const existing = await prisma.indicator_remuneration.findFirst({
-						where: {
-							facility_type_remuneration_id: ftr.id,
-							indicator_id: currentRemuneration.indicator_id,
-							id: { not: id }, // Exclude current record
-						},
-					});
-
-					if (existing) {
-						return NextResponse.json(
-							{
-								error:
-									"Remuneration already exists for this indicator and facility type",
-							},
-							{ status: 409 }
-						);
-					}
-
-					data.facility_type_remuneration_id = ftr.id;
+					newFacilityTypeRemunerationId = ftr.id;
 				}
 			}
+		}
+
+		// Determine the final indicator_id and facility_type_remuneration_id to check for duplicates
+		const finalIndicatorId = newIndicatorId ?? currentRemuneration.indicator_id;
+		const finalFacilityTypeRemunerationId =
+			newFacilityTypeRemunerationId ??
+			currentRemuneration.facility_type_remuneration_id;
+
+		// Check if changing indicator or facility type would create a duplicate
+		if (
+			newIndicatorId !== undefined ||
+			newFacilityTypeRemunerationId !== undefined
+		) {
+			const existing = await prisma.indicator_remuneration.findFirst({
+				where: {
+					facility_type_remuneration_id: finalFacilityTypeRemunerationId,
+					indicator_id: finalIndicatorId,
+					id: { not: id }, // Exclude current record
+				},
+			});
+
+			if (existing) {
+				return NextResponse.json(
+					{
+						error:
+							"Remuneration already exists for this indicator and facility type",
+					},
+					{ status: 409 }
+				);
+			}
+		}
+
+		// Apply changes
+		if (newIndicatorId !== undefined) {
+			data.indicator_id = newIndicatorId;
+		}
+		if (newFacilityTypeRemunerationId !== undefined) {
+			data.facility_type_remuneration_id = newFacilityTypeRemunerationId;
 		}
 		if (base_amount !== undefined) {
 			const baseAmountNum = Number(base_amount);
