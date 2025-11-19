@@ -1370,7 +1370,17 @@ export default function DynamicHealthDataForm({
 						fieldValue.booleanValue = formValue === "1" || formValue === true;
 						break;
 					case "numeric":
-						fieldValue.numericValue = parseFloat(formValue) || 0;
+						// Handle numeric values properly - preserve actual numbers, only default to 0 for empty/undefined
+						if (
+							formValue === undefined ||
+							formValue === null ||
+							formValue === ""
+						) {
+							fieldValue.numericValue = null;
+						} else {
+							const parsed = parseFloat(formValue);
+							fieldValue.numericValue = isNaN(parsed) ? null : parsed;
+						}
 						break;
 					case "text":
 					default:
@@ -1388,6 +1398,38 @@ export default function DynamicHealthDataForm({
 
 			console.log("Submitting fieldValues to API:", fieldValues);
 			console.log("Form data keys:", Object.keys(formData));
+			console.log(
+				"Field mappings:",
+				fieldMappings.map((m) => ({
+					formFieldName: m.formFieldName,
+					databaseFieldId: m.databaseFieldId,
+					description: m.description,
+				}))
+			);
+
+			// Debug: Check if tb_screenings field is in mappings and formData
+			const tbScreeningsMapping = fieldMappings.find(
+				(m) =>
+					m.formFieldName.includes("tb_screenings") ||
+					(m.description?.toLowerCase().includes("tb") &&
+						m.description?.toLowerCase().includes("screen"))
+			);
+			if (tbScreeningsMapping) {
+				console.log("TB Screenings mapping found:", tbScreeningsMapping);
+				console.log(
+					"TB Screenings formData value:",
+					formData[tbScreeningsMapping.formFieldName]
+				);
+				const tbScreeningsFieldValue = fieldValues.find(
+					(fv) => fv.fieldId === tbScreeningsMapping.databaseFieldId
+				);
+				console.log(
+					"TB Screenings fieldValue being submitted:",
+					tbScreeningsFieldValue
+				);
+			} else {
+				console.warn("⚠️ TB Screenings field NOT found in fieldMappings!");
+			}
 			console.log("Selected month/year:", {
 				selectedMonth,
 				selectedYear,
