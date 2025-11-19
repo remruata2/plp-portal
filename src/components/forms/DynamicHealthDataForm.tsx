@@ -715,27 +715,42 @@ export default function DynamicHealthDataForm({
 
 	// Full form validation
 	const validateFullForm = (): FormValidationResult => {
-		const result = validateForm(
-			// Filter out fields that belong to conditional indicators answered "no"
-			(() => {
-				const data: Record<string, any> = {};
-				Object.keys(formData).forEach((key) => {
-					// Check field names directly instead of mapping to indicator codes
-					const isCt001Field = key === "tb_contact_tracing_households";
-					const isDc001Field = key === "tb_differentiated_care_visits";
+		// Filter out conditional fields from both formData and fieldMappings when answer is "no"
+		const filteredFormData: Record<string, any> = {};
+		const filteredFieldMappings = fieldMappings.filter((mapping) => {
+			const isCt001Field =
+				mapping.formFieldName === "tb_contact_tracing_households";
+			const isDc001Field =
+				mapping.formFieldName === "tb_differentiated_care_visits";
 
-					// Skip hidden fields if their conditional answer is "no"
-					if (isCt001Field && indicatorAnswers["CT001"] === "no") {
-						return; // Skip hidden field
-					}
-					if (isDc001Field && indicatorAnswers["DC001"] === "no") {
-						return; // Skip hidden field
-					}
-					data[key] = (formData as any)[key];
-				});
-				return data;
-			})(),
-			fieldMappings,
+			// Exclude conditional fields if their conditional answer is "no"
+			if (isCt001Field && indicatorAnswers["CT001"] === "no") {
+				return false; // Exclude from validation
+			}
+			if (isDc001Field && indicatorAnswers["DC001"] === "no") {
+				return false; // Exclude from validation
+			}
+			return true; // Include in validation
+		});
+
+		// Build filtered formData
+		Object.keys(formData).forEach((key) => {
+			const isCt001Field = key === "tb_contact_tracing_households";
+			const isDc001Field = key === "tb_differentiated_care_visits";
+
+			// Skip hidden fields if their conditional answer is "no"
+			if (isCt001Field && indicatorAnswers["CT001"] === "no") {
+				return; // Skip hidden field
+			}
+			if (isDc001Field && indicatorAnswers["DC001"] === "no") {
+				return; // Skip hidden field
+			}
+			filteredFormData[key] = (formData as any)[key];
+		});
+
+		const result = validateForm(
+			filteredFormData,
+			filteredFieldMappings,
 			facilityType,
 			selectedWorkers,
 			availableWorkers
@@ -999,6 +1014,18 @@ export default function DynamicHealthDataForm({
 				}
 				if (isDc001Conditional) {
 					next.tb_differentiated_care_visits = "";
+				}
+				return next;
+			});
+
+			// Clear validation errors for conditional fields when switching to "No"
+			setFieldErrors((prev) => {
+				const next = { ...prev };
+				if (isCt001Conditional) {
+					next.tb_contact_tracing_households = [];
+				}
+				if (isDc001Conditional) {
+					next.tb_differentiated_care_visits = [];
 				}
 				return next;
 			});

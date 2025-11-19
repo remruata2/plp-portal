@@ -125,6 +125,7 @@ export async function POST(
 			},
 			data: {
 				is_active: false,
+				updated_at: new Date(),
 			},
 		});
 
@@ -146,6 +147,7 @@ export async function POST(
 						contact_number: worker.contact_number || null,
 						email: worker.email || null,
 						is_active: true,
+						updated_at: new Date(),
 					},
 				});
 			} else {
@@ -159,6 +161,7 @@ export async function POST(
 						contact_number: worker.contact_number || null,
 						email: worker.email || null,
 						is_active: true,
+						updated_at: new Date(),
 					},
 				});
 			}
