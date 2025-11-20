@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
 		const districtId = searchParams.get("districtId");
 		const facilityTypeId = searchParams.get("facilityTypeId");
 		const searchQuery = searchParams.get("search");
+		const year = searchParams.get("year");
+		const month = searchParams.get("month");
 
 		// Build where clause for FieldValue using related Facility filters
 		const where: any = {
@@ -42,6 +44,21 @@ export async function GET(request: NextRequest) {
 				(where.facility as any).name = {
 					contains: searchQuery,
 					mode: "insensitive",
+				};
+			}
+		}
+
+		if (year || month) {
+			const paddedMonth = month ? month.padStart(2, "0") : null;
+			if (year && paddedMonth) {
+				where.report_month = `${year}-${paddedMonth}`;
+			} else if (year) {
+				where.report_month = {
+					startsWith: `${year}-`,
+				};
+			} else if (paddedMonth) {
+				where.report_month = {
+					endsWith: `-${paddedMonth}`,
 				};
 			}
 		}

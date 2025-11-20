@@ -61,6 +61,8 @@ export default function HealthDataPage() {
   >([]);
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [selectedFacilityType, setSelectedFacilityType] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>("");
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
@@ -103,6 +105,8 @@ export default function HealthDataPage() {
       if (selectedDistrict) params.set("districtId", selectedDistrict);
       if (selectedFacilityType) params.set("facilityTypeId", selectedFacilityType);
       if (debouncedSearch) params.set("search", debouncedSearch);
+      if (selectedYear) params.set("year", selectedYear);
+      if (selectedMonth) params.set("month", selectedMonth);
 
       const response = await fetch(
         `/api/admin/health-data/submissions${params.toString() ? `?${params.toString()}` : ""}`,
@@ -134,7 +138,7 @@ export default function HealthDataPage() {
     if (session?.user) {
       loadSubmissions();
     }
-  }, [selectedDistrict, selectedFacilityType, debouncedSearch]);
+  }, [selectedDistrict, selectedFacilityType, debouncedSearch, selectedYear, selectedMonth]);
 
   const loadFilterOptions = async () => {
     try {
@@ -326,6 +330,23 @@ export default function HealthDataPage() {
     return <Badge variant={config.variant}>{config.text}</Badge>;
   };
 
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, idx) => (currentYear - idx).toString());
+  const months = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -354,7 +375,7 @@ export default function HealthDataPage() {
 
       <Card>
         <CardContent className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
             <div>
               <label className="text-xs font-medium text-gray-600">District</label>
               <Select value={selectedDistrict} onValueChange={(v) => setSelectedDistrict(v)}>
@@ -385,6 +406,36 @@ export default function HealthDataPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600">Year</label>
+              <Select value={selectedYear} onValueChange={(v) => setSelectedYear(v)}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="All years" />
+                </SelectTrigger>
+                <SelectContent>
+                  {years.map((year) => (
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600">Month</label>
+              <Select value={selectedMonth} onValueChange={(v) => setSelectedMonth(v)}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="All months" />
+                </SelectTrigger>
+                <SelectContent>
+                  {months.map((month) => (
+                    <SelectItem key={month.value} value={month.value}>
+                      {month.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="md:col-span-2">
               <label className="text-xs font-medium text-gray-600">Search facility</label>
               <Input
@@ -395,7 +446,11 @@ export default function HealthDataPage() {
               />
             </div>
           </div>
-          {(selectedDistrict || selectedFacilityType || debouncedSearch) && (
+          {(selectedDistrict ||
+            selectedFacilityType ||
+            debouncedSearch ||
+            selectedYear ||
+            selectedMonth) && (
             <div className="mt-3">
               <Button
                 variant="outline"
@@ -404,6 +459,8 @@ export default function HealthDataPage() {
                   setSelectedDistrict("");
                   setSelectedFacilityType("");
                   setSearch("");
+                  setSelectedYear("");
+                  setSelectedMonth("");
                 }}
               >
                 Clear filters
