@@ -32489,7 +32489,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateInput = {
-    id?: string
+    id: string
     report_month: string
     actual_value?: number | null
     target_value?: NullableJsonNullValueInput | InputJsonValue
@@ -32509,7 +32509,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordUncheckedCreateInput = {
-    id?: string
+    id: string
     facility_id: string
     report_month: string
     indicator_id?: number | null
@@ -32569,7 +32569,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateManyInput = {
-    id?: string
+    id: string
     facility_id: string
     report_month: string
     indicator_id?: number | null
@@ -33111,7 +33111,7 @@ export namespace Prisma {
   }
 
   export type familyCreateInput = {
-    id?: string
+    id: string
     house_no: string
     floor_no?: string | null
     no_of_couples?: number
@@ -33127,7 +33127,7 @@ export namespace Prisma {
   }
 
   export type familyUncheckedCreateInput = {
-    id?: string
+    id: string
     section_id: string
     house_no: string
     floor_no?: string | null
@@ -33175,7 +33175,7 @@ export namespace Prisma {
   }
 
   export type familyCreateManyInput = {
-    id?: string
+    id: string
     section_id: string
     house_no: string
     floor_no?: string | null
@@ -33219,7 +33219,7 @@ export namespace Prisma {
   }
 
   export type family_memberCreateInput = {
-    id?: string
+    id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
     voter_id?: string | null
@@ -33239,7 +33239,7 @@ export namespace Prisma {
   }
 
   export type family_memberUncheckedCreateInput = {
-    id?: string
+    id: string
     family_id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
@@ -33299,7 +33299,7 @@ export namespace Prisma {
   }
 
   export type family_memberCreateManyInput = {
-    id?: string
+    id: string
     family_id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
@@ -34132,7 +34132,7 @@ export namespace Prisma {
   }
 
   export type sectionCreateInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -34144,7 +34144,7 @@ export namespace Prisma {
   }
 
   export type sectionUncheckedCreateInput = {
-    id?: string
+    id: string
     name: string
     village_id: string
     is_active?: boolean
@@ -34180,7 +34180,7 @@ export namespace Prisma {
   }
 
   export type sectionCreateManyInput = {
-    id?: string
+    id: string
     name: string
     village_id: string
     is_active?: boolean
@@ -34352,7 +34352,7 @@ export namespace Prisma {
   }
 
   export type villageCreateInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -34364,7 +34364,7 @@ export namespace Prisma {
   }
 
   export type villageUncheckedCreateInput = {
-    id?: string
+    id: string
     name: string
     facility_id: string
     is_active?: boolean
@@ -34400,7 +34400,7 @@ export namespace Prisma {
   }
 
   export type villageCreateManyInput = {
-    id?: string
+    id: string
     name: string
     facility_id: string
     is_active?: boolean
@@ -39054,7 +39054,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateWithoutFacilityInput = {
-    id?: string
+    id: string
     report_month: string
     actual_value?: number | null
     target_value?: NullableJsonNullValueInput | InputJsonValue
@@ -39073,7 +39073,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordUncheckedCreateWithoutFacilityInput = {
-    id?: string
+    id: string
     report_month: string
     indicator_id?: number | null
     actual_value?: number | null
@@ -39428,7 +39428,7 @@ export namespace Prisma {
   }
 
   export type villageCreateWithoutFacilityInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -39439,7 +39439,7 @@ export namespace Prisma {
   }
 
   export type villageUncheckedCreateWithoutFacilityInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -40669,7 +40669,7 @@ export namespace Prisma {
   }
 
   export type sectionCreateWithoutFamilyInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -40680,7 +40680,7 @@ export namespace Prisma {
   }
 
   export type sectionUncheckedCreateWithoutFamilyInput = {
-    id?: string
+    id: string
     name: string
     village_id: string
     is_active?: boolean
@@ -40696,7 +40696,7 @@ export namespace Prisma {
   }
 
   export type family_memberCreateWithoutFamilyInput = {
-    id?: string
+    id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
     voter_id?: string | null
@@ -40715,7 +40715,7 @@ export namespace Prisma {
   }
 
   export type family_memberUncheckedCreateWithoutFamilyInput = {
-    id?: string
+    id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
     voter_id?: string | null
@@ -40816,7 +40816,7 @@ export namespace Prisma {
   }
 
   export type familyCreateWithoutFamily_memberInput = {
-    id?: string
+    id: string
     house_no: string
     floor_no?: string | null
     no_of_couples?: number
@@ -40831,7 +40831,7 @@ export namespace Prisma {
   }
 
   export type familyUncheckedCreateWithoutFamily_memberInput = {
-    id?: string
+    id: string
     section_id: string
     house_no: string
     floor_no?: string | null
@@ -41677,7 +41677,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateWithoutIndicatorInput = {
-    id?: string
+    id: string
     report_month: string
     actual_value?: number | null
     target_value?: NullableJsonNullValueInput | InputJsonValue
@@ -41696,7 +41696,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordUncheckedCreateWithoutIndicatorInput = {
-    id?: string
+    id: string
     facility_id: string
     report_month: string
     actual_value?: number | null
@@ -42603,7 +42603,7 @@ export namespace Prisma {
   }
 
   export type familyCreateWithoutSectionInput = {
-    id?: string
+    id: string
     house_no: string
     floor_no?: string | null
     no_of_couples?: number
@@ -42618,7 +42618,7 @@ export namespace Prisma {
   }
 
   export type familyUncheckedCreateWithoutSectionInput = {
-    id?: string
+    id: string
     house_no: string
     floor_no?: string | null
     no_of_couples?: number
@@ -42643,7 +42643,7 @@ export namespace Prisma {
   }
 
   export type villageCreateWithoutSectionInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -42654,7 +42654,7 @@ export namespace Prisma {
   }
 
   export type villageUncheckedCreateWithoutSectionInput = {
-    id?: string
+    id: string
     name: string
     facility_id: string
     is_active?: boolean
@@ -42898,7 +42898,7 @@ export namespace Prisma {
   }
 
   export type sectionCreateWithoutVillageInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -42909,7 +42909,7 @@ export namespace Prisma {
   }
 
   export type sectionUncheckedCreateWithoutVillageInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -43372,7 +43372,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateManyFacilityInput = {
-    id?: string
+    id: string
     report_month: string
     indicator_id?: number | null
     actual_value?: number | null
@@ -43466,7 +43466,7 @@ export namespace Prisma {
   }
 
   export type villageCreateManyFacilityInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
@@ -44061,7 +44061,7 @@ export namespace Prisma {
   }
 
   export type family_memberCreateManyFamilyInput = {
-    id?: string
+    id: string
     name: string
     relationship_with_hof: $Enums.HOFRelationship
     voter_id?: string | null
@@ -44579,7 +44579,7 @@ export namespace Prisma {
   }
 
   export type FacilityRemunerationRecordCreateManyIndicatorInput = {
-    id?: string
+    id: string
     facility_id: string
     report_month: string
     actual_value?: number | null
@@ -44785,7 +44785,7 @@ export namespace Prisma {
   }
 
   export type familyCreateManySectionInput = {
-    id?: string
+    id: string
     house_no: string
     floor_no?: string | null
     no_of_couples?: number
@@ -44906,7 +44906,7 @@ export namespace Prisma {
   }
 
   export type sectionCreateManyVillageInput = {
-    id?: string
+    id: string
     name: string
     is_active?: boolean
     deleted_at?: Date | string | null
