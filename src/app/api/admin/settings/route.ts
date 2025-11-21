@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
       },
       create: {
         key: "monthly_submission_deadline",
-        value: submissionDeadlineDay.toString()
+        value: submissionDeadlineDay.toString(),
+        updated_at: new Date()
       }
     });
     
