@@ -205,7 +205,11 @@ export default function DynamicHealthDataForm({
 				// Initialize form data with empty values for all fields
 				const initialData: Record<string, any> = {};
 				mappings.forEach((mapping: any) => {
-					initialData[mapping.formFieldName] = "";
+					if (mapping.fieldType === "BINARY") {
+						initialData[mapping.formFieldName] = "0";
+					} else {
+						initialData[mapping.formFieldName] = "";
+					}
 				});
 
 				// Initialize boolean fields for conditional answers - use facility-aware field codes
