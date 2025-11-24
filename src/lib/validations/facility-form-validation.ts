@@ -7,11 +7,11 @@ export interface ValidationError {
 	field: string;
 	message: string;
 	type:
-		| "required"
-		| "invalid_value"
-		| "range_error"
-		| "logic_error"
-		| "worker_error";
+	| "required"
+	| "invalid_value"
+	| "range_error"
+	| "logic_error"
+	| "worker_error";
 }
 
 export interface FormValidationResult {
@@ -64,6 +64,19 @@ export const FACILITY_VALIDATION_RULES: Record<
 			required: false,
 		},
 		tb_differentiated_care_visits: {
+			required: false,
+		},
+		// Conditional answer fields (toggles) should not be required
+		indicator_ct001_conditional_answer: {
+			required: false,
+		},
+		indicator_ct001_conditional_answer_phc: {
+			required: false,
+		},
+		indicator_dc001_conditional_answer: {
+			required: false,
+		},
+		indicator_dc001_conditional_answer_phc: {
 			required: false,
 		},
 		// Population data validation
@@ -389,9 +402,8 @@ export function validateWorkerSelection(
 				};
 				errors.push({
 					field: "workers",
-					message: `${facilityType} must include a ${
-						workerRoleMap[mandatoryType] || mandatoryType
-					}`,
+					message: `${facilityType} must include a ${workerRoleMap[mandatoryType] || mandatoryType
+						}`,
 					type: "worker_error",
 				});
 			}
@@ -462,9 +474,9 @@ function validateCrossFieldLogic(
 	const tbScreenings = Number(formData.tb_screenings || 0);
 	const totalFootfall = Number(
 		formData.total_footfall_phc_colocated_sc ||
-			formData.total_footfall_sc_clinic ||
-			formData.total_footfall_uhwc ||
-			0
+		formData.total_footfall_sc_clinic ||
+		formData.total_footfall_uhwc ||
+		0
 	);
 
 	if (totalFootfall > 0 && tbScreenings > totalFootfall) {
