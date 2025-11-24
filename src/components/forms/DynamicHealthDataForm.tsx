@@ -210,11 +210,11 @@ export default function DynamicHealthDataForm({
 
 				// Initialize boolean fields for conditional answers - use facility-aware field codes
 				if (facilityType === "PHC") {
-					initialData.indicator_ct001_conditional_answer_phc = "";
-					initialData.indicator_dc001_conditional_answer_phc = "";
+					initialData.indicator_ct001_conditional_answer_phc = "0";
+					initialData.indicator_dc001_conditional_answer_phc = "0";
 				} else {
-					initialData.indicator_ct001_conditional_answer = "";
-					initialData.indicator_dc001_conditional_answer = "";
+					initialData.indicator_ct001_conditional_answer = "0";
+					initialData.indicator_dc001_conditional_answer = "0";
 				}
 
 				setFormData(initialData);
