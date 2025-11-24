@@ -9,11 +9,11 @@ function calculateAge(dob: Date): number {
   const birthDate = new Date(dob);
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  
+
   return age;
 }
 
@@ -49,19 +49,19 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const requestedFacilityId = searchParams.get("facility_id");
     const includeChildren = searchParams.get("include_children") === "true";
-    
+
     const userFacilityId = session.user.facility_id;
-    
+
     if (!userFacilityId) {
       return NextResponse.json(
         { error: "No facility associated with this user" },
         { status: 403 }
       );
     }
-    
+
     // Determine which facility/facilities to query
     let facilityIds: string[] = [];
-    
+
     if (requestedFacilityId) {
       // Specific facility requested
       facilityIds = [requestedFacilityId];
@@ -75,13 +75,13 @@ export async function GET(request: NextRequest) {
         },
         select: { id: true },
       });
-      
+
       facilityIds = [userFacilityId, ...childClinics.map(c => c.id)];
     } else {
       // Just current facility
       facilityIds = [userFacilityId];
     }
-    
+
     const facility_id = requestedFacilityId || userFacilityId; // For facility info display
 
     if (!facility_id) {
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
         house_no: true,
         floor_no: true,
         no_of_couples: true,
-        members: {
+        family_member: {
           where: {
             is_active: true,
             deleted_at: null,
@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
     let maleCount = 0;
     let femaleCount = 0;
     let otherCount = 0;
-    
+
     // Age group counters with gender breakdown
     const ageGroups = {
       "60+": { total: 0, male: 0, female: 0 },
@@ -179,7 +179,7 @@ export async function GET(request: NextRequest) {
       "0-5": { total: 0, male: 0, female: 0 },
     };
     let age30PlusFemale = 0;
-    
+
     let eligibleCouples = 0;
     const coupleBreakdown = {
       hofSpouse: 0,
@@ -196,20 +196,20 @@ export async function GET(request: NextRequest) {
     // Process each family
     for (const family of families) {
       distinctHouses.add(family.house_no);
-      
+
       // Count members by sex
-      for (const member of family.members) {
+      for (const member of family.family_member) {
         totalPopulation++;
-        
+
         if (member.sex === 'MALE') maleCount++;
         else if (member.sex === 'FEMALE') femaleCount++;
         else otherCount++;
-        
+
         // Age calculations (DOB is now required)
         const age = calculateAge(member.dob);
         const isMale = member.sex === 'MALE';
         const isFemale = member.sex === 'FEMALE';
-        
+
         if (age >= 60) {
           ageGroups["60+"].total++;
           if (isMale) ageGroups["60+"].male++;
@@ -259,32 +259,32 @@ export async function GET(request: NextRequest) {
           if (isFemale) ageGroups["0-5"].female++;
         }
       }
-      
+
       // Calculate eligible couples for this family
-      const membersByRelationship: Record<string, typeof family.members> = {};
-      
+      const membersByRelationship: Record<string, typeof family.family_member> = {};
+
       // Group members by relationship
-      for (const member of family.members) {
+      for (const member of family.family_member) {
         if (!membersByRelationship[member.relationship_with_hof]) {
           membersByRelationship[member.relationship_with_hof] = [];
         }
         membersByRelationship[member.relationship_with_hof].push(member);
       }
-      
+
       // Check each couple pair type
       for (const [primary, partners] of Object.entries(COUPLE_PAIRS)) {
         const primaryMembers = membersByRelationship[primary] || [];
-        
+
         for (const partnerType of partners) {
           const partnerMembers = membersByRelationship[partnerType] || [];
-          
+
           // Match pairs (simplified: assumes 1:1 matching)
           const pairsCount = Math.min(primaryMembers.length, partnerMembers.length);
-          
+
           for (let i = 0; i < pairsCount; i++) {
             const primaryMember = primaryMembers[i];
             const partnerMember = partnerMembers[i];
-            
+
             // Check if both are age 15-49
             if (
               primaryMember.dob &&
@@ -293,7 +293,7 @@ export async function GET(request: NextRequest) {
               isAgeInRange(partnerMember.dob, 15, 49)
             ) {
               eligibleCouples++;
-              
+
               // Track breakdown
               if (primary === 'SELF') coupleBreakdown.hofSpouse++;
               else if (primary === 'SON') coupleBreakdown.sonDIL++;

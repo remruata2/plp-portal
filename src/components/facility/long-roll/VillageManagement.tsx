@@ -28,7 +28,7 @@ interface Village {
   name: string;
   created_at: string;
   _count?: {
-    sections: number;
+    section: number;
   };
 }
 
@@ -195,14 +195,14 @@ export default function VillageManagement({ onVillageSelect }: VillageManagement
             </TableHeader>
             <TableBody>
               {filteredVillages.map((village) => (
-                <TableRow 
+                <TableRow
                   key={village.id}
                   className="cursor-pointer hover:bg-muted/50"
                   onClick={() => onVillageSelect(village.id)}
                 >
                   <TableCell className="font-medium">{village.name}</TableCell>
                   <TableCell className="text-center">
-                    {village._count?.sections || 0} sections
+                    {village._count?.section || 0} sections
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">

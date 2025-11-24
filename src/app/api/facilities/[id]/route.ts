@@ -42,10 +42,10 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { 
-      name, 
-      district_id, 
-      facility_type_id, 
+    const {
+      name,
+      district_id,
+      facility_type_id,
       description,
       parent_facility_id,
       has_clinic,
@@ -72,21 +72,21 @@ export async function PUT(
 
     // Add optional fields if provided
     if (description !== undefined) updateData.description = description;
-    
+
     // Handle parent_facility_id (empty string should be null)
     if (parent_facility_id !== undefined) {
       if (parent_facility_id === "" || parent_facility_id === null) {
-        updateData.parent_facility = { disconnect: true };
+        updateData.facility = { disconnect: true };
       } else {
-        updateData.parent_facility = { connect: { id: parent_facility_id } };
+        updateData.facility = { connect: { id: parent_facility_id } };
       }
     }
-    
+
     // Handle has_clinic boolean
     if (has_clinic !== undefined) {
       updateData.has_clinic = Boolean(has_clinic);
     }
-    
+
     // Handle is_active boolean
     if (is_active !== undefined) {
       updateData.is_active = Boolean(is_active);

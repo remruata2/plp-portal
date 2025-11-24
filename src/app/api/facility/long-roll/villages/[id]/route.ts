@@ -6,9 +6,10 @@ import prisma from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -26,7 +27,7 @@ export async function GET(
 
     const village = await prisma.village.findFirst({
       where: {
-        id: params.id,
+        id,
         facility_id,
         deleted_at: null,
       },
@@ -38,7 +39,7 @@ export async function GET(
             display_name: true,
           },
         },
-        sections: {
+        section: {
           where: {
             is_active: true,
             deleted_at: null,
@@ -46,7 +47,7 @@ export async function GET(
           include: {
             _count: {
               select: {
-                families: true,
+                family: true,
               },
             },
           },
@@ -76,9 +77,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -96,7 +98,7 @@ export async function PUT(
 
     const existingVillage = await prisma.village.findFirst({
       where: {
-        id: params.id,
+        id,
         facility_id,
         deleted_at: null,
       },
@@ -125,7 +127,7 @@ export async function PUT(
         facility_id,
         deleted_at: null,
         NOT: {
-          id: params.id,
+          id,
         },
       },
     });
@@ -139,7 +141,7 @@ export async function PUT(
 
     const village = await prisma.village.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         name: name.trim(),
@@ -171,9 +173,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -191,7 +194,7 @@ export async function DELETE(
 
     const existingVillage = await prisma.village.findFirst({
       where: {
-        id: params.id,
+        id,
         facility_id,
         deleted_at: null,
       },
@@ -209,7 +212,7 @@ export async function DELETE(
 
     const village = await prisma.village.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         is_active: false,

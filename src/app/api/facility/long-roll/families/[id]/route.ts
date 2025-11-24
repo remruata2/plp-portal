@@ -7,9 +7,10 @@ import prisma from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -27,7 +28,7 @@ export async function GET(
 
     const family = await prisma.family.findFirst({
       where: {
-        id: params.id,
+        id,
         section: {
           village: {
             facility_id,
@@ -48,7 +49,7 @@ export async function GET(
             },
           },
         },
-        members: {
+        family_member: {
           where: {
             is_active: true,
             deleted_at: null,
@@ -82,9 +83,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -102,7 +104,7 @@ export async function PUT(
 
     const existingFamily = await prisma.family.findFirst({
       where: {
-        id: params.id,
+        id,
         section: {
           village: {
             facility_id,
@@ -138,7 +140,7 @@ export async function PUT(
         house_no: house_no.trim(),
         deleted_at: null,
         NOT: {
-          id: params.id,
+          id,
         },
       },
     });
@@ -157,13 +159,14 @@ export async function PUT(
 
     const family = await prisma.family.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         house_no: house_no.trim(),
         floor_no: floor_no?.trim() || null,
         no_of_couples: no_of_couples !== undefined ? no_of_couples : existingFamily.no_of_couples,
         habitation_type: habitationType,
+        updated_at: new Date(),
       },
       include: {
         section: {
@@ -197,9 +200,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -217,7 +221,7 @@ export async function DELETE(
 
     const existingFamily = await prisma.family.findFirst({
       where: {
-        id: params.id,
+        id,
         section: {
           village: {
             facility_id,
@@ -244,13 +248,14 @@ export async function DELETE(
 
     const family = await prisma.family.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         is_active: false,
         deleted_at: new Date(),
         deleted_reason: deletionReason,
         deleted_remarks: remarks || null,
+        updated_at: new Date(),
       },
     });
 

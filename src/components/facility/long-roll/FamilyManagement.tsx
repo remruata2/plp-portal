@@ -43,7 +43,7 @@ interface Family {
   no_of_couples: number;
   habitation_type: string;
   _count?: {
-    members: number;
+    family_member: number;
   };
 }
 
@@ -84,7 +84,7 @@ export default function FamilyManagement({
     try {
       const response = await fetch(`/api/facility/long-roll/sections/${id}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setSectionInfo(data.section);
       }
@@ -295,7 +295,7 @@ export default function FamilyManagement({
                   </TableHeader>
                   <TableBody>
                     {filteredFamilies.map((family) => (
-                      <TableRow 
+                      <TableRow
                         key={family.id}
                         className="cursor-pointer hover:bg-muted/50"
                         onClick={() => onFamilySelect(family.id)}
@@ -309,7 +309,7 @@ export default function FamilyManagement({
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">
-                          {family._count?.members || 0} members
+                          {family._count?.family_member || 0} members
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">

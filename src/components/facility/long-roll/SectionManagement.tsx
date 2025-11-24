@@ -44,7 +44,7 @@ interface Section {
   name: string;
   village_id: string;
   _count?: {
-    families: number;
+    family: number;
   };
 }
 
@@ -63,7 +63,7 @@ export default function SectionManagement({
   const [villageInfo, setVillageInfo] = useState<Village | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editingSection, setEditingSection] = useState<Section | null>(null);
@@ -72,6 +72,7 @@ export default function SectionManagement({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    console.log("SectionManagement: villageId =", villageId);
     if (villageId) {
       loadSections(villageId);
       loadVillageInfo(villageId);
@@ -82,7 +83,7 @@ export default function SectionManagement({
     try {
       const response = await fetch(`/api/facility/long-roll/villages/${id}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setVillageInfo(data.village);
       }
@@ -94,12 +95,17 @@ export default function SectionManagement({
   const loadSections = async (id: string) => {
     try {
       setLoading(true);
+      console.log("Loading sections for village:", id);
       const response = await fetch(`/api/facility/long-roll/sections?village_id=${id}`);
+      console.log("Sections API response status:", response.status);
       const data = await response.json();
+      console.log("Sections API data:", data);
 
       if (data.success) {
         setSections(data.sections);
+        console.log("Loaded sections:", data.sections);
       } else {
+        console.error("Failed to load sections:", data);
         toast.error("Failed to load sections");
       }
     } catch (error) {
@@ -281,8 +287,8 @@ export default function SectionManagement({
                   </TableHeader>
                   <TableBody>
                     {filteredSections.map((section) => (
-                      <TableRow 
-                        key={section.id} 
+                      <TableRow
+                        key={section.id}
                         className="cursor-pointer hover:bg-muted/50"
                         onClick={() => onSectionSelect(section.id)}
                       >
@@ -290,7 +296,7 @@ export default function SectionManagement({
                           {section.name}
                         </TableCell>
                         <TableCell>
-                          {section._count?.families || 0} households
+                          {section._count?.family || 0} households
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">
@@ -375,8 +381,8 @@ export default function SectionManagement({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleDelete} 
+            <AlertDialogAction
+              onClick={handleDelete}
               disabled={saving}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >

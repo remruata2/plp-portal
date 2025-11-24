@@ -723,12 +723,18 @@ export default function DynamicHealthDataForm({
 			const isDc001Field =
 				mapping.formFieldName === "tb_differentiated_care_visits";
 
-			// Exclude conditional fields if their conditional answer is "no"
-			if (isCt001Field && indicatorAnswers["CT001"] === "no") {
-				return false; // Exclude from validation
+			// Exclude conditional fields if their conditional answer is "no" or undefined (default)
+			if (isCt001Field) {
+				const answer = indicatorAnswers["CT001"];
+				if (answer === "no" || answer === null || answer === undefined) {
+					return false; // Exclude from validation
+				}
 			}
-			if (isDc001Field && indicatorAnswers["DC001"] === "no") {
-				return false; // Exclude from validation
+			if (isDc001Field) {
+				const answer = indicatorAnswers["DC001"];
+				if (answer === "no" || answer === null || answer === undefined) {
+					return false; // Exclude from validation
+				}
 			}
 			return true; // Include in validation
 		});
@@ -738,12 +744,18 @@ export default function DynamicHealthDataForm({
 			const isCt001Field = key === "tb_contact_tracing_households";
 			const isDc001Field = key === "tb_differentiated_care_visits";
 
-			// Skip hidden fields if their conditional answer is "no"
-			if (isCt001Field && indicatorAnswers["CT001"] === "no") {
-				return; // Skip hidden field
+			// Skip hidden fields if their conditional answer is "no" or undefined (default)
+			if (isCt001Field) {
+				const answer = indicatorAnswers["CT001"];
+				if (answer === "no" || answer === null || answer === undefined) {
+					return; // Skip hidden field
+				}
 			}
-			if (isDc001Field && indicatorAnswers["DC001"] === "no") {
-				return; // Skip hidden field
+			if (isDc001Field) {
+				const answer = indicatorAnswers["DC001"];
+				if (answer === "no" || answer === null || answer === undefined) {
+					return; // Skip hidden field
+				}
 			}
 			filteredFormData[key] = (formData as any)[key];
 		});
@@ -878,9 +890,8 @@ export default function DynamicHealthDataForm({
 							onBlur={() => handleFieldBlur(fieldId)}
 							placeholder={shouldDisableElderlyActivity ? "N/A" : "0"}
 							disabled={submitting || shouldDisableElderlyActivity}
-							className={`text-center border-0 rounded-none focus:ring-0 text-base font-medium min-w-[80px] h-10 sm:h-11 ${
-								shouldDisableElderlyActivity ? "bg-gray-100 text-gray-500" : ""
-							}`}
+							className={`text-center border-0 rounded-none focus:ring-0 text-base font-medium min-w-[80px] h-10 sm:h-11 ${shouldDisableElderlyActivity ? "bg-gray-100 text-gray-500" : ""
+								}`}
 							min="0"
 							max="999"
 						/>
@@ -940,9 +951,8 @@ export default function DynamicHealthDataForm({
 							: `Enter ${mapping.description.toLowerCase()}`
 					}
 					disabled={submitting || shouldDisableElderlyActivity}
-					className={`h-10 sm:h-11 text-base ${
-						shouldDisableElderlyActivity ? "bg-gray-100 text-gray-500" : ""
-					} ${hasErrors ? "border-red-500 focus:border-red-500" : ""}`}
+					className={`h-10 sm:h-11 text-base ${shouldDisableElderlyActivity ? "bg-gray-100 text-gray-500" : ""
+						} ${hasErrors ? "border-red-500 focus:border-red-500" : ""}`}
 				/>
 				{shouldDisableElderlyActivity && (
 					<p className="text-xs text-orange-600 mt-2">
@@ -1327,12 +1337,10 @@ export default function DynamicHealthDataForm({
 			if (!validationResult.isValid) {
 				const errorCount = validationResult.errors.length;
 				toast({
-					title: `Please fix ${errorCount} validation error${
-						errorCount > 1 ? "s" : ""
-					} before submitting`,
-					description: `Please fix ${errorCount} validation error${
-						errorCount > 1 ? "s" : ""
-					} before submitting`,
+					title: `Please fix ${errorCount} validation error${errorCount > 1 ? "s" : ""
+						} before submitting`,
+					description: `Please fix ${errorCount} validation error${errorCount > 1 ? "s" : ""
+						} before submitting`,
 					variant: "destructive",
 				});
 
@@ -1848,15 +1856,15 @@ export default function DynamicHealthDataForm({
 									? "indicator_ct001_conditional_answer_phc"
 									: "indicator_ct001_conditional_answer"
 								: facilityType === "PHC"
-								? "indicator_dc001_conditional_answer_phc"
-								: "indicator_dc001_conditional_answer";
+									? "indicator_dc001_conditional_answer_phc"
+									: "indicator_dc001_conditional_answer";
 							const booleanFieldValue = formData[booleanFieldName];
 							const booleanAnswer =
 								booleanFieldValue === "1" || booleanFieldValue === true
 									? "yes"
 									: booleanFieldValue === "0" || booleanFieldValue === false
-									? "no"
-									: null;
+										? "no"
+										: null;
 
 							// Use boolean field value if available, otherwise fall back to indicatorAnswers
 							const effectiveAnswer =
@@ -1868,24 +1876,24 @@ export default function DynamicHealthDataForm({
 							const booleanFields = group.fields.filter(
 								(mapping) =>
 									mapping.formFieldName ===
-										"indicator_ct001_conditional_answer" ||
+									"indicator_ct001_conditional_answer" ||
 									mapping.formFieldName ===
-										"indicator_dc001_conditional_answer" ||
+									"indicator_dc001_conditional_answer" ||
 									mapping.formFieldName ===
-										"indicator_ct001_conditional_answer_phc" ||
+									"indicator_ct001_conditional_answer_phc" ||
 									mapping.formFieldName ===
-										"indicator_dc001_conditional_answer_phc"
+									"indicator_dc001_conditional_answer_phc"
 							);
 							const otherFields = group.fields.filter(
 								(mapping) =>
 									mapping.formFieldName !==
-										"indicator_ct001_conditional_answer" &&
+									"indicator_ct001_conditional_answer" &&
 									mapping.formFieldName !==
-										"indicator_dc001_conditional_answer" &&
+									"indicator_dc001_conditional_answer" &&
 									mapping.formFieldName !==
-										"indicator_ct001_conditional_answer_phc" &&
+									"indicator_ct001_conditional_answer_phc" &&
 									mapping.formFieldName !==
-										"indicator_dc001_conditional_answer_phc"
+									"indicator_dc001_conditional_answer_phc"
 							);
 
 							return (
@@ -1977,7 +1985,7 @@ export default function DynamicHealthDataForm({
 																(isCt001Field || isDc001Field) &&
 																(effectiveAnswer === "no" ||
 																	indicatorAnswers[group.indicatorCode] ===
-																		"no");
+																	"no");
 															return !shouldHide;
 														})
 														.map((mapping, fieldIndex) => (
@@ -2142,10 +2150,10 @@ export default function DynamicHealthDataForm({
 									(hasAttemptedSubmit && validationErrors.length > 0) ||
 									Boolean(
 										selectedMonth &&
-											selectedYear &&
-											existingSubmissions.includes(
-												`${selectedYear}-${selectedMonth}`
-											)
+										selectedYear &&
+										existingSubmissions.includes(
+											`${selectedYear}-${selectedMonth}`
+										)
 									)
 								}
 								className="w-full sm:w-auto order-1 sm:order-2 mb-0"

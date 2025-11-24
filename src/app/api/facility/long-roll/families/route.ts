@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { HabitationType } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
+import { randomUUID } from "crypto";
 
 
 export async function GET(request: NextRequest) {
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
         },
         _count: {
           select: {
-            members: true,
+            family_member: true,
           },
         },
       },
@@ -166,11 +167,13 @@ export async function POST(request: NextRequest) {
 
     const family = await prisma.family.create({
       data: {
+        id: randomUUID(),
         section_id,
         house_no: house_no.trim(),
         floor_no: floor_no?.trim() || null,
         no_of_couples: no_of_couples || 0,
         habitation_type: habitationType,
+        updated_at: new Date(),
       },
       include: {
         section: {

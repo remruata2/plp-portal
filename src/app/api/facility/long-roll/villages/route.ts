@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/prisma";
+import { randomUUID } from "crypto";
 
 
 export async function GET(request: NextRequest) {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
         },
         _count: {
           select: {
-            sections: true,
+            section: true,
           },
         },
       },
@@ -104,8 +105,10 @@ export async function POST(request: NextRequest) {
 
     const village = await prisma.village.create({
       data: {
+        id: randomUUID(),
         name: name.trim(),
         facility_id,
+        updated_at: new Date(),
       },
       include: {
         facility: {

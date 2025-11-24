@@ -19,12 +19,15 @@ export default function LongRollPage() {
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Debug logging
+  console.log("Page state:", { activeTab, selectedVillage, selectedSection, selectedFamily });
+
   useEffect(() => {
     const checkAccess = async () => {
       try {
         const response = await fetch("/api/facility/my-facility");
         const data = await response.json();
-        
+
         if (data.facility && data.facility.has_clinic) {
           setHasAccess(true);
         } else {
@@ -42,7 +45,9 @@ export default function LongRollPage() {
   }, []);
 
   const handleVillageSelect = (villageId: string) => {
+    console.log("Village selected:", villageId);
     setSelectedVillage(villageId);
+    console.log("Setting active tab to sections");
     setActiveTab("sections");
   };
 
@@ -102,30 +107,30 @@ export default function LongRollPage() {
             <CardTitle>Household Registry Management</CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="villages" className="flex items-center gap-2">
                   <Home className="h-4 w-4" />
                   <span className="hidden sm:inline">Villages</span>
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="sections" 
+                <TabsTrigger
+                  value="sections"
                   className="flex items-center gap-2"
                   disabled={!selectedVillage}
                 >
                   <MapPin className="h-4 w-4" />
                   <span className="hidden sm:inline">Sections</span>
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="families" 
+                <TabsTrigger
+                  value="families"
                   className="flex items-center gap-2"
                   disabled={!selectedSection}
                 >
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Household/Families</span>
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="members" 
+                <TabsTrigger
+                  value="members"
                   className="flex items-center gap-2"
                   disabled={!selectedFamily}
                 >
@@ -139,11 +144,16 @@ export default function LongRollPage() {
               </TabsContent>
 
               <TabsContent value="sections" className="mt-6">
-                <SectionManagement
-                  selectedVillage={selectedVillage}
-                  onSectionSelect={handleSectionSelect}
-                  onBackToVillages={() => setActiveTab("villages")}
-                />
+                {(() => {
+                  console.log("Sections TabsContent is rendering, selectedVillage:", selectedVillage);
+                  return (
+                    <SectionManagement
+                      selectedVillage={selectedVillage}
+                      onSectionSelect={handleSectionSelect}
+                      onBackToVillages={() => setActiveTab("villages")}
+                    />
+                  );
+                })()}
               </TabsContent>
 
               <TabsContent value="families" className="mt-6">
