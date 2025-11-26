@@ -75,6 +75,8 @@ else
         DB_HOST="${BASH_REMATCH[3]}"
         DB_PORT="${BASH_REMATCH[4]}"
         DB_NAME="${BASH_REMATCH[5]}"
+        # Strip query parameters from database name
+        DB_NAME="${DB_NAME%%\?*}"
         export PGPASSWORD="$DB_PASS"
     else
         # Try without password (for local postgres user)
@@ -85,6 +87,8 @@ else
             DB_HOST="${BASH_REMATCH[2]}"
             DB_PORT="${BASH_REMATCH[3]}"
             DB_NAME="${BASH_REMATCH[4]}"
+            # Strip query parameters from database name
+            DB_NAME="${DB_NAME%%\?*}"
             export PGPASSWORD=""
         else
             echo -e "${RED}❌ Could not parse DATABASE_URL${NC}"

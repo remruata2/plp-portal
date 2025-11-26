@@ -21,11 +21,11 @@ import { useRouter } from "next/navigation";
 import DynamicHealthDataForm from "@/components/forms/DynamicHealthDataForm";
 
 interface Facility {
-	id: number;
-	name: string;
-	facility_type: {
-		name: string;
-	};
+  id: number;
+  name: string;
+  facility_type: {
+    name: string;
+  };
 }
 
 interface HealthDataSubmission {
@@ -61,8 +61,18 @@ export default function HealthDataPage() {
   >([]);
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [selectedFacilityType, setSelectedFacilityType] = useState<string>("");
-  const [selectedYear, setSelectedYear] = useState<string>("");
-  const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>(() => {
+    const now = new Date();
+    let monthIndex = now.getMonth() - 1;
+    if (monthIndex < 0) return (now.getFullYear() - 1).toString();
+    return now.getFullYear().toString();
+  });
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const now = new Date();
+    let monthIndex = now.getMonth() - 1;
+    if (monthIndex < 0) monthIndex = 11;
+    return (monthIndex + 1).toString().padStart(2, "0");
+  });
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
@@ -120,7 +130,12 @@ export default function HealthDataPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setSubmissions(data.submissions || []);
+        const sorted = (data.submissions || []).sort((a: HealthDataSubmission, b: HealthDataSubmission) => {
+          const dateA = new Date(a.reportMonth + '-01');
+          const dateB = new Date(b.reportMonth + '-01');
+          return dateB.getTime() - dateA.getTime();
+        });
+        setSubmissions(sorted);
       } else {
         console.error("Failed to load submissions");
         setSubmissions([]);
@@ -155,8 +170,8 @@ export default function HealthDataPage() {
         const ftJson = await ftRes.json();
         setFacilityTypes(ftJson || []);
       }
-      // Initial submissions load
-      await loadSubmissions();
+      // Initial submissions load is handled by the useEffect that watches filters
+      // await loadSubmissions();
     } catch (e) {
       console.error("Failed loading filter options", e);
     }
@@ -185,14 +200,14 @@ export default function HealthDataPage() {
     if (
       !confirm(
         "Are you sure you want to delete this submission?\n\n" +
-          "This will permanently delete:\n" +
-          "• All field data values\n" +
-          "• Remuneration calculations\n" +
-          "• Worker remuneration records\n" +
-          "• Performance records\n" +
-          "• Facility targets\n" +
-          "• All other associated core data\n\n" +
-          "This action cannot be undone."
+        "This will permanently delete:\n" +
+        "• All field data values\n" +
+        "• Remuneration calculations\n" +
+        "• Worker remuneration records\n" +
+        "• Performance records\n" +
+        "• Facility targets\n" +
+        "• All other associated core data\n\n" +
+        "This action cannot be undone."
       )
     ) {
       return;
@@ -451,22 +466,22 @@ export default function HealthDataPage() {
             debouncedSearch ||
             selectedYear ||
             selectedMonth) && (
-            <div className="mt-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setSelectedDistrict("");
-                  setSelectedFacilityType("");
-                  setSearch("");
-                  setSelectedYear("");
-                  setSelectedMonth("");
-                }}
-              >
-                Clear filters
-              </Button>
-            </div>
-          )}
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedDistrict("");
+                    setSelectedFacilityType("");
+                    setSearch("");
+                    setSelectedYear("");
+                    setSelectedMonth("");
+                  }}
+                >
+                  Clear filters
+                </Button>
+              </div>
+            )}
         </CardContent>
       </Card>
 
