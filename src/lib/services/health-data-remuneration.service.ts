@@ -281,7 +281,11 @@ export class HealthDataRemunerationService {
 					console.log(
 						`✅ Successfully stored FacilityRemunerationRecord for indicator ${indicator.code}`
 					);
-					indicatorRecords.push(record);
+					// Add indicator_code to the record for performance calculation filtering
+					indicatorRecords.push({
+						...record,
+						indicator_code: indicator.code,
+					});
 				} catch (error) {
 					console.error(
 						`❌ Error storing FacilityRemunerationRecord for indicator ${indicator.code}:`,

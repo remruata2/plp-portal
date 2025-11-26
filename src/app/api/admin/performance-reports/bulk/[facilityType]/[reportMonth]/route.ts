@@ -25,7 +25,7 @@ function parseRangeFromTargetValue(
 			const obj = JSON.parse(str);
 			if (typeof obj.min === "number" || typeof obj.max === "number")
 				return { min: obj.min, max: obj.max };
-		} catch {}
+		} catch { }
 	}
 	const m = str.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
 	if (m) return { min: parseFloat(m[1]), max: parseFloat(m[2]) };
@@ -337,9 +337,9 @@ export async function GET(
 
 				const denominatorLabel = includeDenominator
 					? `DEN - ${resolveFieldLabel(
-							indicator.denominator_field as any,
-							"Denominator"
-					  )}`
+						indicator.denominator_field as any,
+						"Denominator"
+					)}`
 					: undefined;
 				const denominatorKey = includeDenominator
 					? `${indicator.name} - ${denominatorLabel}`
@@ -461,7 +461,12 @@ export async function GET(
 					[],
 					prisma
 				);
-			} catch {}
+			} catch (error) {
+				console.error(
+					`Error recalculating remuneration for facility ${facility.id} (${facility.name}):`,
+					error
+				);
+			}
 
 			// Fetch remuneration records after recalculation
 			const records = await prisma.facilityRemunerationRecord.findMany({
@@ -489,7 +494,7 @@ export async function GET(
 						.map((l: any) => l.name || "")
 						.filter(Boolean)
 						.join(", ");
-				} catch {}
+				} catch { }
 			}
 
 			// Extract conditional answer field values (CT001 and DC001)
@@ -620,16 +625,16 @@ export async function GET(
 					const remuneration = indicator.indicator_remuneration?.[0];
 					const baseMaxRemuneration = remuneration
 						? parseFloat(
-								(remuneration.base_amount as any)?.toString?.() ??
-									`${remuneration.base_amount}`
-						  )
+							(remuneration.base_amount as any)?.toString?.() ??
+							`${remuneration.base_amount}`
+						)
 						: 0;
 					const conditionalAmount =
 						remuneration && (remuneration as any).conditional_amount != null
 							? parseFloat(
-									(remuneration as any).conditional_amount?.toString?.() ??
-										`${(remuneration as any).conditional_amount}`
-							  )
+								(remuneration as any).conditional_amount?.toString?.() ??
+								`${(remuneration as any).conditional_amount}`
+							)
 							: 0;
 
 					// Calculate using FormulaCalculator (single source of truth)
@@ -723,14 +728,14 @@ export async function GET(
 						const result =
 							effectiveMaxRemuneration !== baseMaxRemuneration
 								? calculateRemuneration(
-										actualValue,
-										denominatorValue,
-										effectiveMaxRemuneration,
-										calculationConfig,
-										facility.facility_type.name,
-										undefined,
-										Object.fromEntries(fieldValueMap)
-								  )
+									actualValue,
+									denominatorValue,
+									effectiveMaxRemuneration,
+									calculationConfig,
+									facility.facility_type.name,
+									undefined,
+									Object.fromEntries(fieldValueMap)
+								)
 								: baseResult;
 
 						achievementPercentage =
@@ -997,8 +1002,8 @@ export async function GET(
 			const workerIds = wrs.map((w: any) => w.health_worker_id).filter(Boolean);
 			const workers = workerIds.length
 				? await prisma.health_workers.findMany({
-						where: { id: { in: workerIds } },
-				  })
+					where: { id: { in: workerIds } },
+				})
 				: [];
 			const nameById = new Map<string, string>();
 			for (const w of workers as any[]) {
