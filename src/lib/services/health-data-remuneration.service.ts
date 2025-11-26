@@ -7,6 +7,7 @@ import { mapStatusToReportStatus } from "@/lib/calculations/formula-calculator/m
 import { randomUUID } from "crypto";
 import { calculateEffectiveRemuneration } from "@/lib/services/indicator-remuneration-helper";
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
+import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 export interface HealthDataRemunerationResult {
 	success: boolean;
@@ -234,8 +235,8 @@ export class HealthDataRemunerationService {
 							? 1
 							: 0
 						: actualValue !== null && actualValue !== undefined
-						? Number(actualValue)
-						: undefined;
+							? Number(actualValue)
+							: undefined;
 
 				// Store in FacilityRemunerationRecord
 				try {
@@ -297,27 +298,38 @@ export class HealthDataRemunerationService {
 			// Calculate overall performance percentage for worker incentives
 			// Cap individual indicator percentages at 100% for overall calculation (matches performance report)
 
-			// Exclude TB-related indicators (CT001/DC001) from performance when total TB is zero
-			const totalTbFieldCode = getFieldCodeForFacilityType(
-				"total_tb_patients",
+			// Exclude CT001/DC001 from performance when their conditional answers are "No"
+			const ct001FieldCode = getFieldCodeForFacilityType(
+				"indicator_ct001_conditional_answer",
 				facility.facility_type.name
 			);
-			const totalTbFieldPerf = dbFieldValues.find(
-				(f: any) => f.field?.code === totalTbFieldCode
+			const ct001Field = dbFieldValues.find(
+				(f: any) => f.field?.code === ct001FieldCode
 			);
-			const totalTbValuePerf = totalTbFieldPerf
-				? totalTbFieldPerf.string_value ||
-				  totalTbFieldPerf.numeric_value ||
-				  totalTbFieldPerf.boolean_value
-				: 0;
-			const totalTbZeroPerf = Number(totalTbValuePerf || 0) === 0;
+			const ct001Answer = ct001Field?.boolean_value === true;
 
-			const indicatorsForPerformance = totalTbZeroPerf
-				? indicatorRecords.filter(
-						(r: any) =>
-							r.indicator_code !== "CT001" && r.indicator_code !== "DC001"
-				  )
-				: indicatorRecords;
+			const dc001FieldCode = getFieldCodeForFacilityType(
+				"indicator_dc001_conditional_answer",
+				facility.facility_type.name
+			);
+			const dc001Field = dbFieldValues.find(
+				(f: any) => f.field?.code === dc001FieldCode
+			);
+			const dc001Answer = dc001Field?.boolean_value === true;
+
+			// Filter out indicators based on their conditional answers
+			const indicatorsForPerformance = indicatorRecords.filter((r: any) => {
+				// Exclude CT001 if conditional answer is "No" (false/null/undefined)
+				if (matchesIndicatorCode(r.indicator_code, "CT001") && !ct001Answer) {
+					return false;
+				}
+				// Exclude DC001 if conditional answer is "No" (false/null/undefined)
+				if (matchesIndicatorCode(r.indicator_code, "DC001") && !dc001Answer) {
+					return false;
+				}
+				// Include all other indicators
+				return true;
+			});
 
 			let totalPercentage = 0;
 			indicatorsForPerformance.forEach((record: any, index: number) => {
