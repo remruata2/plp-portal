@@ -725,7 +725,9 @@ export default function DynamicHealthDataForm({
 			const isCt001Field =
 				mapping.formFieldName === "tb_contact_tracing_households";
 			const isDc001Field =
-				mapping.formFieldName === "tb_differentiated_care_visits";
+				mapping.formFieldName === "tb_differentiated_care_visits" ||
+				mapping.formFieldName === "total_tb_patients_phc" ||
+				mapping.formFieldName === "total_tb_patients";
 
 			// Exclude conditional fields if their conditional answer is "no" or undefined (default)
 			if (isCt001Field) {
@@ -746,7 +748,10 @@ export default function DynamicHealthDataForm({
 		// Build filtered formData
 		Object.keys(formData).forEach((key) => {
 			const isCt001Field = key === "tb_contact_tracing_households";
-			const isDc001Field = key === "tb_differentiated_care_visits";
+			const isDc001Field =
+				key === "tb_differentiated_care_visits" ||
+				key === "total_tb_patients_phc" ||
+				key === "total_tb_patients";
 
 			// Skip hidden fields if their conditional answer is "no" or undefined (default)
 			if (isCt001Field) {
