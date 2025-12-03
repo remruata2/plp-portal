@@ -143,7 +143,7 @@ export default function HealthDataFormPage() {
 
 	return (
 		<div
-			className="max-w-6xl mx-auto p-4 sm:p-6 pb-0 min-h-0 form-page-container"
+			className="max-w-6xl mx-auto p-4 sm:p-6 pb-24 min-h-0 form-page-container"
 			style={{ height: "auto", maxHeight: "none", minHeight: "auto" }}
 		>
 			{/* Page Header */}

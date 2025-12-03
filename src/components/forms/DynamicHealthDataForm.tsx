@@ -2135,10 +2135,10 @@ export default function DynamicHealthDataForm({
 								</div>
 							)}
 
-						<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-0 pb-0 last:mb-0 last:pb-0">
+						<div className="sticky bottom-0 left-0 right-0 bg-white border-t p-4 -mx-4 sm:mx-0 sm:static sm:bg-transparent sm:border-t-0 sm:p-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] sm:shadow-none flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mt-6">
 							<div className="text-sm text-gray-600 order-2 sm:order-1">
 								{hasAttemptedSubmit && validationErrors.length > 0 && (
-									<span className="text-red-600">
+									<span className="text-red-600 font-medium">
 										Please fix {validationErrors.length} error
 										{validationErrors.length > 1 ? "s" : ""} before submitting
 									</span>
@@ -2146,7 +2146,7 @@ export default function DynamicHealthDataForm({
 								{hasAttemptedSubmit &&
 									validationErrors.length === 0 &&
 									validationWarnings.length > 0 && (
-										<span className="text-yellow-600">
+										<span className="text-yellow-600 font-medium">
 											{validationWarnings.length} warning
 											{validationWarnings.length > 1 ? "s" : ""} found
 										</span>
@@ -2165,9 +2165,17 @@ export default function DynamicHealthDataForm({
 										)
 									)
 								}
-								className="w-full sm:w-auto order-1 sm:order-2 mb-0"
+								className="w-full sm:w-auto order-1 sm:order-2 mb-0 shadow-sm"
+								size="lg"
 							>
-								{submitting ? "Submitting..." : "Submit Data"}
+								{submitting ? (
+									<>
+										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+										Submitting...
+									</>
+								) : (
+									"Submit Data"
+								)}
 							</Button>
 						</div>
 					</form>

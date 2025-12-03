@@ -471,17 +471,33 @@ function validateCrossFieldLogic(
 	const errors: ValidationError[] = [];
 
 	// TB screening vs footfall validation
-	const tbScreenings = Number(formData.tb_screenings || 0);
+	const tbScreenings = Number(
+		formData.tb_screenings ||
+		formData.tb_screenings_phc ||
+		formData.tb_screenings_sc ||
+		formData.tb_screenings_uhwc ||
+		formData.tb_screenings_ahwc ||
+		formData.tb_screenings_uphc ||
+		0
+	);
 	const totalFootfall = Number(
+		formData.total_footfall ||
 		formData.total_footfall_phc_colocated_sc ||
 		formData.total_footfall_sc_clinic ||
 		formData.total_footfall_uhwc ||
+		formData.total_footfall_ahwc ||
+		formData.total_footfall_uphc ||
 		0
 	);
 
 	if (totalFootfall > 0 && tbScreenings > totalFootfall) {
+		// Find the actual field name being used
+		const tbField =
+			Object.keys(formData).find((k) => k.includes("tb_screenings")) ||
+			"tb_screenings";
+
 		errors.push({
-			field: "tb_screenings",
+			field: tbField,
 			message: "TB screenings cannot exceed total footfall",
 			type: "logic_error",
 		});
@@ -490,7 +506,9 @@ function validateCrossFieldLogic(
 	// Removed subjective wellness sessions upper-bound check
 
 	// RI validation
-	const riPlanned = Number(formData.ri_sessions_planned || 0);
+	const riPlanned = Number(
+		formData.ri_sessions_planned || formData.ri_sessions_planned_phc || 0
+	);
 	const riHeld = Number(formData.ri_sessions_held || 0);
 
 	if (riPlanned > 0 && riHeld > riPlanned) {
