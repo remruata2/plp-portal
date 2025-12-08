@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { facilityId, reportMonth, fieldValues, compare } = body;
-    
+
     // Check if comparison mode is enabled (temporarily enabled for testing)
 
     // Check submission deadline - only enforce for facility users, admins can bypass
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       const deadlineStatus = await checkSubmissionAllowed();
       if (!deadlineStatus.isSubmissionAllowed) {
         return NextResponse.json(
-          { 
+          {
             error: "Submission deadline has passed",
             reason: deadlineStatus.reason,
             deadlineStatus: deadlineStatus
@@ -101,23 +101,31 @@ export async function POST(request: NextRequest) {
       }
 
       // Enhance field values with field relationships for remuneration calculation
+      // Enhance field values with field relationships for remuneration calculation
+      // Optimized to avoid N+1 queries by fetching all fields in one query
+      const fieldIds = createdFieldValues.map(fv => fv.field_id);
+
+      const fieldsWithRelations = await tx.field.findMany({
+        where: { id: { in: fieldIds } },
+        include: {
+          indicator_indicator_numerator_field_idTofield: {
+            select: { id: true, code: true, name: true },
+          },
+          indicator_indicator_denominator_field_idTofield: {
+            select: { id: true, code: true, name: true },
+          },
+          indicator_indicator_target_field_idTofield: {
+            select: { id: true, code: true, name: true },
+          },
+        },
+      });
+
+      // Create a map for easy lookup
+      const fieldsMap = new Map(fieldsWithRelations.map(f => [f.id, f]));
+
       const enhancedFieldValues = [];
       for (const fieldValue of createdFieldValues) {
-        // Get the field with its relationships
-        const fieldWithRelations = await tx.field.findUnique({
-          where: { id: fieldValue.field_id },
-          include: {
-            indicator_indicator_numerator_field_idTofield: {
-              select: { id: true, code: true, name: true },
-            },
-            indicator_indicator_denominator_field_idTofield: {
-              select: { id: true, code: true, name: true },
-            },
-            indicator_indicator_target_field_idTofield: {
-              select: { id: true, code: true, name: true },
-            },
-          },
-        });
+        const fieldWithRelations = fieldsMap.get(fieldValue.field_id);
 
         if (fieldWithRelations) {
           enhancedFieldValues.push({
@@ -130,7 +138,7 @@ export async function POST(request: NextRequest) {
       // Calculate remuneration using the same logic as the report page
       try {
         console.log("🔄 Starting remuneration calculation for", facilityId, "month", reportMonth);
-        
+
         // Get facility information
         const facility = await tx.facility.findUnique({
           where: { id: facilityId },
@@ -178,7 +186,7 @@ export async function POST(request: NextRequest) {
         // If no indicators found, try alternative facility type names
         if (indicators.length === 0) {
           console.log("⚠️ No indicators found with exact facility type name, trying alternatives...");
-          
+
           // Try common variations
           const alternativeNames = [
             facility.facility_type.name,
@@ -187,12 +195,12 @@ export async function POST(request: NextRequest) {
             facility.facility_type.name.toLowerCase(),
             facility.facility_type.name.toUpperCase()
           ];
-          
+
           console.log("🔍 Trying alternative facility type names:", alternativeNames);
-          
+
           for (const altName of alternativeNames) {
             if (altName === facility.facility_type.name) continue; // Skip the one we already tried
-            
+
             const altIndicators = await tx.indicator.findMany({
               where: {
                 applicable_facility_types: {
@@ -214,7 +222,7 @@ export async function POST(request: NextRequest) {
               },
               orderBy: { code: "asc" },
             });
-            
+
             if (altIndicators.length > 0) {
               console.log(`✅ Found ${altIndicators.length} indicators with alternative name: ${altName}`);
               indicators = altIndicators;
@@ -260,7 +268,7 @@ export async function POST(request: NextRequest) {
         // Use the HealthDataRemunerationService for all calculation and storage
         try {
           const { HealthDataRemunerationService } = await import("@/lib/services/health-data-remuneration.service");
-          
+
           // Convert enhancedFieldValues to the format expected by the service
           const serviceFieldValues = enhancedFieldValues.map((fv: any) => ({
             fieldId: fv.field_id,
@@ -303,6 +311,9 @@ export async function POST(request: NextRequest) {
           remuneration: null,
         };
       }
+    }, {
+      maxWait: 5000, // default: 2000
+      timeout: 20000, // default: 5000
     });
 
     return NextResponse.json({
