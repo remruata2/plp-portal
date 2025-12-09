@@ -4,6 +4,7 @@ import type { FormulaConfig } from "./formula-calculator/types";
 import { target_type } from "@/generated/prisma";
 import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
+import { evaluate } from "mathjs";
 
 export interface AutoCalculationResult {
   success: boolean;
@@ -135,7 +136,7 @@ export class AutoIndicatorCalculator {
 
       // Get all field values for conditional checking
       const fieldValues: { [key: string]: number } = {};
-      
+
       // Get all fields for this facility and month
       const allFieldValues = await prisma.field_value.findMany({
         where: {
@@ -281,7 +282,7 @@ export class AutoIndicatorCalculator {
     // Parse target value from the database
     if (indicator.target_value) {
       const targetValueStr = indicator.target_value.toString();
-      
+
       // Check if it's a JSON string (for ranges)
       if (targetValueStr.startsWith('{') && targetValueStr.endsWith('}')) {
         try {
@@ -422,6 +423,7 @@ export class AutoIndicatorCalculator {
 
   /**
    * Calculate value using a specific formula
+   * Uses mathjs evaluate() for safe expression parsing (prevents RCE)
    */
   private calculateWithFormula(
     numerator: number,
@@ -434,8 +436,9 @@ export class AutoIndicatorCalculator {
       .replace(/B/g, denominator.toString());
 
     try {
-      // Evaluate the formula safely
-      return eval(formulaWithValues);
+      // Use mathjs evaluate() for safe math expression parsing
+      const result = evaluate(formulaWithValues);
+      return typeof result === "number" ? result : 0;
     } catch (error) {
       console.error(`Error calculating formula ${formula}:`, error);
       return 0;

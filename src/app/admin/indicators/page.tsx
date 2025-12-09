@@ -33,8 +33,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import EnhancedIndicatorForm from "@/components/admin/EnhancedIndicatorForm";
 import {
-	sortIndicatorsBySourceOrder,
-	getIndicatorNumber,
+  sortIndicatorsBySourceOrder,
+  getIndicatorNumber,
 } from "@/lib/utils/indicator-sort-order";
 
 interface Field {
@@ -60,7 +60,7 @@ interface Indicator {
   denominator_field_id?: number;
   target_field_id?: number;
   conditions?: string;
-	applicable_facility_types?: string[] | null;
+  applicable_facility_types?: string[] | null;
   formula_config?: {
     type: string;
     calculationFormula?: string;
@@ -114,10 +114,10 @@ export default function IndicatorsPage() {
         indicator.name.toLowerCase().includes(searchText) ||
         (indicator.description &&
           indicator.description.toLowerCase().includes(searchText)) ||
-				(indicator.target_type &&
-					indicator.target_type.toLowerCase().includes(searchText)) ||
-				(indicator.target_formula &&
-					indicator.target_formula.toLowerCase().includes(searchText))
+        (indicator.target_type &&
+          indicator.target_type.toLowerCase().includes(searchText)) ||
+        (indicator.target_formula &&
+          indicator.target_formula.toLowerCase().includes(searchText))
       );
     });
   }, [indicators, filterText]);
@@ -165,53 +165,53 @@ export default function IndicatorsPage() {
 
   const handleSubmitEdit = async (formData: any) => {
     try {
-			// Build formula_config with range and binary target values
-			const formulaConfig: any = {
-				type: formData.target_type,
-				calculationFormula: formData.calculation_formula,
-			};
+      // Build formula_config with range and binary target values
+      const formulaConfig: any = {
+        type: formData.target_type,
+        calculationFormula: formData.calculation_formula,
+      };
 
-			// Add general range values for RANGE and PERCENTAGE_RANGE indicators
-			if (
-				(formData.target_type === "RANGE" ||
-					formData.target_type === "PERCENTAGE_RANGE") &&
-				(formData.general_range_min !== undefined ||
-					formData.general_range_max !== undefined)
-			) {
-				formulaConfig.range = {
-					min: formData.general_range_min,
-					max: formData.general_range_max,
-				};
-			}
+      // Add general range values for RANGE and PERCENTAGE_RANGE indicators
+      if (
+        (formData.target_type === "RANGE" ||
+          formData.target_type === "PERCENTAGE_RANGE") &&
+        (formData.general_range_min !== undefined ||
+          formData.general_range_max !== undefined)
+      ) {
+        formulaConfig.range = {
+          min: formData.general_range_min,
+          max: formData.general_range_max,
+        };
+      }
 
-			// Add binary target value for BINARY indicators
-			if (
-				formData.target_type === "BINARY" &&
-				formData.binary_target_value !== undefined
-			) {
-				formulaConfig.targetValue = Number(formData.binary_target_value);
-			}
+      // Add binary target value for BINARY indicators
+      if (
+        formData.target_type === "BINARY" &&
+        formData.binary_target_value !== undefined
+      ) {
+        formulaConfig.targetValue = Number(formData.binary_target_value);
+      }
 
-			// Add facility-specific targets if enabled
-			if (formData.has_facility_specific_targets) {
-				formulaConfig.facilitySpecificTargets =
-					formData.facility_specific_targets;
-			}
+      // Add facility-specific targets if enabled
+      if (formData.has_facility_specific_targets) {
+        formulaConfig.facilitySpecificTargets =
+          formData.facility_specific_targets;
+      }
 
-			// Determine target_value: preserve existing for RANGE/PERCENTAGE_RANGE, update for BINARY
-			let targetValueToStore: string | null = null;
-			if (formData.target_type === "BINARY") {
-				// For BINARY indicators: use binary_target_value if provided, otherwise preserve existing
-				if (formData.binary_target_value !== undefined) {
-					targetValueToStore = String(formData.binary_target_value);
-				} else {
-					// Preserve existing target_value for BINARY if no new value provided
-					targetValueToStore = selectedIndicator?.target_value || null;
-				}
-			} else {
-				// For RANGE and PERCENTAGE_RANGE indicators: preserve existing target_value
-				targetValueToStore = selectedIndicator?.target_value || null;
-			}
+      // Determine target_value: preserve existing for RANGE/PERCENTAGE_RANGE, update for BINARY
+      let targetValueToStore: string | null = null;
+      if (formData.target_type === "BINARY") {
+        // For BINARY indicators: use binary_target_value if provided, otherwise preserve existing
+        if (formData.binary_target_value !== undefined) {
+          targetValueToStore = String(formData.binary_target_value);
+        } else {
+          // Preserve existing target_value for BINARY if no new value provided
+          targetValueToStore = selectedIndicator?.target_value || null;
+        }
+      } else {
+        // For RANGE and PERCENTAGE_RANGE indicators: preserve existing target_value
+        targetValueToStore = selectedIndicator?.target_value || null;
+      }
 
       const response = await fetch(`/api/indicators/${selectedIndicator?.id}`, {
         method: "PUT",
@@ -220,11 +220,11 @@ export default function IndicatorsPage() {
         },
         body: JSON.stringify({
           ...formData,
-					applicable_facility_types: formData.applicable_facility_types || [],
-					formula_config: JSON.stringify(formulaConfig),
-					target_formula: formData.target_formula || null,
-					// Preserve existing target_value for RANGE/PERCENTAGE_RANGE, update for BINARY
-					target_value: targetValueToStore,
+          applicable_facility_types: formData.applicable_facility_types || [],
+          formula_config: JSON.stringify(formulaConfig),
+          target_formula: formData.target_formula || null,
+          // Preserve existing target_value for RANGE/PERCENTAGE_RANGE, update for BINARY
+          target_value: targetValueToStore,
         }),
       });
 
@@ -256,37 +256,37 @@ export default function IndicatorsPage() {
         toast.success("Indicator deleted successfully");
         loadIndicators();
       } else {
-				const errorData = await response.json();
-				const errorMessage = errorData.error || "Failed to delete indicator";
-				const details = errorData.details;
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "Failed to delete indicator";
+        const details = errorData.details;
 
-				let fullMessage = errorMessage;
-				if (details) {
-					const detailParts = [];
-					if (details.facilityTargets > 0) {
-						detailParts.push(`${details.facilityTargets} facility target(s)`);
-					}
-					if (details.indicatorRemunerations > 0) {
-						detailParts.push(
-							`${details.indicatorRemunerations} remuneration configuration(s)`
-						);
-					}
-					if (details.facilityRemunerationRecords > 0) {
-						detailParts.push(
-							`${details.facilityRemunerationRecords} remuneration record(s)`
-						);
-					}
-					if (details.indicatorWorkerAllocations > 0) {
-						detailParts.push(
-							`${details.indicatorWorkerAllocations} worker allocation(s)`
-						);
-					}
-					if (detailParts.length > 0) {
-						fullMessage += ` (Used in: ${detailParts.join(", ")})`;
-					}
-				}
+        let fullMessage = errorMessage;
+        if (details) {
+          const detailParts = [];
+          if (details.facilityTargets > 0) {
+            detailParts.push(`${details.facilityTargets} facility target(s)`);
+          }
+          if (details.indicatorRemunerations > 0) {
+            detailParts.push(
+              `${details.indicatorRemunerations} remuneration configuration(s)`
+            );
+          }
+          if (details.facilityRemunerationRecords > 0) {
+            detailParts.push(
+              `${details.facilityRemunerationRecords} remuneration record(s)`
+            );
+          }
+          if (details.indicatorWorkerAllocations > 0) {
+            detailParts.push(
+              `${details.indicatorWorkerAllocations} worker allocation(s)`
+            );
+          }
+          if (detailParts.length > 0) {
+            fullMessage += ` (Used in: ${detailParts.join(", ")})`;
+          }
+        }
 
-				toast.error(fullMessage);
+        toast.error(fullMessage);
       }
     } catch (error) {
       console.error("Error deleting indicator:", error);
@@ -300,38 +300,38 @@ export default function IndicatorsPage() {
 
   const handleSubmitAdd = async (formData: any) => {
     try {
-			// Build formula_config with range and binary target values
-			const formulaConfig: any = {
-				type: formData.target_type,
-				calculationFormula: formData.calculation_formula,
-			};
+      // Build formula_config with range and binary target values
+      const formulaConfig: any = {
+        type: formData.target_type,
+        calculationFormula: formData.calculation_formula,
+      };
 
-			// Add general range values for RANGE and PERCENTAGE_RANGE indicators
-			if (
-				(formData.target_type === "RANGE" ||
-					formData.target_type === "PERCENTAGE_RANGE") &&
-				(formData.general_range_min !== undefined ||
-					formData.general_range_max !== undefined)
-			) {
-				formulaConfig.range = {
-					min: formData.general_range_min,
-					max: formData.general_range_max,
-				};
-			}
+      // Add general range values for RANGE and PERCENTAGE_RANGE indicators
+      if (
+        (formData.target_type === "RANGE" ||
+          formData.target_type === "PERCENTAGE_RANGE") &&
+        (formData.general_range_min !== undefined ||
+          formData.general_range_max !== undefined)
+      ) {
+        formulaConfig.range = {
+          min: formData.general_range_min,
+          max: formData.general_range_max,
+        };
+      }
 
-			// Add binary target value for BINARY indicators
-			if (
-				formData.target_type === "BINARY" &&
-				formData.binary_target_value !== undefined
-			) {
-				formulaConfig.targetValue = Number(formData.binary_target_value);
-			}
+      // Add binary target value for BINARY indicators
+      if (
+        formData.target_type === "BINARY" &&
+        formData.binary_target_value !== undefined
+      ) {
+        formulaConfig.targetValue = Number(formData.binary_target_value);
+      }
 
-			// Add facility-specific targets if enabled
-			if (formData.has_facility_specific_targets) {
-				formulaConfig.facilitySpecificTargets =
-					formData.facility_specific_targets;
-			}
+      // Add facility-specific targets if enabled
+      if (formData.has_facility_specific_targets) {
+        formulaConfig.facilitySpecificTargets =
+          formData.facility_specific_targets;
+      }
 
       const response = await fetch("/api/indicators", {
         method: "POST",
@@ -340,15 +340,15 @@ export default function IndicatorsPage() {
         },
         body: JSON.stringify({
           ...formData,
-					applicable_facility_types: formData.applicable_facility_types || [],
-					formula_config: JSON.stringify(formulaConfig),
-					target_formula: formData.target_formula || null,
-					// Store binary target value in target_value field as well
-					target_value:
-						formData.target_type === "BINARY" &&
-						formData.binary_target_value !== undefined
-							? String(formData.binary_target_value)
-							: null,
+          applicable_facility_types: formData.applicable_facility_types || [],
+          formula_config: JSON.stringify(formulaConfig),
+          target_formula: formData.target_formula || null,
+          // Store binary target value in target_value field as well
+          target_value:
+            formData.target_type === "BINARY" &&
+              formData.binary_target_value !== undefined
+              ? String(formData.binary_target_value)
+              : null,
         }),
       });
 
@@ -379,11 +379,19 @@ export default function IndicatorsPage() {
   };
 
   // Helper function to highlight search terms
+  // Escapes special regex characters to prevent ReDoS attacks
   const highlightText = (text: string, searchTerm: string) => {
     if (!searchTerm.trim()) return text;
 
-    const regex = new RegExp(`(${searchTerm})`, "gi");
-    return text.replace(
+    // Escape special regex characters to prevent ReDoS
+    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedSearchTerm})`, "gi");
+    // Also escape HTML in the text first to prevent XSS
+    const escapedText = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    return escapedText.replace(
       regex,
       '<mark class="bg-yellow-200 px-1 rounded">$1</mark>'
     );
@@ -601,83 +609,83 @@ export default function IndicatorsPage() {
                   code: selectedIndicator.code,
                   name: selectedIndicator.name,
                   description: selectedIndicator.description || "",
-									applicable_facility_types: Array.isArray(
-										selectedIndicator.applicable_facility_types
-									)
-										? selectedIndicator.applicable_facility_types
-										: [],
+                  applicable_facility_types: Array.isArray(
+                    selectedIndicator.applicable_facility_types
+                  )
+                    ? selectedIndicator.applicable_facility_types
+                    : [],
                   numerator_field_id:
                     selectedIndicator.numerator_field_id?.toString() || "",
                   denominator_field_id:
                     selectedIndicator.denominator_field_id?.toString() || "",
                   target_type: selectedIndicator.target_type as any,
-									// Extract general range values from formula_config or target_value (backward compatibility)
-									general_range_min: (() => {
-										// Try formula_config first
-										if (
-											selectedIndicator.formula_config?.range?.min !== undefined
-										) {
-											return selectedIndicator.formula_config.range.min;
-										}
-										// Fallback to parsing target_value if it's a JSON range
-										if (selectedIndicator.target_value) {
-											try {
-												const parsed = JSON.parse(
-													selectedIndicator.target_value
-												);
-												if (parsed?.min !== undefined) {
-													return parsed.min;
-												}
-											} catch {
-												// Not JSON, ignore
-											}
-										}
-										return undefined;
-									})(),
-									general_range_max: (() => {
-										// Try formula_config first
-										if (
-											selectedIndicator.formula_config?.range?.max !== undefined
-										) {
-											return selectedIndicator.formula_config.range.max;
-										}
-										// Fallback to parsing target_value if it's a JSON range
-										if (selectedIndicator.target_value) {
-											try {
-												const parsed = JSON.parse(
-													selectedIndicator.target_value
-												);
-												if (parsed?.max !== undefined) {
-													return parsed.max;
-												}
-											} catch {
-												// Not JSON, ignore
-											}
-										}
-										return undefined;
-									})(),
-									// Extract binary target value from target_value or formula_config
-									binary_target_value: (() => {
-										if (selectedIndicator.target_type === "BINARY") {
-											// Try formula_config.targetValue first
-											if (
-												selectedIndicator.formula_config?.targetValue !==
-												undefined
-											) {
-												return selectedIndicator.formula_config.targetValue;
-											}
-											// Fallback to target_value field
-											if (selectedIndicator.target_value) {
-												const parsed = parseFloat(
-													selectedIndicator.target_value
-												);
-												return isNaN(parsed)
-													? selectedIndicator.target_value
-													: parsed;
-											}
-										}
-										return undefined;
-									})(),
+                  // Extract general range values from formula_config or target_value (backward compatibility)
+                  general_range_min: (() => {
+                    // Try formula_config first
+                    if (
+                      selectedIndicator.formula_config?.range?.min !== undefined
+                    ) {
+                      return selectedIndicator.formula_config.range.min;
+                    }
+                    // Fallback to parsing target_value if it's a JSON range
+                    if (selectedIndicator.target_value) {
+                      try {
+                        const parsed = JSON.parse(
+                          selectedIndicator.target_value
+                        );
+                        if (parsed?.min !== undefined) {
+                          return parsed.min;
+                        }
+                      } catch {
+                        // Not JSON, ignore
+                      }
+                    }
+                    return undefined;
+                  })(),
+                  general_range_max: (() => {
+                    // Try formula_config first
+                    if (
+                      selectedIndicator.formula_config?.range?.max !== undefined
+                    ) {
+                      return selectedIndicator.formula_config.range.max;
+                    }
+                    // Fallback to parsing target_value if it's a JSON range
+                    if (selectedIndicator.target_value) {
+                      try {
+                        const parsed = JSON.parse(
+                          selectedIndicator.target_value
+                        );
+                        if (parsed?.max !== undefined) {
+                          return parsed.max;
+                        }
+                      } catch {
+                        // Not JSON, ignore
+                      }
+                    }
+                    return undefined;
+                  })(),
+                  // Extract binary target value from target_value or formula_config
+                  binary_target_value: (() => {
+                    if (selectedIndicator.target_type === "BINARY") {
+                      // Try formula_config.targetValue first
+                      if (
+                        selectedIndicator.formula_config?.targetValue !==
+                        undefined
+                      ) {
+                        return selectedIndicator.formula_config.targetValue;
+                      }
+                      // Fallback to target_value field
+                      if (selectedIndicator.target_value) {
+                        const parsed = parseFloat(
+                          selectedIndicator.target_value
+                        );
+                        return isNaN(parsed)
+                          ? selectedIndicator.target_value
+                          : parsed;
+                      }
+                    }
+                    return undefined;
+                  })(),
                   calculation_formula:
                     selectedIndicator.formula_config?.calculationFormula ||
                     "(A/B)*100",
@@ -687,7 +695,7 @@ export default function IndicatorsPage() {
                     selectedIndicator.formula_config?.facilitySpecificTargets ||
                     {},
                   conditions: selectedIndicator.conditions || "",
-									target_formula: selectedIndicator.target_formula || "",
+                  target_formula: selectedIndicator.target_formula || "",
                 }}
                 onSubmit={handleSubmitEdit}
                 onCancel={() => {

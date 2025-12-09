@@ -14,7 +14,8 @@ export async function middleware(req: NextRequest) {
   console.log("Middleware: Processing path:", path);
 
   // Define public routes that don't need auth
-  const publicRoutes = ["/api/seed"];
+  // Note: /api/seed removed for security - should require authentication
+  const publicRoutes: string[] = [];
   const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
 
   // Skip auth check for public routes
