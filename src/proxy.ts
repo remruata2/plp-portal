@@ -8,7 +8,7 @@ import { user_role } from "./generated/prisma";
 type UserRole = typeof user_role[keyof typeof user_role];
 
 // First, handle public routes that don't need auth checks
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   console.log("Middleware: Processing path:", path);
