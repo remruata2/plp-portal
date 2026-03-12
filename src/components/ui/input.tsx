@@ -5,7 +5,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, onWheel, ...props }, ref) => {
     return (
       <input
         type={type}
@@ -14,6 +14,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
+        onWheel={(e) => {
+          if (type === "number") {
+            (e.target as HTMLInputElement).blur();
+          }
+          onWheel?.(e);
+        }}
+        onTouchStart={(e) => {
+          if (type === "number") {
+            // Only blur if the input is already focused and the user is touching it again (likely to scroll)
+            if (document.activeElement === e.target) {
+              (e.target as HTMLInputElement).blur();
+            }
+          }
+        }}
         {...props}
       />
     );

@@ -14,6 +14,15 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+	DialogFooter,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/toast";
 import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
 import WorkerSelectionForm from "./WorkerSelectionForm";
@@ -83,6 +92,8 @@ export default function DynamicHealthDataForm({
 	const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 	const [existingSubmissions, setExistingSubmissions] = useState<string[]>([]);
 	const [checkingSubmissions, setCheckingSubmissions] = useState(false);
+	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [isConfirmed, setIsConfirmed] = useState(false);
 
 	// Ref for debouncing full validation
 	const fullValidationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -1397,6 +1408,27 @@ export default function DynamicHealthDataForm({
 				return;
 			}
 
+			// All validations passed! Open the confirmation modal instead of submitting directly
+			setIsConfirmed(false);
+			setShowConfirmModal(true);
+		} catch (error) {
+			console.error("Error validating data:", error);
+			toast({
+				title: "Failed to validate data",
+				description: "An error occurred during validation.",
+				variant: "destructive",
+			});
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
+	const confirmSubmit = async () => {
+		try {
+			setSubmitting(true);
+			setShowConfirmModal(false);
+
+			const reportMonth = `${selectedYear}-${selectedMonth}`;
 			// Use facility ID from props or fallback to session
 			const effectiveFacilityId = facilityId || session?.user?.facility_id;
 
@@ -2181,6 +2213,120 @@ export default function DynamicHealthDataForm({
 					</form>
 				)}
 			</CardContent>
+
+			{/* Confirmation Modal */}
+			<Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
+				<DialogContent className="sm:max-w-[700px] w-[95vw] sm:w-full max-h-[90dvh] sm:max-h-[85vh] flex flex-col p-4 sm:p-6">
+					<DialogHeader className="shrink-0 text-left">
+						<DialogTitle>Confirm Data Submission</DialogTitle>
+						<DialogDescription>
+							Please review your data before final submission. This action cannot be easily undone.
+						</DialogDescription>
+					</DialogHeader>
+					
+					<div className="flex-1 overflow-y-auto min-h-0 pr-1 py-1 space-y-4">
+						<div className="bg-gray-50 p-3 rounded text-sm text-gray-700">
+							<p><strong>Reporting Period:</strong> {prevMonthName} {prevYear}</p>
+							<p><strong>Facility Type:</strong> {facilityType}</p>
+						</div>
+
+						<div className="space-y-4">
+							<h4 className="font-medium text-gray-900 border-b pb-2">Entered Values</h4>
+							{indicatorGroups.map((group) => {
+								// Only show fields that have values entered
+								const fieldsWithValue = group.fields.map(field => {
+									let value = formData[field.formFieldName];
+									
+									// Convert boolean toggles properly for display
+									if (field.fieldType === "BINARY") {
+										value = (value === "1" || value === true) ? "Yes" : "No";
+									} else if (value === "" || value === undefined || value === null) {
+										value = "N/A";
+									}
+
+									return {
+										id: field.databaseFieldId,
+										description: field.description,
+										name: field.formFieldName,
+										value: value
+									};
+								});
+
+								// Hide fields dependent on Yes/No conditional questions if the answer was No.
+								const isCt001ConditionalField = group.fields.some(f => f.formFieldName === "indicator_ct001_conditional_answer" || f.formFieldName === "indicator_ct001_conditional_answer_phc");
+								const isDc001ConditionalField = group.fields.some(f => f.formFieldName === "indicator_dc001_conditional_answer" || f.formFieldName === "indicator_dc001_conditional_answer_phc");
+
+								let groupAnswer = "yes";
+								if (isCt001ConditionalField) {
+									const answer = facilityType === "PHC" ? formData["indicator_ct001_conditional_answer_phc"] : formData["indicator_ct001_conditional_answer"];
+									groupAnswer = (answer === "1" || answer === true) ? "yes" : "no";
+								} else if (isDc001ConditionalField) {
+									const answer = facilityType === "PHC" ? formData["indicator_dc001_conditional_answer_phc"] : formData["indicator_dc001_conditional_answer"];
+									groupAnswer = (answer === "1" || answer === true) ? "yes" : "no";
+								} else if (indicatorAnswers[group.indicatorCode]) {
+									groupAnswer = indicatorAnswers[group.indicatorCode] || "yes";
+								}
+
+								const displayFields = fieldsWithValue.filter(f => {
+									// Skip the conditional answer fields themselves
+									if (f.name.includes("conditional_answer")) return false;
+
+									if ((f.name === "tb_contact_tracing_households" || f.name === "tb_differentiated_care_visits") && groupAnswer !== "yes") {
+										return false;
+									}
+									return true;
+								});
+								
+								if (displayFields.length === 0) return null;
+
+								return (
+									<div key={group.indicatorCode} className="text-sm">
+										<p className="font-semibold text-gray-800 mb-1">{group.indicatorName}</p>
+										<ul className="space-y-1 divide-y divide-gray-100 pl-2">
+											{displayFields.map(f => (
+												<li key={f.id} className="pt-1 flex justify-between gap-4 text-xs">
+													<span className="text-gray-600 truncate">{f.description}</span>
+													<span className="font-medium shrink-0">{f.value}</span>
+												</li>
+											))}
+										</ul>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div className="pt-4 border-t space-y-4 shrink-0">
+						<div className="flex items-start space-x-2">
+							<Checkbox 
+								id="confirm-accurate" 
+								checked={isConfirmed}
+								onCheckedChange={(checked) => setIsConfirmed(checked as boolean)}
+							/>
+							<div className="grid gap-1.5 leading-none">
+								<label
+									htmlFor="confirm-accurate"
+									className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									I confirm these values are correct
+								</label>
+								<p className="text-xs text-muted-foreground mt-1">
+									I have verified that all entered data accurately reflects the facility's performance for this period.
+								</p>
+							</div>
+						</div>
+						
+						<DialogFooter>
+							<Button type="button" variant="outline" onClick={() => setShowConfirmModal(false)}>
+								Go Back and Edit
+							</Button>
+							<Button type="button" onClick={confirmSubmit} disabled={!isConfirmed || submitting}>
+								{submitting ? "Submitting..." : "Yes, Submit Form"}
+							</Button>
+						</DialogFooter>
+					</div>
+				</DialogContent>
+			</Dialog>
 		</Card>
 	);
 }
