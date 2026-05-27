@@ -140,7 +140,15 @@ export async function updateUser(
  * Delete a user
  */
 export async function deleteUser(id: number) {
-	return await db.user.delete({
-		where: { id },
+	return await db.$transaction(async (tx) => {
+		// Delete associated field values to prevent foreign key constraints
+		await tx.field_value.deleteMany({
+			where: { uploaded_by: id },
+		});
+
+		// Delete the user
+		return await tx.user.delete({
+			where: { id },
+		});
 	});
 }

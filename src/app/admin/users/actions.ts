@@ -29,8 +29,14 @@ export async function deleteUserAction(
 		await deleteUserService(id);
 		revalidatePath("/admin/users"); // Revalidate the user list page to reflect changes
 		return { success: true };
-	} catch (error) {
+	} catch (error: any) {
 		console.error("Failed to delete user:", error);
+		if (error?.code === "P2003") {
+			return {
+				success: false,
+				error: "Cannot delete user with associated records. Please edit and set the user to inactive instead.",
+			};
+		}
 		// In a real app, you might want to return a more specific error message
 		return {
 			success: false,

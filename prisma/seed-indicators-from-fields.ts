@@ -516,7 +516,7 @@ async function seedFinalCorrectedIndicators() {
       name: "Patient satisfaction score for the month",
       description: "Patient satisfaction score (1-5 scale) converted to percentage",
       numerator_field_code: "patient_satisfaction_score",
-      denominator_field_code: null, // No denominator field needed - fixed scale of 5
+      denominator_field_code: "patient_satisfaction_max",
       numerator_label: "Patient Satisfaction Score",
       denominator_label: "Fixed Scale (5)",
       target_type: "PERCENTAGE_RANGE" as const,

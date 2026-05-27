@@ -126,8 +126,11 @@ export default function UserListClient({
       success: (result) => {
         if (result.success) {
           setIsAlertDialogOpen(false); // Close dialog on success
+          setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id));
+          const deletedUsername = userToDelete.username;
           setUserToDelete(null);
-          return `User ${userToDelete.username} deleted successfully.`;
+          router.refresh();
+          return `User ${deletedUsername} deleted successfully.`;
         } else {
           // This error will be caught by the 'error' callback of toast.promise
           throw new Error(result.error || "Failed to delete user.");
@@ -540,8 +543,11 @@ export default function UserListClient({
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete the
-                user "{userToDelete.username}" and remove their data from our
-                servers.
+                user "{userToDelete.username}".
+                <br /><br />
+                <span className="font-semibold text-red-600">
+                  Warning: All associated data and records uploaded by this user will also be permanently deleted.
+                </span>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

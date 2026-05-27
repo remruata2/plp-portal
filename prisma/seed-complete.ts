@@ -59,6 +59,7 @@ async function seedEnhancedFacilityTypes() {
         data: {
           name: facilityType.name,
           display_name: facilityType.display_name,
+          updated_at: new Date(),
         },
       });
       createdCount++;
@@ -819,6 +820,7 @@ async function seedFacilities() {
           display_name: facilityData.name,
           facility_type_id: facilityType.id,
           district_id: district.id,
+          updated_at: new Date(),
         },
       });
       createdCount++;

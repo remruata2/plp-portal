@@ -120,7 +120,8 @@ async function createFacilityTargets() {
                 report_month: currentMonth,
                 target_value: 0, // Default target value
                 numerator_label: indicator.numerator_label || "Numerator",
-                denominator_label: indicator.denominator_label || "Denominator"
+                denominator_label: indicator.denominator_label || "Denominator",
+                updated_at: new Date()
               }
             });
             targetsCreated++;

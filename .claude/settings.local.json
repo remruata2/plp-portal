@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\Projects\\\\plp-portal\\\\src\\\\app\\\\admin\\\\performance-reports\" -Recurse -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "Bash(xargs grep -l \"form.*name\\\\|formName\")"
+    ]
+  }
+}

@@ -570,7 +570,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/remruata/projects/plp-portal/src/generated/prisma",
+      "value": "D:\\Projects\\plp-portal\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -579,12 +579,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/remruata/projects/plp-portal/prisma/schema.prisma",
+    "sourceFilePath": "D:\\Projects\\plp-portal\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -141,6 +141,7 @@ async function seedWorkerAllocationConfig() {
             allocated_amount: config.allocatedAmount,
             description: config.description,
             is_active: true,
+            updated_at: new Date(),
           },
         });
 

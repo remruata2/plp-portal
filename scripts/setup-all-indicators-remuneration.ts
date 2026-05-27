@@ -405,6 +405,7 @@ async function main() {
             data: {
               facility_type_id: facilityType.id,
               total_amount: totalAmount,
+              updated_at: new Date(),
             },
           }
         );
@@ -453,6 +454,7 @@ async function main() {
               facility_type_remuneration_id: facilityTypeRemuneration.id,
               indicator_id: indicator.id,
               base_amount: amount,
+              updated_at: new Date(),
             },
           });
           console.log(`  ✅ ${indicator.code}: Rs. ${amount}`);
@@ -460,7 +462,10 @@ async function main() {
           // Update existing indicator remuneration
           await prisma.indicator_remuneration.update({
             where: { id: existingIndicatorRemuneration.id },
-            data: { base_amount: amount },
+            data: { 
+              base_amount: amount,
+              updated_at: new Date(),
+            },
           });
           console.log(`  🔄 ${indicator.code}: Rs. ${amount} (updated)`);
         }
