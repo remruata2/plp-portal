@@ -385,13 +385,11 @@ export default function FacilitiesPage() {
             <Download className="h-4 w-4" />
             Download CSV
           </Button>
+          <Button onClick={() => setIsCreateOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Facility
+          </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Facility
-              </Button>
-            </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Create New Facility</DialogTitle>
