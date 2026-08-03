@@ -44,6 +44,11 @@ export type facility_target = $Result.DefaultSelection<Prisma.$facility_targetPa
  */
 export type facility_type = $Result.DefaultSelection<Prisma.$facility_typePayload>
 /**
+ * Model indicator_group
+ * 
+ */
+export type indicator_group = $Result.DefaultSelection<Prisma.$indicator_groupPayload>
+/**
  * Model facility_type_remuneration
  * 
  */
@@ -534,6 +539,16 @@ export class PrismaClient<
     * ```
     */
   get facility_type(): Prisma.facility_typeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.indicator_group`: Exposes CRUD operations for the **indicator_group** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Indicator_groups
+    * const indicator_groups = await prisma.indicator_group.findMany()
+    * ```
+    */
+  get indicator_group(): Prisma.indicator_groupDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.facility_type_remuneration`: Exposes CRUD operations for the **facility_type_remuneration** model.
@@ -1140,6 +1155,7 @@ export namespace Prisma {
     facility_field_mapping: 'facility_field_mapping',
     facility_target: 'facility_target',
     facility_type: 'facility_type',
+    indicator_group: 'indicator_group',
     facility_type_remuneration: 'facility_type_remuneration',
     family: 'family',
     family_member: 'family_member',
@@ -1174,7 +1190,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "facilityRemunerationRecord" | "district" | "facility" | "facility_field_mapping" | "facility_target" | "facility_type" | "facility_type_remuneration" | "family" | "family_member" | "field" | "field_value" | "health_workers" | "indicator" | "indicator_remuneration" | "indicator_worker_allocation" | "remuneration_calculations" | "section" | "system_setting" | "user" | "village" | "worker_allocation_config" | "worker_remunerations"
+      modelProps: "facilityRemunerationRecord" | "district" | "facility" | "facility_field_mapping" | "facility_target" | "facility_type" | "indicator_group" | "facility_type_remuneration" | "family" | "family_member" | "field" | "field_value" | "health_workers" | "indicator" | "indicator_remuneration" | "indicator_worker_allocation" | "remuneration_calculations" | "section" | "system_setting" | "user" | "village" | "worker_allocation_config" | "worker_remunerations"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1619,6 +1635,80 @@ export namespace Prisma {
           count: {
             args: Prisma.facility_typeCountArgs<ExtArgs>
             result: $Utils.Optional<Facility_typeCountAggregateOutputType> | number
+          }
+        }
+      }
+      indicator_group: {
+        payload: Prisma.$indicator_groupPayload<ExtArgs>
+        fields: Prisma.indicator_groupFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.indicator_groupFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.indicator_groupFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          findFirst: {
+            args: Prisma.indicator_groupFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.indicator_groupFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          findMany: {
+            args: Prisma.indicator_groupFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>[]
+          }
+          create: {
+            args: Prisma.indicator_groupCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          createMany: {
+            args: Prisma.indicator_groupCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.indicator_groupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>[]
+          }
+          delete: {
+            args: Prisma.indicator_groupDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          update: {
+            args: Prisma.indicator_groupUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          deleteMany: {
+            args: Prisma.indicator_groupDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.indicator_groupUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.indicator_groupUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>[]
+          }
+          upsert: {
+            args: Prisma.indicator_groupUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$indicator_groupPayload>
+          }
+          aggregate: {
+            args: Prisma.Indicator_groupAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIndicator_group>
+          }
+          groupBy: {
+            args: Prisma.indicator_groupGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Indicator_groupGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.indicator_groupCountArgs<ExtArgs>
+            result: $Utils.Optional<Indicator_groupCountAggregateOutputType> | number
           }
         }
       }
@@ -2896,6 +2986,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingOmit
     facility_target?: facility_targetOmit
     facility_type?: facility_typeOmit
+    indicator_group?: indicator_groupOmit
     facility_type_remuneration?: facility_type_remunerationOmit
     family?: familyOmit
     family_member?: family_memberOmit
@@ -3143,12 +3234,14 @@ export namespace Prisma {
     facility: number
     facility_field_mapping: number
     worker_allocation_config: number
+    indicator_group: number
   }
 
   export type Facility_typeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility?: boolean | Facility_typeCountOutputTypeCountFacilityArgs
     facility_field_mapping?: boolean | Facility_typeCountOutputTypeCountFacility_field_mappingArgs
     worker_allocation_config?: boolean | Facility_typeCountOutputTypeCountWorker_allocation_configArgs
+    indicator_group?: boolean | Facility_typeCountOutputTypeCountIndicator_groupArgs
   }
 
   // Custom InputTypes
@@ -3181,6 +3274,44 @@ export namespace Prisma {
    */
   export type Facility_typeCountOutputTypeCountWorker_allocation_configArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: worker_allocation_configWhereInput
+  }
+
+  /**
+   * Facility_typeCountOutputType without action
+   */
+  export type Facility_typeCountOutputTypeCountIndicator_groupArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: indicator_groupWhereInput
+  }
+
+
+  /**
+   * Count Type Indicator_groupCountOutputType
+   */
+
+  export type Indicator_groupCountOutputType = {
+    facility_field_mapping: number
+  }
+
+  export type Indicator_groupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility_field_mapping?: boolean | Indicator_groupCountOutputTypeCountFacility_field_mappingArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Indicator_groupCountOutputType without action
+   */
+  export type Indicator_groupCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Indicator_groupCountOutputType
+     */
+    select?: Indicator_groupCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Indicator_groupCountOutputType without action
+   */
+  export type Indicator_groupCountOutputTypeCountFacility_field_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: facility_field_mappingWhereInput
   }
 
 
@@ -3256,6 +3387,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield: number
     indicator_indicator_numerator_field_idTofield: number
     indicator_indicator_target_field_idTofield: number
+    facility_field_mapping_parent: number
+    facility_field_mapping_parent2: number
+    indicator_group_parent: number
+    indicator_group_parent2: number
   }
 
   export type FieldCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3264,6 +3399,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: boolean | FieldCountOutputTypeCountIndicator_indicator_denominator_field_idTofieldArgs
     indicator_indicator_numerator_field_idTofield?: boolean | FieldCountOutputTypeCountIndicator_indicator_numerator_field_idTofieldArgs
     indicator_indicator_target_field_idTofield?: boolean | FieldCountOutputTypeCountIndicator_indicator_target_field_idTofieldArgs
+    facility_field_mapping_parent?: boolean | FieldCountOutputTypeCountFacility_field_mapping_parentArgs
+    facility_field_mapping_parent2?: boolean | FieldCountOutputTypeCountFacility_field_mapping_parent2Args
+    indicator_group_parent?: boolean | FieldCountOutputTypeCountIndicator_group_parentArgs
+    indicator_group_parent2?: boolean | FieldCountOutputTypeCountIndicator_group_parent2Args
   }
 
   // Custom InputTypes
@@ -3310,6 +3449,34 @@ export namespace Prisma {
    */
   export type FieldCountOutputTypeCountIndicator_indicator_target_field_idTofieldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: indicatorWhereInput
+  }
+
+  /**
+   * FieldCountOutputType without action
+   */
+  export type FieldCountOutputTypeCountFacility_field_mapping_parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: facility_field_mappingWhereInput
+  }
+
+  /**
+   * FieldCountOutputType without action
+   */
+  export type FieldCountOutputTypeCountFacility_field_mapping_parent2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: facility_field_mappingWhereInput
+  }
+
+  /**
+   * FieldCountOutputType without action
+   */
+  export type FieldCountOutputTypeCountIndicator_group_parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: indicator_groupWhereInput
+  }
+
+  /**
+   * FieldCountOutputType without action
+   */
+  export type FieldCountOutputTypeCountIndicator_group_parent2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: indicator_groupWhereInput
   }
 
 
@@ -7272,12 +7439,18 @@ export namespace Prisma {
     id: number | null
     field_id: number | null
     display_order: number | null
+    group_id: number | null
+    parent_field_id: number | null
+    parent_field_id2: number | null
   }
 
   export type Facility_field_mappingSumAggregateOutputType = {
     id: number | null
     field_id: number | null
     display_order: number | null
+    group_id: number | null
+    parent_field_id: number | null
+    parent_field_id2: number | null
   }
 
   export type Facility_field_mappingMinAggregateOutputType = {
@@ -7288,6 +7461,11 @@ export namespace Prisma {
     created_at: Date | null
     updated_at: Date | null
     facility_type_id: string | null
+    group_id: number | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
   }
 
   export type Facility_field_mappingMaxAggregateOutputType = {
@@ -7298,6 +7476,11 @@ export namespace Prisma {
     created_at: Date | null
     updated_at: Date | null
     facility_type_id: string | null
+    group_id: number | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
   }
 
   export type Facility_field_mappingCountAggregateOutputType = {
@@ -7308,6 +7491,11 @@ export namespace Prisma {
     created_at: number
     updated_at: number
     facility_type_id: number
+    group_id: number
+    parent_field_id: number
+    show_on_value: number
+    parent_field_id2: number
+    show_on_value2: number
     _all: number
   }
 
@@ -7316,12 +7504,18 @@ export namespace Prisma {
     id?: true
     field_id?: true
     display_order?: true
+    group_id?: true
+    parent_field_id?: true
+    parent_field_id2?: true
   }
 
   export type Facility_field_mappingSumAggregateInputType = {
     id?: true
     field_id?: true
     display_order?: true
+    group_id?: true
+    parent_field_id?: true
+    parent_field_id2?: true
   }
 
   export type Facility_field_mappingMinAggregateInputType = {
@@ -7332,6 +7526,11 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     facility_type_id?: true
+    group_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
   }
 
   export type Facility_field_mappingMaxAggregateInputType = {
@@ -7342,6 +7541,11 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     facility_type_id?: true
+    group_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
   }
 
   export type Facility_field_mappingCountAggregateInputType = {
@@ -7352,6 +7556,11 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     facility_type_id?: true
+    group_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
     _all?: true
   }
 
@@ -7449,6 +7658,11 @@ export namespace Prisma {
     created_at: Date
     updated_at: Date
     facility_type_id: string
+    group_id: number | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
     _count: Facility_field_mappingCountAggregateOutputType | null
     _avg: Facility_field_mappingAvgAggregateOutputType | null
     _sum: Facility_field_mappingSumAggregateOutputType | null
@@ -7478,8 +7692,16 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     facility_type_id?: boolean
+    group_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }, ExtArgs["result"]["facility_field_mapping"]>
 
   export type facility_field_mappingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7490,8 +7712,16 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     facility_type_id?: boolean
+    group_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }, ExtArgs["result"]["facility_field_mapping"]>
 
   export type facility_field_mappingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7502,8 +7732,16 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     facility_type_id?: boolean
+    group_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }, ExtArgs["result"]["facility_field_mapping"]>
 
   export type facility_field_mappingSelectScalar = {
@@ -7514,20 +7752,34 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     facility_type_id?: boolean
+    group_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
   }
 
-  export type facility_field_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "field_id" | "is_required" | "display_order" | "created_at" | "updated_at" | "facility_type_id", ExtArgs["result"]["facility_field_mapping"]>
+  export type facility_field_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "field_id" | "is_required" | "display_order" | "created_at" | "updated_at" | "facility_type_id" | "group_id" | "parent_field_id" | "show_on_value" | "parent_field_id2" | "show_on_value2", ExtArgs["result"]["facility_field_mapping"]>
   export type facility_field_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }
   export type facility_field_mappingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }
   export type facility_field_mappingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type?: boolean | facility_typeDefaultArgs<ExtArgs>
     field?: boolean | fieldDefaultArgs<ExtArgs>
+    indicator_group?: boolean | facility_field_mapping$indicator_groupArgs<ExtArgs>
+    parent_field?: boolean | facility_field_mapping$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | facility_field_mapping$parent_field2Args<ExtArgs>
   }
 
   export type $facility_field_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7535,6 +7787,9 @@ export namespace Prisma {
     objects: {
       facility_type: Prisma.$facility_typePayload<ExtArgs>
       field: Prisma.$fieldPayload<ExtArgs>
+      indicator_group: Prisma.$indicator_groupPayload<ExtArgs> | null
+      parent_field: Prisma.$fieldPayload<ExtArgs> | null
+      parent_field2: Prisma.$fieldPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7544,6 +7799,11 @@ export namespace Prisma {
       created_at: Date
       updated_at: Date
       facility_type_id: string
+      group_id: number | null
+      parent_field_id: number | null
+      show_on_value: string | null
+      parent_field_id2: number | null
+      show_on_value2: string | null
     }, ExtArgs["result"]["facility_field_mapping"]>
     composites: {}
   }
@@ -7940,6 +8200,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     facility_type<T extends facility_typeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, facility_typeDefaultArgs<ExtArgs>>): Prisma__facility_typeClient<$Result.GetResult<Prisma.$facility_typePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     field<T extends fieldDefaultArgs<ExtArgs> = {}>(args?: Subset<T, fieldDefaultArgs<ExtArgs>>): Prisma__fieldClient<$Result.GetResult<Prisma.$fieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    indicator_group<T extends facility_field_mapping$indicator_groupArgs<ExtArgs> = {}>(args?: Subset<T, facility_field_mapping$indicator_groupArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parent_field<T extends facility_field_mapping$parent_fieldArgs<ExtArgs> = {}>(args?: Subset<T, facility_field_mapping$parent_fieldArgs<ExtArgs>>): Prisma__fieldClient<$Result.GetResult<Prisma.$fieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parent_field2<T extends facility_field_mapping$parent_field2Args<ExtArgs> = {}>(args?: Subset<T, facility_field_mapping$parent_field2Args<ExtArgs>>): Prisma__fieldClient<$Result.GetResult<Prisma.$fieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7976,6 +8239,11 @@ export namespace Prisma {
     readonly created_at: FieldRef<"facility_field_mapping", 'DateTime'>
     readonly updated_at: FieldRef<"facility_field_mapping", 'DateTime'>
     readonly facility_type_id: FieldRef<"facility_field_mapping", 'String'>
+    readonly group_id: FieldRef<"facility_field_mapping", 'Int'>
+    readonly parent_field_id: FieldRef<"facility_field_mapping", 'Int'>
+    readonly show_on_value: FieldRef<"facility_field_mapping", 'String'>
+    readonly parent_field_id2: FieldRef<"facility_field_mapping", 'Int'>
+    readonly show_on_value2: FieldRef<"facility_field_mapping", 'String'>
   }
     
 
@@ -8369,6 +8637,63 @@ export namespace Prisma {
      * Limit how many facility_field_mappings to delete.
      */
     limit?: number
+  }
+
+  /**
+   * facility_field_mapping.indicator_group
+   */
+  export type facility_field_mapping$indicator_groupArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    where?: indicator_groupWhereInput
+  }
+
+  /**
+   * facility_field_mapping.parent_field
+   */
+  export type facility_field_mapping$parent_fieldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the field
+     */
+    select?: fieldSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the field
+     */
+    omit?: fieldOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: fieldInclude<ExtArgs> | null
+    where?: fieldWhereInput
+  }
+
+  /**
+   * facility_field_mapping.parent_field2
+   */
+  export type facility_field_mapping$parent_field2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the field
+     */
+    select?: fieldSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the field
+     */
+    omit?: fieldOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: fieldInclude<ExtArgs> | null
+    where?: fieldWhereInput
   }
 
   /**
@@ -9734,6 +10059,7 @@ export namespace Prisma {
     facility_field_mapping?: boolean | facility_type$facility_field_mappingArgs<ExtArgs>
     facility_type_remuneration?: boolean | facility_type$facility_type_remunerationArgs<ExtArgs>
     worker_allocation_config?: boolean | facility_type$worker_allocation_configArgs<ExtArgs>
+    indicator_group?: boolean | facility_type$indicator_groupArgs<ExtArgs>
     _count?: boolean | Facility_typeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["facility_type"]>
 
@@ -9773,6 +10099,7 @@ export namespace Prisma {
     facility_field_mapping?: boolean | facility_type$facility_field_mappingArgs<ExtArgs>
     facility_type_remuneration?: boolean | facility_type$facility_type_remunerationArgs<ExtArgs>
     worker_allocation_config?: boolean | facility_type$worker_allocation_configArgs<ExtArgs>
+    indicator_group?: boolean | facility_type$indicator_groupArgs<ExtArgs>
     _count?: boolean | Facility_typeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type facility_typeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -9785,6 +10112,7 @@ export namespace Prisma {
       facility_field_mapping: Prisma.$facility_field_mappingPayload<ExtArgs>[]
       facility_type_remuneration: Prisma.$facility_type_remunerationPayload<ExtArgs> | null
       worker_allocation_config: Prisma.$worker_allocation_configPayload<ExtArgs>[]
+      indicator_group: Prisma.$indicator_groupPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10192,6 +10520,7 @@ export namespace Prisma {
     facility_field_mapping<T extends facility_type$facility_field_mappingArgs<ExtArgs> = {}>(args?: Subset<T, facility_type$facility_field_mappingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$facility_field_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facility_type_remuneration<T extends facility_type$facility_type_remunerationArgs<ExtArgs> = {}>(args?: Subset<T, facility_type$facility_type_remunerationArgs<ExtArgs>>): Prisma__facility_type_remunerationClient<$Result.GetResult<Prisma.$facility_type_remunerationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     worker_allocation_config<T extends facility_type$worker_allocation_configArgs<ExtArgs> = {}>(args?: Subset<T, facility_type$worker_allocation_configArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$worker_allocation_configPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    indicator_group<T extends facility_type$indicator_groupArgs<ExtArgs> = {}>(args?: Subset<T, facility_type$indicator_groupArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10707,6 +11036,30 @@ export namespace Prisma {
   }
 
   /**
+   * facility_type.indicator_group
+   */
+  export type facility_type$indicator_groupArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    where?: indicator_groupWhereInput
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    cursor?: indicator_groupWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
+  }
+
+  /**
    * facility_type without action
    */
   export type facility_typeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10722,6 +11075,1317 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: facility_typeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model indicator_group
+   */
+
+  export type AggregateIndicator_group = {
+    _count: Indicator_groupCountAggregateOutputType | null
+    _avg: Indicator_groupAvgAggregateOutputType | null
+    _sum: Indicator_groupSumAggregateOutputType | null
+    _min: Indicator_groupMinAggregateOutputType | null
+    _max: Indicator_groupMaxAggregateOutputType | null
+  }
+
+  export type Indicator_groupAvgAggregateOutputType = {
+    id: number | null
+    sort_order: number | null
+    parent_field_id: number | null
+    parent_field_id2: number | null
+  }
+
+  export type Indicator_groupSumAggregateOutputType = {
+    id: number | null
+    sort_order: number | null
+    parent_field_id: number | null
+    parent_field_id2: number | null
+  }
+
+  export type Indicator_groupMinAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    description: string | null
+    sort_order: number | null
+    facility_type_id: string | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Indicator_groupMaxAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    description: string | null
+    sort_order: number | null
+    facility_type_id: string | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Indicator_groupCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    description: number
+    sort_order: number
+    facility_type_id: number
+    parent_field_id: number
+    show_on_value: number
+    parent_field_id2: number
+    show_on_value2: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type Indicator_groupAvgAggregateInputType = {
+    id?: true
+    sort_order?: true
+    parent_field_id?: true
+    parent_field_id2?: true
+  }
+
+  export type Indicator_groupSumAggregateInputType = {
+    id?: true
+    sort_order?: true
+    parent_field_id?: true
+    parent_field_id2?: true
+  }
+
+  export type Indicator_groupMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    sort_order?: true
+    facility_type_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Indicator_groupMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    sort_order?: true
+    facility_type_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Indicator_groupCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    sort_order?: true
+    facility_type_id?: true
+    parent_field_id?: true
+    show_on_value?: true
+    parent_field_id2?: true
+    show_on_value2?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type Indicator_groupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which indicator_group to aggregate.
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of indicator_groups to fetch.
+     */
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: indicator_groupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` indicator_groups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` indicator_groups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned indicator_groups
+    **/
+    _count?: true | Indicator_groupCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Indicator_groupAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Indicator_groupSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Indicator_groupMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Indicator_groupMaxAggregateInputType
+  }
+
+  export type GetIndicator_groupAggregateType<T extends Indicator_groupAggregateArgs> = {
+        [P in keyof T & keyof AggregateIndicator_group]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIndicator_group[P]>
+      : GetScalarType<T[P], AggregateIndicator_group[P]>
+  }
+
+
+
+
+  export type indicator_groupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: indicator_groupWhereInput
+    orderBy?: indicator_groupOrderByWithAggregationInput | indicator_groupOrderByWithAggregationInput[]
+    by: Indicator_groupScalarFieldEnum[] | Indicator_groupScalarFieldEnum
+    having?: indicator_groupScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Indicator_groupCountAggregateInputType | true
+    _avg?: Indicator_groupAvgAggregateInputType
+    _sum?: Indicator_groupSumAggregateInputType
+    _min?: Indicator_groupMinAggregateInputType
+    _max?: Indicator_groupMaxAggregateInputType
+  }
+
+  export type Indicator_groupGroupByOutputType = {
+    id: number
+    code: string
+    name: string
+    description: string | null
+    sort_order: number
+    facility_type_id: string | null
+    parent_field_id: number | null
+    show_on_value: string | null
+    parent_field_id2: number | null
+    show_on_value2: string | null
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: Indicator_groupCountAggregateOutputType | null
+    _avg: Indicator_groupAvgAggregateOutputType | null
+    _sum: Indicator_groupSumAggregateOutputType | null
+    _min: Indicator_groupMinAggregateOutputType | null
+    _max: Indicator_groupMaxAggregateOutputType | null
+  }
+
+  type GetIndicator_groupGroupByPayload<T extends indicator_groupGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Indicator_groupGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Indicator_groupGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Indicator_groupGroupByOutputType[P]>
+            : GetScalarType<T[P], Indicator_groupGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type indicator_groupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    sort_order?: boolean
+    facility_type_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+    facility_field_mapping?: boolean | indicator_group$facility_field_mappingArgs<ExtArgs>
+    _count?: boolean | Indicator_groupCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["indicator_group"]>
+
+  export type indicator_groupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    sort_order?: boolean
+    facility_type_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+  }, ExtArgs["result"]["indicator_group"]>
+
+  export type indicator_groupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    sort_order?: boolean
+    facility_type_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+  }, ExtArgs["result"]["indicator_group"]>
+
+  export type indicator_groupSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    sort_order?: boolean
+    facility_type_id?: boolean
+    parent_field_id?: boolean
+    show_on_value?: boolean
+    parent_field_id2?: boolean
+    show_on_value2?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type indicator_groupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "description" | "sort_order" | "facility_type_id" | "parent_field_id" | "show_on_value" | "parent_field_id2" | "show_on_value2" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["indicator_group"]>
+  export type indicator_groupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+    facility_field_mapping?: boolean | indicator_group$facility_field_mappingArgs<ExtArgs>
+    _count?: boolean | Indicator_groupCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type indicator_groupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+  }
+  export type indicator_groupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility_type?: boolean | indicator_group$facility_typeArgs<ExtArgs>
+    parent_field?: boolean | indicator_group$parent_fieldArgs<ExtArgs>
+    parent_field2?: boolean | indicator_group$parent_field2Args<ExtArgs>
+  }
+
+  export type $indicator_groupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "indicator_group"
+    objects: {
+      facility_type: Prisma.$facility_typePayload<ExtArgs> | null
+      parent_field: Prisma.$fieldPayload<ExtArgs> | null
+      parent_field2: Prisma.$fieldPayload<ExtArgs> | null
+      facility_field_mapping: Prisma.$facility_field_mappingPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      code: string
+      name: string
+      description: string | null
+      sort_order: number
+      facility_type_id: string | null
+      parent_field_id: number | null
+      show_on_value: string | null
+      parent_field_id2: number | null
+      show_on_value2: string | null
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["indicator_group"]>
+    composites: {}
+  }
+
+  type indicator_groupGetPayload<S extends boolean | null | undefined | indicator_groupDefaultArgs> = $Result.GetResult<Prisma.$indicator_groupPayload, S>
+
+  type indicator_groupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<indicator_groupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Indicator_groupCountAggregateInputType | true
+    }
+
+  export interface indicator_groupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['indicator_group'], meta: { name: 'indicator_group' } }
+    /**
+     * Find zero or one Indicator_group that matches the filter.
+     * @param {indicator_groupFindUniqueArgs} args - Arguments to find a Indicator_group
+     * @example
+     * // Get one Indicator_group
+     * const indicator_group = await prisma.indicator_group.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends indicator_groupFindUniqueArgs>(args: SelectSubset<T, indicator_groupFindUniqueArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Indicator_group that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {indicator_groupFindUniqueOrThrowArgs} args - Arguments to find a Indicator_group
+     * @example
+     * // Get one Indicator_group
+     * const indicator_group = await prisma.indicator_group.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends indicator_groupFindUniqueOrThrowArgs>(args: SelectSubset<T, indicator_groupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Indicator_group that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupFindFirstArgs} args - Arguments to find a Indicator_group
+     * @example
+     * // Get one Indicator_group
+     * const indicator_group = await prisma.indicator_group.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends indicator_groupFindFirstArgs>(args?: SelectSubset<T, indicator_groupFindFirstArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Indicator_group that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupFindFirstOrThrowArgs} args - Arguments to find a Indicator_group
+     * @example
+     * // Get one Indicator_group
+     * const indicator_group = await prisma.indicator_group.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends indicator_groupFindFirstOrThrowArgs>(args?: SelectSubset<T, indicator_groupFindFirstOrThrowArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Indicator_groups that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Indicator_groups
+     * const indicator_groups = await prisma.indicator_group.findMany()
+     * 
+     * // Get first 10 Indicator_groups
+     * const indicator_groups = await prisma.indicator_group.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const indicator_groupWithIdOnly = await prisma.indicator_group.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends indicator_groupFindManyArgs>(args?: SelectSubset<T, indicator_groupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Indicator_group.
+     * @param {indicator_groupCreateArgs} args - Arguments to create a Indicator_group.
+     * @example
+     * // Create one Indicator_group
+     * const Indicator_group = await prisma.indicator_group.create({
+     *   data: {
+     *     // ... data to create a Indicator_group
+     *   }
+     * })
+     * 
+     */
+    create<T extends indicator_groupCreateArgs>(args: SelectSubset<T, indicator_groupCreateArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Indicator_groups.
+     * @param {indicator_groupCreateManyArgs} args - Arguments to create many Indicator_groups.
+     * @example
+     * // Create many Indicator_groups
+     * const indicator_group = await prisma.indicator_group.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends indicator_groupCreateManyArgs>(args?: SelectSubset<T, indicator_groupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Indicator_groups and returns the data saved in the database.
+     * @param {indicator_groupCreateManyAndReturnArgs} args - Arguments to create many Indicator_groups.
+     * @example
+     * // Create many Indicator_groups
+     * const indicator_group = await prisma.indicator_group.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Indicator_groups and only return the `id`
+     * const indicator_groupWithIdOnly = await prisma.indicator_group.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends indicator_groupCreateManyAndReturnArgs>(args?: SelectSubset<T, indicator_groupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Indicator_group.
+     * @param {indicator_groupDeleteArgs} args - Arguments to delete one Indicator_group.
+     * @example
+     * // Delete one Indicator_group
+     * const Indicator_group = await prisma.indicator_group.delete({
+     *   where: {
+     *     // ... filter to delete one Indicator_group
+     *   }
+     * })
+     * 
+     */
+    delete<T extends indicator_groupDeleteArgs>(args: SelectSubset<T, indicator_groupDeleteArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Indicator_group.
+     * @param {indicator_groupUpdateArgs} args - Arguments to update one Indicator_group.
+     * @example
+     * // Update one Indicator_group
+     * const indicator_group = await prisma.indicator_group.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends indicator_groupUpdateArgs>(args: SelectSubset<T, indicator_groupUpdateArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Indicator_groups.
+     * @param {indicator_groupDeleteManyArgs} args - Arguments to filter Indicator_groups to delete.
+     * @example
+     * // Delete a few Indicator_groups
+     * const { count } = await prisma.indicator_group.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends indicator_groupDeleteManyArgs>(args?: SelectSubset<T, indicator_groupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Indicator_groups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Indicator_groups
+     * const indicator_group = await prisma.indicator_group.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends indicator_groupUpdateManyArgs>(args: SelectSubset<T, indicator_groupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Indicator_groups and returns the data updated in the database.
+     * @param {indicator_groupUpdateManyAndReturnArgs} args - Arguments to update many Indicator_groups.
+     * @example
+     * // Update many Indicator_groups
+     * const indicator_group = await prisma.indicator_group.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Indicator_groups and only return the `id`
+     * const indicator_groupWithIdOnly = await prisma.indicator_group.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends indicator_groupUpdateManyAndReturnArgs>(args: SelectSubset<T, indicator_groupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Indicator_group.
+     * @param {indicator_groupUpsertArgs} args - Arguments to update or create a Indicator_group.
+     * @example
+     * // Update or create a Indicator_group
+     * const indicator_group = await prisma.indicator_group.upsert({
+     *   create: {
+     *     // ... data to create a Indicator_group
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Indicator_group we want to update
+     *   }
+     * })
+     */
+    upsert<T extends indicator_groupUpsertArgs>(args: SelectSubset<T, indicator_groupUpsertArgs<ExtArgs>>): Prisma__indicator_groupClient<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Indicator_groups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupCountArgs} args - Arguments to filter Indicator_groups to count.
+     * @example
+     * // Count the number of Indicator_groups
+     * const count = await prisma.indicator_group.count({
+     *   where: {
+     *     // ... the filter for the Indicator_groups we want to count
+     *   }
+     * })
+    **/
+    count<T extends indicator_groupCountArgs>(
+      args?: Subset<T, indicator_groupCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Indicator_groupCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Indicator_group.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Indicator_groupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Indicator_groupAggregateArgs>(args: Subset<T, Indicator_groupAggregateArgs>): Prisma.PrismaPromise<GetIndicator_groupAggregateType<T>>
+
+    /**
+     * Group by Indicator_group.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {indicator_groupGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends indicator_groupGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: indicator_groupGroupByArgs['orderBy'] }
+        : { orderBy?: indicator_groupGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, indicator_groupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIndicator_groupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the indicator_group model
+   */
+  readonly fields: indicator_groupFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for indicator_group.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__indicator_groupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    facility_type<T extends indicator_group$facility_typeArgs<ExtArgs> = {}>(args?: Subset<T, indicator_group$facility_typeArgs<ExtArgs>>): Prisma__facility_typeClient<$Result.GetResult<Prisma.$facility_typePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parent_field<T extends indicator_group$parent_fieldArgs<ExtArgs> = {}>(args?: Subset<T, indicator_group$parent_fieldArgs<ExtArgs>>): Prisma__fieldClient<$Result.GetResult<Prisma.$fieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parent_field2<T extends indicator_group$parent_field2Args<ExtArgs> = {}>(args?: Subset<T, indicator_group$parent_field2Args<ExtArgs>>): Prisma__fieldClient<$Result.GetResult<Prisma.$fieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    facility_field_mapping<T extends indicator_group$facility_field_mappingArgs<ExtArgs> = {}>(args?: Subset<T, indicator_group$facility_field_mappingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$facility_field_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the indicator_group model
+   */
+  interface indicator_groupFieldRefs {
+    readonly id: FieldRef<"indicator_group", 'Int'>
+    readonly code: FieldRef<"indicator_group", 'String'>
+    readonly name: FieldRef<"indicator_group", 'String'>
+    readonly description: FieldRef<"indicator_group", 'String'>
+    readonly sort_order: FieldRef<"indicator_group", 'Int'>
+    readonly facility_type_id: FieldRef<"indicator_group", 'String'>
+    readonly parent_field_id: FieldRef<"indicator_group", 'Int'>
+    readonly show_on_value: FieldRef<"indicator_group", 'String'>
+    readonly parent_field_id2: FieldRef<"indicator_group", 'Int'>
+    readonly show_on_value2: FieldRef<"indicator_group", 'String'>
+    readonly is_active: FieldRef<"indicator_group", 'Boolean'>
+    readonly created_at: FieldRef<"indicator_group", 'DateTime'>
+    readonly updated_at: FieldRef<"indicator_group", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * indicator_group findUnique
+   */
+  export type indicator_groupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter, which indicator_group to fetch.
+     */
+    where: indicator_groupWhereUniqueInput
+  }
+
+  /**
+   * indicator_group findUniqueOrThrow
+   */
+  export type indicator_groupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter, which indicator_group to fetch.
+     */
+    where: indicator_groupWhereUniqueInput
+  }
+
+  /**
+   * indicator_group findFirst
+   */
+  export type indicator_groupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter, which indicator_group to fetch.
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of indicator_groups to fetch.
+     */
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for indicator_groups.
+     */
+    cursor?: indicator_groupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` indicator_groups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` indicator_groups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of indicator_groups.
+     */
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
+  }
+
+  /**
+   * indicator_group findFirstOrThrow
+   */
+  export type indicator_groupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter, which indicator_group to fetch.
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of indicator_groups to fetch.
+     */
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for indicator_groups.
+     */
+    cursor?: indicator_groupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` indicator_groups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` indicator_groups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of indicator_groups.
+     */
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
+  }
+
+  /**
+   * indicator_group findMany
+   */
+  export type indicator_groupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter, which indicator_groups to fetch.
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of indicator_groups to fetch.
+     */
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing indicator_groups.
+     */
+    cursor?: indicator_groupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` indicator_groups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` indicator_groups.
+     */
+    skip?: number
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
+  }
+
+  /**
+   * indicator_group create
+   */
+  export type indicator_groupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * The data needed to create a indicator_group.
+     */
+    data: XOR<indicator_groupCreateInput, indicator_groupUncheckedCreateInput>
+  }
+
+  /**
+   * indicator_group createMany
+   */
+  export type indicator_groupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many indicator_groups.
+     */
+    data: indicator_groupCreateManyInput | indicator_groupCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * indicator_group createManyAndReturn
+   */
+  export type indicator_groupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * The data used to create many indicator_groups.
+     */
+    data: indicator_groupCreateManyInput | indicator_groupCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * indicator_group update
+   */
+  export type indicator_groupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * The data needed to update a indicator_group.
+     */
+    data: XOR<indicator_groupUpdateInput, indicator_groupUncheckedUpdateInput>
+    /**
+     * Choose, which indicator_group to update.
+     */
+    where: indicator_groupWhereUniqueInput
+  }
+
+  /**
+   * indicator_group updateMany
+   */
+  export type indicator_groupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update indicator_groups.
+     */
+    data: XOR<indicator_groupUpdateManyMutationInput, indicator_groupUncheckedUpdateManyInput>
+    /**
+     * Filter which indicator_groups to update
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * Limit how many indicator_groups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * indicator_group updateManyAndReturn
+   */
+  export type indicator_groupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * The data used to update indicator_groups.
+     */
+    data: XOR<indicator_groupUpdateManyMutationInput, indicator_groupUncheckedUpdateManyInput>
+    /**
+     * Filter which indicator_groups to update
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * Limit how many indicator_groups to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * indicator_group upsert
+   */
+  export type indicator_groupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * The filter to search for the indicator_group to update in case it exists.
+     */
+    where: indicator_groupWhereUniqueInput
+    /**
+     * In case the indicator_group found by the `where` argument doesn't exist, create a new indicator_group with this data.
+     */
+    create: XOR<indicator_groupCreateInput, indicator_groupUncheckedCreateInput>
+    /**
+     * In case the indicator_group was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<indicator_groupUpdateInput, indicator_groupUncheckedUpdateInput>
+  }
+
+  /**
+   * indicator_group delete
+   */
+  export type indicator_groupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    /**
+     * Filter which indicator_group to delete.
+     */
+    where: indicator_groupWhereUniqueInput
+  }
+
+  /**
+   * indicator_group deleteMany
+   */
+  export type indicator_groupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which indicator_groups to delete
+     */
+    where?: indicator_groupWhereInput
+    /**
+     * Limit how many indicator_groups to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * indicator_group.facility_type
+   */
+  export type indicator_group$facility_typeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the facility_type
+     */
+    select?: facility_typeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the facility_type
+     */
+    omit?: facility_typeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: facility_typeInclude<ExtArgs> | null
+    where?: facility_typeWhereInput
+  }
+
+  /**
+   * indicator_group.parent_field
+   */
+  export type indicator_group$parent_fieldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the field
+     */
+    select?: fieldSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the field
+     */
+    omit?: fieldOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: fieldInclude<ExtArgs> | null
+    where?: fieldWhereInput
+  }
+
+  /**
+   * indicator_group.parent_field2
+   */
+  export type indicator_group$parent_field2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the field
+     */
+    select?: fieldSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the field
+     */
+    omit?: fieldOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: fieldInclude<ExtArgs> | null
+    where?: fieldWhereInput
+  }
+
+  /**
+   * indicator_group.facility_field_mapping
+   */
+  export type indicator_group$facility_field_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the facility_field_mapping
+     */
+    select?: facility_field_mappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the facility_field_mapping
+     */
+    omit?: facility_field_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: facility_field_mappingInclude<ExtArgs> | null
+    where?: facility_field_mappingWhereInput
+    orderBy?: facility_field_mappingOrderByWithRelationInput | facility_field_mappingOrderByWithRelationInput[]
+    cursor?: facility_field_mappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Facility_field_mappingScalarFieldEnum | Facility_field_mappingScalarFieldEnum[]
+  }
+
+  /**
+   * indicator_group without action
+   */
+  export type indicator_groupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
   }
 
 
@@ -14583,6 +16247,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: boolean | field$indicator_indicator_denominator_field_idTofieldArgs<ExtArgs>
     indicator_indicator_numerator_field_idTofield?: boolean | field$indicator_indicator_numerator_field_idTofieldArgs<ExtArgs>
     indicator_indicator_target_field_idTofield?: boolean | field$indicator_indicator_target_field_idTofieldArgs<ExtArgs>
+    facility_field_mapping_parent?: boolean | field$facility_field_mapping_parentArgs<ExtArgs>
+    facility_field_mapping_parent2?: boolean | field$facility_field_mapping_parent2Args<ExtArgs>
+    indicator_group_parent?: boolean | field$indicator_group_parentArgs<ExtArgs>
+    indicator_group_parent2?: boolean | field$indicator_group_parent2Args<ExtArgs>
     _count?: boolean | FieldCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["field"]>
 
@@ -14647,6 +16315,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: boolean | field$indicator_indicator_denominator_field_idTofieldArgs<ExtArgs>
     indicator_indicator_numerator_field_idTofield?: boolean | field$indicator_indicator_numerator_field_idTofieldArgs<ExtArgs>
     indicator_indicator_target_field_idTofield?: boolean | field$indicator_indicator_target_field_idTofieldArgs<ExtArgs>
+    facility_field_mapping_parent?: boolean | field$facility_field_mapping_parentArgs<ExtArgs>
+    facility_field_mapping_parent2?: boolean | field$facility_field_mapping_parent2Args<ExtArgs>
+    indicator_group_parent?: boolean | field$indicator_group_parentArgs<ExtArgs>
+    indicator_group_parent2?: boolean | field$indicator_group_parent2Args<ExtArgs>
     _count?: boolean | FieldCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type fieldIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -14660,6 +16332,10 @@ export namespace Prisma {
       indicator_indicator_denominator_field_idTofield: Prisma.$indicatorPayload<ExtArgs>[]
       indicator_indicator_numerator_field_idTofield: Prisma.$indicatorPayload<ExtArgs>[]
       indicator_indicator_target_field_idTofield: Prisma.$indicatorPayload<ExtArgs>[]
+      facility_field_mapping_parent: Prisma.$facility_field_mappingPayload<ExtArgs>[]
+      facility_field_mapping_parent2: Prisma.$facility_field_mappingPayload<ExtArgs>[]
+      indicator_group_parent: Prisma.$indicator_groupPayload<ExtArgs>[]
+      indicator_group_parent2: Prisma.$indicator_groupPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -15076,6 +16752,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield<T extends field$indicator_indicator_denominator_field_idTofieldArgs<ExtArgs> = {}>(args?: Subset<T, field$indicator_indicator_denominator_field_idTofieldArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     indicator_indicator_numerator_field_idTofield<T extends field$indicator_indicator_numerator_field_idTofieldArgs<ExtArgs> = {}>(args?: Subset<T, field$indicator_indicator_numerator_field_idTofieldArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     indicator_indicator_target_field_idTofield<T extends field$indicator_indicator_target_field_idTofieldArgs<ExtArgs> = {}>(args?: Subset<T, field$indicator_indicator_target_field_idTofieldArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    facility_field_mapping_parent<T extends field$facility_field_mapping_parentArgs<ExtArgs> = {}>(args?: Subset<T, field$facility_field_mapping_parentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$facility_field_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    facility_field_mapping_parent2<T extends field$facility_field_mapping_parent2Args<ExtArgs> = {}>(args?: Subset<T, field$facility_field_mapping_parent2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$facility_field_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    indicator_group_parent<T extends field$indicator_group_parentArgs<ExtArgs> = {}>(args?: Subset<T, field$indicator_group_parentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    indicator_group_parent2<T extends field$indicator_group_parent2Args<ExtArgs> = {}>(args?: Subset<T, field$indicator_group_parent2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$indicator_groupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15625,6 +17305,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IndicatorScalarFieldEnum | IndicatorScalarFieldEnum[]
+  }
+
+  /**
+   * field.facility_field_mapping_parent
+   */
+  export type field$facility_field_mapping_parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the facility_field_mapping
+     */
+    select?: facility_field_mappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the facility_field_mapping
+     */
+    omit?: facility_field_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: facility_field_mappingInclude<ExtArgs> | null
+    where?: facility_field_mappingWhereInput
+    orderBy?: facility_field_mappingOrderByWithRelationInput | facility_field_mappingOrderByWithRelationInput[]
+    cursor?: facility_field_mappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Facility_field_mappingScalarFieldEnum | Facility_field_mappingScalarFieldEnum[]
+  }
+
+  /**
+   * field.facility_field_mapping_parent2
+   */
+  export type field$facility_field_mapping_parent2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the facility_field_mapping
+     */
+    select?: facility_field_mappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the facility_field_mapping
+     */
+    omit?: facility_field_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: facility_field_mappingInclude<ExtArgs> | null
+    where?: facility_field_mappingWhereInput
+    orderBy?: facility_field_mappingOrderByWithRelationInput | facility_field_mappingOrderByWithRelationInput[]
+    cursor?: facility_field_mappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Facility_field_mappingScalarFieldEnum | Facility_field_mappingScalarFieldEnum[]
+  }
+
+  /**
+   * field.indicator_group_parent
+   */
+  export type field$indicator_group_parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    where?: indicator_groupWhereInput
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    cursor?: indicator_groupWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
+  }
+
+  /**
+   * field.indicator_group_parent2
+   */
+  export type field$indicator_group_parent2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the indicator_group
+     */
+    select?: indicator_groupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the indicator_group
+     */
+    omit?: indicator_groupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: indicator_groupInclude<ExtArgs> | null
+    where?: indicator_groupWhereInput
+    orderBy?: indicator_groupOrderByWithRelationInput | indicator_groupOrderByWithRelationInput[]
+    cursor?: indicator_groupWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Indicator_groupScalarFieldEnum | Indicator_groupScalarFieldEnum[]
   }
 
   /**
@@ -19655,6 +21431,7 @@ export namespace Prisma {
     condition_2_amount: number
     condition_3_amount: number
     condition_4_amount: number
+    condition_config: number
     _all: number
   }
 
@@ -19726,6 +21503,7 @@ export namespace Prisma {
     condition_2_amount?: true
     condition_3_amount?: true
     condition_4_amount?: true
+    condition_config?: true
     _all?: true
   }
 
@@ -19828,6 +21606,7 @@ export namespace Prisma {
     condition_2_amount: Decimal | null
     condition_3_amount: Decimal | null
     condition_4_amount: Decimal | null
+    condition_config: JsonValue | null
     _count: Indicator_remunerationCountAggregateOutputType | null
     _avg: Indicator_remunerationAvgAggregateOutputType | null
     _sum: Indicator_remunerationSumAggregateOutputType | null
@@ -19862,6 +21641,7 @@ export namespace Prisma {
     condition_2_amount?: boolean
     condition_3_amount?: boolean
     condition_4_amount?: boolean
+    condition_config?: boolean
     facility_type_remuneration?: boolean | facility_type_remunerationDefaultArgs<ExtArgs>
     indicator?: boolean | indicatorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["indicator_remuneration"]>
@@ -19879,6 +21659,7 @@ export namespace Prisma {
     condition_2_amount?: boolean
     condition_3_amount?: boolean
     condition_4_amount?: boolean
+    condition_config?: boolean
     facility_type_remuneration?: boolean | facility_type_remunerationDefaultArgs<ExtArgs>
     indicator?: boolean | indicatorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["indicator_remuneration"]>
@@ -19896,6 +21677,7 @@ export namespace Prisma {
     condition_2_amount?: boolean
     condition_3_amount?: boolean
     condition_4_amount?: boolean
+    condition_config?: boolean
     facility_type_remuneration?: boolean | facility_type_remunerationDefaultArgs<ExtArgs>
     indicator?: boolean | indicatorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["indicator_remuneration"]>
@@ -19913,9 +21695,10 @@ export namespace Prisma {
     condition_2_amount?: boolean
     condition_3_amount?: boolean
     condition_4_amount?: boolean
+    condition_config?: boolean
   }
 
-  export type indicator_remunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_type_remuneration_id" | "indicator_id" | "base_amount" | "conditional_amount" | "condition_type" | "created_at" | "updated_at" | "condition_1_amount" | "condition_2_amount" | "condition_3_amount" | "condition_4_amount", ExtArgs["result"]["indicator_remuneration"]>
+  export type indicator_remunerationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "facility_type_remuneration_id" | "indicator_id" | "base_amount" | "conditional_amount" | "condition_type" | "created_at" | "updated_at" | "condition_1_amount" | "condition_2_amount" | "condition_3_amount" | "condition_4_amount" | "condition_config", ExtArgs["result"]["indicator_remuneration"]>
   export type indicator_remunerationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     facility_type_remuneration?: boolean | facility_type_remunerationDefaultArgs<ExtArgs>
     indicator?: boolean | indicatorDefaultArgs<ExtArgs>
@@ -19948,6 +21731,7 @@ export namespace Prisma {
       condition_2_amount: Prisma.Decimal | null
       condition_3_amount: Prisma.Decimal | null
       condition_4_amount: Prisma.Decimal | null
+      condition_config: Prisma.JsonValue | null
     }, ExtArgs["result"]["indicator_remuneration"]>
     composites: {}
   }
@@ -20385,6 +22169,7 @@ export namespace Prisma {
     readonly condition_2_amount: FieldRef<"indicator_remuneration", 'Decimal'>
     readonly condition_3_amount: FieldRef<"indicator_remuneration", 'Decimal'>
     readonly condition_4_amount: FieldRef<"indicator_remuneration", 'Decimal'>
+    readonly condition_config: FieldRef<"indicator_remuneration", 'Json'>
   }
     
 
@@ -29948,7 +31733,12 @@ export namespace Prisma {
     display_order: 'display_order',
     created_at: 'created_at',
     updated_at: 'updated_at',
-    facility_type_id: 'facility_type_id'
+    facility_type_id: 'facility_type_id',
+    group_id: 'group_id',
+    parent_field_id: 'parent_field_id',
+    show_on_value: 'show_on_value',
+    parent_field_id2: 'parent_field_id2',
+    show_on_value2: 'show_on_value2'
   };
 
   export type Facility_field_mappingScalarFieldEnum = (typeof Facility_field_mappingScalarFieldEnum)[keyof typeof Facility_field_mappingScalarFieldEnum]
@@ -29980,6 +31770,25 @@ export namespace Prisma {
   };
 
   export type Facility_typeScalarFieldEnum = (typeof Facility_typeScalarFieldEnum)[keyof typeof Facility_typeScalarFieldEnum]
+
+
+  export const Indicator_groupScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    description: 'description',
+    sort_order: 'sort_order',
+    facility_type_id: 'facility_type_id',
+    parent_field_id: 'parent_field_id',
+    show_on_value: 'show_on_value',
+    parent_field_id2: 'parent_field_id2',
+    show_on_value2: 'show_on_value2',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type Indicator_groupScalarFieldEnum = (typeof Indicator_groupScalarFieldEnum)[keyof typeof Indicator_groupScalarFieldEnum]
 
 
   export const Facility_type_remunerationScalarFieldEnum: {
@@ -30132,7 +31941,8 @@ export namespace Prisma {
     condition_1_amount: 'condition_1_amount',
     condition_2_amount: 'condition_2_amount',
     condition_3_amount: 'condition_3_amount',
-    condition_4_amount: 'condition_4_amount'
+    condition_4_amount: 'condition_4_amount',
+    condition_config: 'condition_config'
   };
 
   export type Indicator_remunerationScalarFieldEnum = (typeof Indicator_remunerationScalarFieldEnum)[keyof typeof Indicator_remunerationScalarFieldEnum]
@@ -30833,8 +32643,16 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     updated_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     facility_type_id?: StringFilter<"facility_field_mapping"> | string
+    group_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    parent_field_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value?: StringNullableFilter<"facility_field_mapping"> | string | null
+    parent_field_id2?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value2?: StringNullableFilter<"facility_field_mapping"> | string | null
     facility_type?: XOR<Facility_typeScalarRelationFilter, facility_typeWhereInput>
     field?: XOR<FieldScalarRelationFilter, fieldWhereInput>
+    indicator_group?: XOR<Indicator_groupNullableScalarRelationFilter, indicator_groupWhereInput> | null
+    parent_field?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    parent_field2?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
   }
 
   export type facility_field_mappingOrderByWithRelationInput = {
@@ -30845,8 +32663,16 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facility_type_id?: SortOrder
+    group_id?: SortOrderInput | SortOrder
+    parent_field_id?: SortOrderInput | SortOrder
+    show_on_value?: SortOrderInput | SortOrder
+    parent_field_id2?: SortOrderInput | SortOrder
+    show_on_value2?: SortOrderInput | SortOrder
     facility_type?: facility_typeOrderByWithRelationInput
     field?: fieldOrderByWithRelationInput
+    indicator_group?: indicator_groupOrderByWithRelationInput
+    parent_field?: fieldOrderByWithRelationInput
+    parent_field2?: fieldOrderByWithRelationInput
   }
 
   export type facility_field_mappingWhereUniqueInput = Prisma.AtLeast<{
@@ -30861,8 +32687,16 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     updated_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     facility_type_id?: StringFilter<"facility_field_mapping"> | string
+    group_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    parent_field_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value?: StringNullableFilter<"facility_field_mapping"> | string | null
+    parent_field_id2?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value2?: StringNullableFilter<"facility_field_mapping"> | string | null
     facility_type?: XOR<Facility_typeScalarRelationFilter, facility_typeWhereInput>
     field?: XOR<FieldScalarRelationFilter, fieldWhereInput>
+    indicator_group?: XOR<Indicator_groupNullableScalarRelationFilter, indicator_groupWhereInput> | null
+    parent_field?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    parent_field2?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
   }, "id" | "facility_type_id_field_id">
 
   export type facility_field_mappingOrderByWithAggregationInput = {
@@ -30873,6 +32707,11 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facility_type_id?: SortOrder
+    group_id?: SortOrderInput | SortOrder
+    parent_field_id?: SortOrderInput | SortOrder
+    show_on_value?: SortOrderInput | SortOrder
+    parent_field_id2?: SortOrderInput | SortOrder
+    show_on_value2?: SortOrderInput | SortOrder
     _count?: facility_field_mappingCountOrderByAggregateInput
     _avg?: facility_field_mappingAvgOrderByAggregateInput
     _max?: facility_field_mappingMaxOrderByAggregateInput
@@ -30891,6 +32730,11 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"facility_field_mapping"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"facility_field_mapping"> | Date | string
     facility_type_id?: StringWithAggregatesFilter<"facility_field_mapping"> | string
+    group_id?: IntNullableWithAggregatesFilter<"facility_field_mapping"> | number | null
+    parent_field_id?: IntNullableWithAggregatesFilter<"facility_field_mapping"> | number | null
+    show_on_value?: StringNullableWithAggregatesFilter<"facility_field_mapping"> | string | null
+    parent_field_id2?: IntNullableWithAggregatesFilter<"facility_field_mapping"> | number | null
+    show_on_value2?: StringNullableWithAggregatesFilter<"facility_field_mapping"> | string | null
   }
 
   export type facility_targetWhereInput = {
@@ -30989,6 +32833,7 @@ export namespace Prisma {
     facility_field_mapping?: Facility_field_mappingListRelationFilter
     facility_type_remuneration?: XOR<Facility_type_remunerationNullableScalarRelationFilter, facility_type_remunerationWhereInput> | null
     worker_allocation_config?: Worker_allocation_configListRelationFilter
+    indicator_group?: Indicator_groupListRelationFilter
   }
 
   export type facility_typeOrderByWithRelationInput = {
@@ -31003,6 +32848,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingOrderByRelationAggregateInput
     facility_type_remuneration?: facility_type_remunerationOrderByWithRelationInput
     worker_allocation_config?: worker_allocation_configOrderByRelationAggregateInput
+    indicator_group?: indicator_groupOrderByRelationAggregateInput
   }
 
   export type facility_typeWhereUniqueInput = Prisma.AtLeast<{
@@ -31020,6 +32866,7 @@ export namespace Prisma {
     facility_field_mapping?: Facility_field_mappingListRelationFilter
     facility_type_remuneration?: XOR<Facility_type_remunerationNullableScalarRelationFilter, facility_type_remunerationWhereInput> | null
     worker_allocation_config?: Worker_allocation_configListRelationFilter
+    indicator_group?: Indicator_groupListRelationFilter
   }, "id" | "name">
 
   export type facility_typeOrderByWithAggregationInput = {
@@ -31046,6 +32893,113 @@ export namespace Prisma {
     display_name?: StringWithAggregatesFilter<"facility_type"> | string
     is_active?: BoolWithAggregatesFilter<"facility_type"> | boolean
     updated_at?: DateTimeWithAggregatesFilter<"facility_type"> | Date | string
+  }
+
+  export type indicator_groupWhereInput = {
+    AND?: indicator_groupWhereInput | indicator_groupWhereInput[]
+    OR?: indicator_groupWhereInput[]
+    NOT?: indicator_groupWhereInput | indicator_groupWhereInput[]
+    id?: IntFilter<"indicator_group"> | number
+    code?: StringFilter<"indicator_group"> | string
+    name?: StringFilter<"indicator_group"> | string
+    description?: StringNullableFilter<"indicator_group"> | string | null
+    sort_order?: IntFilter<"indicator_group"> | number
+    facility_type_id?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id2?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value2?: StringNullableFilter<"indicator_group"> | string | null
+    is_active?: BoolFilter<"indicator_group"> | boolean
+    created_at?: DateTimeFilter<"indicator_group"> | Date | string
+    updated_at?: DateTimeFilter<"indicator_group"> | Date | string
+    facility_type?: XOR<Facility_typeNullableScalarRelationFilter, facility_typeWhereInput> | null
+    parent_field?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    parent_field2?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    facility_field_mapping?: Facility_field_mappingListRelationFilter
+  }
+
+  export type indicator_groupOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sort_order?: SortOrder
+    facility_type_id?: SortOrderInput | SortOrder
+    parent_field_id?: SortOrderInput | SortOrder
+    show_on_value?: SortOrderInput | SortOrder
+    parent_field_id2?: SortOrderInput | SortOrder
+    show_on_value2?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    facility_type?: facility_typeOrderByWithRelationInput
+    parent_field?: fieldOrderByWithRelationInput
+    parent_field2?: fieldOrderByWithRelationInput
+    facility_field_mapping?: facility_field_mappingOrderByRelationAggregateInput
+  }
+
+  export type indicator_groupWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    code_facility_type_id?: indicator_groupCodeFacility_type_idCompoundUniqueInput
+    AND?: indicator_groupWhereInput | indicator_groupWhereInput[]
+    OR?: indicator_groupWhereInput[]
+    NOT?: indicator_groupWhereInput | indicator_groupWhereInput[]
+    code?: StringFilter<"indicator_group"> | string
+    name?: StringFilter<"indicator_group"> | string
+    description?: StringNullableFilter<"indicator_group"> | string | null
+    sort_order?: IntFilter<"indicator_group"> | number
+    facility_type_id?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id2?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value2?: StringNullableFilter<"indicator_group"> | string | null
+    is_active?: BoolFilter<"indicator_group"> | boolean
+    created_at?: DateTimeFilter<"indicator_group"> | Date | string
+    updated_at?: DateTimeFilter<"indicator_group"> | Date | string
+    facility_type?: XOR<Facility_typeNullableScalarRelationFilter, facility_typeWhereInput> | null
+    parent_field?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    parent_field2?: XOR<FieldNullableScalarRelationFilter, fieldWhereInput> | null
+    facility_field_mapping?: Facility_field_mappingListRelationFilter
+  }, "id" | "code_facility_type_id">
+
+  export type indicator_groupOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sort_order?: SortOrder
+    facility_type_id?: SortOrderInput | SortOrder
+    parent_field_id?: SortOrderInput | SortOrder
+    show_on_value?: SortOrderInput | SortOrder
+    parent_field_id2?: SortOrderInput | SortOrder
+    show_on_value2?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: indicator_groupCountOrderByAggregateInput
+    _avg?: indicator_groupAvgOrderByAggregateInput
+    _max?: indicator_groupMaxOrderByAggregateInput
+    _min?: indicator_groupMinOrderByAggregateInput
+    _sum?: indicator_groupSumOrderByAggregateInput
+  }
+
+  export type indicator_groupScalarWhereWithAggregatesInput = {
+    AND?: indicator_groupScalarWhereWithAggregatesInput | indicator_groupScalarWhereWithAggregatesInput[]
+    OR?: indicator_groupScalarWhereWithAggregatesInput[]
+    NOT?: indicator_groupScalarWhereWithAggregatesInput | indicator_groupScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"indicator_group"> | number
+    code?: StringWithAggregatesFilter<"indicator_group"> | string
+    name?: StringWithAggregatesFilter<"indicator_group"> | string
+    description?: StringNullableWithAggregatesFilter<"indicator_group"> | string | null
+    sort_order?: IntWithAggregatesFilter<"indicator_group"> | number
+    facility_type_id?: StringNullableWithAggregatesFilter<"indicator_group"> | string | null
+    parent_field_id?: IntNullableWithAggregatesFilter<"indicator_group"> | number | null
+    show_on_value?: StringNullableWithAggregatesFilter<"indicator_group"> | string | null
+    parent_field_id2?: IntNullableWithAggregatesFilter<"indicator_group"> | number | null
+    show_on_value2?: StringNullableWithAggregatesFilter<"indicator_group"> | string | null
+    is_active?: BoolWithAggregatesFilter<"indicator_group"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"indicator_group"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"indicator_group"> | Date | string
   }
 
   export type facility_type_remunerationWhereInput = {
@@ -31353,6 +33307,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: IndicatorListRelationFilter
     indicator_indicator_numerator_field_idTofield?: IndicatorListRelationFilter
     indicator_indicator_target_field_idTofield?: IndicatorListRelationFilter
+    facility_field_mapping_parent?: Facility_field_mappingListRelationFilter
+    facility_field_mapping_parent2?: Facility_field_mappingListRelationFilter
+    indicator_group_parent?: Indicator_groupListRelationFilter
+    indicator_group_parent2?: Indicator_groupListRelationFilter
   }
 
   export type fieldOrderByWithRelationInput = {
@@ -31376,6 +33334,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorOrderByRelationAggregateInput
     indicator_indicator_numerator_field_idTofield?: indicatorOrderByRelationAggregateInput
     indicator_indicator_target_field_idTofield?: indicatorOrderByRelationAggregateInput
+    facility_field_mapping_parent?: facility_field_mappingOrderByRelationAggregateInput
+    facility_field_mapping_parent2?: facility_field_mappingOrderByRelationAggregateInput
+    indicator_group_parent?: indicator_groupOrderByRelationAggregateInput
+    indicator_group_parent2?: indicator_groupOrderByRelationAggregateInput
   }
 
   export type fieldWhereUniqueInput = Prisma.AtLeast<{
@@ -31402,6 +33364,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: IndicatorListRelationFilter
     indicator_indicator_numerator_field_idTofield?: IndicatorListRelationFilter
     indicator_indicator_target_field_idTofield?: IndicatorListRelationFilter
+    facility_field_mapping_parent?: Facility_field_mappingListRelationFilter
+    facility_field_mapping_parent2?: Facility_field_mappingListRelationFilter
+    indicator_group_parent?: Indicator_groupListRelationFilter
+    indicator_group_parent2?: Indicator_groupListRelationFilter
   }, "id" | "code">
 
   export type fieldOrderByWithAggregationInput = {
@@ -31813,6 +33779,7 @@ export namespace Prisma {
     condition_2_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
+    condition_config?: JsonNullableFilter<"indicator_remuneration">
     facility_type_remuneration?: XOR<Facility_type_remunerationScalarRelationFilter, facility_type_remunerationWhereInput>
     indicator?: XOR<IndicatorScalarRelationFilter, indicatorWhereInput>
   }
@@ -31830,6 +33797,7 @@ export namespace Prisma {
     condition_2_amount?: SortOrderInput | SortOrder
     condition_3_amount?: SortOrderInput | SortOrder
     condition_4_amount?: SortOrderInput | SortOrder
+    condition_config?: SortOrderInput | SortOrder
     facility_type_remuneration?: facility_type_remunerationOrderByWithRelationInput
     indicator?: indicatorOrderByWithRelationInput
   }
@@ -31851,6 +33819,7 @@ export namespace Prisma {
     condition_2_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
+    condition_config?: JsonNullableFilter<"indicator_remuneration">
     facility_type_remuneration?: XOR<Facility_type_remunerationScalarRelationFilter, facility_type_remunerationWhereInput>
     indicator?: XOR<IndicatorScalarRelationFilter, indicatorWhereInput>
   }, "id" | "facility_type_remuneration_id_indicator_id">
@@ -31868,6 +33837,7 @@ export namespace Prisma {
     condition_2_amount?: SortOrderInput | SortOrder
     condition_3_amount?: SortOrderInput | SortOrder
     condition_4_amount?: SortOrderInput | SortOrder
+    condition_config?: SortOrderInput | SortOrder
     _count?: indicator_remunerationCountOrderByAggregateInput
     _avg?: indicator_remunerationAvgOrderByAggregateInput
     _max?: indicator_remunerationMaxOrderByAggregateInput
@@ -31891,6 +33861,7 @@ export namespace Prisma {
     condition_2_amount?: DecimalNullableWithAggregatesFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: DecimalNullableWithAggregatesFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: DecimalNullableWithAggregatesFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
+    condition_config?: JsonNullableWithAggregatesFilter<"indicator_remuneration">
   }
 
   export type indicator_worker_allocationWhereInput = {
@@ -32815,8 +34786,13 @@ export namespace Prisma {
     display_order?: number
     created_at?: Date | string
     updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
     facility_type: facility_typeCreateNestedOneWithoutFacility_field_mappingInput
     field: fieldCreateNestedOneWithoutFacility_field_mappingInput
+    indicator_group?: indicator_groupCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field?: fieldCreateNestedOneWithoutFacility_field_mapping_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input
   }
 
   export type facility_field_mappingUncheckedCreateInput = {
@@ -32827,6 +34803,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at: Date | string
     facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type facility_field_mappingUpdateInput = {
@@ -32834,8 +34815,13 @@ export namespace Prisma {
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
     facility_type?: facility_typeUpdateOneRequiredWithoutFacility_field_mappingNestedInput
     field?: fieldUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    indicator_group?: indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput
+    parent_field?: fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput
   }
 
   export type facility_field_mappingUncheckedUpdateInput = {
@@ -32846,6 +34832,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type facility_field_mappingCreateManyInput = {
@@ -32856,6 +34847,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at: Date | string
     facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type facility_field_mappingUpdateManyMutationInput = {
@@ -32863,6 +34859,8 @@ export namespace Prisma {
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type facility_field_mappingUncheckedUpdateManyInput = {
@@ -32873,6 +34871,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type facility_targetCreateInput = {
@@ -32966,6 +34969,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUncheckedCreateInput = {
@@ -32980,6 +34984,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationUncheckedCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configUncheckedCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUpdateInput = {
@@ -32994,6 +34999,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeUncheckedUpdateInput = {
@@ -33008,6 +35014,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUncheckedUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeCreateManyInput = {
@@ -33037,6 +35044,116 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     display_name?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type indicator_groupCreateInput = {
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_type?: facility_typeCreateNestedOneWithoutIndicator_groupInput
+    parent_field?: fieldCreateNestedOneWithoutIndicator_group_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutIndicator_group_parent2Input
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupUncheckedCreateInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type?: facility_typeUpdateOneWithoutIndicator_groupNestedInput
+    parent_field?: fieldUpdateOneWithoutIndicator_group_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutIndicator_group_parent2NestedInput
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupCreateManyInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type indicator_groupUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type indicator_groupUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -33377,6 +35494,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateInput = {
@@ -33400,6 +35521,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUpdateInput = {
@@ -33422,6 +35547,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateInput = {
@@ -33445,6 +35574,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldCreateManyInput = {
@@ -33892,6 +36025,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     facility_type_remuneration: facility_type_remunerationCreateNestedOneWithoutIndicator_remunerationInput
     indicator: indicatorCreateNestedOneWithoutIndicator_remunerationInput
   }
@@ -33909,6 +36043,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUpdateInput = {
@@ -33921,6 +36056,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     facility_type_remuneration?: facility_type_remunerationUpdateOneRequiredWithoutIndicator_remunerationNestedInput
     indicator?: indicatorUpdateOneRequiredWithoutIndicator_remunerationNestedInput
   }
@@ -33938,6 +36074,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationCreateManyInput = {
@@ -33953,6 +36090,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUpdateManyMutationInput = {
@@ -33965,6 +36103,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUncheckedUpdateManyInput = {
@@ -33980,6 +36119,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_worker_allocationCreateInput = {
@@ -35116,6 +37256,16 @@ export namespace Prisma {
     isNot?: fieldWhereInput
   }
 
+  export type Indicator_groupNullableScalarRelationFilter = {
+    is?: indicator_groupWhereInput | null
+    isNot?: indicator_groupWhereInput | null
+  }
+
+  export type FieldNullableScalarRelationFilter = {
+    is?: fieldWhereInput | null
+    isNot?: fieldWhereInput | null
+  }
+
   export type facility_field_mappingFacility_type_idField_idCompoundUniqueInput = {
     facility_type_id: string
     field_id: number
@@ -35129,12 +37279,20 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facility_type_id?: SortOrder
+    group_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
   }
 
   export type facility_field_mappingAvgOrderByAggregateInput = {
     id?: SortOrder
     field_id?: SortOrder
     display_order?: SortOrder
+    group_id?: SortOrder
+    parent_field_id?: SortOrder
+    parent_field_id2?: SortOrder
   }
 
   export type facility_field_mappingMaxOrderByAggregateInput = {
@@ -35145,6 +37303,11 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facility_type_id?: SortOrder
+    group_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
   }
 
   export type facility_field_mappingMinOrderByAggregateInput = {
@@ -35155,12 +37318,20 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     facility_type_id?: SortOrder
+    group_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
   }
 
   export type facility_field_mappingSumOrderByAggregateInput = {
     id?: SortOrder
     field_id?: SortOrder
     display_order?: SortOrder
+    group_id?: SortOrder
+    parent_field_id?: SortOrder
+    parent_field_id2?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -35282,11 +37453,21 @@ export namespace Prisma {
     none?: worker_allocation_configWhereInput
   }
 
+  export type Indicator_groupListRelationFilter = {
+    every?: indicator_groupWhereInput
+    some?: indicator_groupWhereInput
+    none?: indicator_groupWhereInput
+  }
+
   export type facility_field_mappingOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type worker_allocation_configOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type indicator_groupOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -35318,6 +37499,78 @@ export namespace Prisma {
     display_name?: SortOrder
     is_active?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type Facility_typeNullableScalarRelationFilter = {
+    is?: facility_typeWhereInput | null
+    isNot?: facility_typeWhereInput | null
+  }
+
+  export type indicator_groupCodeFacility_type_idCompoundUniqueInput = {
+    code: string
+    facility_type_id: string
+  }
+
+  export type indicator_groupCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sort_order?: SortOrder
+    facility_type_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type indicator_groupAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sort_order?: SortOrder
+    parent_field_id?: SortOrder
+    parent_field_id2?: SortOrder
+  }
+
+  export type indicator_groupMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sort_order?: SortOrder
+    facility_type_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type indicator_groupMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sort_order?: SortOrder
+    facility_type_id?: SortOrder
+    parent_field_id?: SortOrder
+    show_on_value?: SortOrder
+    parent_field_id2?: SortOrder
+    show_on_value2?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type indicator_groupSumOrderByAggregateInput = {
+    id?: SortOrder
+    sort_order?: SortOrder
+    parent_field_id?: SortOrder
+    parent_field_id2?: SortOrder
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -35899,11 +38152,6 @@ export namespace Prisma {
     not?: NestedEnumtarget_typeFilter<$PrismaModel> | $Enums.target_type
   }
 
-  export type FieldNullableScalarRelationFilter = {
-    is?: fieldWhereInput | null
-    isNot?: fieldWhereInput | null
-  }
-
   export type Indicator_worker_allocationListRelationFilter = {
     every?: indicator_worker_allocationWhereInput
     some?: indicator_worker_allocationWhereInput
@@ -36037,6 +38285,7 @@ export namespace Prisma {
     condition_2_amount?: SortOrder
     condition_3_amount?: SortOrder
     condition_4_amount?: SortOrder
+    condition_config?: SortOrder
   }
 
   export type indicator_remunerationAvgOrderByAggregateInput = {
@@ -37053,6 +39302,24 @@ export namespace Prisma {
     connect?: fieldWhereUniqueInput
   }
 
+  export type indicator_groupCreateNestedOneWithoutFacility_field_mappingInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_field_mappingInput, indicator_groupUncheckedCreateWithoutFacility_field_mappingInput>
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_field_mappingInput
+    connect?: indicator_groupWhereUniqueInput
+  }
+
+  export type fieldCreateNestedOneWithoutFacility_field_mapping_parentInput = {
+    create?: XOR<fieldCreateWithoutFacility_field_mapping_parentInput, fieldUncheckedCreateWithoutFacility_field_mapping_parentInput>
+    connectOrCreate?: fieldCreateOrConnectWithoutFacility_field_mapping_parentInput
+    connect?: fieldWhereUniqueInput
+  }
+
+  export type fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input = {
+    create?: XOR<fieldCreateWithoutFacility_field_mapping_parent2Input, fieldUncheckedCreateWithoutFacility_field_mapping_parent2Input>
+    connectOrCreate?: fieldCreateOrConnectWithoutFacility_field_mapping_parent2Input
+    connect?: fieldWhereUniqueInput
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -37075,6 +39342,36 @@ export namespace Prisma {
     upsert?: fieldUpsertWithoutFacility_field_mappingInput
     connect?: fieldWhereUniqueInput
     update?: XOR<XOR<fieldUpdateToOneWithWhereWithoutFacility_field_mappingInput, fieldUpdateWithoutFacility_field_mappingInput>, fieldUncheckedUpdateWithoutFacility_field_mappingInput>
+  }
+
+  export type indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_field_mappingInput, indicator_groupUncheckedCreateWithoutFacility_field_mappingInput>
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_field_mappingInput
+    upsert?: indicator_groupUpsertWithoutFacility_field_mappingInput
+    disconnect?: indicator_groupWhereInput | boolean
+    delete?: indicator_groupWhereInput | boolean
+    connect?: indicator_groupWhereUniqueInput
+    update?: XOR<XOR<indicator_groupUpdateToOneWithWhereWithoutFacility_field_mappingInput, indicator_groupUpdateWithoutFacility_field_mappingInput>, indicator_groupUncheckedUpdateWithoutFacility_field_mappingInput>
+  }
+
+  export type fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput = {
+    create?: XOR<fieldCreateWithoutFacility_field_mapping_parentInput, fieldUncheckedCreateWithoutFacility_field_mapping_parentInput>
+    connectOrCreate?: fieldCreateOrConnectWithoutFacility_field_mapping_parentInput
+    upsert?: fieldUpsertWithoutFacility_field_mapping_parentInput
+    disconnect?: fieldWhereInput | boolean
+    delete?: fieldWhereInput | boolean
+    connect?: fieldWhereUniqueInput
+    update?: XOR<XOR<fieldUpdateToOneWithWhereWithoutFacility_field_mapping_parentInput, fieldUpdateWithoutFacility_field_mapping_parentInput>, fieldUncheckedUpdateWithoutFacility_field_mapping_parentInput>
+  }
+
+  export type fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput = {
+    create?: XOR<fieldCreateWithoutFacility_field_mapping_parent2Input, fieldUncheckedCreateWithoutFacility_field_mapping_parent2Input>
+    connectOrCreate?: fieldCreateOrConnectWithoutFacility_field_mapping_parent2Input
+    upsert?: fieldUpsertWithoutFacility_field_mapping_parent2Input
+    disconnect?: fieldWhereInput | boolean
+    delete?: fieldWhereInput | boolean
+    connect?: fieldWhereUniqueInput
+    update?: XOR<XOR<fieldUpdateToOneWithWhereWithoutFacility_field_mapping_parent2Input, fieldUpdateWithoutFacility_field_mapping_parent2Input>, fieldUncheckedUpdateWithoutFacility_field_mapping_parent2Input>
   }
 
   export type facilityCreateNestedOneWithoutFacility_targetInput = {
@@ -37140,6 +39437,13 @@ export namespace Prisma {
     connect?: worker_allocation_configWhereUniqueInput | worker_allocation_configWhereUniqueInput[]
   }
 
+  export type indicator_groupCreateNestedManyWithoutFacility_typeInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput> | indicator_groupCreateWithoutFacility_typeInput[] | indicator_groupUncheckedCreateWithoutFacility_typeInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_typeInput | indicator_groupCreateOrConnectWithoutFacility_typeInput[]
+    createMany?: indicator_groupCreateManyFacility_typeInputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+  }
+
   export type facilityUncheckedCreateNestedManyWithoutFacility_typeInput = {
     create?: XOR<facilityCreateWithoutFacility_typeInput, facilityUncheckedCreateWithoutFacility_typeInput> | facilityCreateWithoutFacility_typeInput[] | facilityUncheckedCreateWithoutFacility_typeInput[]
     connectOrCreate?: facilityCreateOrConnectWithoutFacility_typeInput | facilityCreateOrConnectWithoutFacility_typeInput[]
@@ -37165,6 +39469,13 @@ export namespace Prisma {
     connectOrCreate?: worker_allocation_configCreateOrConnectWithoutFacility_typeInput | worker_allocation_configCreateOrConnectWithoutFacility_typeInput[]
     createMany?: worker_allocation_configCreateManyFacility_typeInputEnvelope
     connect?: worker_allocation_configWhereUniqueInput | worker_allocation_configWhereUniqueInput[]
+  }
+
+  export type indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput> | indicator_groupCreateWithoutFacility_typeInput[] | indicator_groupUncheckedCreateWithoutFacility_typeInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_typeInput | indicator_groupCreateOrConnectWithoutFacility_typeInput[]
+    createMany?: indicator_groupCreateManyFacility_typeInputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
   }
 
   export type facilityUpdateManyWithoutFacility_typeNestedInput = {
@@ -37219,6 +39530,20 @@ export namespace Prisma {
     deleteMany?: worker_allocation_configScalarWhereInput | worker_allocation_configScalarWhereInput[]
   }
 
+  export type indicator_groupUpdateManyWithoutFacility_typeNestedInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput> | indicator_groupCreateWithoutFacility_typeInput[] | indicator_groupUncheckedCreateWithoutFacility_typeInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_typeInput | indicator_groupCreateOrConnectWithoutFacility_typeInput[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutFacility_typeInput | indicator_groupUpsertWithWhereUniqueWithoutFacility_typeInput[]
+    createMany?: indicator_groupCreateManyFacility_typeInputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutFacility_typeInput | indicator_groupUpdateWithWhereUniqueWithoutFacility_typeInput[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutFacility_typeInput | indicator_groupUpdateManyWithWhereWithoutFacility_typeInput[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+  }
+
   export type facilityUncheckedUpdateManyWithoutFacility_typeNestedInput = {
     create?: XOR<facilityCreateWithoutFacility_typeInput, facilityUncheckedCreateWithoutFacility_typeInput> | facilityCreateWithoutFacility_typeInput[] | facilityUncheckedCreateWithoutFacility_typeInput[]
     connectOrCreate?: facilityCreateOrConnectWithoutFacility_typeInput | facilityCreateOrConnectWithoutFacility_typeInput[]
@@ -37269,6 +39594,110 @@ export namespace Prisma {
     update?: worker_allocation_configUpdateWithWhereUniqueWithoutFacility_typeInput | worker_allocation_configUpdateWithWhereUniqueWithoutFacility_typeInput[]
     updateMany?: worker_allocation_configUpdateManyWithWhereWithoutFacility_typeInput | worker_allocation_configUpdateManyWithWhereWithoutFacility_typeInput[]
     deleteMany?: worker_allocation_configScalarWhereInput | worker_allocation_configScalarWhereInput[]
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput = {
+    create?: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput> | indicator_groupCreateWithoutFacility_typeInput[] | indicator_groupUncheckedCreateWithoutFacility_typeInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutFacility_typeInput | indicator_groupCreateOrConnectWithoutFacility_typeInput[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutFacility_typeInput | indicator_groupUpsertWithWhereUniqueWithoutFacility_typeInput[]
+    createMany?: indicator_groupCreateManyFacility_typeInputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutFacility_typeInput | indicator_groupUpdateWithWhereUniqueWithoutFacility_typeInput[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutFacility_typeInput | indicator_groupUpdateManyWithWhereWithoutFacility_typeInput[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+  }
+
+  export type facility_typeCreateNestedOneWithoutIndicator_groupInput = {
+    create?: XOR<facility_typeCreateWithoutIndicator_groupInput, facility_typeUncheckedCreateWithoutIndicator_groupInput>
+    connectOrCreate?: facility_typeCreateOrConnectWithoutIndicator_groupInput
+    connect?: facility_typeWhereUniqueInput
+  }
+
+  export type fieldCreateNestedOneWithoutIndicator_group_parentInput = {
+    create?: XOR<fieldCreateWithoutIndicator_group_parentInput, fieldUncheckedCreateWithoutIndicator_group_parentInput>
+    connectOrCreate?: fieldCreateOrConnectWithoutIndicator_group_parentInput
+    connect?: fieldWhereUniqueInput
+  }
+
+  export type fieldCreateNestedOneWithoutIndicator_group_parent2Input = {
+    create?: XOR<fieldCreateWithoutIndicator_group_parent2Input, fieldUncheckedCreateWithoutIndicator_group_parent2Input>
+    connectOrCreate?: fieldCreateOrConnectWithoutIndicator_group_parent2Input
+    connect?: fieldWhereUniqueInput
+  }
+
+  export type facility_field_mappingCreateNestedManyWithoutIndicator_groupInput = {
+    create?: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput> | facility_field_mappingCreateWithoutIndicator_groupInput[] | facility_field_mappingUncheckedCreateWithoutIndicator_groupInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutIndicator_groupInput | facility_field_mappingCreateOrConnectWithoutIndicator_groupInput[]
+    createMany?: facility_field_mappingCreateManyIndicator_groupInputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type facility_field_mappingUncheckedCreateNestedManyWithoutIndicator_groupInput = {
+    create?: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput> | facility_field_mappingCreateWithoutIndicator_groupInput[] | facility_field_mappingUncheckedCreateWithoutIndicator_groupInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutIndicator_groupInput | facility_field_mappingCreateOrConnectWithoutIndicator_groupInput[]
+    createMany?: facility_field_mappingCreateManyIndicator_groupInputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type facility_typeUpdateOneWithoutIndicator_groupNestedInput = {
+    create?: XOR<facility_typeCreateWithoutIndicator_groupInput, facility_typeUncheckedCreateWithoutIndicator_groupInput>
+    connectOrCreate?: facility_typeCreateOrConnectWithoutIndicator_groupInput
+    upsert?: facility_typeUpsertWithoutIndicator_groupInput
+    disconnect?: facility_typeWhereInput | boolean
+    delete?: facility_typeWhereInput | boolean
+    connect?: facility_typeWhereUniqueInput
+    update?: XOR<XOR<facility_typeUpdateToOneWithWhereWithoutIndicator_groupInput, facility_typeUpdateWithoutIndicator_groupInput>, facility_typeUncheckedUpdateWithoutIndicator_groupInput>
+  }
+
+  export type fieldUpdateOneWithoutIndicator_group_parentNestedInput = {
+    create?: XOR<fieldCreateWithoutIndicator_group_parentInput, fieldUncheckedCreateWithoutIndicator_group_parentInput>
+    connectOrCreate?: fieldCreateOrConnectWithoutIndicator_group_parentInput
+    upsert?: fieldUpsertWithoutIndicator_group_parentInput
+    disconnect?: fieldWhereInput | boolean
+    delete?: fieldWhereInput | boolean
+    connect?: fieldWhereUniqueInput
+    update?: XOR<XOR<fieldUpdateToOneWithWhereWithoutIndicator_group_parentInput, fieldUpdateWithoutIndicator_group_parentInput>, fieldUncheckedUpdateWithoutIndicator_group_parentInput>
+  }
+
+  export type fieldUpdateOneWithoutIndicator_group_parent2NestedInput = {
+    create?: XOR<fieldCreateWithoutIndicator_group_parent2Input, fieldUncheckedCreateWithoutIndicator_group_parent2Input>
+    connectOrCreate?: fieldCreateOrConnectWithoutIndicator_group_parent2Input
+    upsert?: fieldUpsertWithoutIndicator_group_parent2Input
+    disconnect?: fieldWhereInput | boolean
+    delete?: fieldWhereInput | boolean
+    connect?: fieldWhereUniqueInput
+    update?: XOR<XOR<fieldUpdateToOneWithWhereWithoutIndicator_group_parent2Input, fieldUpdateWithoutIndicator_group_parent2Input>, fieldUncheckedUpdateWithoutIndicator_group_parent2Input>
+  }
+
+  export type facility_field_mappingUpdateManyWithoutIndicator_groupNestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput> | facility_field_mappingCreateWithoutIndicator_groupInput[] | facility_field_mappingUncheckedCreateWithoutIndicator_groupInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutIndicator_groupInput | facility_field_mappingCreateOrConnectWithoutIndicator_groupInput[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutIndicator_groupInput | facility_field_mappingUpsertWithWhereUniqueWithoutIndicator_groupInput[]
+    createMany?: facility_field_mappingCreateManyIndicator_groupInputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutIndicator_groupInput | facility_field_mappingUpdateWithWhereUniqueWithoutIndicator_groupInput[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutIndicator_groupInput | facility_field_mappingUpdateManyWithWhereWithoutIndicator_groupInput[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupNestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput> | facility_field_mappingCreateWithoutIndicator_groupInput[] | facility_field_mappingUncheckedCreateWithoutIndicator_groupInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutIndicator_groupInput | facility_field_mappingCreateOrConnectWithoutIndicator_groupInput[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutIndicator_groupInput | facility_field_mappingUpsertWithWhereUniqueWithoutIndicator_groupInput[]
+    createMany?: facility_field_mappingCreateManyIndicator_groupInputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutIndicator_groupInput | facility_field_mappingUpdateWithWhereUniqueWithoutIndicator_groupInput[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutIndicator_groupInput | facility_field_mappingUpdateManyWithWhereWithoutIndicator_groupInput[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
   }
 
   export type facility_typeCreateNestedOneWithoutFacility_type_remunerationInput = {
@@ -37452,6 +39881,34 @@ export namespace Prisma {
     connect?: indicatorWhereUniqueInput | indicatorWhereUniqueInput[]
   }
 
+  export type facility_field_mappingCreateNestedManyWithoutParent_fieldInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput> | facility_field_mappingCreateWithoutParent_fieldInput[] | facility_field_mappingUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_fieldInput | facility_field_mappingCreateOrConnectWithoutParent_fieldInput[]
+    createMany?: facility_field_mappingCreateManyParent_fieldInputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type facility_field_mappingCreateNestedManyWithoutParent_field2Input = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input> | facility_field_mappingCreateWithoutParent_field2Input[] | facility_field_mappingUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_field2Input | facility_field_mappingCreateOrConnectWithoutParent_field2Input[]
+    createMany?: facility_field_mappingCreateManyParent_field2InputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type indicator_groupCreateNestedManyWithoutParent_fieldInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput> | indicator_groupCreateWithoutParent_fieldInput[] | indicator_groupUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_fieldInput | indicator_groupCreateOrConnectWithoutParent_fieldInput[]
+    createMany?: indicator_groupCreateManyParent_fieldInputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+  }
+
+  export type indicator_groupCreateNestedManyWithoutParent_field2Input = {
+    create?: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input> | indicator_groupCreateWithoutParent_field2Input[] | indicator_groupUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_field2Input | indicator_groupCreateOrConnectWithoutParent_field2Input[]
+    createMany?: indicator_groupCreateManyParent_field2InputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+  }
+
   export type facility_field_mappingUncheckedCreateNestedManyWithoutFieldInput = {
     create?: XOR<facility_field_mappingCreateWithoutFieldInput, facility_field_mappingUncheckedCreateWithoutFieldInput> | facility_field_mappingCreateWithoutFieldInput[] | facility_field_mappingUncheckedCreateWithoutFieldInput[]
     connectOrCreate?: facility_field_mappingCreateOrConnectWithoutFieldInput | facility_field_mappingCreateOrConnectWithoutFieldInput[]
@@ -37485,6 +39942,34 @@ export namespace Prisma {
     connectOrCreate?: indicatorCreateOrConnectWithoutTarget_fieldInput | indicatorCreateOrConnectWithoutTarget_fieldInput[]
     createMany?: indicatorCreateManyTarget_fieldInputEnvelope
     connect?: indicatorWhereUniqueInput | indicatorWhereUniqueInput[]
+  }
+
+  export type facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput> | facility_field_mappingCreateWithoutParent_fieldInput[] | facility_field_mappingUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_fieldInput | facility_field_mappingCreateOrConnectWithoutParent_fieldInput[]
+    createMany?: facility_field_mappingCreateManyParent_fieldInputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input> | facility_field_mappingCreateWithoutParent_field2Input[] | facility_field_mappingUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_field2Input | facility_field_mappingCreateOrConnectWithoutParent_field2Input[]
+    createMany?: facility_field_mappingCreateManyParent_field2InputEnvelope
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+  }
+
+  export type indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput> | indicator_groupCreateWithoutParent_fieldInput[] | indicator_groupUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_fieldInput | indicator_groupCreateOrConnectWithoutParent_fieldInput[]
+    createMany?: indicator_groupCreateManyParent_fieldInputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+  }
+
+  export type indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input = {
+    create?: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input> | indicator_groupCreateWithoutParent_field2Input[] | indicator_groupUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_field2Input | indicator_groupCreateOrConnectWithoutParent_field2Input[]
+    createMany?: indicator_groupCreateManyParent_field2InputEnvelope
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
   }
 
   export type EnumFieldTypeFieldUpdateOperationsInput = {
@@ -37569,6 +40054,62 @@ export namespace Prisma {
     deleteMany?: indicatorScalarWhereInput | indicatorScalarWhereInput[]
   }
 
+  export type facility_field_mappingUpdateManyWithoutParent_fieldNestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput> | facility_field_mappingCreateWithoutParent_fieldInput[] | facility_field_mappingUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_fieldInput | facility_field_mappingCreateOrConnectWithoutParent_fieldInput[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutParent_fieldInput | facility_field_mappingUpsertWithWhereUniqueWithoutParent_fieldInput[]
+    createMany?: facility_field_mappingCreateManyParent_fieldInputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutParent_fieldInput | facility_field_mappingUpdateWithWhereUniqueWithoutParent_fieldInput[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutParent_fieldInput | facility_field_mappingUpdateManyWithWhereWithoutParent_fieldInput[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
+  }
+
+  export type facility_field_mappingUpdateManyWithoutParent_field2NestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input> | facility_field_mappingCreateWithoutParent_field2Input[] | facility_field_mappingUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_field2Input | facility_field_mappingCreateOrConnectWithoutParent_field2Input[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutParent_field2Input | facility_field_mappingUpsertWithWhereUniqueWithoutParent_field2Input[]
+    createMany?: facility_field_mappingCreateManyParent_field2InputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutParent_field2Input | facility_field_mappingUpdateWithWhereUniqueWithoutParent_field2Input[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutParent_field2Input | facility_field_mappingUpdateManyWithWhereWithoutParent_field2Input[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
+  }
+
+  export type indicator_groupUpdateManyWithoutParent_fieldNestedInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput> | indicator_groupCreateWithoutParent_fieldInput[] | indicator_groupUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_fieldInput | indicator_groupCreateOrConnectWithoutParent_fieldInput[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutParent_fieldInput | indicator_groupUpsertWithWhereUniqueWithoutParent_fieldInput[]
+    createMany?: indicator_groupCreateManyParent_fieldInputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutParent_fieldInput | indicator_groupUpdateWithWhereUniqueWithoutParent_fieldInput[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutParent_fieldInput | indicator_groupUpdateManyWithWhereWithoutParent_fieldInput[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+  }
+
+  export type indicator_groupUpdateManyWithoutParent_field2NestedInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input> | indicator_groupCreateWithoutParent_field2Input[] | indicator_groupUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_field2Input | indicator_groupCreateOrConnectWithoutParent_field2Input[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutParent_field2Input | indicator_groupUpsertWithWhereUniqueWithoutParent_field2Input[]
+    createMany?: indicator_groupCreateManyParent_field2InputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutParent_field2Input | indicator_groupUpdateWithWhereUniqueWithoutParent_field2Input[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutParent_field2Input | indicator_groupUpdateManyWithWhereWithoutParent_field2Input[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+  }
+
   export type facility_field_mappingUncheckedUpdateManyWithoutFieldNestedInput = {
     create?: XOR<facility_field_mappingCreateWithoutFieldInput, facility_field_mappingUncheckedCreateWithoutFieldInput> | facility_field_mappingCreateWithoutFieldInput[] | facility_field_mappingUncheckedCreateWithoutFieldInput[]
     connectOrCreate?: facility_field_mappingCreateOrConnectWithoutFieldInput | facility_field_mappingCreateOrConnectWithoutFieldInput[]
@@ -37637,6 +40178,62 @@ export namespace Prisma {
     update?: indicatorUpdateWithWhereUniqueWithoutTarget_fieldInput | indicatorUpdateWithWhereUniqueWithoutTarget_fieldInput[]
     updateMany?: indicatorUpdateManyWithWhereWithoutTarget_fieldInput | indicatorUpdateManyWithWhereWithoutTarget_fieldInput[]
     deleteMany?: indicatorScalarWhereInput | indicatorScalarWhereInput[]
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput> | facility_field_mappingCreateWithoutParent_fieldInput[] | facility_field_mappingUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_fieldInput | facility_field_mappingCreateOrConnectWithoutParent_fieldInput[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutParent_fieldInput | facility_field_mappingUpsertWithWhereUniqueWithoutParent_fieldInput[]
+    createMany?: facility_field_mappingCreateManyParent_fieldInputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutParent_fieldInput | facility_field_mappingUpdateWithWhereUniqueWithoutParent_fieldInput[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutParent_fieldInput | facility_field_mappingUpdateManyWithWhereWithoutParent_fieldInput[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput = {
+    create?: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input> | facility_field_mappingCreateWithoutParent_field2Input[] | facility_field_mappingUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: facility_field_mappingCreateOrConnectWithoutParent_field2Input | facility_field_mappingCreateOrConnectWithoutParent_field2Input[]
+    upsert?: facility_field_mappingUpsertWithWhereUniqueWithoutParent_field2Input | facility_field_mappingUpsertWithWhereUniqueWithoutParent_field2Input[]
+    createMany?: facility_field_mappingCreateManyParent_field2InputEnvelope
+    set?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    disconnect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    delete?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    connect?: facility_field_mappingWhereUniqueInput | facility_field_mappingWhereUniqueInput[]
+    update?: facility_field_mappingUpdateWithWhereUniqueWithoutParent_field2Input | facility_field_mappingUpdateWithWhereUniqueWithoutParent_field2Input[]
+    updateMany?: facility_field_mappingUpdateManyWithWhereWithoutParent_field2Input | facility_field_mappingUpdateManyWithWhereWithoutParent_field2Input[]
+    deleteMany?: facility_field_mappingScalarWhereInput | facility_field_mappingScalarWhereInput[]
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput> | indicator_groupCreateWithoutParent_fieldInput[] | indicator_groupUncheckedCreateWithoutParent_fieldInput[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_fieldInput | indicator_groupCreateOrConnectWithoutParent_fieldInput[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutParent_fieldInput | indicator_groupUpsertWithWhereUniqueWithoutParent_fieldInput[]
+    createMany?: indicator_groupCreateManyParent_fieldInputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutParent_fieldInput | indicator_groupUpdateWithWhereUniqueWithoutParent_fieldInput[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutParent_fieldInput | indicator_groupUpdateManyWithWhereWithoutParent_fieldInput[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput = {
+    create?: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input> | indicator_groupCreateWithoutParent_field2Input[] | indicator_groupUncheckedCreateWithoutParent_field2Input[]
+    connectOrCreate?: indicator_groupCreateOrConnectWithoutParent_field2Input | indicator_groupCreateOrConnectWithoutParent_field2Input[]
+    upsert?: indicator_groupUpsertWithWhereUniqueWithoutParent_field2Input | indicator_groupUpsertWithWhereUniqueWithoutParent_field2Input[]
+    createMany?: indicator_groupCreateManyParent_field2InputEnvelope
+    set?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    disconnect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    delete?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    connect?: indicator_groupWhereUniqueInput | indicator_groupWhereUniqueInput[]
+    update?: indicator_groupUpdateWithWhereUniqueWithoutParent_field2Input | indicator_groupUpdateWithWhereUniqueWithoutParent_field2Input[]
+    updateMany?: indicator_groupUpdateManyWithWhereWithoutParent_field2Input | indicator_groupUpdateManyWithWhereWithoutParent_field2Input[]
+    deleteMany?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
   }
 
   export type facilityCreateNestedOneWithoutField_valueInput = {
@@ -39131,6 +41728,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUncheckedCreateWithoutFacilityInput = {
@@ -39144,6 +41742,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationUncheckedCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configUncheckedCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeCreateOrConnectWithoutFacilityInput = {
@@ -39578,6 +42177,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeUncheckedUpdateWithoutFacilityInput = {
@@ -39591,6 +42191,7 @@ export namespace Prisma {
     facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUncheckedUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facilityUpsertWithoutOther_facilityInput = {
@@ -39899,6 +42500,7 @@ export namespace Prisma {
     facility?: facilityCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUncheckedCreateWithoutFacility_field_mappingInput = {
@@ -39912,6 +42514,7 @@ export namespace Prisma {
     facility?: facilityUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationUncheckedCreateNestedOneWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configUncheckedCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeCreateOrConnectWithoutFacility_field_mappingInput = {
@@ -39938,6 +42541,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateWithoutFacility_field_mappingInput = {
@@ -39960,11 +42567,163 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldCreateOrConnectWithoutFacility_field_mappingInput = {
     where: fieldWhereUniqueInput
     create: XOR<fieldCreateWithoutFacility_field_mappingInput, fieldUncheckedCreateWithoutFacility_field_mappingInput>
+  }
+
+  export type indicator_groupCreateWithoutFacility_field_mappingInput = {
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_type?: facility_typeCreateNestedOneWithoutIndicator_groupInput
+    parent_field?: fieldCreateNestedOneWithoutIndicator_group_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutIndicator_group_parent2Input
+  }
+
+  export type indicator_groupUncheckedCreateWithoutFacility_field_mappingInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type indicator_groupCreateOrConnectWithoutFacility_field_mappingInput = {
+    where: indicator_groupWhereUniqueInput
+    create: XOR<indicator_groupCreateWithoutFacility_field_mappingInput, indicator_groupUncheckedCreateWithoutFacility_field_mappingInput>
+  }
+
+  export type fieldCreateWithoutFacility_field_mapping_parentInput = {
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFieldInput
+    field_value?: field_valueCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldUncheckedCreateWithoutFacility_field_mapping_parentInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFieldInput
+    field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldCreateOrConnectWithoutFacility_field_mapping_parentInput = {
+    where: fieldWhereUniqueInput
+    create: XOR<fieldCreateWithoutFacility_field_mapping_parentInput, fieldUncheckedCreateWithoutFacility_field_mapping_parentInput>
+  }
+
+  export type fieldCreateWithoutFacility_field_mapping_parent2Input = {
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFieldInput
+    field_value?: field_valueCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldUncheckedCreateWithoutFacility_field_mapping_parent2Input = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFieldInput
+    field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldCreateOrConnectWithoutFacility_field_mapping_parent2Input = {
+    where: fieldWhereUniqueInput
+    create: XOR<fieldCreateWithoutFacility_field_mapping_parent2Input, fieldUncheckedCreateWithoutFacility_field_mapping_parent2Input>
   }
 
   export type facility_typeUpsertWithoutFacility_field_mappingInput = {
@@ -39989,6 +42748,7 @@ export namespace Prisma {
     facility?: facilityUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeUncheckedUpdateWithoutFacility_field_mappingInput = {
@@ -40002,6 +42762,7 @@ export namespace Prisma {
     facility?: facilityUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUncheckedUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type fieldUpsertWithoutFacility_field_mappingInput = {
@@ -40034,6 +42795,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateWithoutFacility_field_mappingInput = {
@@ -40056,6 +42821,176 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type indicator_groupUpsertWithoutFacility_field_mappingInput = {
+    update: XOR<indicator_groupUpdateWithoutFacility_field_mappingInput, indicator_groupUncheckedUpdateWithoutFacility_field_mappingInput>
+    create: XOR<indicator_groupCreateWithoutFacility_field_mappingInput, indicator_groupUncheckedCreateWithoutFacility_field_mappingInput>
+    where?: indicator_groupWhereInput
+  }
+
+  export type indicator_groupUpdateToOneWithWhereWithoutFacility_field_mappingInput = {
+    where?: indicator_groupWhereInput
+    data: XOR<indicator_groupUpdateWithoutFacility_field_mappingInput, indicator_groupUncheckedUpdateWithoutFacility_field_mappingInput>
+  }
+
+  export type indicator_groupUpdateWithoutFacility_field_mappingInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type?: facility_typeUpdateOneWithoutIndicator_groupNestedInput
+    parent_field?: fieldUpdateOneWithoutIndicator_group_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutIndicator_group_parent2NestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateWithoutFacility_field_mappingInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type fieldUpsertWithoutFacility_field_mapping_parentInput = {
+    update: XOR<fieldUpdateWithoutFacility_field_mapping_parentInput, fieldUncheckedUpdateWithoutFacility_field_mapping_parentInput>
+    create: XOR<fieldCreateWithoutFacility_field_mapping_parentInput, fieldUncheckedCreateWithoutFacility_field_mapping_parentInput>
+    where?: fieldWhereInput
+  }
+
+  export type fieldUpdateToOneWithWhereWithoutFacility_field_mapping_parentInput = {
+    where?: fieldWhereInput
+    data: XOR<fieldUpdateWithoutFacility_field_mapping_parentInput, fieldUncheckedUpdateWithoutFacility_field_mapping_parentInput>
+  }
+
+  export type fieldUpdateWithoutFacility_field_mapping_parentInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type fieldUncheckedUpdateWithoutFacility_field_mapping_parentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type fieldUpsertWithoutFacility_field_mapping_parent2Input = {
+    update: XOR<fieldUpdateWithoutFacility_field_mapping_parent2Input, fieldUncheckedUpdateWithoutFacility_field_mapping_parent2Input>
+    create: XOR<fieldCreateWithoutFacility_field_mapping_parent2Input, fieldUncheckedCreateWithoutFacility_field_mapping_parent2Input>
+    where?: fieldWhereInput
+  }
+
+  export type fieldUpdateToOneWithWhereWithoutFacility_field_mapping_parent2Input = {
+    where?: fieldWhereInput
+    data: XOR<fieldUpdateWithoutFacility_field_mapping_parent2Input, fieldUncheckedUpdateWithoutFacility_field_mapping_parent2Input>
+  }
+
+  export type fieldUpdateWithoutFacility_field_mapping_parent2Input = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type fieldUncheckedUpdateWithoutFacility_field_mapping_parent2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type facilityCreateWithoutFacility_targetInput = {
@@ -40343,7 +43278,12 @@ export namespace Prisma {
     display_order?: number
     created_at?: Date | string
     updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
     field: fieldCreateNestedOneWithoutFacility_field_mappingInput
+    indicator_group?: indicator_groupCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field?: fieldCreateNestedOneWithoutFacility_field_mapping_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input
   }
 
   export type facility_field_mappingUncheckedCreateWithoutFacility_typeInput = {
@@ -40353,6 +43293,11 @@ export namespace Prisma {
     display_order?: number
     created_at?: Date | string
     updated_at: Date | string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type facility_field_mappingCreateOrConnectWithoutFacility_typeInput = {
@@ -40422,6 +43367,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type indicator_groupCreateWithoutFacility_typeInput = {
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    parent_field?: fieldCreateNestedOneWithoutIndicator_group_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutIndicator_group_parent2Input
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupUncheckedCreateWithoutFacility_typeInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupCreateOrConnectWithoutFacility_typeInput = {
+    where: indicator_groupWhereUniqueInput
+    create: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput>
+  }
+
+  export type indicator_groupCreateManyFacility_typeInputEnvelope = {
+    data: indicator_groupCreateManyFacility_typeInput | indicator_groupCreateManyFacility_typeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type facilityUpsertWithWhereUniqueWithoutFacility_typeInput = {
     where: facilityWhereUniqueInput
     update: XOR<facilityUpdateWithoutFacility_typeInput, facilityUncheckedUpdateWithoutFacility_typeInput>
@@ -40465,6 +43451,11 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     updated_at?: DateTimeFilter<"facility_field_mapping"> | Date | string
     facility_type_id?: StringFilter<"facility_field_mapping"> | string
+    group_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    parent_field_id?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value?: StringNullableFilter<"facility_field_mapping"> | string | null
+    parent_field_id2?: IntNullableFilter<"facility_field_mapping"> | number | null
+    show_on_value2?: StringNullableFilter<"facility_field_mapping"> | string | null
   }
 
   export type facility_type_remunerationUpsertWithoutFacility_typeInput = {
@@ -40529,6 +43520,402 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"worker_allocation_config"> | Date | string
   }
 
+  export type indicator_groupUpsertWithWhereUniqueWithoutFacility_typeInput = {
+    where: indicator_groupWhereUniqueInput
+    update: XOR<indicator_groupUpdateWithoutFacility_typeInput, indicator_groupUncheckedUpdateWithoutFacility_typeInput>
+    create: XOR<indicator_groupCreateWithoutFacility_typeInput, indicator_groupUncheckedCreateWithoutFacility_typeInput>
+  }
+
+  export type indicator_groupUpdateWithWhereUniqueWithoutFacility_typeInput = {
+    where: indicator_groupWhereUniqueInput
+    data: XOR<indicator_groupUpdateWithoutFacility_typeInput, indicator_groupUncheckedUpdateWithoutFacility_typeInput>
+  }
+
+  export type indicator_groupUpdateManyWithWhereWithoutFacility_typeInput = {
+    where: indicator_groupScalarWhereInput
+    data: XOR<indicator_groupUpdateManyMutationInput, indicator_groupUncheckedUpdateManyWithoutFacility_typeInput>
+  }
+
+  export type indicator_groupScalarWhereInput = {
+    AND?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+    OR?: indicator_groupScalarWhereInput[]
+    NOT?: indicator_groupScalarWhereInput | indicator_groupScalarWhereInput[]
+    id?: IntFilter<"indicator_group"> | number
+    code?: StringFilter<"indicator_group"> | string
+    name?: StringFilter<"indicator_group"> | string
+    description?: StringNullableFilter<"indicator_group"> | string | null
+    sort_order?: IntFilter<"indicator_group"> | number
+    facility_type_id?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value?: StringNullableFilter<"indicator_group"> | string | null
+    parent_field_id2?: IntNullableFilter<"indicator_group"> | number | null
+    show_on_value2?: StringNullableFilter<"indicator_group"> | string | null
+    is_active?: BoolFilter<"indicator_group"> | boolean
+    created_at?: DateTimeFilter<"indicator_group"> | Date | string
+    updated_at?: DateTimeFilter<"indicator_group"> | Date | string
+  }
+
+  export type facility_typeCreateWithoutIndicator_groupInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at: Date | string
+    facility?: facilityCreateNestedManyWithoutFacility_typeInput
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFacility_typeInput
+    facility_type_remuneration?: facility_type_remunerationCreateNestedOneWithoutFacility_typeInput
+    worker_allocation_config?: worker_allocation_configCreateNestedManyWithoutFacility_typeInput
+  }
+
+  export type facility_typeUncheckedCreateWithoutIndicator_groupInput = {
+    id?: string
+    name: string
+    created_at?: Date | string
+    description?: string | null
+    display_name: string
+    is_active?: boolean
+    updated_at: Date | string
+    facility?: facilityUncheckedCreateNestedManyWithoutFacility_typeInput
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFacility_typeInput
+    facility_type_remuneration?: facility_type_remunerationUncheckedCreateNestedOneWithoutFacility_typeInput
+    worker_allocation_config?: worker_allocation_configUncheckedCreateNestedManyWithoutFacility_typeInput
+  }
+
+  export type facility_typeCreateOrConnectWithoutIndicator_groupInput = {
+    where: facility_typeWhereUniqueInput
+    create: XOR<facility_typeCreateWithoutIndicator_groupInput, facility_typeUncheckedCreateWithoutIndicator_groupInput>
+  }
+
+  export type fieldCreateWithoutIndicator_group_parentInput = {
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFieldInput
+    field_value?: field_valueCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldUncheckedCreateWithoutIndicator_group_parentInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFieldInput
+    field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
+  }
+
+  export type fieldCreateOrConnectWithoutIndicator_group_parentInput = {
+    where: fieldWhereUniqueInput
+    create: XOR<fieldCreateWithoutIndicator_group_parentInput, fieldUncheckedCreateWithoutIndicator_group_parentInput>
+  }
+
+  export type fieldCreateWithoutIndicator_group_parent2Input = {
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFieldInput
+    field_value?: field_valueCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+  }
+
+  export type fieldUncheckedCreateWithoutIndicator_group_parent2Input = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at: Date | string
+    calculation_formula?: string | null
+    default_value?: string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type: $Enums.FieldType
+    is_active?: boolean
+    sort_order?: number
+    user_type: $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFieldInput
+    field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+  }
+
+  export type fieldCreateOrConnectWithoutIndicator_group_parent2Input = {
+    where: fieldWhereUniqueInput
+    create: XOR<fieldCreateWithoutIndicator_group_parent2Input, fieldUncheckedCreateWithoutIndicator_group_parent2Input>
+  }
+
+  export type facility_field_mappingCreateWithoutIndicator_groupInput = {
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    facility_type: facility_typeCreateNestedOneWithoutFacility_field_mappingInput
+    field: fieldCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field?: fieldCreateNestedOneWithoutFacility_field_mapping_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input
+  }
+
+  export type facility_field_mappingUncheckedCreateWithoutIndicator_groupInput = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+  }
+
+  export type facility_field_mappingCreateOrConnectWithoutIndicator_groupInput = {
+    where: facility_field_mappingWhereUniqueInput
+    create: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput>
+  }
+
+  export type facility_field_mappingCreateManyIndicator_groupInputEnvelope = {
+    data: facility_field_mappingCreateManyIndicator_groupInput | facility_field_mappingCreateManyIndicator_groupInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type facility_typeUpsertWithoutIndicator_groupInput = {
+    update: XOR<facility_typeUpdateWithoutIndicator_groupInput, facility_typeUncheckedUpdateWithoutIndicator_groupInput>
+    create: XOR<facility_typeCreateWithoutIndicator_groupInput, facility_typeUncheckedCreateWithoutIndicator_groupInput>
+    where?: facility_typeWhereInput
+  }
+
+  export type facility_typeUpdateToOneWithWhereWithoutIndicator_groupInput = {
+    where?: facility_typeWhereInput
+    data: XOR<facility_typeUpdateWithoutIndicator_groupInput, facility_typeUncheckedUpdateWithoutIndicator_groupInput>
+  }
+
+  export type facility_typeUpdateWithoutIndicator_groupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: facilityUpdateManyWithoutFacility_typeNestedInput
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutFacility_typeNestedInput
+    facility_type_remuneration?: facility_type_remunerationUpdateOneWithoutFacility_typeNestedInput
+    worker_allocation_config?: worker_allocation_configUpdateManyWithoutFacility_typeNestedInput
+  }
+
+  export type facility_typeUncheckedUpdateWithoutIndicator_groupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    display_name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility?: facilityUncheckedUpdateManyWithoutFacility_typeNestedInput
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFacility_typeNestedInput
+    facility_type_remuneration?: facility_type_remunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
+    worker_allocation_config?: worker_allocation_configUncheckedUpdateManyWithoutFacility_typeNestedInput
+  }
+
+  export type fieldUpsertWithoutIndicator_group_parentInput = {
+    update: XOR<fieldUpdateWithoutIndicator_group_parentInput, fieldUncheckedUpdateWithoutIndicator_group_parentInput>
+    create: XOR<fieldCreateWithoutIndicator_group_parentInput, fieldUncheckedCreateWithoutIndicator_group_parentInput>
+    where?: fieldWhereInput
+  }
+
+  export type fieldUpdateToOneWithWhereWithoutIndicator_group_parentInput = {
+    where?: fieldWhereInput
+    data: XOR<fieldUpdateWithoutIndicator_group_parentInput, fieldUncheckedUpdateWithoutIndicator_group_parentInput>
+  }
+
+  export type fieldUpdateWithoutIndicator_group_parentInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type fieldUncheckedUpdateWithoutIndicator_group_parentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
+  }
+
+  export type fieldUpsertWithoutIndicator_group_parent2Input = {
+    update: XOR<fieldUpdateWithoutIndicator_group_parent2Input, fieldUncheckedUpdateWithoutIndicator_group_parent2Input>
+    create: XOR<fieldCreateWithoutIndicator_group_parent2Input, fieldUncheckedCreateWithoutIndicator_group_parent2Input>
+    where?: fieldWhereInput
+  }
+
+  export type fieldUpdateToOneWithWhereWithoutIndicator_group_parent2Input = {
+    where?: fieldWhereInput
+    data: XOR<fieldUpdateWithoutIndicator_group_parent2Input, fieldUncheckedUpdateWithoutIndicator_group_parent2Input>
+  }
+
+  export type fieldUpdateWithoutIndicator_group_parent2Input = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+  }
+
+  export type fieldUncheckedUpdateWithoutIndicator_group_parent2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calculation_formula?: NullableStringFieldUpdateOperationsInput | string | null
+    default_value?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type_targets?: NullableJsonNullValueInput | InputJsonValue
+    field_type?: EnumFieldTypeFieldUpdateOperationsInput | $Enums.FieldType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    sort_order?: IntFieldUpdateOperationsInput | number
+    user_type?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    validation_rules?: NullableJsonNullValueInput | InputJsonValue
+    field_category?: Enumfield_categoryFieldUpdateOperationsInput | $Enums.field_category
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFieldNestedInput
+    field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
+    indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
+    indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
+    indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+  }
+
+  export type facility_field_mappingUpsertWithWhereUniqueWithoutIndicator_groupInput = {
+    where: facility_field_mappingWhereUniqueInput
+    update: XOR<facility_field_mappingUpdateWithoutIndicator_groupInput, facility_field_mappingUncheckedUpdateWithoutIndicator_groupInput>
+    create: XOR<facility_field_mappingCreateWithoutIndicator_groupInput, facility_field_mappingUncheckedCreateWithoutIndicator_groupInput>
+  }
+
+  export type facility_field_mappingUpdateWithWhereUniqueWithoutIndicator_groupInput = {
+    where: facility_field_mappingWhereUniqueInput
+    data: XOR<facility_field_mappingUpdateWithoutIndicator_groupInput, facility_field_mappingUncheckedUpdateWithoutIndicator_groupInput>
+  }
+
+  export type facility_field_mappingUpdateManyWithWhereWithoutIndicator_groupInput = {
+    where: facility_field_mappingScalarWhereInput
+    data: XOR<facility_field_mappingUpdateManyMutationInput, facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupInput>
+  }
+
   export type facility_typeCreateWithoutFacility_type_remunerationInput = {
     id?: string
     name: string
@@ -40540,6 +43927,7 @@ export namespace Prisma {
     facility?: facilityCreateNestedManyWithoutFacility_typeInput
     facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUncheckedCreateWithoutFacility_type_remunerationInput = {
@@ -40553,6 +43941,7 @@ export namespace Prisma {
     facility?: facilityUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFacility_typeInput
     worker_allocation_config?: worker_allocation_configUncheckedCreateNestedManyWithoutFacility_typeInput
+    indicator_group?: indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeCreateOrConnectWithoutFacility_type_remunerationInput = {
@@ -40570,6 +43959,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     indicator: indicatorCreateNestedOneWithoutIndicator_remunerationInput
   }
 
@@ -40585,6 +43975,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationCreateOrConnectWithoutFacility_type_remunerationInput = {
@@ -40619,6 +44010,7 @@ export namespace Prisma {
     facility?: facilityUpdateManyWithoutFacility_typeNestedInput
     facility_field_mapping?: facility_field_mappingUpdateManyWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeUncheckedUpdateWithoutFacility_type_remunerationInput = {
@@ -40632,6 +44024,7 @@ export namespace Prisma {
     facility?: facilityUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFacility_typeNestedInput
     worker_allocation_config?: worker_allocation_configUncheckedUpdateManyWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type indicator_remunerationUpsertWithWhereUniqueWithoutFacility_type_remunerationInput = {
@@ -40666,6 +44059,7 @@ export namespace Prisma {
     condition_2_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: DecimalNullableFilter<"indicator_remuneration"> | Decimal | DecimalJsLike | number | string | null
+    condition_config?: JsonNullableFilter<"indicator_remuneration">
   }
 
   export type sectionCreateWithoutFamilyInput = {
@@ -40896,7 +44290,12 @@ export namespace Prisma {
     display_order?: number
     created_at?: Date | string
     updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
     facility_type: facility_typeCreateNestedOneWithoutFacility_field_mappingInput
+    indicator_group?: indicator_groupCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field?: fieldCreateNestedOneWithoutFacility_field_mapping_parentInput
+    parent_field2?: fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input
   }
 
   export type facility_field_mappingUncheckedCreateWithoutFieldInput = {
@@ -40906,6 +44305,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at: Date | string
     facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type facility_field_mappingCreateOrConnectWithoutFieldInput = {
@@ -41148,6 +44552,162 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type facility_field_mappingCreateWithoutParent_fieldInput = {
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    facility_type: facility_typeCreateNestedOneWithoutFacility_field_mappingInput
+    field: fieldCreateNestedOneWithoutFacility_field_mappingInput
+    indicator_group?: indicator_groupCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field2?: fieldCreateNestedOneWithoutFacility_field_mapping_parent2Input
+  }
+
+  export type facility_field_mappingUncheckedCreateWithoutParent_fieldInput = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    group_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+  }
+
+  export type facility_field_mappingCreateOrConnectWithoutParent_fieldInput = {
+    where: facility_field_mappingWhereUniqueInput
+    create: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput>
+  }
+
+  export type facility_field_mappingCreateManyParent_fieldInputEnvelope = {
+    data: facility_field_mappingCreateManyParent_fieldInput | facility_field_mappingCreateManyParent_fieldInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type facility_field_mappingCreateWithoutParent_field2Input = {
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    facility_type: facility_typeCreateNestedOneWithoutFacility_field_mappingInput
+    field: fieldCreateNestedOneWithoutFacility_field_mappingInput
+    indicator_group?: indicator_groupCreateNestedOneWithoutFacility_field_mappingInput
+    parent_field?: fieldCreateNestedOneWithoutFacility_field_mapping_parentInput
+  }
+
+  export type facility_field_mappingUncheckedCreateWithoutParent_field2Input = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    show_on_value2?: string | null
+  }
+
+  export type facility_field_mappingCreateOrConnectWithoutParent_field2Input = {
+    where: facility_field_mappingWhereUniqueInput
+    create: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input>
+  }
+
+  export type facility_field_mappingCreateManyParent_field2InputEnvelope = {
+    data: facility_field_mappingCreateManyParent_field2Input | facility_field_mappingCreateManyParent_field2Input[]
+    skipDuplicates?: boolean
+  }
+
+  export type indicator_groupCreateWithoutParent_fieldInput = {
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_type?: facility_typeCreateNestedOneWithoutIndicator_groupInput
+    parent_field2?: fieldCreateNestedOneWithoutIndicator_group_parent2Input
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupUncheckedCreateWithoutParent_fieldInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupCreateOrConnectWithoutParent_fieldInput = {
+    where: indicator_groupWhereUniqueInput
+    create: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput>
+  }
+
+  export type indicator_groupCreateManyParent_fieldInputEnvelope = {
+    data: indicator_groupCreateManyParent_fieldInput | indicator_groupCreateManyParent_fieldInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type indicator_groupCreateWithoutParent_field2Input = {
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_type?: facility_typeCreateNestedOneWithoutIndicator_groupInput
+    parent_field?: fieldCreateNestedOneWithoutIndicator_group_parentInput
+    facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupUncheckedCreateWithoutParent_field2Input = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutIndicator_groupInput
+  }
+
+  export type indicator_groupCreateOrConnectWithoutParent_field2Input = {
+    where: indicator_groupWhereUniqueInput
+    create: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input>
+  }
+
+  export type indicator_groupCreateManyParent_field2InputEnvelope = {
+    data: indicator_groupCreateManyParent_field2Input | indicator_groupCreateManyParent_field2Input[]
+    skipDuplicates?: boolean
+  }
+
   export type facility_field_mappingUpsertWithWhereUniqueWithoutFieldInput = {
     where: facility_field_mappingWhereUniqueInput
     update: XOR<facility_field_mappingUpdateWithoutFieldInput, facility_field_mappingUncheckedUpdateWithoutFieldInput>
@@ -41255,6 +44815,70 @@ export namespace Prisma {
     data: XOR<indicatorUpdateManyMutationInput, indicatorUncheckedUpdateManyWithoutTarget_fieldInput>
   }
 
+  export type facility_field_mappingUpsertWithWhereUniqueWithoutParent_fieldInput = {
+    where: facility_field_mappingWhereUniqueInput
+    update: XOR<facility_field_mappingUpdateWithoutParent_fieldInput, facility_field_mappingUncheckedUpdateWithoutParent_fieldInput>
+    create: XOR<facility_field_mappingCreateWithoutParent_fieldInput, facility_field_mappingUncheckedCreateWithoutParent_fieldInput>
+  }
+
+  export type facility_field_mappingUpdateWithWhereUniqueWithoutParent_fieldInput = {
+    where: facility_field_mappingWhereUniqueInput
+    data: XOR<facility_field_mappingUpdateWithoutParent_fieldInput, facility_field_mappingUncheckedUpdateWithoutParent_fieldInput>
+  }
+
+  export type facility_field_mappingUpdateManyWithWhereWithoutParent_fieldInput = {
+    where: facility_field_mappingScalarWhereInput
+    data: XOR<facility_field_mappingUpdateManyMutationInput, facility_field_mappingUncheckedUpdateManyWithoutParent_fieldInput>
+  }
+
+  export type facility_field_mappingUpsertWithWhereUniqueWithoutParent_field2Input = {
+    where: facility_field_mappingWhereUniqueInput
+    update: XOR<facility_field_mappingUpdateWithoutParent_field2Input, facility_field_mappingUncheckedUpdateWithoutParent_field2Input>
+    create: XOR<facility_field_mappingCreateWithoutParent_field2Input, facility_field_mappingUncheckedCreateWithoutParent_field2Input>
+  }
+
+  export type facility_field_mappingUpdateWithWhereUniqueWithoutParent_field2Input = {
+    where: facility_field_mappingWhereUniqueInput
+    data: XOR<facility_field_mappingUpdateWithoutParent_field2Input, facility_field_mappingUncheckedUpdateWithoutParent_field2Input>
+  }
+
+  export type facility_field_mappingUpdateManyWithWhereWithoutParent_field2Input = {
+    where: facility_field_mappingScalarWhereInput
+    data: XOR<facility_field_mappingUpdateManyMutationInput, facility_field_mappingUncheckedUpdateManyWithoutParent_field2Input>
+  }
+
+  export type indicator_groupUpsertWithWhereUniqueWithoutParent_fieldInput = {
+    where: indicator_groupWhereUniqueInput
+    update: XOR<indicator_groupUpdateWithoutParent_fieldInput, indicator_groupUncheckedUpdateWithoutParent_fieldInput>
+    create: XOR<indicator_groupCreateWithoutParent_fieldInput, indicator_groupUncheckedCreateWithoutParent_fieldInput>
+  }
+
+  export type indicator_groupUpdateWithWhereUniqueWithoutParent_fieldInput = {
+    where: indicator_groupWhereUniqueInput
+    data: XOR<indicator_groupUpdateWithoutParent_fieldInput, indicator_groupUncheckedUpdateWithoutParent_fieldInput>
+  }
+
+  export type indicator_groupUpdateManyWithWhereWithoutParent_fieldInput = {
+    where: indicator_groupScalarWhereInput
+    data: XOR<indicator_groupUpdateManyMutationInput, indicator_groupUncheckedUpdateManyWithoutParent_fieldInput>
+  }
+
+  export type indicator_groupUpsertWithWhereUniqueWithoutParent_field2Input = {
+    where: indicator_groupWhereUniqueInput
+    update: XOR<indicator_groupUpdateWithoutParent_field2Input, indicator_groupUncheckedUpdateWithoutParent_field2Input>
+    create: XOR<indicator_groupCreateWithoutParent_field2Input, indicator_groupUncheckedCreateWithoutParent_field2Input>
+  }
+
+  export type indicator_groupUpdateWithWhereUniqueWithoutParent_field2Input = {
+    where: indicator_groupWhereUniqueInput
+    data: XOR<indicator_groupUpdateWithoutParent_field2Input, indicator_groupUncheckedUpdateWithoutParent_field2Input>
+  }
+
+  export type indicator_groupUpdateManyWithWhereWithoutParent_field2Input = {
+    where: indicator_groupScalarWhereInput
+    data: XOR<indicator_groupUpdateManyMutationInput, indicator_groupUncheckedUpdateManyWithoutParent_field2Input>
+  }
+
   export type facilityCreateWithoutField_valueInput = {
     id?: string
     name: string
@@ -41323,6 +44947,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateWithoutField_valueInput = {
@@ -41345,6 +44973,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldCreateOrConnectWithoutField_valueInput = {
@@ -41465,6 +45097,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateWithoutField_valueInput = {
@@ -41487,6 +45123,10 @@ export namespace Prisma {
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type userUpsertWithoutField_valueInput = {
@@ -41774,6 +45414,10 @@ export namespace Prisma {
     field_value?: field_valueCreateNestedManyWithoutFieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateWithoutIndicator_indicator_denominator_field_idTofieldInput = {
@@ -41796,6 +45440,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldCreateOrConnectWithoutIndicator_indicator_denominator_field_idTofieldInput = {
@@ -41822,6 +45470,10 @@ export namespace Prisma {
     field_value?: field_valueCreateNestedManyWithoutFieldInput
     indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateWithoutIndicator_indicator_numerator_field_idTofieldInput = {
@@ -41844,6 +45496,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutTarget_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldCreateOrConnectWithoutIndicator_indicator_numerator_field_idTofieldInput = {
@@ -41870,6 +45526,10 @@ export namespace Prisma {
     field_value?: field_valueCreateNestedManyWithoutFieldInput
     indicator_indicator_denominator_field_idTofield?: indicatorCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorCreateNestedManyWithoutNumerator_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldUncheckedCreateWithoutIndicator_indicator_target_field_idTofieldInput = {
@@ -41892,6 +45552,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedCreateNestedManyWithoutFieldInput
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutDenominator_fieldInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedCreateNestedManyWithoutNumerator_fieldInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_fieldInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedCreateNestedManyWithoutParent_field2Input
+    indicator_group_parent?: indicator_groupUncheckedCreateNestedManyWithoutParent_fieldInput
+    indicator_group_parent2?: indicator_groupUncheckedCreateNestedManyWithoutParent_field2Input
   }
 
   export type fieldCreateOrConnectWithoutIndicator_indicator_target_field_idTofieldInput = {
@@ -41909,6 +45573,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     facility_type_remuneration: facility_type_remunerationCreateNestedOneWithoutIndicator_remunerationInput
   }
 
@@ -41924,6 +45589,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationCreateOrConnectWithoutIndicatorInput = {
@@ -42024,6 +45690,10 @@ export namespace Prisma {
     field_value?: field_valueUpdateManyWithoutFieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateWithoutIndicator_indicator_denominator_field_idTofieldInput = {
@@ -42046,6 +45716,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUpsertWithoutIndicator_indicator_numerator_field_idTofieldInput = {
@@ -42078,6 +45752,10 @@ export namespace Prisma {
     field_value?: field_valueUpdateManyWithoutFieldNestedInput
     indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateWithoutIndicator_indicator_numerator_field_idTofieldInput = {
@@ -42100,6 +45778,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_target_field_idTofield?: indicatorUncheckedUpdateManyWithoutTarget_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUpsertWithoutIndicator_indicator_target_field_idTofieldInput = {
@@ -42132,6 +45814,10 @@ export namespace Prisma {
     field_value?: field_valueUpdateManyWithoutFieldNestedInput
     indicator_indicator_denominator_field_idTofield?: indicatorUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUpdateManyWithoutNumerator_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUpdateManyWithoutParent_field2NestedInput
   }
 
   export type fieldUncheckedUpdateWithoutIndicator_indicator_target_field_idTofieldInput = {
@@ -42154,6 +45840,10 @@ export namespace Prisma {
     field_value?: field_valueUncheckedUpdateManyWithoutFieldNestedInput
     indicator_indicator_denominator_field_idTofield?: indicatorUncheckedUpdateManyWithoutDenominator_fieldNestedInput
     indicator_indicator_numerator_field_idTofield?: indicatorUncheckedUpdateManyWithoutNumerator_fieldNestedInput
+    facility_field_mapping_parent?: facility_field_mappingUncheckedUpdateManyWithoutParent_fieldNestedInput
+    facility_field_mapping_parent2?: facility_field_mappingUncheckedUpdateManyWithoutParent_field2NestedInput
+    indicator_group_parent?: indicator_groupUncheckedUpdateManyWithoutParent_fieldNestedInput
+    indicator_group_parent2?: indicator_groupUncheckedUpdateManyWithoutParent_field2NestedInput
   }
 
   export type indicator_remunerationUpsertWithWhereUniqueWithoutIndicatorInput = {
@@ -43074,6 +46764,7 @@ export namespace Prisma {
     facility?: facilityCreateNestedManyWithoutFacility_typeInput
     facility_field_mapping?: facility_field_mappingCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationCreateNestedOneWithoutFacility_typeInput
+    indicator_group?: indicator_groupCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeUncheckedCreateWithoutWorker_allocation_configInput = {
@@ -43087,6 +46778,7 @@ export namespace Prisma {
     facility?: facilityUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_field_mapping?: facility_field_mappingUncheckedCreateNestedManyWithoutFacility_typeInput
     facility_type_remuneration?: facility_type_remunerationUncheckedCreateNestedOneWithoutFacility_typeInput
+    indicator_group?: indicator_groupUncheckedCreateNestedManyWithoutFacility_typeInput
   }
 
   export type facility_typeCreateOrConnectWithoutWorker_allocation_configInput = {
@@ -43116,6 +46808,7 @@ export namespace Prisma {
     facility?: facilityUpdateManyWithoutFacility_typeNestedInput
     facility_field_mapping?: facility_field_mappingUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUpdateOneWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facility_typeUncheckedUpdateWithoutWorker_allocation_configInput = {
@@ -43129,6 +46822,7 @@ export namespace Prisma {
     facility?: facilityUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutFacility_typeNestedInput
     facility_type_remuneration?: facility_type_remunerationUncheckedUpdateOneWithoutFacility_typeNestedInput
+    indicator_group?: indicator_groupUncheckedUpdateManyWithoutFacility_typeNestedInput
   }
 
   export type facilityCreateWithoutWorker_remunerationsInput = {
@@ -43873,6 +47567,11 @@ export namespace Prisma {
     display_order?: number
     created_at?: Date | string
     updated_at: Date | string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type worker_allocation_configCreateManyFacility_typeInput = {
@@ -43885,6 +47584,21 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at: Date | string
+  }
+
+  export type indicator_groupCreateManyFacility_typeInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type facilityUpdateWithoutFacility_typeInput = {
@@ -43949,7 +47663,12 @@ export namespace Prisma {
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
     field?: fieldUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    indicator_group?: indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput
+    parent_field?: fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput
   }
 
   export type facility_field_mappingUncheckedUpdateWithoutFacility_typeInput = {
@@ -43959,6 +47678,11 @@ export namespace Prisma {
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type facility_field_mappingUncheckedUpdateManyWithoutFacility_typeInput = {
@@ -43968,6 +47692,11 @@ export namespace Prisma {
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type worker_allocation_configUpdateWithoutFacility_typeInput = {
@@ -44005,6 +47734,107 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type indicator_groupUpdateWithoutFacility_typeInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent_field?: fieldUpdateOneWithoutIndicator_group_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutIndicator_group_parent2NestedInput
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateWithoutFacility_typeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutFacility_typeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type facility_field_mappingCreateManyIndicator_groupInput = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+  }
+
+  export type facility_field_mappingUpdateWithoutIndicator_groupInput = {
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type?: facility_typeUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    field?: fieldUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    parent_field?: fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput
+  }
+
+  export type facility_field_mappingUncheckedUpdateWithoutIndicator_groupInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type indicator_remunerationCreateManyFacility_type_remunerationInput = {
     id?: number
     indicator_id: number
@@ -44017,6 +47847,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUpdateWithoutFacility_type_remunerationInput = {
@@ -44029,6 +47860,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     indicator?: indicatorUpdateOneRequiredWithoutIndicator_remunerationNestedInput
   }
 
@@ -44044,6 +47876,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUncheckedUpdateManyWithoutFacility_type_remunerationInput = {
@@ -44058,6 +47891,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type family_memberCreateManyFamilyInput = {
@@ -44143,6 +47977,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at: Date | string
     facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
   }
 
   export type field_valueCreateManyFieldInput = {
@@ -44230,12 +48069,75 @@ export namespace Prisma {
     source_of_verification?: string | null
   }
 
+  export type facility_field_mappingCreateManyParent_fieldInput = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    group_id?: number | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+  }
+
+  export type facility_field_mappingCreateManyParent_field2Input = {
+    id?: number
+    field_id: number
+    is_required?: boolean
+    display_order?: number
+    created_at?: Date | string
+    updated_at: Date | string
+    facility_type_id: string
+    group_id?: number | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    show_on_value2?: string | null
+  }
+
+  export type indicator_groupCreateManyParent_fieldInput = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    show_on_value?: string | null
+    parent_field_id2?: number | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type indicator_groupCreateManyParent_field2Input = {
+    id?: number
+    code: string
+    name: string
+    description?: string | null
+    sort_order?: number
+    facility_type_id?: string | null
+    parent_field_id?: number | null
+    show_on_value?: string | null
+    show_on_value2?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type facility_field_mappingUpdateWithoutFieldInput = {
     is_required?: BoolFieldUpdateOperationsInput | boolean
     display_order?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
     facility_type?: facility_typeUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    indicator_group?: indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput
+    parent_field?: fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput
+    parent_field2?: fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput
   }
 
   export type facility_field_mappingUncheckedUpdateWithoutFieldInput = {
@@ -44245,6 +48147,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type facility_field_mappingUncheckedUpdateManyWithoutFieldInput = {
@@ -44254,6 +48161,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type field_valueUpdateWithoutFieldInput = {
@@ -44531,6 +48443,180 @@ export namespace Prisma {
     source_of_verification?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type facility_field_mappingUpdateWithoutParent_fieldInput = {
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type?: facility_typeUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    field?: fieldUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    indicator_group?: indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput
+    parent_field2?: fieldUpdateOneWithoutFacility_field_mapping_parent2NestedInput
+  }
+
+  export type facility_field_mappingUncheckedUpdateWithoutParent_fieldInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutParent_fieldInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type facility_field_mappingUpdateWithoutParent_field2Input = {
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    facility_type?: facility_typeUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    field?: fieldUpdateOneRequiredWithoutFacility_field_mappingNestedInput
+    indicator_group?: indicator_groupUpdateOneWithoutFacility_field_mappingNestedInput
+    parent_field?: fieldUpdateOneWithoutFacility_field_mapping_parentNestedInput
+  }
+
+  export type facility_field_mappingUncheckedUpdateWithoutParent_field2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type facility_field_mappingUncheckedUpdateManyWithoutParent_field2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    field_id?: IntFieldUpdateOperationsInput | number
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    display_order?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type_id?: StringFieldUpdateOperationsInput | string
+    group_id?: NullableIntFieldUpdateOperationsInput | number | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type indicator_groupUpdateWithoutParent_fieldInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type?: facility_typeUpdateOneWithoutIndicator_groupNestedInput
+    parent_field2?: fieldUpdateOneWithoutIndicator_group_parent2NestedInput
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateWithoutParent_fieldInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutParent_fieldInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id2?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type indicator_groupUpdateWithoutParent_field2Input = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_type?: facility_typeUpdateOneWithoutIndicator_groupNestedInput
+    parent_field?: fieldUpdateOneWithoutIndicator_group_parentNestedInput
+    facility_field_mapping?: facility_field_mappingUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateWithoutParent_field2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    facility_field_mapping?: facility_field_mappingUncheckedUpdateManyWithoutIndicator_groupNestedInput
+  }
+
+  export type indicator_groupUncheckedUpdateManyWithoutParent_field2Input = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sort_order?: IntFieldUpdateOperationsInput | number
+    facility_type_id?: NullableStringFieldUpdateOperationsInput | string | null
+    parent_field_id?: NullableIntFieldUpdateOperationsInput | number | null
+    show_on_value?: NullableStringFieldUpdateOperationsInput | string | null
+    show_on_value2?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type worker_remunerationsCreateManyHealth_workersInput = {
     id?: number
     report_month: string
@@ -44620,6 +48706,7 @@ export namespace Prisma {
     condition_2_amount?: Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_worker_allocationCreateManyIndicatorInput = {
@@ -44729,6 +48816,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
     facility_type_remuneration?: facility_type_remunerationUpdateOneRequiredWithoutIndicator_remunerationNestedInput
   }
 
@@ -44744,6 +48832,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_remunerationUncheckedUpdateManyWithoutIndicatorInput = {
@@ -44758,6 +48847,7 @@ export namespace Prisma {
     condition_2_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_3_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     condition_4_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    condition_config?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type indicator_worker_allocationUpdateWithoutIndicatorInput = {

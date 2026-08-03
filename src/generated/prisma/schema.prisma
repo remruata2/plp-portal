@@ -83,20 +83,31 @@ model facility {
 }
 
 model facility_field_mapping {
-  id               Int           @id @default(autoincrement())
+  id               Int              @id @default(autoincrement())
   field_id         Int
-  is_required      Boolean       @default(false)
-  display_order    Int           @default(0)
-  created_at       DateTime      @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime      @db.Timestamptz(6)
+  is_required      Boolean          @default(false)
+  display_order    Int              @default(0)
+  created_at       DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime         @db.Timestamptz(6)
   facility_type_id String
-  facility_type    facility_type @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
-  field            field         @relation(fields: [field_id], references: [id], onDelete: Cascade)
+  group_id         Int?
+  parent_field_id  Int?
+  show_on_value    String?          @db.VarChar(50)
+  parent_field_id2 Int?
+  show_on_value2   String?          @db.VarChar(50)
+  facility_type    facility_type    @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
+  field            field            @relation(fields: [field_id], references: [id], onDelete: Cascade)
+  indicator_group  indicator_group? @relation(fields: [group_id], references: [id], onDelete: SetNull)
+  parent_field     field?           @relation("mapping_parent_field", fields: [parent_field_id], references: [id], onDelete: SetNull)
+  parent_field2    field?           @relation("mapping_parent_field2", fields: [parent_field_id2], references: [id], onDelete: SetNull)
 
   @@unique([facility_type_id, field_id])
   @@index([display_order])
   @@index([facility_type_id])
   @@index([field_id])
+  @@index([group_id])
+  @@index([parent_field_id])
+  @@index([parent_field_id2])
   @@index([is_required])
 }
 
@@ -131,6 +142,33 @@ model facility_type {
   facility_field_mapping     facility_field_mapping[]
   facility_type_remuneration facility_type_remuneration?
   worker_allocation_config   worker_allocation_config[]
+  indicator_group            indicator_group[]
+}
+
+model indicator_group {
+  id                     Int                      @id @default(autoincrement())
+  code                   String                   @db.VarChar(50)
+  name                   String                   @db.VarChar(200)
+  description            String?                  @db.VarChar(500)
+  sort_order             Int                      @default(0)
+  facility_type_id       String?
+  parent_field_id        Int?
+  show_on_value          String?                  @db.VarChar(50)
+  parent_field_id2       Int?
+  show_on_value2         String?                  @db.VarChar(50)
+  is_active              Boolean                  @default(true)
+  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime                 @default(now()) @updatedAt @db.Timestamptz(6)
+  facility_type          facility_type?           @relation(fields: [facility_type_id], references: [id], onDelete: Cascade)
+  parent_field           field?                   @relation("group_parent_field", fields: [parent_field_id], references: [id], onDelete: SetNull)
+  parent_field2          field?                   @relation("group_parent_field2", fields: [parent_field_id2], references: [id], onDelete: SetNull)
+  facility_field_mapping facility_field_mapping[]
+
+  @@unique([code, facility_type_id])
+  @@index([sort_order])
+  @@index([facility_type_id])
+  @@index([parent_field_id])
+  @@index([is_active])
 }
 
 model facility_type_remuneration {
@@ -218,6 +256,10 @@ model field {
   indicator_indicator_denominator_field_idTofield indicator[]              @relation("indicator_denominator_field_idTofield")
   indicator_indicator_numerator_field_idTofield   indicator[]              @relation("indicator_numerator_field_idTofield")
   indicator_indicator_target_field_idTofield      indicator[]              @relation("indicator_target_field_idTofield")
+  facility_field_mapping_parent                   facility_field_mapping[] @relation("mapping_parent_field")
+  facility_field_mapping_parent2                  facility_field_mapping[] @relation("mapping_parent_field2")
+  indicator_group_parent                          indicator_group[]        @relation("group_parent_field")
+  indicator_group_parent2                         indicator_group[]        @relation("group_parent_field2")
 
   @@index([field_category])
   @@index([field_type])
@@ -325,6 +367,7 @@ model indicator_remuneration {
   condition_2_amount            Decimal?                   @db.Decimal(10, 2)
   condition_3_amount            Decimal?                   @db.Decimal(10, 2)
   condition_4_amount            Decimal?                   @db.Decimal(10, 2)
+  condition_config              Json?
   facility_type_remuneration    facility_type_remuneration @relation(fields: [facility_type_remuneration_id], references: [id])
   indicator                     indicator                  @relation(fields: [indicator_id], references: [id])
 

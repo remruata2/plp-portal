@@ -14,6 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import ConditionRuleBuilder from "./ConditionRuleBuilder";
 
 type Indicator = { id: number; code: string; name: string };
 type FacilityType = { id: number; name: string; display_name?: string | null };
@@ -28,6 +29,7 @@ type FormValues = {
 	condition_2_amount?: string;
 	condition_3_amount?: string;
 	condition_4_amount?: string;
+	condition_config?: string;
 };
 
 export default function IndicatorRemunerationForm({
@@ -54,6 +56,9 @@ export default function IndicatorRemunerationForm({
 		condition_2_amount: initialValues?.condition_2_amount || "",
 		condition_3_amount: initialValues?.condition_3_amount || "",
 		condition_4_amount: initialValues?.condition_4_amount || "",
+		condition_config: typeof initialValues?.condition_config === "object"
+			? JSON.stringify(initialValues.condition_config, null, 2)
+			: initialValues?.condition_config || "",
 	});
 
 	useEffect(() => {
@@ -75,6 +80,9 @@ export default function IndicatorRemunerationForm({
 				condition_2_amount: initialValues.condition_2_amount || prev.condition_2_amount,
 				condition_3_amount: initialValues.condition_3_amount || prev.condition_3_amount,
 				condition_4_amount: initialValues.condition_4_amount || prev.condition_4_amount,
+				condition_config: typeof initialValues.condition_config === "object"
+					? JSON.stringify(initialValues.condition_config, null, 2)
+					: initialValues.condition_config || prev.condition_config,
 			}));
 		}
 	}, [initialValues]);
@@ -156,6 +164,18 @@ export default function IndicatorRemunerationForm({
 				? Number(values.condition_4_amount)
 				: null;
 
+			if (values.condition_config && values.condition_config.trim() !== "") {
+				try {
+					payload.condition_config = JSON.parse(values.condition_config);
+				} catch (e) {
+					toast.error("Invalid Condition Config JSON format");
+					setSubmitting(false);
+					return;
+				}
+			} else {
+				payload.condition_config = null;
+			}
+
 			if (mode === "create") {
 				const res = await fetch("/api/admin/indicator-remunerations", {
 					method: "POST",
@@ -183,6 +203,7 @@ export default function IndicatorRemunerationForm({
 						condition_2_amount: payload.condition_2_amount,
 						condition_3_amount: payload.condition_3_amount,
 						condition_4_amount: payload.condition_4_amount,
+						condition_config: payload.condition_config,
 					}),
 				});
 				if (!res.ok) {
@@ -333,6 +354,14 @@ export default function IndicatorRemunerationForm({
 								placeholder="Optional"
 							/>
 						</div>
+					</div>
+
+					<div className="mt-6">
+						<ConditionRuleBuilder
+							value={values.condition_config || ""}
+							onChange={(jsonStr) => onChange("condition_config", jsonStr)}
+							facilityTypeId={values.facilityTypeId}
+						/>
 					</div>
 
 					<div className="flex items-center justify-end gap-2">

@@ -168,7 +168,12 @@ exports.Prisma.Facility_field_mappingScalarFieldEnum = {
   display_order: 'display_order',
   created_at: 'created_at',
   updated_at: 'updated_at',
-  facility_type_id: 'facility_type_id'
+  facility_type_id: 'facility_type_id',
+  group_id: 'group_id',
+  parent_field_id: 'parent_field_id',
+  show_on_value: 'show_on_value',
+  parent_field_id2: 'parent_field_id2',
+  show_on_value2: 'show_on_value2'
 };
 
 exports.Prisma.Facility_targetScalarFieldEnum = {
@@ -190,6 +195,22 @@ exports.Prisma.Facility_typeScalarFieldEnum = {
   description: 'description',
   display_name: 'display_name',
   is_active: 'is_active',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.Indicator_groupScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  sort_order: 'sort_order',
+  facility_type_id: 'facility_type_id',
+  parent_field_id: 'parent_field_id',
+  show_on_value: 'show_on_value',
+  parent_field_id2: 'parent_field_id2',
+  show_on_value2: 'show_on_value2',
+  is_active: 'is_active',
+  created_at: 'created_at',
   updated_at: 'updated_at'
 };
 
@@ -322,7 +343,8 @@ exports.Prisma.Indicator_remunerationScalarFieldEnum = {
   condition_1_amount: 'condition_1_amount',
   condition_2_amount: 'condition_2_amount',
   condition_3_amount: 'condition_3_amount',
-  condition_4_amount: 'condition_4_amount'
+  condition_4_amount: 'condition_4_amount',
+  condition_config: 'condition_config'
 };
 
 exports.Prisma.Indicator_worker_allocationScalarFieldEnum = {
@@ -538,6 +560,7 @@ exports.Prisma.ModelName = {
   facility_field_mapping: 'facility_field_mapping',
   facility_target: 'facility_target',
   facility_type: 'facility_type',
+  indicator_group: 'indicator_group',
   facility_type_remuneration: 'facility_type_remuneration',
   family: 'family',
   family_member: 'family_member',

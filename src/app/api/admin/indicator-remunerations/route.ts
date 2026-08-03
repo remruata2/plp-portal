@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
 			condition_2_amount,
 			condition_3_amount,
 			condition_4_amount,
+			condition_config,
 		} = body || {};
 
 		const facilityTypeIdStr = String(facilityTypeIdRaw ?? "").trim();
@@ -206,6 +207,7 @@ export async function POST(request: NextRequest) {
 				condition_2_amount: condition2Amount,
 				condition_3_amount: condition3Amount,
 				condition_4_amount: condition4Amount,
+				condition_config: condition_config ?? undefined,
 				updated_at: new Date(),
 			},
 		});

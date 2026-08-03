@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/toast";
+import { CornerDownRight } from "lucide-react";
 import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
 import WorkerSelectionForm from "./WorkerSelectionForm";
 import ConditionalIndicatorDisplay from "@/components/indicators/ConditionalIndicatorDisplay";
@@ -36,22 +37,11 @@ import {
 	type FormValidationResult,
 } from "@/lib/validations/facility-form-validation";
 
-interface FieldMapping {
-	formFieldName: string;
-	databaseFieldId: number;
-	fieldType: string;
-	description: string;
-}
-
-interface IndicatorGroup {
-	indicatorCode: string;
-	indicatorName: string;
-	fields: FieldMapping[];
-	conditions?: string;
-	source_of_verification?: string;
-	target_formula?: string;
-	target_value?: string;
-}
+import {
+	groupFieldsByIndicators,
+	type FieldMapping,
+	type IndicatorGroup,
+} from "@/lib/utils/indicator-grouping";
 
 interface DynamicHealthDataFormProps {
 	facilityType: string;
@@ -282,7 +272,7 @@ export default function DynamicHealthDataForm({
 		if (session?.user && !loading) {
 			fetchExistingSubmissions();
 		}
-	}, [session, facilityId, loading]);
+	}, [session?.user?.facility_id, facilityId, loading]);
 
 	// Re-validate form when workers change - only if submit has been attempted
 	useEffect(() => {
@@ -296,336 +286,6 @@ export default function DynamicHealthDataForm({
 			}, 300);
 		}
 	}, [selectedWorkers, availableWorkers, hasAttemptedSubmit]);
-
-	// Function to group fields by indicators
-	const groupFieldsByIndicators = (
-		mappings: FieldMapping[]
-	): IndicatorGroup[] => {
-		// Define indicator mapping based on field codes - updated to match source files exactly
-		const indicatorMapping: Record<string, { code: string; name: string }> = {
-			// Population data (foundational demographic information)
-			total_population: { code: "POP001", name: "Population Data" },
-			total_population_phc: { code: "POP001", name: "Population Data" }, // PHC-specific
-			population_30_plus: { code: "POP001", name: "Population Data" },
-			population_30_plus_phc: { code: "POP001", name: "Population Data" }, // PHC-specific
-			population_30_plus_female: { code: "POP001", name: "Population Data" },
-			population_30_plus_female_phc: {
-				code: "POP001",
-				name: "Population Data",
-			}, // PHC-specific
-			population_18_plus: { code: "POP001", name: "Population Data" },
-
-			// ANC indicators - facility-specific mappings
-			anc_due_list: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
-			anc_due_list_phc: { code: "AF001_PHC", name: "Total ANC footfall" }, // PHC-specific
-			anc_footfall: { code: "AF001_PHC", name: "Total ANC footfall" }, // Will be mapped based on facility type
-			anc_footfall_phc: { code: "AF001_PHC", name: "Total ANC footfall" },
-			anc_footfall_sc: {
-				code: "AF001_SC",
-				name: "Total ANC footfall",
-			},
-			anc_footfall_ahwc: {
-				code: "AF001_AHWC",
-				name: "Total ANC footfall",
-			},
-			anc_tested_hb: { code: "HT001", name: "Pregnant women tested for Hb" },
-
-			// RI indicators
-			ri_sessions_planned: { code: "RS001", name: "RI sessions held" },
-			ri_sessions_planned_phc: { code: "RS001", name: "RI sessions held" }, // PHC-specific
-			ri_sessions_held: { code: "RS001", name: "RI sessions held" },
-			ri_beneficiaries_due: { code: "RF001", name: "RI footfall" },
-			ri_footfall: { code: "RF001", name: "RI footfall" },
-			ri_footfall_phc: { code: "RF001", name: "RI footfall" }, // PHC-specific
-
-			// TB indicators - facility-specific mappings
-			pulmonary_tb_patients: {
-				code: "CT001",
-				name: "Household visited for TB contact tracing",
-			},
-			total_tb_patients: {
-				code: "DC001",
-				name: "No. of TB patients visited for Differentiated TB Care",
-			},
-			total_tb_patients_phc: {
-				code: "DC001",
-				name: "No. of TB patients visited for Differentiated TB Care",
-			}, // PHC-specific
-			// Boolean conditional answer fields - positioned as 7th and 8th inputs
-			indicator_ct001_conditional_answer: {
-				code: "CT001",
-				name: "Household visited for TB contact tracing",
-			},
-			indicator_ct001_conditional_answer_phc: {
-				code: "CT001",
-				name: "Household visited for TB contact tracing",
-			}, // PHC-specific
-			indicator_dc001_conditional_answer: {
-				code: "DC001",
-				name: "No. of TB patients visited for Differentiated TB Care",
-			},
-			indicator_dc001_conditional_answer_phc: {
-				code: "DC001",
-				name: "No. of TB patients visited for Differentiated TB Care",
-			}, // PHC-specific
-			tb_screenings: {
-				code: "TS001_PHC",
-				name: "Individuals screened for TB",
-			}, // Will be mapped based on facility type
-			tb_screenings_phc: {
-				code: "TS001_PHC",
-				name: "Individuals screened for TB",
-			},
-			tb_screenings_sc: {
-				code: "TS001_SC",
-				name: "Individuals screened for TB",
-			},
-			tb_screenings_uhwc: {
-				code: "TS001_UHWC",
-				name: "Individuals screened for TB",
-			},
-			tb_screenings_ahwc: {
-				code: "TS001_AHWC",
-				name: "Individuals screened for TB",
-			},
-			tb_screenings_uphc: {
-				code: "TS001_UPHC",
-				name: "Individuals screened for TB",
-			},
-			tb_contact_tracing_households: {
-				code: "CT001",
-				name: "Household visited for TB contact tracing",
-			},
-			tb_differentiated_care_visits: {
-				code: "DC001",
-				name: "No. of TB patients visited for Differentiated TB Care",
-			},
-
-			// NCD indicators
-			cbac_forms_filled: {
-				code: "CB001",
-				name: "CBAC filled for the month (including rescreened)",
-			},
-			htn_screened: {
-				code: "HS001",
-				name: "HTN screened (including rescreened) for the month",
-			},
-			dm_screened: {
-				code: "DS001",
-				name: "DM screened (including rescreened) for the month",
-			},
-			oral_cancer_screened: {
-				code: "OC001",
-				name: "Oral Ca. Screened for the month",
-			},
-			breast_cervical_cancer_screened: {
-				code: "BC001",
-				name: "Breast & Cervical Ca. screened for the month",
-			},
-			ncd_diagnosed_tx_completed: {
-				code: "ND001",
-				name: "NCD Diagnosed & Tx completed",
-			},
-			ncd_referred_from_sc: {
-				code: "ND001",
-				name: "NCD Diagnosed & Tx completed",
-			},
-
-			// Service indicators
-			total_footfall: { code: "TF001_PHC", name: "Total Footfall (M&F)" }, // Will be mapped based on facility type
-			total_footfall_phc_colocated_sc: {
-				code: "TF001_PHC",
-				name: "Total Footfall (M&F)",
-			},
-			total_footfall_sc_clinic: {
-				code: "TF001_SC",
-				name: "Total Footfall (M&F)",
-			},
-			total_footfall_uhwc: {
-				code: "TF001_UHWC",
-				name: "Total Footfall (M&F)",
-			},
-			total_footfall_ahwc: {
-				code: "TF001_AHWC",
-				name: "Total Footfall (M&F)",
-			},
-			total_footfall_uphc: {
-				code: "TF001_UPHC",
-				name: "Total Footfall (M&F)",
-			},
-			wellness_sessions_conducted: {
-				code: "WS001",
-				name: "Total Wellness sessions",
-			},
-			teleconsultation_conducted: { code: "TC001", name: "Teleconsultation" },
-			prakriti_parikshan_conducted: {
-				code: "PP001",
-				name: "Prakriti Parikshan conducted",
-			},
-			patient_satisfaction_score: {
-				code: "PS001",
-				name: "Patient satisfaction score for the month",
-			},
-
-			// Elderly care indicators
-			bedridden_patients: {
-				code: "EP001",
-				name: "No of Elderly & Palliative patients visited",
-			},
-			bedridden_patients_phc: {
-				code: "EP001",
-				name: "No of Elderly & Palliative patients visited",
-			}, // PHC-specific
-			elderly_palliative_visits: {
-				code: "EP001",
-				name: "No of Elderly & Palliative patients visited",
-			},
-			elderly_clinic_conducted: {
-				code: "EC001",
-				name: "No of Elderly clinic conducted",
-			},
-			elderly_support_group_formed: {
-				code: "ES001",
-				name: "Whether Elderly Support Group (Sanjivini) is formed",
-			},
-			elderly_support_group_activity: {
-				code: "EA001",
-				name: "If Yes, any activity conducted during the month",
-			},
-
-			// Administrative indicators
-			jas_meetings_conducted: {
-				code: "JM001",
-				name: "No of JAS meeting conducted",
-			},
-			dvdms_issues_generated: {
-				code: "DV001_PHC",
-				name: "No. of issues generated in DVDMS",
-			}, // Will be mapped based on facility type
-			dvdms_issues_generated_phc: {
-				code: "DV001_PHC",
-				name: "No. of issues generated in DVDMS",
-			},
-			dvdms_issues_generated_sc: {
-				code: "DV001_SC",
-				name: "No. of issues generated in DVDMS",
-			},
-			dvdms_issues_generated_uhwc: {
-				code: "DV001_UHWC",
-				name: "No. of issues generated in DVDMS",
-			},
-			dvdms_issues_generated_ahwc: {
-				code: "DV001_AHWC",
-				name: "No. of issues generated in DVDMS",
-			},
-		};
-
-		// Group fields by indicator
-		const groups: Record<string, IndicatorGroup> = {};
-
-		mappings.forEach((mapping) => {
-			const indicator = indicatorMapping[mapping.formFieldName] || {
-				code: "OTHER",
-				name: "Other Fields",
-			};
-
-			if (!groups[indicator.code]) {
-				groups[indicator.code] = {
-					indicatorCode: indicator.code,
-					indicatorName: indicator.name,
-					fields: [],
-				};
-			}
-
-			groups[indicator.code].fields.push(mapping);
-		});
-
-		// Sort fields within each group to put boolean conditional answer fields first
-		Object.keys(groups).forEach((indicatorCode) => {
-			groups[indicatorCode].fields.sort((a, b) => {
-				// Put boolean conditional answer fields first (both regular and PHC variants)
-				const aIsBoolean =
-					a.formFieldName === "indicator_ct001_conditional_answer" ||
-					a.formFieldName === "indicator_dc001_conditional_answer" ||
-					a.formFieldName === "indicator_ct001_conditional_answer_phc" ||
-					a.formFieldName === "indicator_dc001_conditional_answer_phc";
-				const bIsBoolean =
-					b.formFieldName === "indicator_ct001_conditional_answer" ||
-					b.formFieldName === "indicator_dc001_conditional_answer" ||
-					b.formFieldName === "indicator_ct001_conditional_answer_phc" ||
-					b.formFieldName === "indicator_dc001_conditional_answer_phc";
-
-				if (aIsBoolean && !bIsBoolean) return -1;
-				if (!aIsBoolean && bIsBoolean) return 1;
-				return 0;
-			});
-		});
-
-		// Convert to array and sort by proper indicator order (as per source files)
-		const indicatorOrder = [
-			"POP001", // Population Data (foundational)
-			// Total Footfall - facility-specific
-			"TF001_PHC", // 1. Total Footfall (M&F)
-			"TF001_SC", // 1. Total Footfall (M&F)
-			"TF001_UHWC", // 1. Total Footfall (M&F)
-			"TF001_AHWC", // 1. Total Footfall (M&F)
-			"TF001_UPHC", // 1. Total Footfall (M&F)
-			"WS001", // 2. Total Wellness sessions
-			"TC001", // 3. Teleconsultation
-			// ANC Footfall - facility-specific
-			"AF001_PHC", // 4. Total ANC footfall
-			"AF001_SC", // 4. Total ANC footfall
-			"AF001_AHWC", // 4. Total ANC footfall
-			"HT001", // 5. Pregnant women tested for Hb
-			// TB Screenings - facility-specific
-			"TS001_PHC", // 6. Individuals screened for TB
-			"TS001_SC", // 6. Individuals screened for TB
-			"TS001_UHWC", // 6. Individuals screened for TB
-			"TS001_AHWC", // 6. Individuals screened for TB
-			"TS001_UPHC", // 6. Individuals screened for TB
-			"CT001", // 7. Household visited for TB contact tracing
-			"DC001", // 8. TB patients visited for Differentiated TB Care
-			"RS001", // 9. RI sessions held
-			"RF001", // 10. RI footfall
-			"CB001", // 11. CBAC filled for the month
-			"HS001", // 12. HTN screened for the month
-			"DS001", // 13. DM screened for the month
-			"OC001", // 14. Oral Ca. Screened for the month
-			"BC001", // 15. Breast & Cervical Ca. Screened for the month
-			"ND001", // 16. NCD Diagnosed & Tx completed
-			"PS001", // 17. Patient satisfaction score
-			"EP001", // 18. Elderly & Palliative patients visited
-			"EC001", // 19. Elderly clinic conducted
-			"JM001", // 20. JAS meeting conducted
-			// DVDMS Issues - facility-specific
-			"DV001_PHC", // 21. Issues generated in DVDMS
-			"DV001_SC", // 21. Issues generated in DVDMS
-			"DV001_UHWC", // 21. Issues generated in DVDMS
-			"DV001_AHWC", // 21. Issues generated in DVDMS
-			// AYUSH-specific indicators
-			"PP001", // 22. Prakriti Parikshan conducted
-			"ES001", // 23. Elderly Support Group formed
-			"EA001", // 24. Elderly Support Group activity
-			"OTHER", // Other fields (at the end)
-		];
-
-		return Object.values(groups).sort((a, b) => {
-			const indexA = indicatorOrder.indexOf(a.indicatorCode);
-			const indexB = indicatorOrder.indexOf(b.indicatorCode);
-
-			// If both indicators are in the order list, sort by their position
-			if (indexA !== -1 && indexB !== -1) {
-				return indexA - indexB;
-			}
-
-			// If only one is in the order list, prioritize it
-			if (indexA !== -1) return -1;
-			if (indexB !== -1) return 1;
-
-			// If neither is in the order list, sort alphabetically
-			return a.indicatorCode.localeCompare(b.indicatorCode);
-		});
-	};
 
 	const handleInputChange = (fieldName: string, value: any) => {
 		setFormData((prev) => {
@@ -1877,29 +1537,81 @@ export default function DynamicHealthDataForm({
 						</div>
 
 						{indicatorGroups.map((group, groupIndex) => {
-							// Check if this indicator has conditional logic by checking if group contains conditional answer fields
-							const hasCt001ConditionalField = group.fields.some(
-								(f) =>
-									f.formFieldName === "indicator_ct001_conditional_answer" ||
-									f.formFieldName === "indicator_ct001_conditional_answer_phc"
-							);
-							const hasDc001ConditionalField = group.fields.some(
-								(f) =>
-									f.formFieldName === "indicator_dc001_conditional_answer" ||
-									f.formFieldName === "indicator_dc001_conditional_answer_phc"
-							);
-							const isConditionalIndicator =
-								hasCt001ConditionalField || hasDc001ConditionalField;
+							// Helper to evaluate dynamic binary field gating conditions (supports dual AND gates)
+							const isConditionalItemVisible = (
+								parentFieldCode?: string | null,
+								showOnValue?: string | null,
+								parentFieldCode2?: string | null,
+								showOnValue2?: string | null
+							): boolean => {
+								const checkSingleGate = (
+									code?: string | null,
+									targetVal?: string | null
+								): boolean => {
+									if (!code) return true;
+									const parentVal = String(formData[code] ?? "").trim();
+									const expected = String(targetVal ?? "1").trim();
 
-							// Get the boolean field value from formData for conditional indicators - use facility-aware field codes
-							const booleanFieldName = hasCt001ConditionalField
-								? facilityType === "PHC"
-									? "indicator_ct001_conditional_answer_phc"
-									: "indicator_ct001_conditional_answer"
-								: facilityType === "PHC"
-									? "indicator_dc001_conditional_answer_phc"
-									: "indicator_dc001_conditional_answer";
-							const booleanFieldValue = formData[booleanFieldName];
+									if (parentVal === "") return false;
+
+									if (expected === "1") {
+										return (
+											parentVal === "1" ||
+											parentVal === "true" ||
+											parentVal.toLowerCase() === "yes"
+										);
+									}
+									if (expected === "0") {
+										return (
+											parentVal === "0" ||
+											parentVal === "false" ||
+											parentVal.toLowerCase() === "no"
+										);
+									}
+
+									return parentVal === expected;
+								};
+
+								// Gate 1 AND Gate 2 must both pass
+								return (
+									checkSingleGate(parentFieldCode, showOnValue) &&
+									checkSingleGate(parentFieldCode2, showOnValue2)
+								);
+							};
+
+							// 1. Check if the entire group is gated by parent binary fields outside of this group
+							const isParentFieldInThisGroup = group.parentFieldCode
+								? group.fields.some((f) => f.formFieldName === group.parentFieldCode)
+								: false;
+							const isParentField2InThisGroup = group.parentFieldCode2
+								? group.fields.some((f) => f.formFieldName === group.parentFieldCode2)
+								: false;
+
+							if (
+								group.parentFieldCode &&
+								!isParentFieldInThisGroup &&
+								!isParentField2InThisGroup &&
+								!isConditionalItemVisible(
+									group.parentFieldCode,
+									group.showOnValue,
+									group.parentFieldCode2,
+									group.showOnValue2
+								)
+							) {
+								return null;
+							}
+
+							// Check if this indicator has conditional logic by checking if group contains conditional answer fields or parent fields
+							const conditionalField = group.fields.find(
+								(f) =>
+									f.formFieldName.includes("conditional_answer") ||
+									(f.fieldType === "BINARY" && group.fields.some((other) => other.parentFieldCode === f.formFieldName))
+							);
+							const isConditionalIndicator = !!conditionalField;
+
+							// Get the boolean field value from formData for conditional indicators
+							const booleanFieldName = conditionalField?.formFieldName || "";
+							const booleanFieldValue = booleanFieldName ? formData[booleanFieldName] : null;
 							const booleanAnswer =
 								booleanFieldValue === "1" || booleanFieldValue === true
 									? "yes"
@@ -1913,28 +1625,24 @@ export default function DynamicHealthDataForm({
 									? booleanAnswer
 									: indicatorAnswers[group.indicatorCode] ?? null;
 
-							// Separate boolean fields from other fields (both regular and PHC variants)
+							// Separate boolean fields from other fields
 							const booleanFields = group.fields.filter(
 								(mapping) =>
-									mapping.formFieldName ===
-									"indicator_ct001_conditional_answer" ||
-									mapping.formFieldName ===
-									"indicator_dc001_conditional_answer" ||
-									mapping.formFieldName ===
-									"indicator_ct001_conditional_answer_phc" ||
-									mapping.formFieldName ===
-									"indicator_dc001_conditional_answer_phc"
+									mapping.formFieldName.includes("conditional_answer") ||
+									mapping.formFieldName === booleanFieldName
 							);
 							const otherFields = group.fields.filter(
-								(mapping) =>
-									mapping.formFieldName !==
-									"indicator_ct001_conditional_answer" &&
-									mapping.formFieldName !==
-									"indicator_dc001_conditional_answer" &&
-									mapping.formFieldName !==
-									"indicator_ct001_conditional_answer_phc" &&
-									mapping.formFieldName !==
-									"indicator_dc001_conditional_answer_phc"
+								(mapping) => !booleanFields.some((bf) => bf.formFieldName === mapping.formFieldName)
+							);
+
+							// Filter visible fields in regular rendering using isConditionalItemVisible
+							const visibleFields = group.fields.filter((mapping) =>
+								isConditionalItemVisible(
+									mapping.parentFieldCode,
+									mapping.showOnValue,
+									mapping.parentFieldCode2,
+									mapping.showOnValue2
+								)
 							);
 
 							return (
@@ -1973,47 +1681,39 @@ export default function DynamicHealthDataForm({
 													target_formula: group.target_formula,
 													target_value: group.target_value,
 												}}
-												// Use effectiveAnswer from boolean field or indicatorAnswers
 												answer={effectiveAnswer}
-												showConditionalQuestion={false} // Hide the question UI since we're using boolean field
-												facilityType={facilityType} // Pass facility type for field code resolution
+												showConditionalQuestion={false}
+												facilityType={facilityType}
 												onConditionChange={(conditionMet) => {
-													// Handle condition change if needed
 													console.log(
 														`Condition for ${group.indicatorCode}:`,
 														conditionMet
 													);
 												}}
 												onYesNoChange={(answer) => {
-													// Handle Yes/No answer change or reset (null)
 													handleYesNoAnswer(group.indicatorCode, answer);
-													// Also update the boolean field directly - use facility-aware field code
-													if (hasCt001ConditionalField) {
-														const fieldName =
-															facilityType === "PHC"
-																? "indicator_ct001_conditional_answer_phc"
-																: "indicator_ct001_conditional_answer";
+													if (booleanFieldName) {
 														handleInputChange(
-															fieldName,
-															answer === "yes" ? "1" : "0"
-														);
-													} else if (hasDc001ConditionalField) {
-														const fieldName =
-															facilityType === "PHC"
-																? "indicator_dc001_conditional_answer_phc"
-																: "indicator_dc001_conditional_answer";
-														handleInputChange(
-															fieldName,
+															booleanFieldName,
 															answer === "yes" ? "1" : "0"
 														);
 													}
 												}}
 											>
-												{/* Render related fields inside conditional component - only shown when "Yes" is selected */}
+												{/* Render related fields inside conditional component */}
 												<div className="grid grid-cols-1 mt-3 sm:mt-4">
 													{otherFields
 														.filter((mapping) => {
-															// Check field names directly instead of mapping to indicator codes
+															if (
+																!isConditionalItemVisible(
+																	mapping.parentFieldCode,
+																	mapping.showOnValue,
+																	mapping.parentFieldCode2,
+																	mapping.showOnValue2
+																)
+															) {
+																return false;
+															}
 															const isCt001Field =
 																mapping.formFieldName ===
 																"tb_contact_tracing_households";
@@ -2021,7 +1721,6 @@ export default function DynamicHealthDataForm({
 																mapping.formFieldName ===
 																"tb_differentiated_care_visits";
 
-															// Check both effectiveAnswer and indicatorAnswers
 															const shouldHide =
 																(isCt001Field || isDc001Field) &&
 																(effectiveAnswer === "no" ||
@@ -2029,53 +1728,76 @@ export default function DynamicHealthDataForm({
 																	"no");
 															return !shouldHide;
 														})
-														.map((mapping, fieldIndex) => (
-															<div
-																key={mapping.databaseFieldId}
-																className="mb-4"
-															>
-																<Label
-																	htmlFor={mapping.formFieldName}
-																	className="text-sm font-medium"
+														.map((mapping, fieldIndex) => {
+															const isSubField = Boolean(
+																mapping.parentFieldCode || mapping.parentFieldCode2
+															);
+
+															return (
+																<div
+																	key={mapping.databaseFieldId}
+																	className={`mb-4 transition-all duration-300 ${
+																		isSubField
+																			? "ml-3 sm:ml-6 pl-3 sm:pl-4 border-l-2 border-indigo-400 dark:border-indigo-600 bg-indigo-50/40 dark:bg-indigo-950/30 py-3 pr-3 rounded-r-xl"
+																			: ""
+																	}`}
 																>
-																	{groupIndex + 1}
-																	{String.fromCharCode(
-																		97 + fieldIndex + booleanFields.length
+																	<Label
+																		htmlFor={mapping.formFieldName}
+																		className="text-sm font-medium"
+																	>
+																		{groupIndex + 1}
+																		{String.fromCharCode(
+																			97 + fieldIndex + booleanFields.length
+																		)}
+																		. {mapping.description}
+																	</Label>
+																	{renderFieldInput(
+																		mapping,
+																		groupIndex,
+																		fieldIndex + booleanFields.length
 																	)}
-																	. {mapping.description}
-																</Label>
-																{renderFieldInput(
-																	mapping,
-																	groupIndex,
-																	fieldIndex + booleanFields.length
-																)}
-															</div>
-														))}
+																</div>
+															);
+														})}
 												</div>
 											</ConditionalIndicatorDisplay>
 										</>
 									) : (
 										<>
-											{/* Regular indicator rendering */}
+											{/* Regular indicator rendering with dynamic binary field gating */}
 											<div className="border-b border-gray-200 pb-2 sm:pb-3">
 												<h3 className="text-base sm:text-lg font-semibold text-gray-900">
 													{groupIndex + 1}. {group.indicatorName}
 												</h3>
 											</div>
 											<div className="grid grid-cols-1 mt-3 sm:mt-4">
-												{group.fields.map((mapping, fieldIndex) => (
-													<div key={mapping.databaseFieldId} className="mb-4">
-														<Label
-															htmlFor={mapping.formFieldName}
-															className="text-sm font-medium"
+												{visibleFields.map((mapping, fieldIndex) => {
+													const isSubField = Boolean(
+														mapping.parentFieldCode || mapping.parentFieldCode2
+													);
+
+													return (
+														<div
+															key={mapping.databaseFieldId}
+															className={`mb-4 transition-all duration-300 ${
+																isSubField
+																	? "ml-3 sm:ml-6 pl-3 sm:pl-4 border-l-2 border-indigo-400 dark:border-indigo-600 bg-indigo-50/40 dark:bg-indigo-950/30 py-3 pr-3 rounded-r-xl"
+																	: ""
+															}`}
 														>
-															{groupIndex + 1}
-															{String.fromCharCode(97 + fieldIndex)}.{" "}
-															{mapping.description}
-														</Label>
-														{renderFieldInput(mapping, groupIndex, fieldIndex)}
-													</div>
-												))}
+															<Label
+																htmlFor={mapping.formFieldName}
+																className="text-sm font-medium"
+															>
+																{groupIndex + 1}
+																{String.fromCharCode(97 + fieldIndex)}.{" "}
+																{mapping.description}
+															</Label>
+															{renderFieldInput(mapping, groupIndex, fieldIndex)}
+														</div>
+													);
+												})}
 											</div>
 										</>
 									)}

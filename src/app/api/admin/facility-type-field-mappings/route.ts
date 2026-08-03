@@ -1,85 +1,73 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/prisma";
 
-
-
+// GET: Fetch all field mappings or filter by query parameter ?facilityTypeId=...
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const facilityTypeId = searchParams.get("facilityTypeId");
 
-    if (!facilityTypeId) {
-      return NextResponse.json(
-        { error: "Facility type ID is required" },
-        { status: 400 }
-      );
+    if (facilityTypeId) {
+      const facilityType = await prisma.facility_type.findUnique({
+        where: { id: facilityTypeId },
+        include: {
+          facility_field_mapping: {
+            include: {
+              field: true,
+            },
+            orderBy: {
+              display_order: "asc",
+            },
+          },
+        },
+      });
+
+      if (!facilityType) {
+        return NextResponse.json(
+          { error: "Facility type not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({
+        facilityType,
+        mappings: facilityType.facility_field_mapping,
+      });
     }
 
-    // Get facility type
-    const facilityType = await prisma.facility_type.findUnique({
-      where: { id: facilityTypeId },
-    });
-
-    if (!facilityType) {
-      return NextResponse.json(
-        { error: "Facility type not found" },
-        { status: 404 }
-      );
-    }
-
-    // Get existing mappings
-    const mappings = await prisma.facility_field_mapping.findMany({
-      where: { facility_type_id: facilityTypeId },
+    const allMappings = await prisma.facility_field_mapping.findMany({
       include: {
         field: true,
+        facility_type: true,
       },
       orderBy: {
         display_order: "asc",
       },
     });
 
-    return NextResponse.json({
-      facilityType,
-      mappings,
-    });
-  } catch (error) {
+    return NextResponse.json({ mappings: allMappings });
+  } catch (error: any) {
     console.error("Error fetching field mappings:", error);
     return NextResponse.json(
-      { error: "Failed to fetch field mappings" },
+      { error: error.message || "Failed to fetch field mappings" },
       { status: 500 }
     );
   }
 }
 
+// POST: Save/update field mappings for a facility type (called by /admin/field-mappings page)
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await request.json();
     const { facilityTypeId, mappings } = body;
 
-    // Validate facilityTypeId exists
-    if (facilityTypeId === undefined || facilityTypeId === null || facilityTypeId === "") {
+    if (!facilityTypeId || typeof facilityTypeId !== "string") {
       return NextResponse.json(
-        { error: "Facility type ID is required" },
+        { error: "Facility type ID must be specified" },
         { status: 400 }
       );
     }
 
-    // Validate mappings exists (empty array is allowed - means no mappings)
-    if (mappings === undefined) {
-      return NextResponse.json(
-        { error: "Mappings array is required (can be empty)" },
-        { status: 400 }
-      );
-    }
-
-    // Validate mappings is an array
     if (!Array.isArray(mappings)) {
       return NextResponse.json(
         { error: "Mappings must be an array" },
@@ -87,15 +75,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate facilityTypeId is a non-empty string
-    if (typeof facilityTypeId !== "string" || facilityTypeId.trim() === "") {
-      return NextResponse.json(
-        { error: "Facility type ID must be a non-empty string" },
-        { status: 400 }
-      );
-    }
-
-    // Verify facility type exists (using string ID)
+    // Verify facility type exists
     const facilityType = await prisma.facility_type.findUnique({
       where: { id: facilityTypeId },
     });
@@ -107,24 +87,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Delete existing mappings
+    // Fetch existing mappings to preserve group_id, parent_field_id, and show_on_value
+    const existingMappings = await prisma.facility_field_mapping.findMany({
+      where: { facility_type_id: facilityTypeId },
+    });
+
+    const existingMap = new Map<
+      number,
+      {
+        group_id: number | null;
+        parent_field_id: number | null;
+        show_on_value: string | null;
+      }
+    >();
+
+    existingMappings.forEach((m) => {
+      existingMap.set(m.field_id, {
+        group_id: m.group_id,
+        parent_field_id: m.parent_field_id,
+        show_on_value: m.show_on_value,
+      });
+    });
+
+    // Delete existing mappings for this facility type
     await prisma.facility_field_mapping.deleteMany({
       where: { facility_type_id: facilityTypeId },
     });
 
-    // Create new mappings (only if there are any)
+    // Re-create mappings with preserved group_id and conditional gating settings
     if (mappings.length > 0) {
-    const mappingsData = mappings.map((mapping: any) => ({
-        facility_type_id: facilityTypeId, // Use string ID directly
-        field_id: parseInt(String(mapping.field_id), 10),
-        is_required: Boolean(mapping.is_required),
-        display_order: parseInt(String(mapping.display_order), 10) || 0,
-        updated_at: new Date(),
-    }));
+      const mappingsData = mappings.map((mapping: any) => {
+        const fieldId = parseInt(String(mapping.field_id), 10);
+        const existing = existingMap.get(fieldId);
 
-    await prisma.facility_field_mapping.createMany({
-      data: mappingsData,
-    });
+        return {
+          facility_type_id: facilityTypeId,
+          field_id: fieldId,
+          is_required: Boolean(mapping.is_required),
+          display_order: parseInt(String(mapping.display_order), 10) || 0,
+          group_id: existing?.group_id ?? null,
+          parent_field_id: existing?.parent_field_id ?? null,
+          show_on_value: existing?.show_on_value ?? null,
+          updated_at: new Date(),
+        };
+      });
+
+      await prisma.facility_field_mapping.createMany({
+        data: mappingsData,
+      });
     }
 
     return NextResponse.json({
@@ -137,4 +147,9 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// PUT: Alias for POST to support PUT requests
+export async function PUT(request: NextRequest) {
+  return POST(request);
 }

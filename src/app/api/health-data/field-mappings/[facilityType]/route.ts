@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/prisma";
-
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ facilityType: string }> }
 ) {
   try {
-    // Temporarily disable auth for testing
-    // const session = await getServerSession(authOptions);
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-
     const { facilityType } = await params;
 
     console.log(
@@ -32,6 +23,11 @@ export async function GET(
         facility_field_mapping: {
           include: {
             field: true,
+            parent_field: true,
+            parent_field2: true,
+            indicator_group: {
+              include: { parent_field: true, parent_field2: true },
+            },
           },
           orderBy: { display_order: "asc" },
         },
@@ -67,10 +63,44 @@ export async function GET(
       }
 
       return {
-        formFieldName: mapping.field.code.toLowerCase().replace(/\s+/g, ""), // Convert to camelCase
+        formFieldName: mapping.field.code.toLowerCase().replace(/\s+/g, ""),
         databaseFieldId: mapping.field.id,
         fieldType: frontendFieldType,
         description: mapping.field.name,
+        displayOrder: mapping.display_order,
+        parentFieldId: mapping.parent_field_id,
+        parentFieldCode: mapping.parent_field?.code
+          ? mapping.parent_field.code.toLowerCase().replace(/\s+/g, "")
+          : null,
+        showOnValue: mapping.show_on_value,
+        parentFieldId2: mapping.parent_field_id2,
+        parentFieldCode2: mapping.parent_field2?.code
+          ? mapping.parent_field2.code.toLowerCase().replace(/\s+/g, "")
+          : null,
+        showOnValue2: mapping.show_on_value2,
+        group: mapping.indicator_group
+          ? {
+              id: mapping.indicator_group.id,
+              code: mapping.indicator_group.code,
+              name: mapping.indicator_group.name,
+              sortOrder: mapping.indicator_group.sort_order,
+              description: mapping.indicator_group.description,
+              parentFieldId: mapping.indicator_group.parent_field_id,
+              parentFieldCode: mapping.indicator_group.parent_field?.code
+                ? mapping.indicator_group.parent_field.code
+                    .toLowerCase()
+                    .replace(/\s+/g, "")
+                : null,
+              showOnValue: mapping.indicator_group.show_on_value,
+              parentFieldId2: mapping.indicator_group.parent_field_id2,
+              parentFieldCode2: mapping.indicator_group.parent_field2?.code
+                ? mapping.indicator_group.parent_field2.code
+                    .toLowerCase()
+                    .replace(/\s+/g, "")
+                : null,
+              showOnValue2: mapping.indicator_group.show_on_value2,
+            }
+          : null,
       };
     });
 

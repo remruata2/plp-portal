@@ -24,9 +24,14 @@ export async function GET(request: NextRequest) {
       whereClause.field_category = category;
     }
 
-    // Get all fields with their current values
+    // Get all fields with their current values and facility type mappings
     const fields = await prisma.field.findMany({
       where: whereClause,
+      include: {
+        facility_field_mapping: {
+          select: { facility_type_id: true },
+        },
+      },
       orderBy: { sort_order: "asc" },
     });
 
@@ -46,8 +51,13 @@ export async function GET(request: NextRequest) {
           valueSource = result.source;
         }
 
+        const mappedFacilityTypeIds = (field.facility_field_mapping || []).map(
+          (m: any) => m.facility_type_id
+        );
+
         return {
           ...field,
+          mappedFacilityTypeIds,
           currentValue,
           valueSource,
         };
@@ -85,6 +95,7 @@ export async function POST(request: NextRequest) {
         field_category,
         default_value,
         sort_order,
+        facilityTypeIds,
       } = body;
 
       if (!code || !name) {
@@ -120,6 +131,31 @@ export async function POST(request: NextRequest) {
           updated_at: new Date(),
         },
       });
+
+      // If facilityTypeIds are provided and not ["none"], create facility field mappings directly
+      if (
+        Array.isArray(facilityTypeIds) &&
+        facilityTypeIds.length > 0 &&
+        !facilityTypeIds.includes("none")
+      ) {
+        const validFacilityTypeIds = facilityTypeIds.filter(
+          (id: string) => id && id !== "none"
+        );
+
+        if (validFacilityTypeIds.length > 0) {
+          const mappingData = validFacilityTypeIds.map((facTypeId: string) => ({
+            facility_type_id: facTypeId,
+            field_id: newField.id,
+            is_required: false,
+            display_order: 999,
+            updated_at: new Date(),
+          }));
+
+          await prisma.facility_field_mapping.createMany({
+            data: mappingData,
+          });
+        }
+      }
 
       return NextResponse.json(newField);
     }

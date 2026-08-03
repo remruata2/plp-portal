@@ -74,6 +74,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 				{/* Main Dashboard */}
 				<Link
 					href="/admin"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname === "/admin" ? activeLinkClasses : inactiveLinkClasses
@@ -101,6 +102,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 				<Link
 					href="/admin/health-data"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/admin/health-data")
@@ -126,6 +128,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 				<Link
 					href="/admin/field-mappings"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/admin/field-mappings")
@@ -149,9 +152,36 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 					Field Mappings
 				</Link>
 
+				<Link
+					href="/admin/form-structure"
+					prefetch={false}
+					onClick={() => setSidebarOpen && setSidebarOpen(false)}
+					className={`${baseLinkClasses} ${
+						pathname.startsWith("/admin/form-structure")
+							? activeLinkClasses
+							: inactiveLinkClasses
+					}`}
+				>
+					<svg
+						className="mr-3 h-5 w-5 text-indigo-500"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+						/>
+					</svg>
+					Form Structure & Order
+				</Link>
+
 				{/* Fields Management (top-level) */}
 				<Link
 					href="/admin/fields"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/admin/fields")
@@ -182,6 +212,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/districts"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/districts")
@@ -213,6 +244,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/facility-types"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/facility-types")
@@ -238,6 +270,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/facilities"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/facilities")
@@ -263,6 +296,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/settings"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/settings")
@@ -297,6 +331,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/users"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/users")
@@ -322,6 +357,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/health-workers"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/health-workers")
@@ -348,10 +384,10 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 						{/* Performance & Analytics Section */}
 						<SectionHeader title="Performance & Analytics" />
 
-
 						{/* Incentive Reports */}
 						<Link
 							href="/admin/performance-reports"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/performance-reports")
@@ -437,6 +473,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 								<div className="mt-1 space-y-1">
 									<Link
 										href="/admin/indicators"
+										prefetch={false}
 										onClick={() => setSidebarOpen && setSidebarOpen(false)}
 										className={`${subLinkClasses} ${
 											pathname === "/admin/indicators"
@@ -461,6 +498,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 									</Link>
 									<Link
 										href="/admin/fields"
+										prefetch={false}
 										onClick={() => setSidebarOpen && setSidebarOpen(false)}
 										className={`${subLinkClasses} ${
 											pathname === "/admin/fields"
@@ -489,6 +527,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/targets"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/targets")
@@ -517,6 +556,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/incentives"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/incentives")
@@ -542,6 +582,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/indicator-remunerations"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/indicator-remunerations")
@@ -567,6 +608,7 @@ export default function AdminSidebar({ setSidebarOpen }: AdminSidebarProps) {
 
 						<Link
 							href="/admin/indicator-worker-allocations"
+							prefetch={false}
 							onClick={() => setSidebarOpen && setSidebarOpen(false)}
 							className={`${baseLinkClasses} ${
 								pathname.startsWith("/admin/indicator-worker-allocations")

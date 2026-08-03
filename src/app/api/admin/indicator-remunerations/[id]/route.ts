@@ -87,6 +87,7 @@ export async function PATCH(
 			condition_2_amount,
 			condition_3_amount,
 			condition_4_amount,
+			condition_config,
 		} = body || {};
 
 		// Get current remuneration to check if facility type is being changed
@@ -206,6 +207,9 @@ export async function PATCH(
 		}
 		if (condition_type !== undefined) {
 			data.condition_type = condition_type ?? null;
+		}
+		if (condition_config !== undefined) {
+			data.condition_config = condition_config ?? null;
 		}
 
 		// Handle condition amounts

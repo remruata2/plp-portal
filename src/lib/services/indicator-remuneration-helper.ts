@@ -117,7 +117,8 @@ export function calculateEffectiveRemuneration(
 		remuneration.condition_1_amount != null ||
 		remuneration.condition_2_amount != null ||
 		remuneration.condition_3_amount != null ||
-		remuneration.condition_4_amount != null;
+		remuneration.condition_4_amount != null ||
+		remuneration.condition_config != null;
 
 	if (hasConditionAmounts) {
 		// Use new condition amount system

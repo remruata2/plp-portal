@@ -41,7 +41,7 @@ export default function FacilitySidebar({
 		};
 
 		fetchFacilityData();
-	}, [session]);
+	}, [session?.user?.facility_id]);
 
 	const baseLinkClasses =
 		"flex items-center px-3 py-3 text-lg md:text-sm font-medium rounded-md transition-colors";
@@ -72,6 +72,7 @@ export default function FacilitySidebar({
 			<nav className="flex-1 px-3 py-4 space-y-2 md:space-y-1 overflow-y-auto">
 				<Link
 					href="/facility/dashboard"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/facility/dashboard")
@@ -103,6 +104,7 @@ export default function FacilitySidebar({
 
 				<Link
 					href="/facility/health-data"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/facility/health-data")
@@ -128,6 +130,7 @@ export default function FacilitySidebar({
 
 				<Link
 					href="/facility/workers"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/facility/workers")
@@ -153,6 +156,7 @@ export default function FacilitySidebar({
 
 				<Link
 					href="/facility/reports"
+					prefetch={false}
 					onClick={() => setSidebarOpen && setSidebarOpen(false)}
 					className={`${baseLinkClasses} ${
 						pathname.startsWith("/facility/reports")

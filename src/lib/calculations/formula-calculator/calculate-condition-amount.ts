@@ -2,13 +2,70 @@ import { getFieldCodeForFacilityType } from "@/lib/utils/field-code-resolver";
 import { matchesIndicatorCode } from "@/lib/utils/indicator-code-resolver";
 
 /**
+ * Helper to evaluate dynamic condition rules against provided field values
+ */
+function evaluateRule(rule: any, fieldValues: any[], facilityType?: string): boolean {
+	if (!rule || !rule.field_code) return false;
+
+	const targetCode = getFieldCodeForFacilityType(rule.field_code, facilityType);
+	
+	// Find matching field value by code
+	const fieldMatch = fieldValues.find((f: any) => {
+		const code = f.field?.code || f.fieldCode || f.code;
+		return code === targetCode || code === rule.field_code;
+	});
+
+	if (!fieldMatch) {
+		// Field not found: treat null/undefined as false or empty
+		const op = rule.operator || "===";
+		if (op === "falsy" || op === "false") return true;
+		if ((op === "===" || op === "==" || op === "equals") && (rule.value === false || rule.value === "0")) return true;
+		return false;
+	}
+
+	// Extract actual field value
+	let val: any = fieldMatch.boolean_value;
+	if (val === undefined || val === null) {
+		val = fieldMatch.numeric_value ?? fieldMatch.string_value ?? fieldMatch.value;
+	}
+
+	const expected = rule.value;
+	const operator = rule.operator || "===";
+
+	switch (operator) {
+		case "truthy":
+		case "true":
+			return val === true || val === "1" || val === 1 || String(val).toLowerCase() === "yes";
+		case "falsy":
+		case "false":
+			return val === false || val === "0" || val === 0 || val === null || val === undefined || String(val).toLowerCase() === "no";
+		case "==":
+		case "===":
+		case "equals":
+			if (expected === true || expected === "1") {
+				return val === true || val === "1" || val === 1 || String(val).toLowerCase() === "yes";
+			}
+			if (expected === false || expected === "0") {
+				return val === false || val === "0" || val === 0 || val === null || val === undefined || String(val).toLowerCase() === "no";
+			}
+			return String(val) === String(expected);
+		case "!=":
+		case "!==":
+		case "not_equals":
+			if (expected === true || expected === "1") {
+				return !(val === true || val === "1" || val === 1 || String(val).toLowerCase() === "yes");
+			}
+			if (expected === false || expected === "0") {
+				return !(val === false || val === "0" || val === 0 || val === null || val === undefined || String(val).toLowerCase() === "no");
+			}
+			return String(val) !== String(expected);
+		default:
+			return String(val) === String(expected);
+	}
+}
+
+/**
  * Determine which condition amount to use based on indicator code and boolean field values
- *
- * @param indicatorCode - Indicator code (e.g., "TS001", "CT001", "DC001")
- * @param remuneration - Remuneration object with condition amounts
- * @param fieldValues - Array of field values to check for boolean answers
- * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
- * @returns The effective max remuneration amount to use
  */
 export function getConditionAmount(
 	indicatorCode: string,
@@ -18,8 +75,65 @@ export function getConditionAmount(
 ): number {
 	const baseAmount = parseFloat(remuneration.base_amount.toString());
 
-	// Get boolean field values for indicators 7 and 8
-	// Treat null/undefined as false (user didn't select "Yes", so it's "No")
+	// 1. Dynamic Condition Evaluation (New System)
+	if (remuneration && remuneration.condition_config) {
+		let config = remuneration.condition_config;
+		if (typeof config === "string") {
+			try {
+				config = JSON.parse(config);
+			} catch (e) {
+				console.error("Failed to parse condition_config JSON:", e);
+			}
+		}
+
+		if (config && typeof config === "object") {
+			// If config is array of condition items
+			const conditionsList = Array.isArray(config) ? config : config.conditions;
+			
+			if (Array.isArray(conditionsList)) {
+				for (const item of conditionsList) {
+					const rules = item.rules || [];
+					const allRulesMet = rules.length > 0 && rules.every((r: any) => evaluateRule(r, fieldValues, facilityType));
+					
+					if (allRulesMet) {
+						const target = item.condition_target || item.target;
+						if (target === "condition_1" || target === 1) {
+							return remuneration.condition_1_amount != null ? Number(remuneration.condition_1_amount) : baseAmount;
+						}
+						if (target === "condition_2" || target === 2) {
+							return remuneration.condition_2_amount != null ? Number(remuneration.condition_2_amount) : baseAmount;
+						}
+						if (target === "condition_3" || target === 3) {
+							return remuneration.condition_3_amount != null ? Number(remuneration.condition_3_amount) : baseAmount;
+						}
+						if (target === "condition_4" || target === 4) {
+							return remuneration.condition_4_amount != null ? Number(remuneration.condition_4_amount) : baseAmount;
+						}
+						if (target === "base_amount") {
+							return baseAmount;
+						}
+						if (typeof target === "number") {
+							return target;
+						}
+					}
+				}
+			} else {
+				// Object style: { condition_1: [...rules], condition_2: [...rules] }
+				for (let i = 1; i <= 4; i++) {
+					const rules = config[`condition_${i}`];
+					if (Array.isArray(rules) && rules.length > 0) {
+						const allRulesMet = rules.every((r: any) => evaluateRule(r, fieldValues, facilityType));
+						if (allRulesMet) {
+							const amtKey = `condition_${i}_amount`;
+							return remuneration[amtKey] != null ? Number(remuneration[amtKey]) : baseAmount;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// 2. Legacy / Fallback Condition Logic (TS001, CT001, DC001)
 	const ct001FieldCode = getFieldCodeForFacilityType(
 		"indicator_ct001_conditional_answer",
 		facilityType
@@ -27,7 +141,7 @@ export function getConditionAmount(
 	const indicator7AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === ct001FieldCode
 	)?.boolean_value;
-	const indicator7Answer = indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+	const indicator7Answer = indicator7AnswerRaw === true ? true : false;
 
 	const dc001FieldCode = getFieldCodeForFacilityType(
 		"indicator_dc001_conditional_answer",
@@ -36,79 +150,51 @@ export function getConditionAmount(
 	const indicator8AnswerRaw = fieldValues.find(
 		(f: any) => f.field?.code === dc001FieldCode
 	)?.boolean_value;
-	const indicator8Answer = indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+	const indicator8Answer = indicator8AnswerRaw === true ? true : false;
 
-	// For Indicator 6 (TS001) - Individuals screened for TB
-	// Condition logic based on Indicator 7 and Indicator 8 answers
-	// Handle both TS001 and TS001_SC, TS001_PHC, TS001_UHWC, etc.
 	if (indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
-		// Condition 1: If 7 & 8 are both Yes
 		if (indicator7Answer === true && indicator8Answer === true) {
 			return remuneration.condition_1_amount != null
 				? Number(remuneration.condition_1_amount)
 				: baseAmount;
 		}
-		// Condition 2: If 7 & 8 are both No (or null/undefined, treated as false)
 		if (indicator7Answer === false && indicator8Answer === false) {
 			return remuneration.condition_2_amount != null
 				? Number(remuneration.condition_2_amount)
 				: baseAmount;
 		}
-		// Condition 3: If 7 is Yes and 8 is No
 		if (indicator7Answer === true && indicator8Answer === false) {
 			return remuneration.condition_3_amount != null
 				? Number(remuneration.condition_3_amount)
 				: baseAmount;
 		}
-		// Condition 4: If 7 is No and 8 is Yes
 		if (indicator7Answer === false && indicator8Answer === true) {
 			return remuneration.condition_4_amount != null
 				? Number(remuneration.condition_4_amount)
 				: baseAmount;
 		}
-		// Default: use base_amount if boolean values are not available
 		return baseAmount;
 	}
 
-	// For Indicator 7 (CT001) - Household visited for TB contact tracing
-	// If Indicator CT001 Conditional Answer = Yes, use base_amount
-	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
 	if (matchesIndicatorCode(indicatorCode, "CT001")) {
-		// If conditional answer is Yes, use base_amount
 		if (indicator7Answer === true) {
 			return baseAmount;
 		}
-		// If No or null/undefined (treated as false), return 0
 		return 0;
 	}
 
-	// For Indicator 8 (DC001) - TB patients visited for Differentiated TB Care
-	// If Indicator DC001 Conditional Answer = Yes, use base_amount
-	// If No (or null/undefined), user can't fill and gets 0 incentive (handled by displayPercentage logic)
 	if (matchesIndicatorCode(indicatorCode, "DC001")) {
-		// If conditional answer is Yes, use base_amount
 		if (indicator8Answer === true) {
 			return baseAmount;
 		}
-		// If No or null/undefined (treated as false), return 0
 		return 0;
 	}
 
-	// For all other indicators, use base_amount
-	// If condition amounts are set, they all use the same value (base_amount)
 	return baseAmount;
 }
 
 /**
- * Calculate conditional remuneration and display percentage using new condition amount system
- *
- * @param remuneration - Remuneration object with condition amounts
- * @param fieldValues - Array of field values to check for boolean answers
- * @param indicatorCode - Indicator code (e.g., "TS001", "CT001", "DC001")
- * @param baseAchievement - Achievement percentage from FormulaCalculator
- * @param denominatorValue - Denominator value for display percentage calculation (optional)
- * @param facilityType - Facility type name (e.g., "PHC", "SC_HWC") for field code resolution
- * @returns Object with calculated remuneration/display values
+ * Calculate conditional remuneration and display percentage using condition amount system
  */
 export function calculateConditionalRemuneration(
 	remuneration: any,
@@ -121,7 +207,6 @@ export function calculateConditionalRemuneration(
 	effectiveMaxRemuneration: number;
 	displayPercentage: number;
 } {
-	// Get the appropriate condition amount
 	const effectiveMaxRemuneration = getConditionAmount(
 		indicatorCode,
 		remuneration,
@@ -129,18 +214,14 @@ export function calculateConditionalRemuneration(
 		facilityType
 	);
 
-	// Calculate display percentage
 	let displayPercentage = baseAchievement;
 
-	// For TB-related indicators, check if they should show NA
 	const isTbContactTracing = matchesIndicatorCode(indicatorCode, "CT001");
 	const isTbDifferentiatedCare = matchesIndicatorCode(indicatorCode, "DC001");
 	const isTbScreening =
 		indicatorCode === "TS001" || indicatorCode.startsWith("TS001_");
 
 	if (isTbContactTracing || isTbDifferentiatedCare || isTbScreening) {
-		// Check if the indicator should be NA based on boolean answers
-		// Treat null/undefined as false (user didn't select "Yes", so it's "No")
 		const ct001FieldCode = getFieldCodeForFacilityType(
 			"indicator_ct001_conditional_answer",
 			facilityType
@@ -148,7 +229,7 @@ export function calculateConditionalRemuneration(
 		const indicator7AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === ct001FieldCode
 		)?.boolean_value;
-		const indicator7Answer = indicator7AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+		const indicator7Answer = indicator7AnswerRaw === true ? true : false;
 
 		const dc001FieldCode = getFieldCodeForFacilityType(
 			"indicator_dc001_conditional_answer",
@@ -157,26 +238,19 @@ export function calculateConditionalRemuneration(
 		const indicator8AnswerRaw = fieldValues.find(
 			(f: any) => f.field?.code === dc001FieldCode
 		)?.boolean_value;
-		const indicator8Answer = indicator8AnswerRaw === true ? true : false; // null/undefined/false all treated as false
+		const indicator8Answer = indicator8AnswerRaw === true ? true : false;
 
-		// For CT001: NA if no pulmonary TB patients (Indicator 7 = No or null)
 		if (isTbContactTracing && indicator7Answer === false) {
 			displayPercentage = 0;
-		}
-		// For DC001: NA if no TB patients (Indicator 8 = No or null)
-		else if (isTbDifferentiatedCare && indicator8Answer === false) {
+		} else if (isTbDifferentiatedCare && indicator8Answer === false) {
 			displayPercentage = 0;
-		}
-		// For TS001: Use normal percentage (conditions determine amount, not NA status)
-		else {
+		} else {
 			displayPercentage = Math.min(baseAchievement, 100);
 		}
 	} else {
-		// Cap at 100% for display
 		displayPercentage = Math.min(baseAchievement, 100);
 	}
 
-	// Normalize displayPercentage
 	if (!isFinite(displayPercentage) || isNaN(displayPercentage)) {
 		displayPercentage = 0;
 	}

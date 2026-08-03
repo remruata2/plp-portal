@@ -37,6 +37,7 @@ type IndicatorRemuneration = {
 	condition_2_amount?: number | null;
 	condition_3_amount?: number | null;
 	condition_4_amount?: number | null;
+	condition_config?: any;
 	indicator?: Indicator;
 	facility_type_remuneration?: {
 		id: number;
@@ -286,10 +287,11 @@ export default function IndicatorRemunerationListClient() {
 						<TableRow>
 							<TableHead>Indicator</TableHead>
 							<TableHead>Facility Type</TableHead>
-							<TableHead className="text-right">Condition 1</TableHead>
-							<TableHead className="text-right">Condition 2</TableHead>
-							<TableHead className="text-right">Condition 3</TableHead>
-							<TableHead className="text-right">Condition 4</TableHead>
+							<TableHead className="text-right">Base Amount</TableHead>
+							<TableHead className="text-right">Cond 1</TableHead>
+							<TableHead className="text-right">Cond 2</TableHead>
+							<TableHead className="text-right">Cond 3</TableHead>
+							<TableHead className="text-right">Cond 4</TableHead>
 							<TableHead className="w-[120px]">Actions</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -297,7 +299,7 @@ export default function IndicatorRemunerationListClient() {
 						{!loading && filtered.length === 0 && (
 							<TableRow>
 								<TableCell
-									colSpan={7}
+									colSpan={8}
 									className="text-center text-gray-500 py-8"
 								>
 									No remunerations found
@@ -305,23 +307,8 @@ export default function IndicatorRemunerationListClient() {
 							</TableRow>
 						)}
 						{filtered.map((item) => {
-							// Use condition amounts if set, otherwise fallback to base_amount
-							const condition1 =
-								item.condition_1_amount != null
-									? Number(item.condition_1_amount)
-									: Number(item.base_amount);
-							const condition2 =
-								item.condition_2_amount != null
-									? Number(item.condition_2_amount)
-									: Number(item.base_amount);
-							const condition3 =
-								item.condition_3_amount != null
-									? Number(item.condition_3_amount)
-									: Number(item.base_amount);
-							const condition4 =
-								item.condition_4_amount != null
-									? Number(item.condition_4_amount)
-									: Number(item.base_amount);
+							const hasConfig = !!item.condition_config;
+							const baseAmt = Number(item.base_amount);
 
 							return (
 								<TableRow key={item.id}>
@@ -329,6 +316,11 @@ export default function IndicatorRemunerationListClient() {
 										<div className="flex items-center gap-2">
 											<Badge variant="outline">{item.indicator?.code}</Badge>
 											<span>{item.indicator?.name}</span>
+											{hasConfig && (
+												<Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100 text-[10px]">
+													Rules Configured
+												</Badge>
+											)}
 										</div>
 									</TableCell>
 									<TableCell>
@@ -336,17 +328,28 @@ export default function IndicatorRemunerationListClient() {
 											?.display_name ||
 											item.facility_type_remuneration?.facility_type?.name}
 									</TableCell>
-									<TableCell className="text-right">
-										₹{condition1.toLocaleString()}
+									<TableCell className="text-right font-semibold text-slate-900">
+										₹{baseAmt.toLocaleString()}
 									</TableCell>
-									<TableCell className="text-right">
-										₹{condition2.toLocaleString()}
+									<TableCell className="text-right text-slate-600">
+										{item.condition_1_amount != null
+											? `₹${Number(item.condition_1_amount).toLocaleString()}`
+											: "-"}
 									</TableCell>
-									<TableCell className="text-right">
-										₹{condition3.toLocaleString()}
+									<TableCell className="text-right text-slate-600">
+										{item.condition_2_amount != null
+											? `₹${Number(item.condition_2_amount).toLocaleString()}`
+											: "-"}
 									</TableCell>
-									<TableCell className="text-right">
-										₹{condition4.toLocaleString()}
+									<TableCell className="text-right text-slate-600">
+										{item.condition_3_amount != null
+											? `₹${Number(item.condition_3_amount).toLocaleString()}`
+											: "-"}
+									</TableCell>
+									<TableCell className="text-right text-slate-600">
+										{item.condition_4_amount != null
+											? `₹${Number(item.condition_4_amount).toLocaleString()}`
+											: "-"}
 									</TableCell>
 									<TableCell>
 										<div className="flex items-center gap-1">

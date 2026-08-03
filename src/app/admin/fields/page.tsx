@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, Edit, Settings } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Plus, Trash2, Edit, Settings, Building2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface Field {
@@ -37,6 +38,7 @@ interface Field {
 	valueSource: string;
 	sort_order: number;
 	is_active: boolean;
+	mappedFacilityTypeIds?: string[];
 }
 
 interface Facility {
@@ -45,15 +47,33 @@ interface Facility {
 	facility_type: { id: number; name: string };
 }
 
+interface FacilityTypeOption {
+	id: string;
+	name: string;
+	display_name: string;
+}
+
 export default function FieldsPage() {
 	const [fields, setFields] = useState<Field[]>([]);
 	const [facilities, setFacilities] = useState<Facility[]>([]);
+	const [facilityTypeOptions, setFacilityTypeOptions] = useState<FacilityTypeOption[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [selectedField, setSelectedField] = useState<Field | null>(null);
 	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isEditMetaModalOpen, setIsEditMetaModalOpen] = useState(false);
+	const [isCodeUserEdited, setIsCodeUserEdited] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
+
+	const generateCodeFromName = (name: string, maxLen = 45): string => {
+		return name
+			.toLowerCase()
+			.trim()
+			.replace(/[^a-z0-9\s_]/g, "")
+			.replace(/\s+/g, "_")
+			.slice(0, maxLen)
+			.replace(/_+$/, "");
+	};
 	const [updateForm, setUpdateForm] = useState({
 		fieldName: "",
 		value: "",
@@ -72,6 +92,7 @@ export default function FieldsPage() {
 		field_category: "DATA_FIELD" as "DATA_FIELD" | "TARGET_FIELD",
 		default_value: "",
 		sort_order: 0,
+		facilityTypeIds: ["none"] as string[],
 	});
 
 	const [editForm, setEditForm] = useState({
@@ -83,6 +104,7 @@ export default function FieldsPage() {
 		field_category: "DATA_FIELD" as "DATA_FIELD" | "TARGET_FIELD",
 		default_value: "",
 		sort_order: 0,
+		facilityTypeIds: ["none"] as string[],
 	});
 
 	const currentMonth = new Date().toISOString().slice(0, 7);
@@ -90,7 +112,20 @@ export default function FieldsPage() {
 	useEffect(() => {
 		loadFields();
 		loadFacilities();
+		loadFacilityTypes();
 	}, []);
+
+	const loadFacilityTypes = async () => {
+		try {
+			const response = await fetch("/api/facility-types");
+			if (response.ok) {
+				const data = await response.json();
+				setFacilityTypeOptions(data);
+			}
+		} catch (error) {
+			console.error("Error loading facility types:", error);
+		}
+	};
 
 	const loadFields = async () => {
 		try {
@@ -115,7 +150,6 @@ export default function FieldsPage() {
 			const response = await fetch("/api/facilities");
 			if (response.ok) {
 				const data = await response.json();
-				// The API returns { success: true, data: facilities }
 				setFacilities(Array.isArray(data.data) ? data.data : []);
 			} else {
 				console.log("Facilities API returned:", response.status);
@@ -142,6 +176,7 @@ export default function FieldsPage() {
 	};
 
 	const handleAddField = () => {
+		setIsCodeUserEdited(false);
 		setAddForm({
 			code: "",
 			name: "",
@@ -151,12 +186,18 @@ export default function FieldsPage() {
 			field_category: "DATA_FIELD",
 			default_value: "",
 			sort_order: 0,
+			facilityTypeIds: ["none"],
 		});
 		setIsAddModalOpen(true);
 	};
 
 	const handleEditFieldMeta = (field: Field) => {
 		setSelectedField(field);
+		const mappedIds =
+			field.mappedFacilityTypeIds && field.mappedFacilityTypeIds.length > 0
+				? field.mappedFacilityTypeIds
+				: ["none"];
+
 		setEditForm({
 			code: field.code || "",
 			name: field.name || "",
@@ -166,6 +207,7 @@ export default function FieldsPage() {
 			field_category: field.field_category,
 			default_value: field.default_value || "",
 			sort_order: field.sort_order || 0,
+			facilityTypeIds: mappedIds,
 		});
 		setIsEditMetaModalOpen(true);
 	};
@@ -245,7 +287,14 @@ export default function FieldsPage() {
 			});
 
 			if (response.ok) {
-				toast.success("Field created successfully");
+				const isMapped =
+					addForm.facilityTypeIds.length > 0 &&
+					!addForm.facilityTypeIds.includes("none");
+				toast.success(
+					isMapped
+						? `Field created and mapped to ${addForm.facilityTypeIds.length} facility type(s)!`
+						: "Field created successfully (unmapped)"
+				);
 				setIsAddModalOpen(false);
 				loadFields(); // Reload the list
 			} else {
@@ -279,6 +328,7 @@ export default function FieldsPage() {
 					field_category: editForm.field_category,
 					default_value: editForm.default_value || null,
 					sort_order: editForm.sort_order || 0,
+					facilityTypeIds: editForm.facilityTypeIds,
 				}),
 			});
 
@@ -478,23 +528,54 @@ export default function FieldsPage() {
 		return (
 			<div className="space-y-4">
 				<div>
-					<Label htmlFor="code">Field Code</Label>
+					<Label htmlFor="name">Field Name *</Label>
 					<Input
-						id="code"
-						value={addForm.code}
-						onChange={(e) => setAddForm({ ...addForm, code: e.target.value })}
-						placeholder="e.g., total_population"
+						id="name"
+						value={addForm.name}
+						onChange={(e) => {
+							const newName = e.target.value;
+							const autoCode = generateCodeFromName(newName);
+							setAddForm((prev) => ({
+								...prev,
+								name: newName,
+								code: isCodeUserEdited ? prev.code : autoCode,
+							}));
+						}}
+						placeholder="e.g., Total Population 30+"
 					/>
 				</div>
 
 				<div>
-					<Label htmlFor="name">Field Name</Label>
+					<div className="flex items-center justify-between mb-1">
+						<Label htmlFor="code">Field Code *</Label>
+						{isCodeUserEdited && (
+							<button
+								type="button"
+								onClick={() => {
+									setIsCodeUserEdited(false);
+									setAddForm((prev) => ({
+										...prev,
+										code: generateCodeFromName(prev.name),
+									}));
+								}}
+								className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+							>
+								Reset Auto Code
+							</button>
+						)}
+					</div>
 					<Input
-						id="name"
-						value={addForm.name}
-						onChange={(e) => setAddForm({ ...addForm, name: e.target.value })}
-						placeholder="e.g., Total Population"
+						id="code"
+						value={addForm.code}
+						onChange={(e) => {
+							setIsCodeUserEdited(true);
+							setAddForm({ ...addForm, code: e.target.value });
+						}}
+						placeholder="e.g., total_population_30_plus"
 					/>
+					<p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+						Auto-generated from name (max 45 characters). You can edit manually anytime.
+					</p>
 				</div>
 
 				<div>
@@ -600,6 +681,67 @@ export default function FieldsPage() {
 						}
 						placeholder="0"
 					/>
+				</div>
+
+				{/* Map Directly to Facility Types */}
+				<div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+					<Label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+						<Building2 className="w-3.5 h-3.5 text-indigo-500" />
+						Map Directly to Facility Types
+					</Label>
+					<div className="space-y-2 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-200 dark:border-slate-800 max-h-48 overflow-y-auto">
+						{/* None option */}
+						<div className="flex items-center space-x-2 pb-1.5 border-b border-slate-200/80 dark:border-slate-800">
+							<Checkbox
+								id="fac-none"
+								checked={addForm.facilityTypeIds.includes("none")}
+								onCheckedChange={(checked) => {
+									if (checked) {
+										setAddForm({ ...addForm, facilityTypeIds: ["none"] });
+									}
+								}}
+							/>
+							<Label
+								htmlFor="fac-none"
+								className="text-xs font-semibold cursor-pointer text-amber-700 dark:text-amber-400"
+							>
+								None (Do Not Map Yet)
+							</Label>
+						</div>
+
+						{/* Facility types checkboxes */}
+						{facilityTypeOptions.map((ft) => {
+							const isChecked = addForm.facilityTypeIds.includes(ft.id);
+							return (
+								<div key={ft.id} className="flex items-center space-x-2">
+									<Checkbox
+										id={`fac-${ft.id}`}
+										checked={isChecked}
+										onCheckedChange={(checked) => {
+											let updated = addForm.facilityTypeIds.filter(
+												(id) => id !== "none"
+											);
+											if (checked) {
+												updated.push(ft.id);
+											} else {
+												updated = updated.filter((id) => id !== ft.id);
+											}
+											if (updated.length === 0) {
+												updated = ["none"];
+											}
+											setAddForm({ ...addForm, facilityTypeIds: updated });
+										}}
+									/>
+									<Label
+										htmlFor={`fac-${ft.id}`}
+										className="text-xs font-medium cursor-pointer text-slate-800 dark:text-slate-200"
+									>
+										{ft.display_name} ({ft.name})
+									</Label>
+								</div>
+							);
+						})}
+					</div>
 				</div>
 			</div>
 		);
@@ -891,6 +1033,70 @@ export default function FieldsPage() {
 									}
 									placeholder="0"
 								/>
+							</div>
+
+							{/* Map directly to Facility Types */}
+							<div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+								<Label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+									<Building2 className="w-3.5 h-3.5 text-indigo-500" />
+									Mapped Facility Types
+								</Label>
+								<div className="space-y-2 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-200 dark:border-slate-800 max-h-48 overflow-y-auto">
+									{/* None Option */}
+									<div className="flex items-center space-x-2 pb-1.5 border-b border-slate-200/80 dark:border-slate-800">
+										<Checkbox
+											id="edit-fac-none"
+											checked={editForm.facilityTypeIds.includes("none")}
+											onCheckedChange={(checked) => {
+												if (checked) {
+													setEditForm({ ...editForm, facilityTypeIds: ["none"] });
+												}
+											}}
+										/>
+										<Label
+											htmlFor="edit-fac-none"
+											className="text-xs font-semibold cursor-pointer text-amber-700 dark:text-amber-400"
+										>
+											None (Unlinked)
+										</Label>
+									</div>
+
+									{/* Facility Types Checkboxes */}
+									{facilityTypeOptions.map((ft) => {
+										const isChecked = editForm.facilityTypeIds.includes(ft.id);
+										return (
+											<div key={ft.id} className="flex items-center space-x-2">
+												<Checkbox
+													id={`edit-fac-${ft.id}`}
+													checked={isChecked}
+													onCheckedChange={(checked) => {
+														let updated = editForm.facilityTypeIds.filter(
+															(id) => id !== "none"
+														);
+														if (checked) {
+															updated.push(ft.id);
+														} else {
+															updated = updated.filter((id) => id !== ft.id);
+														}
+														if (updated.length === 0) {
+															updated = ["none"];
+														}
+														setEditForm({
+															...editForm,
+															facilityTypeIds: updated,
+														});
+													}}
+												/>
+												<Label
+													htmlFor={`edit-fac-${ft.id}`}
+													className="text-xs font-medium cursor-pointer text-slate-800 dark:text-slate-200"
+												>
+													{ft.display_name} ({ft.name})
+												</Label>
+											</div>
+										);
+									})}
+								</div>
 							</div>
 						</div>
 						<div className="flex justify-end gap-2 mt-4">
