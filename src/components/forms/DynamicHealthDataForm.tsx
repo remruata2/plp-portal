@@ -347,6 +347,123 @@ export default function DynamicHealthDataForm({
 		}, 100);
 	};
 
+	// Helper to evaluate dynamic binary field gating conditions (supports dual AND gates)
+	const isConditionalItemVisible = (
+		parentFieldCode?: string | null,
+		showOnValue?: string | null,
+		parentFieldCode2?: string | null,
+		showOnValue2?: string | null,
+		currentFormData?: Record<string, any>
+	): boolean => {
+		const data = currentFormData || formData;
+		const checkSingleGate = (
+			code?: string | null,
+			targetVal?: string | null
+		): boolean => {
+			if (!code) return true;
+			const parentVal = String(data[code] ?? "").trim();
+			const expected = String(targetVal ?? "1").trim();
+
+			if (parentVal === "") return false;
+
+			if (expected === "1") {
+				return (
+					parentVal === "1" ||
+					parentVal === "true" ||
+					parentVal.toLowerCase() === "yes"
+				);
+			}
+			if (expected === "0") {
+				return (
+					parentVal === "0" ||
+					parentVal === "false" ||
+					parentVal.toLowerCase() === "no"
+				);
+			}
+
+			return parentVal === expected;
+		};
+
+		// Gate 1 AND Gate 2 must both pass
+		return (
+			checkSingleGate(parentFieldCode, showOnValue) &&
+			checkSingleGate(parentFieldCode2, showOnValue2)
+		);
+	};
+
+	// Check if a field mapping is currently visible to the user
+	const isFieldMappingVisible = (
+		mapping: FieldMapping,
+		currentFormData?: Record<string, any>
+	): boolean => {
+		const data = currentFormData || formData;
+
+		// 1. Check field-level gating
+		if (
+			!isConditionalItemVisible(
+				mapping.parentFieldCode,
+				mapping.showOnValue,
+				mapping.parentFieldCode2,
+				mapping.showOnValue2,
+				data
+			)
+		) {
+			return false;
+		}
+
+		// 2. Check group-level gating
+		const parentGroup = indicatorGroups.find((g) =>
+			g.fields.some((f) => f.formFieldName === mapping.formFieldName)
+		);
+
+		if (parentGroup && parentGroup.parentFieldCode) {
+			const isParentFieldInGroup = parentGroup.fields.some(
+				(f) => f.formFieldName === parentGroup.parentFieldCode
+			);
+			const isParentField2InGroup = parentGroup.parentFieldCode2
+				? parentGroup.fields.some(
+						(f) => f.formFieldName === parentGroup.parentFieldCode2
+				  )
+				: false;
+
+			if (!isParentFieldInGroup && !isParentField2InGroup) {
+				if (
+					!isConditionalItemVisible(
+						parentGroup.parentFieldCode,
+						parentGroup.showOnValue,
+						parentGroup.parentFieldCode2,
+						parentGroup.showOnValue2,
+						data
+					)
+				) {
+					return false;
+				}
+			}
+		}
+
+		// 3. Fallback checks for legacy CT001 / DC001
+		const isCt001Field = mapping.formFieldName === "tb_contact_tracing_households";
+		const isDc001Field =
+			mapping.formFieldName === "tb_differentiated_care_visits" ||
+			mapping.formFieldName === "total_tb_patients_phc" ||
+			mapping.formFieldName === "total_tb_patients";
+
+		if (isCt001Field) {
+			const answer = indicatorAnswers["CT001"];
+			if (answer === "no" || answer === null || answer === undefined) {
+				return false;
+			}
+		}
+		if (isDc001Field) {
+			const answer = indicatorAnswers["DC001"];
+			if (answer === "no" || answer === null || answer === undefined) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
 	// Real-time field validation
 	const validateFieldRealTime = (
 		fieldName: string,
@@ -358,8 +475,17 @@ export default function DynamicHealthDataForm({
 		);
 		if (!fieldMapping) return;
 
-		// Use the current form data passed in, or fall back to state
 		const dataToValidate = currentFormData || formData;
+
+		// If field is hidden by conditional gating, clear any errors
+		if (!isFieldMappingVisible(fieldMapping, dataToValidate)) {
+			setFieldErrors((prev) => ({
+				...prev,
+				[fieldName]: [],
+			}));
+			return;
+		}
+
 		const errors = validateField(
 			fieldName,
 			value,
@@ -368,16 +494,11 @@ export default function DynamicHealthDataForm({
 			fieldMapping
 		);
 
-		// Update field errors - always set the array (empty if no errors)
 		setFieldErrors((prev) => ({
 			...prev,
 			[fieldName]: errors,
 		}));
 
-		// Debug log (remove in production)
-		// console.log(`Validation for ${fieldName}: ${errors.length} errors`, errors);
-
-		// Also trigger a debounced full form validation to update summary - only if submit attempted
 		if (hasAttemptedSubmit) {
 			if (fullValidationTimeoutRef.current) {
 				clearTimeout(fullValidationTimeoutRef.current);
@@ -390,54 +511,16 @@ export default function DynamicHealthDataForm({
 
 	// Full form validation
 	const validateFullForm = (): FormValidationResult => {
-		// Filter out conditional fields from both formData and fieldMappings when answer is "no"
+		// Filter out hidden conditional fields so they are NOT mandatory for submission
+		const filteredFieldMappings = fieldMappings.filter((mapping) =>
+			isFieldMappingVisible(mapping, formData)
+		);
+
 		const filteredFormData: Record<string, any> = {};
-		const filteredFieldMappings = fieldMappings.filter((mapping) => {
-			const isCt001Field =
-				mapping.formFieldName === "tb_contact_tracing_households";
-			const isDc001Field =
-				mapping.formFieldName === "tb_differentiated_care_visits" ||
-				mapping.formFieldName === "total_tb_patients_phc" ||
-				mapping.formFieldName === "total_tb_patients";
-
-			// Exclude conditional fields if their conditional answer is "no" or undefined (default)
-			if (isCt001Field) {
-				const answer = indicatorAnswers["CT001"];
-				if (answer === "no" || answer === null || answer === undefined) {
-					return false; // Exclude from validation
-				}
+		fieldMappings.forEach((mapping) => {
+			if (isFieldMappingVisible(mapping, formData)) {
+				filteredFormData[mapping.formFieldName] = (formData as any)[mapping.formFieldName];
 			}
-			if (isDc001Field) {
-				const answer = indicatorAnswers["DC001"];
-				if (answer === "no" || answer === null || answer === undefined) {
-					return false; // Exclude from validation
-				}
-			}
-			return true; // Include in validation
-		});
-
-		// Build filtered formData
-		Object.keys(formData).forEach((key) => {
-			const isCt001Field = key === "tb_contact_tracing_households";
-			const isDc001Field =
-				key === "tb_differentiated_care_visits" ||
-				key === "total_tb_patients_phc" ||
-				key === "total_tb_patients";
-
-			// Skip hidden fields if their conditional answer is "no" or undefined (default)
-			if (isCt001Field) {
-				const answer = indicatorAnswers["CT001"];
-				if (answer === "no" || answer === null || answer === undefined) {
-					return; // Skip hidden field
-				}
-			}
-			if (isDc001Field) {
-				const answer = indicatorAnswers["DC001"];
-				if (answer === "no" || answer === null || answer === undefined) {
-					return; // Skip hidden field
-				}
-			}
-			filteredFormData[key] = (formData as any)[key];
 		});
 
 		const result = validateForm(
