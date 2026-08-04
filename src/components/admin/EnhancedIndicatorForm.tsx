@@ -37,6 +37,7 @@ interface Field {
 	field_type: string;
 	default_value?: string;
 	field_category?: string;
+	mappedFacilityTypeNames?: string[];
 }
 
 interface EnhancedIndicatorFormData {
@@ -268,6 +269,18 @@ export default function EnhancedIndicatorForm({
 		return config;
 	};
 
+	// Filter fields to only those mapped to the indicator's applicable facility types
+	const filteredFields = useMemo(() => {
+		const selectedTypes = formData.applicable_facility_types || [];
+		if (selectedTypes.length === 0) return fields;
+		return fields.filter((field) => {
+			const mapped = field.mappedFacilityTypeNames || [];
+			// Show field if it has no facility type restrictions, or if it matches any selected type
+			if (mapped.length === 0) return true;
+			return selectedTypes.some((type) => mapped.includes(type));
+		});
+	}, [fields, formData.applicable_facility_types]);
+
 	return (
 		<div className="space-y-6">
 			{/* Tab Navigation */}
@@ -465,7 +478,7 @@ export default function EnhancedIndicatorForm({
 											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
-											{fields.map((field) => (
+											{filteredFields.map((field) => (
 												<SelectItem key={field.id} value={field.id.toString()}>
 													{field.name}
 												</SelectItem>
@@ -502,7 +515,7 @@ export default function EnhancedIndicatorForm({
 											<SelectItem value="none">
 												None (No denominator)
 											</SelectItem>
-											{fields.map((field) => (
+											{filteredFields.map((field) => (
 												<SelectItem key={field.id} value={field.id.toString()}>
 													{field.name}
 												</SelectItem>

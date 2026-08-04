@@ -29,7 +29,10 @@ export async function GET(request: NextRequest) {
       where: whereClause,
       include: {
         facility_field_mapping: {
-          select: { facility_type_id: true },
+          select: {
+            facility_type_id: true,
+            facility_type: { select: { name: true } },
+          },
         },
       },
       orderBy: { sort_order: "asc" },
@@ -54,10 +57,14 @@ export async function GET(request: NextRequest) {
         const mappedFacilityTypeIds = (field.facility_field_mapping || []).map(
           (m: any) => m.facility_type_id
         );
+        const mappedFacilityTypeNames = (field.facility_field_mapping || []).map(
+          (m: any) => m.facility_type?.name
+        ).filter(Boolean);
 
         return {
           ...field,
           mappedFacilityTypeIds,
+          mappedFacilityTypeNames,
           currentValue,
           valueSource,
         };
