@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, Save, RefreshCw, Filter, Layers } from "lucide-react";
+import { Plus, Save, RefreshCw, Filter, Layers, ChevronsDown, ChevronsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -24,6 +24,8 @@ interface FormStructureHeaderProps {
   onAddGroupClick: () => void;
   onSaveClick: () => void;
   onResetClick: () => void;
+  onExpandAll?: () => void;
+  onCollapseAll?: () => void;
   isSaving: boolean;
   isDirty: boolean;
 }
@@ -35,6 +37,8 @@ export default function FormStructureHeader({
   onAddGroupClick,
   onSaveClick,
   onResetClick,
+  onExpandAll,
+  onCollapseAll,
   isSaving,
   isDirty,
 }: FormStructureHeaderProps) {
@@ -77,6 +81,36 @@ export default function FormStructureHeader({
               </SelectContent>
             </Select>
           </div>
+
+          {/* Accordion Expand/Collapse All */}
+          {(onExpandAll || onCollapseAll) && (
+            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+              {onExpandAll && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onExpandAll}
+                  className="h-7 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 px-2.5"
+                  title="Expand all form sections"
+                >
+                  <ChevronsDown className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                  Expand All
+                </Button>
+              )}
+              {onCollapseAll && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onCollapseAll}
+                  className="h-7 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 px-2.5"
+                  title="Collapse all form sections"
+                >
+                  <ChevronsUp className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                  Collapse All
+                </Button>
+              )}
+            </div>
+          )}
 
           {/* Add Group Button */}
           <Button

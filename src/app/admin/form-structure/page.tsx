@@ -38,6 +38,8 @@ export default function DynamicFormStructurePage() {
   const [isDirty, setIsDirty] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+  const [expandedGroupIds, setExpandedGroupIds] = useState<Set<number>>(new Set());
+
   // Fetch form structure for selected facility type
   const fetchFormStructure = async (facilityTypeId?: string, showLoading: boolean = true) => {
     try {
@@ -53,8 +55,12 @@ export default function DynamicFormStructurePage() {
       const data = await res.json();
       setFacilityTypes(data.facilityTypes || []);
       setSelectedFacilityTypeId(data.activeFacilityTypeId || "");
-      setGroups(data.groups || []);
+      const loadedGroups = data.groups || [];
+      setGroups(loadedGroups);
       setBinaryFields(data.binaryFields || []);
+      
+      // Default: collapse all groups for clean scroll-free navigation
+      setExpandedGroupIds(new Set());
       setIsDirty(false);
     } catch (err: any) {
       console.error(err);
@@ -64,6 +70,26 @@ export default function DynamicFormStructurePage() {
         setLoading(false);
       }
     }
+  };
+
+  const handleToggleExpand = (groupId: number) => {
+    setExpandedGroupIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupId)) {
+        next.delete(groupId);
+      } else {
+        next.add(groupId);
+      }
+      return next;
+    });
+  };
+
+  const handleExpandAll = () => {
+    setExpandedGroupIds(new Set(groups.map((g) => g.id)));
+  };
+
+  const handleCollapseAll = () => {
+    setExpandedGroupIds(new Set());
   };
 
   useEffect(() => {
@@ -574,6 +600,8 @@ export default function DynamicFormStructurePage() {
         onAddGroupClick={() => setIsAddModalOpen(true)}
         onSaveClick={handleSave}
         onResetClick={() => fetchFormStructure(selectedFacilityTypeId)}
+        onExpandAll={handleExpandAll}
+        onCollapseAll={handleCollapseAll}
         isSaving={saving}
         isDirty={isDirty}
       />
@@ -620,6 +648,8 @@ export default function DynamicFormStructurePage() {
               totalGroups={groups.length}
               allGroups={groupOptions}
               binaryFields={binaryFields}
+              isExpanded={expandedGroupIds.has(group.id)}
+              onToggleExpand={() => handleToggleExpand(group.id)}
               onMoveGroup={handleMoveGroup}
               onReorderGroups={handleReorderGroups}
               onDeleteGroup={handleDeleteGroup}

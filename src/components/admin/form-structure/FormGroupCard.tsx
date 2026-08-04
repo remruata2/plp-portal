@@ -86,6 +86,8 @@ interface FormGroupCardProps {
     description?: string
   ) => void;
   onRemoveFieldMapping?: (fieldMappingId: number, fieldName: string) => void;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
 export default function FormGroupCard({
@@ -105,8 +107,13 @@ export default function FormGroupCard({
   onUpdateFieldConditional,
   onUpdateGroupDetails,
   onRemoveFieldMapping,
+  isExpanded: isExpandedProp,
+  onToggleExpand,
 }: FormGroupCardProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [internalExpanded, setInternalExpanded] = useState(false);
+  const isExpanded = isExpandedProp ?? internalExpanded;
+  const toggleExpand = onToggleExpand ?? (() => setInternalExpanded(!internalExpanded));
+
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedName, setEditedName] = useState(group.name);
   const [editedDesc, setEditedDesc] = useState(group.description || "");
@@ -501,8 +508,9 @@ export default function FormGroupCard({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={toggleExpand}
             className="h-8 w-8 p-0 text-slate-500 hover:text-slate-900"
+            title={isExpanded ? "Collapse Section" : "Expand Section"}
           >
             {isExpanded ? (
               <ChevronUp className="w-4 h-4" />
