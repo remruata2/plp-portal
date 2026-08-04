@@ -495,13 +495,11 @@ export default function IndicatorsPage() {
             </Select>
           </div>
         </div>
-          {filterText && (
-            <p className="text-xs text-gray-500 mt-1">
-              Showing {filteredIndicators.length} of {indicators.length}{" "}
-              indicators
-            </p>
-          )}
-        </div>
+        {(filterText || selectedFacilityType !== "all") && (
+          <p className="text-xs text-gray-500 mb-3">
+            Showing {filteredIndicators.length} of {indicators.length} indicators
+          </p>
+        )}
 
         {/* Indicators List */}
         <div className="space-y-3">

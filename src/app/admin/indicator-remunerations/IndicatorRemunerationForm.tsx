@@ -56,9 +56,11 @@ export default function IndicatorRemunerationForm({
 		condition_2_amount: initialValues?.condition_2_amount || "",
 		condition_3_amount: initialValues?.condition_3_amount || "",
 		condition_4_amount: initialValues?.condition_4_amount || "",
-		condition_config: typeof initialValues?.condition_config === "object"
-			? JSON.stringify(initialValues.condition_config, null, 2)
-			: initialValues?.condition_config || "",
+		condition_config: initialValues?.condition_config != null
+			? (typeof initialValues.condition_config === "object"
+				? JSON.stringify(initialValues.condition_config, null, 2)
+				: String(initialValues.condition_config))
+			: "",
 	});
 
 	useEffect(() => {
@@ -80,9 +82,11 @@ export default function IndicatorRemunerationForm({
 				condition_2_amount: initialValues.condition_2_amount || prev.condition_2_amount,
 				condition_3_amount: initialValues.condition_3_amount || prev.condition_3_amount,
 				condition_4_amount: initialValues.condition_4_amount || prev.condition_4_amount,
-				condition_config: typeof initialValues.condition_config === "object"
-					? JSON.stringify(initialValues.condition_config, null, 2)
-					: initialValues.condition_config || prev.condition_config,
+				condition_config: initialValues.condition_config != null
+					? (typeof initialValues.condition_config === "object"
+						? JSON.stringify(initialValues.condition_config, null, 2)
+						: String(initialValues.condition_config))
+					: prev.condition_config,
 			}));
 		}
 	}, [initialValues]);

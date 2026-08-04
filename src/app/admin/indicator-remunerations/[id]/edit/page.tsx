@@ -69,6 +69,7 @@ export default async function EditIndicatorRemunerationPage(props: {
 			remuneration.condition_4_amount != null
 				? String(remuneration.condition_4_amount)
 				: "",
+		condition_config: remuneration.condition_config ?? null,
 	} as const;
 
 	return (

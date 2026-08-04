@@ -61,6 +61,22 @@ export default function ConditionRuleBuilder({
 		}
 	});
 
+	// Sync config when value prop updates from parent
+	useEffect(() => {
+		if (!value || value.trim() === "") {
+			setConfig({});
+			return;
+		}
+		try {
+			const parsed = JSON.parse(value);
+			if (typeof parsed === "object" && parsed !== null) {
+				setConfig(parsed);
+			}
+		} catch {
+			// ignore invalid JSON during typing
+		}
+	}, [value]);
+
 	// Fetch all fields for the dropdown
 	useEffect(() => {
 		async function fetchFields() {
