@@ -590,6 +590,9 @@ export default function DynamicFormStructurePage() {
     code: g.code,
   }));
 
+  const unassignedGroup = groups.find((g) => g.id === 0);
+  const unassignedFields = unassignedGroup ? unassignedGroup.fields : [];
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header Bar */}
@@ -648,6 +651,7 @@ export default function DynamicFormStructurePage() {
               totalGroups={groups.length}
               allGroups={groupOptions}
               binaryFields={binaryFields}
+              unassignedFields={unassignedFields}
               isExpanded={expandedGroupIds.has(group.id)}
               onToggleExpand={() => handleToggleExpand(group.id)}
               onMoveGroup={handleMoveGroup}
