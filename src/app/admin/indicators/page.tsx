@@ -118,12 +118,10 @@ export default function IndicatorsPage() {
     if (selectedFacilityType && selectedFacilityType !== "all") {
       result = result.filter((indicator) => {
         const applicable = Array.isArray(indicator.applicable_facility_types)
-          ? indicator.applicable_facility_types
+          ? (indicator.applicable_facility_types as string[])
           : [];
         
-        // Include if no restriction or if facility type matches
-        if (applicable.length === 0) return true;
-        return applicable.includes(selectedFacilityType);
+        return applicable.includes(selectedFacilityType) || applicable.includes("ALL");
       });
     }
 
