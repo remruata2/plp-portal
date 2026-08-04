@@ -312,13 +312,12 @@ export default function ConditionalIndicatorDisplay({
 		);
 	}
 
-	// When showConditionalQuestion is false, just render children directly based on answer
-	if (!showConditionalQuestion && conditionalQuestion) {
-		if (yesNoAnswer === "yes" && shouldShowIndicator) {
-			return <>{children}</>;
+	// When showConditionalQuestion is false, render children directly without duplicating the section title card
+	if (!showConditionalQuestion) {
+		if (yesNoAnswer === "no") {
+			return null;
 		}
-		// If answer is "no" or null, don't show children
-		return null;
+		return <>{children}</>;
 	}
 
 	// Default case - show normally (for non-conditional indicators)
