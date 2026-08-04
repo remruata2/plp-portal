@@ -273,22 +273,25 @@ export default function FieldMappingPage() {
 							<div className="max-h-[60vh] overflow-y-auto border rounded-lg p-4 mb-6">
 								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 									{filteredFields.map((field) => (
-										<div key={field.id} className="flex items-start space-x-2">
+										<div key={field.id} className="flex items-start space-x-2.5 min-w-0 p-2 rounded hover:bg-gray-50 transition-colors border border-gray-100">
 											<input
 												type="checkbox"
 												id={`field-${field.id}`}
 												checked={selectedFields.has(field.id)}
 												onChange={() => handleFieldToggle(field.id)}
-												className="mt-1"
+												className="mt-1 shrink-0 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 											/>
 											<label
 												htmlFor={`field-${field.id}`}
-												className="text-sm cursor-pointer"
+												className="text-sm cursor-pointer min-w-0 flex-1 overflow-hidden"
 											>
-												<div className="font-medium">
-													[{field.code}] {field.name}
+												<div className="font-mono text-xs font-semibold text-blue-700 break-all mb-0.5">
+													[{field.code}]
 												</div>
-												<div className="text-xs text-gray-500">
+												<div className="font-medium text-gray-900 break-words leading-tight">
+													{field.name}
+												</div>
+												<div className="text-[11px] text-gray-500 mt-1">
 													Type: {field.field_type} | User: {field.user_type}
 												</div>
 											</label>
