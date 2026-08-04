@@ -36,6 +36,13 @@ import {
   sortIndicatorsBySourceOrder,
   getIndicatorNumber,
 } from "@/lib/utils/indicator-sort-order";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Field {
   id: number;
@@ -80,35 +87,52 @@ export default function IndicatorsPage() {
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedFacilityType, setSelectedFacilityType] = useState<string>("all");
+  const [facilityTypes, setFacilityTypes] = useState<{ id: string; name: string; display_name: string }[]>([]);
   const [filterText, setFilterText] = useState("");
   const filterInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadIndicators();
     loadFields();
+    loadFacilityTypes();
   }, []);
 
-  // Keyboard shortcut to focus filter input
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-        e.preventDefault();
-        filterInputRef.current?.focus();
+  const loadFacilityTypes = async () => {
+    try {
+      const response = await fetch("/api/facility-types");
+      if (response.ok) {
+        const data = await response.json();
+        setFacilityTypes(data || []);
       }
-    };
+    } catch (error) {
+      console.error("Error loading facility types:", error);
+    }
+  };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  // Filter indicators based on search text
+  // Filter indicators based on search text & facility type
   const filteredIndicators = useMemo(() => {
+    let result = indicators;
+
+    // Filter by facility type if selected
+    if (selectedFacilityType && selectedFacilityType !== "all") {
+      result = result.filter((indicator) => {
+        const applicable = Array.isArray(indicator.applicable_facility_types)
+          ? indicator.applicable_facility_types
+          : [];
+        
+        // Include if no restriction or if facility type matches
+        if (applicable.length === 0) return true;
+        return applicable.includes(selectedFacilityType);
+      });
+    }
+
     if (!filterText.trim()) {
-      return indicators;
+      return result;
     }
 
     const searchText = filterText.toLowerCase().trim();
-    return indicators.filter((indicator) => {
+    return result.filter((indicator) => {
       return (
         indicator.code.toLowerCase().includes(searchText) ||
         indicator.name.toLowerCase().includes(searchText) ||
@@ -120,7 +144,7 @@ export default function IndicatorsPage() {
           indicator.target_formula.toLowerCase().includes(searchText))
       );
     });
-  }, [indicators, filterText]);
+  }, [indicators, filterText, selectedFacilityType]);
 
   const loadIndicators = async () => {
     try {
@@ -430,9 +454,9 @@ export default function IndicatorsPage() {
           </div>
         </div>
 
-        {/* Filter */}
-        <div className="mb-4">
-          <div className="relative">
+        {/* Filter Bar */}
+        <div className="mb-4 flex flex-col md:flex-row items-center gap-3">
+          <div className="relative flex-1 w-full">
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="text"
@@ -453,6 +477,24 @@ export default function IndicatorsPage() {
               </Button>
             )}
           </div>
+
+          {/* Facility Type Filter */}
+          <div className="w-full md:w-[260px] shrink-0">
+            <Select value={selectedFacilityType} onValueChange={setSelectedFacilityType}>
+              <SelectTrigger className="bg-white border-gray-200">
+                <SelectValue placeholder="All Facility Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Facility Types</SelectItem>
+                {facilityTypes.map((ft) => (
+                  <SelectItem key={ft.id} value={ft.name}>
+                    {ft.display_name} ({ft.name})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
           {filterText && (
             <p className="text-xs text-gray-500 mt-1">
               Showing {filteredIndicators.length} of {indicators.length}{" "}
