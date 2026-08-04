@@ -129,12 +129,17 @@ export default function FormGroupFieldList({
                 key={field.mappingId}
                 onDragOver={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   e.dataTransfer.dropEffect = "move";
                   setDragOverMappingId(field.mappingId);
                 }}
-                onDragLeave={() => setDragOverMappingId(null)}
+                onDragLeave={(e) => {
+                  e.stopPropagation();
+                  setDragOverMappingId(null);
+                }}
                 onDrop={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setDragOverMappingId(null);
                   setDraggedMappingId(null);
                   try {
