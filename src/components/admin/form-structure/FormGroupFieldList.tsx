@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { ArrowUp, ArrowDown, CheckCircle2, AlertCircle, GitFork, FolderInput, Plus, X, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowUp, ArrowDown, CheckCircle2, AlertCircle, GitFork, FolderInput, Plus, X, Trash2, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -49,6 +49,12 @@ interface FormGroupFieldListProps {
   binaryFields: BinaryFieldOption[];
   currentGroupId: number;
   onMoveField: (fieldMappingId: number, direction: "up" | "down") => void;
+  onReorderFields?: (
+    sourceFieldMappingId: number,
+    targetFieldMappingId: number | null,
+    sourceGroupId: number,
+    targetGroupId: number
+  ) => void;
   onChangeFieldGroup: (fieldMappingId: number, targetGroupId: number) => void;
   onToggleRequired: (fieldMappingId: number) => void;
   onUpdateFieldConditional?: (
@@ -67,11 +73,15 @@ export default function FormGroupFieldList({
   binaryFields,
   currentGroupId,
   onMoveField,
+  onReorderFields,
   onChangeFieldGroup,
   onToggleRequired,
   onUpdateFieldConditional,
   onRemoveFieldMapping,
 }: FormGroupFieldListProps) {
+  const [draggedMappingId, setDraggedMappingId] = useState<number | null>(null);
+  const [dragOverMappingId, setDragOverMappingId] = useState<number | null>(null);
+
   if (fields.length === 0) {
     return (
       <div className="p-6 text-center text-xs text-slate-400 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50/50 dark:bg-slate-900/50">
@@ -97,7 +107,7 @@ export default function FormGroupFieldList({
       <table className="w-full text-left text-xs">
         <thead className="bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
           <tr>
-            <th className="py-2.5 px-3 w-10 text-center">Seq</th>
+            <th className="py-2.5 px-3 w-14 text-center">Seq</th>
             <th className="py-2.5 px-3 min-w-[180px]">Field Title</th>
             <th className="py-2.5 px-3 font-mono">Code</th>
             <th className="py-2.5 px-3">Type</th>
@@ -110,15 +120,78 @@ export default function FormGroupFieldList({
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
-          {fields.map((field, index) => (
-            <tr
-              key={field.mappingId}
-              className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
-            >
-              {/* Index Badge */}
-              <td className="py-2.5 px-3 text-center font-mono font-medium text-slate-400">
-                {index + 1}
-              </td>
+          {fields.map((field, index) => {
+            const isDragging = draggedMappingId === field.mappingId;
+            const isDragOver = dragOverMappingId === field.mappingId;
+
+            return (
+              <tr
+                key={field.mappingId}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = "move";
+                  setDragOverMappingId(field.mappingId);
+                }}
+                onDragLeave={() => setDragOverMappingId(null)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragOverMappingId(null);
+                  setDraggedMappingId(null);
+                  try {
+                    const dataStr = e.dataTransfer.getData("application/json");
+                    if (!dataStr) return;
+                    const data = JSON.parse(dataStr);
+
+                    if (data.type === "field" && onReorderFields) {
+                      onReorderFields(
+                        data.mappingId,
+                        field.mappingId,
+                        data.sourceGroupId,
+                        currentGroupId
+                      );
+                    }
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}
+                className={`transition-colors ${
+                  isDragging
+                    ? "opacity-30 bg-indigo-50/50 dark:bg-indigo-950/20"
+                    : isDragOver
+                    ? "bg-indigo-50 dark:bg-indigo-950/60 border-t-2 border-indigo-500"
+                    : "hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
+                }`}
+              >
+                {/* Index Badge & Drag Handle */}
+                <td className="py-2.5 px-3 text-center font-mono font-medium text-slate-400">
+                  <div className="flex items-center justify-center gap-1">
+                    <div
+                      draggable
+                      onDragStart={(e) => {
+                        e.stopPropagation();
+                        e.dataTransfer.setData(
+                          "application/json",
+                          JSON.stringify({
+                            type: "field",
+                            mappingId: field.mappingId,
+                            sourceGroupId: currentGroupId,
+                          })
+                        );
+                        e.dataTransfer.effectAllowed = "move";
+                        setDraggedMappingId(field.mappingId);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedMappingId(null);
+                        setDragOverMappingId(null);
+                      }}
+                      className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 p-0.5 rounded transition-colors"
+                      title="Drag to reorder field"
+                    >
+                      <GripVertical className="w-3.5 h-3.5" />
+                    </div>
+                    <span>{index + 1}</span>
+                  </div>
+                </td>
 
               {/* Title */}
               <td className="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-200">
@@ -390,7 +463,8 @@ export default function FormGroupFieldList({
                 </div>
               </td>
             </tr>
-          ))}
+          );
+        })}
         </tbody>
       </table>
     </div>

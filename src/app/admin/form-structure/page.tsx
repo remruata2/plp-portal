@@ -103,6 +103,29 @@ export default function DynamicFormStructurePage() {
     setIsDirty(true);
   };
 
+  // Reorder groups via drag & drop
+  const handleReorderGroups = (sourceIndex: number, targetIndex: number) => {
+    if (
+      sourceIndex === targetIndex ||
+      sourceIndex < 0 ||
+      targetIndex < 0 ||
+      sourceIndex >= groups.length ||
+      targetIndex >= groups.length
+    ) {
+      return;
+    }
+    const updated = [...groups];
+    const [movedGroup] = updated.splice(sourceIndex, 1);
+    updated.splice(targetIndex, 0, movedGroup);
+
+    updated.forEach((g, idx) => {
+      g.sortOrder = idx + 1;
+    });
+
+    setGroups(updated);
+    setIsDirty(true);
+  };
+
   // Update Section / Group Conditional Binary Parent
   const handleUpdateGroupConditional = (
     groupId: number,
@@ -154,6 +177,62 @@ export default function DynamicFormStructurePage() {
     });
 
     setGroups(updated);
+    setIsDirty(true);
+  };
+
+  // Reorder field via drag & drop (within same group or across groups)
+  const handleReorderFields = (
+    sourceMappingId: number,
+    targetMappingId: number | null,
+    sourceGroupId: number,
+    targetGroupId: number
+  ) => {
+    setGroups((prevGroups) => {
+      let movedField: FieldItem | null = null;
+
+      // Extract field from source group
+      const nextGroups = prevGroups.map((g) => {
+        if (g.id === sourceGroupId) {
+          const field = g.fields.find((f) => f.mappingId === sourceMappingId);
+          if (field) {
+            movedField = { ...field, groupId: targetGroupId };
+            return {
+              ...g,
+              fields: g.fields.filter((f) => f.mappingId !== sourceMappingId),
+            };
+          }
+        }
+        return g;
+      });
+
+      if (!movedField) return prevGroups;
+
+      // Insert field into target group at target position
+      return nextGroups.map((g) => {
+        if (g.id === targetGroupId) {
+          const currentFields = [...g.fields];
+          let targetIndex = currentFields.length;
+
+          if (targetMappingId !== null) {
+            const idx = currentFields.findIndex((f) => f.mappingId === targetMappingId);
+            if (idx !== -1) {
+              targetIndex = idx;
+            }
+          }
+
+          currentFields.splice(targetIndex, 0, movedField!);
+
+          // Recalculate display orders
+          currentFields.forEach((f, idx) => {
+            f.displayOrder = idx + 1;
+          });
+
+          return { ...g, fields: currentFields };
+        }
+        return g;
+      });
+    });
+
     setIsDirty(true);
   };
 
@@ -542,8 +621,10 @@ export default function DynamicFormStructurePage() {
               allGroups={groupOptions}
               binaryFields={binaryFields}
               onMoveGroup={handleMoveGroup}
+              onReorderGroups={handleReorderGroups}
               onDeleteGroup={handleDeleteGroup}
               onMoveField={handleMoveField}
+              onReorderFields={handleReorderFields}
               onChangeFieldGroup={handleChangeFieldGroup}
               onToggleRequired={handleToggleRequired}
               onUpdateGroupConditional={handleUpdateGroupConditional}

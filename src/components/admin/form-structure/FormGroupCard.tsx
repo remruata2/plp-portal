@@ -13,6 +13,7 @@ import {
   Check,
   X,
   Plus,
+  GripVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -54,8 +55,15 @@ interface FormGroupCardProps {
   allGroups: GroupOption[];
   binaryFields: BinaryFieldOption[];
   onMoveGroup: (groupIndex: number, direction: "up" | "down") => void;
+  onReorderGroups?: (sourceIndex: number, targetIndex: number) => void;
   onDeleteGroup: (groupId: number, mode: "unlink" | "delete") => void;
   onMoveField: (fieldMappingId: number, direction: "up" | "down") => void;
+  onReorderFields?: (
+    sourceFieldMappingId: number,
+    targetFieldMappingId: number | null,
+    sourceGroupId: number,
+    targetGroupId: number
+  ) => void;
   onChangeFieldGroup: (fieldMappingId: number, targetGroupId: number) => void;
   onToggleRequired: (fieldMappingId: number) => void;
   onUpdateGroupConditional: (
@@ -87,8 +95,10 @@ export default function FormGroupCard({
   allGroups,
   binaryFields,
   onMoveGroup,
+  onReorderGroups,
   onDeleteGroup,
   onMoveField,
+  onReorderFields,
   onChangeFieldGroup,
   onToggleRequired,
   onUpdateGroupConditional,
@@ -100,6 +110,52 @@ export default function FormGroupCard({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedName, setEditedName] = useState(group.name);
   const [editedDesc, setEditedDesc] = useState(group.description || "");
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [isDragOverTarget, setIsDragOverTarget] = useState(false);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    if (group.id === 0) return;
+    e.dataTransfer.setData(
+      "application/json",
+      JSON.stringify({ type: "group", groupIndex, groupId: group.id })
+    );
+    e.dataTransfer.effectAllowed = "move";
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setIsDragOverTarget(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setIsDragOverTarget(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOverTarget(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverTarget(false);
+    try {
+      const dataStr = e.dataTransfer.getData("application/json");
+      if (!dataStr) return;
+      const data = JSON.parse(dataStr);
+
+      if (data.type === "group" && onReorderGroups) {
+        onReorderGroups(data.groupIndex, groupIndex);
+      } else if (data.type === "field" && onReorderFields) {
+        onReorderFields(data.mappingId, null, data.sourceGroupId, group.id);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleSaveTitle = () => {
     if (!editedName.trim()) return;
@@ -116,13 +172,37 @@ export default function FormGroupCard({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden transition-all duration-200">
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`bg-white dark:bg-slate-900 border rounded-xl shadow-xs overflow-hidden transition-all duration-200 ${
+        isDragging
+          ? "opacity-40 border-dashed border-indigo-400"
+          : isDragOverTarget
+          ? "border-2 border-indigo-500 ring-2 ring-indigo-200 dark:ring-indigo-900"
+          : "border-slate-200 dark:border-slate-800"
+      }`}
+    >
       {/* Group Header Bar */}
       <div className="px-5 py-4 bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 flex-1 min-w-[280px]">
-          {/* Order Badge */}
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold text-xs shrink-0">
-            {groupIndex + 1}
+          {/* Drag Handle & Order Badge */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {group.id !== 0 && (
+              <div
+                draggable
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                className="cursor-grab active:cursor-grabbing p-1 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded transition-colors"
+                title="Drag to reorder section"
+              >
+                <GripVertical className="w-4 h-4" />
+              </div>
+            )}
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold text-xs">
+              {groupIndex + 1}
+            </div>
           </div>
 
           <div className="flex-1 min-w-0">
@@ -442,6 +522,7 @@ export default function FormGroupCard({
             binaryFields={binaryFields}
             currentGroupId={group.id}
             onMoveField={onMoveField}
+            onReorderFields={onReorderFields}
             onChangeFieldGroup={onChangeFieldGroup}
             onToggleRequired={onToggleRequired}
             onUpdateFieldConditional={onUpdateFieldConditional}
