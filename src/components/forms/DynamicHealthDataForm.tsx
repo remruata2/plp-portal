@@ -25,7 +25,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/toast";
 import { CornerDownRight } from "lucide-react";
-import FillAllFieldsButton from "@/components/ui/fill-all-fields-button";
 import WorkerSelectionForm from "./WorkerSelectionForm";
 import ConditionalIndicatorDisplay from "@/components/indicators/ConditionalIndicatorDisplay";
 import {
@@ -1444,10 +1443,6 @@ export default function DynamicHealthDataForm({
 					<CardTitle className="text-lg sm:text-xl">
 						{facilityType} PLP Report Form
 					</CardTitle>
-					<FillAllFieldsButton
-						onFill={handleFillAllFields}
-						disabled={submitting}
-					/>
 				</div>
 			</CardHeader>
 			<CardContent
