@@ -166,10 +166,21 @@ async function setupSubcenterFields() {
 			if (isDryRun) {
 				console.log(`     🔗 [DRY-RUN] Would MAP field to Sub Centre (display_order: ${sortOrder})`);
 			} else if (fieldObj) {
+				// Find matching indicator group by code or name
+				const groupMatch = await prisma.indicator_group.findFirst({
+					where: {
+						OR: [
+							{ code: { contains: fieldObj.code, mode: "insensitive" } },
+							{ name: { contains: fieldObj.name, mode: "insensitive" } },
+						],
+					},
+				});
+
 				await prisma.facility_field_mapping.create({
 					data: {
 						facility_type_id: subCenterFacilityType.id,
 						field_id: fieldObj.id,
+						group_id: groupMatch?.id ?? null,
 						display_order: sortOrder,
 						is_required: false,
 						updated_at: new Date(),
