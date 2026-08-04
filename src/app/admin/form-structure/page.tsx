@@ -300,6 +300,49 @@ export default function DynamicFormStructurePage() {
     setIsDirty(true);
   };
 
+  // Batch change field group assignment (multiple fields at once)
+  const handleBatchChangeFieldGroup = (
+    fieldMappingIds: number[],
+    targetGroupId: number
+  ) => {
+    if (fieldMappingIds.length === 0) return;
+
+    setGroups((prevGroups) => {
+      const movedFields: FieldItem[] = [];
+
+      // Step 1: Collect matching fields and remove from source groups
+      const updatedGroups = prevGroups.map((g) => {
+        const matching = g.fields.filter((f) => fieldMappingIds.includes(f.mappingId));
+        if (matching.length > 0) {
+          matching.forEach((f) => {
+            movedFields.push({ ...f, groupId: targetGroupId });
+          });
+          return {
+            ...g,
+            fields: g.fields.filter((f) => !fieldMappingIds.includes(f.mappingId)),
+          };
+        }
+        return g;
+      });
+
+      if (movedFields.length === 0) return prevGroups;
+
+      // Step 2: Append all moved fields to target group
+      return updatedGroups.map((g) => {
+        if (g.id === targetGroupId) {
+          const newFields = [...g.fields, ...movedFields];
+          newFields.forEach((f, idx) => {
+            f.displayOrder = idx + 1;
+          });
+          return { ...g, fields: newFields };
+        }
+        return g;
+      });
+    });
+
+    setIsDirty(true);
+  };
+
   // Toggle field required status
   const handleToggleRequired = (fieldMappingId: number) => {
     const updated = groups.map((g) => ({
@@ -660,6 +703,7 @@ export default function DynamicFormStructurePage() {
               onMoveField={handleMoveField}
               onReorderFields={handleReorderFields}
               onChangeFieldGroup={handleChangeFieldGroup}
+              onBatchAddFields={handleBatchChangeFieldGroup}
               onToggleRequired={handleToggleRequired}
               onUpdateGroupConditional={handleUpdateGroupConditional}
               onUpdateFieldConditional={handleUpdateFieldConditional}

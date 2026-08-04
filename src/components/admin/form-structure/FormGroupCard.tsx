@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import FormGroupFieldList, { FieldItem, BinaryFieldOption } from "./FormGroupFieldList";
+import BatchAddFieldModal from "./BatchAddFieldModal";
 
 interface GroupOption {
   id: number;
@@ -65,6 +66,7 @@ interface FormGroupCardProps {
     targetGroupId: number
   ) => void;
   onChangeFieldGroup: (fieldMappingId: number, targetGroupId: number) => void;
+  onBatchAddFields?: (mappingIds: number[], targetGroupId: number) => void;
   onToggleRequired: (fieldMappingId: number) => void;
   onUpdateGroupConditional: (
     groupId: number,
@@ -103,6 +105,7 @@ export default function FormGroupCard({
   onMoveField,
   onReorderFields,
   onChangeFieldGroup,
+  onBatchAddFields,
   onToggleRequired,
   onUpdateGroupConditional,
   onUpdateFieldConditional,
@@ -115,6 +118,8 @@ export default function FormGroupCard({
   const [internalExpanded, setInternalExpanded] = useState(false);
   const isExpanded = isExpandedProp ?? internalExpanded;
   const toggleExpand = onToggleExpand ?? (() => setInternalExpanded(!internalExpanded));
+
+  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedName, setEditedName] = useState(group.name);
@@ -526,35 +531,48 @@ export default function FormGroupCard({
       {/* Group Content Body */}
       {isExpanded && (
         <div className="p-4">
-          {/* Quick Add Field from Unassigned Dropdown */}
+          {/* Quick Add Field from Unassigned Banner */}
           {group.id !== 0 && unassignedFields && unassignedFields.length > 0 && (
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 p-2.5 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 rounded-lg text-xs">
               <div className="flex items-center gap-1.5 font-semibold text-indigo-900 dark:text-indigo-200">
                 <Plus className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                <span>Add Field from Unassigned ({unassignedFields.length} available):</span>
+                <span>Add Fields from Unassigned ({unassignedFields.length} available):</span>
               </div>
-              <Select
-                onValueChange={(val) => {
-                  const mappingId = parseInt(val, 10);
-                  if (mappingId && onChangeFieldGroup) {
-                    onChangeFieldGroup(mappingId, group.id);
-                  }
-                }}
-              >
-                <SelectTrigger className="h-8 text-xs bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 font-medium w-[240px] sm:w-[340px]">
-                  <SelectValue placeholder="+ Select unassigned field to add..." />
-                </SelectTrigger>
-                <SelectContent className="max-h-[300px] w-[340px] sm:w-[440px]">
-                  {unassignedFields.map((uf) => (
-                    <SelectItem key={uf.mappingId} value={String(uf.mappingId)} className="text-xs py-2 cursor-pointer">
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{uf.name}</span>
-                        <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400">[{uf.code}]</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsBatchModalOpen(true)}
+                  className="h-8 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white border-transparent shadow-2xs"
+                >
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  Select Multiple Fields
+                </Button>
+
+                <Select
+                  onValueChange={(val) => {
+                    const mappingId = parseInt(val, 10);
+                    if (mappingId && onChangeFieldGroup) {
+                      onChangeFieldGroup(mappingId, group.id);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="h-8 text-xs bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 font-medium w-[220px] sm:w-[260px]">
+                    <SelectValue placeholder="+ Select single field..." />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px] w-[340px] sm:w-[400px]">
+                    {unassignedFields.map((uf) => (
+                      <SelectItem key={uf.mappingId} value={String(uf.mappingId)} className="text-xs py-2 cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-800 dark:text-slate-200">{uf.name}</span>
+                          <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400">[{uf.code}]</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           )}
 
@@ -570,6 +588,23 @@ export default function FormGroupCard({
             onUpdateFieldConditional={onUpdateFieldConditional}
             onRemoveFieldMapping={onRemoveFieldMapping}
           />
+
+          {/* Batch Add Modal */}
+          {group.id !== 0 && (
+            <BatchAddFieldModal
+              isOpen={isBatchModalOpen}
+              onClose={() => setIsBatchModalOpen(false)}
+              groupName={group.name}
+              unassignedFields={unassignedFields}
+              onAddFields={(mappingIds) => {
+                if (onBatchAddFields) {
+                  onBatchAddFields(mappingIds, group.id);
+                } else if (onChangeFieldGroup) {
+                  mappingIds.forEach((mId) => onChangeFieldGroup(mId, group.id));
+                }
+              }}
+            />
+          )}
         </div>
       )}
     </div>
