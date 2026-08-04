@@ -26,63 +26,25 @@ export function getEffectiveMaxRemuneration(
 		return storedMaxRemuneration;
 	}
 
-	// For TS001 variants, recalculate based on conditional answers
-	if (indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
-		// Get conditional answers for logging
-		const ct001FieldCode = getFieldCodeForFacilityType(
-			"indicator_ct001_conditional_answer",
-			facilityType
-		);
-		const indicator7Answer = fieldValues.find(
-			(f: any) => f.field?.code === ct001FieldCode
-		)?.boolean_value;
-		const dc001FieldCode = getFieldCodeForFacilityType(
-			"indicator_dc001_conditional_answer",
-			facilityType
-		);
-		const indicator8Answer = fieldValues.find(
-			(f: any) => f.field?.code === dc001FieldCode
-		)?.boolean_value;
+	// Check if condition amounts or config exist for this indicator remuneration
+	const hasConditionConfig =
+		indicatorRemuneration.condition_1_amount != null ||
+		indicatorRemuneration.condition_2_amount != null ||
+		indicatorRemuneration.condition_3_amount != null ||
+		indicatorRemuneration.condition_4_amount != null ||
+		indicatorRemuneration.condition_config != null;
 
-		const baseAmount = parseFloat(indicatorRemuneration.base_amount.toString());
-		const condition1Amount = indicatorRemuneration.condition_1_amount
-			? Number(indicatorRemuneration.condition_1_amount)
-			: null;
-		const condition2Amount = indicatorRemuneration.condition_2_amount
-			? Number(indicatorRemuneration.condition_2_amount)
-			: null;
-		const condition3Amount = indicatorRemuneration.condition_3_amount
-			? Number(indicatorRemuneration.condition_3_amount)
-			: null;
-		const condition4Amount = indicatorRemuneration.condition_4_amount
-			? Number(indicatorRemuneration.condition_4_amount)
-			: null;
-
+	if (hasConditionConfig || indicatorCode === "TS001" || indicatorCode.startsWith("TS001_")) {
 		const effectiveMax = getConditionAmount(
 			indicatorCode,
 			indicatorRemuneration,
 			fieldValues,
 			facilityType
 		);
-
-		console.log(`🔍 [TS001 Max Remuneration Calculation] ${indicatorCode}:`, {
-			indicatorCode,
-			baseAmount,
-			condition1Amount,
-			condition2Amount,
-			condition3Amount,
-			condition4Amount,
-			ct001Answer: indicator7Answer,
-			dc001Answer: indicator8Answer,
-			effectiveMaxRemuneration: effectiveMax,
-			condition: `CT001=${indicator7Answer}, DC001=${indicator8Answer}`,
-		});
-
 		return effectiveMax;
 	}
 
-	// For other indicators, use base_amount from config if available, otherwise stored value
-	// This ensures we always use the current remuneration config, not outdated stored values
+	// For standard indicators without conditions, use base_amount from config if available, otherwise stored value
 	if (indicatorRemuneration && indicatorRemuneration.base_amount != null) {
 		return parseFloat(indicatorRemuneration.base_amount.toString());
 	}
