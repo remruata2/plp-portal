@@ -553,6 +553,12 @@ async function setupSubcenterIndicators() {
 			where: { code: cfg.code },
 		});
 
+		const parsedTargetVal = cfg.target_value ? JSON.parse(cfg.target_value) : null;
+		const rangeObj =
+			parsedTargetVal && parsedTargetVal.min !== undefined && parsedTargetVal.max !== undefined
+				? { min: parsedTargetVal.min, max: parsedTargetVal.max }
+				: null;
+
 		const indicatorData = {
 			name: cfg.name,
 			description: cfg.description,
@@ -567,7 +573,10 @@ async function setupSubcenterIndicators() {
 			target_formula: cfg.target_formula,
 			target_value: cfg.target_value,
 			source_of_verification: cfg.source_of_verification,
-			formula_config: numField && denField ? { calculationFormula: "(A/B)*100" } : null,
+			formula_config: {
+				calculationFormula: numField && denField ? "(A/B)*100" : undefined,
+				range: rangeObj,
+			},
 			updated_at: new Date(),
 		};
 
