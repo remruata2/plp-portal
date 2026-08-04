@@ -291,8 +291,15 @@ export default function ConditionRuleBuilder({
 											);
 											const isBinaryField =
 												selectedFieldObj?.field_type === "BINARY" ||
+												typeof rule.value === "boolean" ||
+												rule.value === "true" ||
+												rule.value === "false" ||
+												rule.value === true ||
+												rule.value === false ||
 												rule.field_code.includes("answer") ||
-												rule.field_code.includes("conditional");
+												rule.field_code.includes("conditional") ||
+												rule.field_code.includes("whether") ||
+												rule.field_code.startsWith("sc_are_there");
 
 											return (
 												<div
