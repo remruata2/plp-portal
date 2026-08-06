@@ -1416,6 +1416,48 @@ export default function DynamicHealthDataForm({
 		}
 	};
 
+	// Helper to evaluate dynamic binary field gating conditions (supports dual AND gates)
+	const isConditionalItemVisible = (
+		parentFieldCode?: string | null,
+		showOnValue?: string | null,
+		parentFieldCode2?: string | null,
+		showOnValue2?: string | null
+	): boolean => {
+		const checkSingleGate = (
+			code?: string | null,
+			targetVal?: string | null
+		): boolean => {
+			if (!code) return true;
+			const parentVal = String(formData[code] ?? "").trim();
+			const expected = String(targetVal ?? "1").trim();
+
+			if (parentVal === "") return false;
+
+			if (expected === "1") {
+				return (
+					parentVal === "1" ||
+					parentVal === "true" ||
+					parentVal.toLowerCase() === "yes"
+				);
+			}
+			if (expected === "0") {
+				return (
+					parentVal === "0" ||
+					parentVal === "false" ||
+					parentVal.toLowerCase() === "no"
+				);
+			}
+
+			return parentVal === expected;
+		};
+
+		// Gate 1 AND Gate 2 must both pass
+		return (
+			checkSingleGate(parentFieldCode, showOnValue) &&
+			checkSingleGate(parentFieldCode2, showOnValue2)
+		);
+	};
+
 	if (loading || status === "loading") {
 		return (
 			<Card>
@@ -1615,48 +1657,6 @@ export default function DynamicHealthDataForm({
 						</div>
 
 						{indicatorGroups.map((group, groupIndex) => {
-							// Helper to evaluate dynamic binary field gating conditions (supports dual AND gates)
-							const isConditionalItemVisible = (
-								parentFieldCode?: string | null,
-								showOnValue?: string | null,
-								parentFieldCode2?: string | null,
-								showOnValue2?: string | null
-							): boolean => {
-								const checkSingleGate = (
-									code?: string | null,
-									targetVal?: string | null
-								): boolean => {
-									if (!code) return true;
-									const parentVal = String(formData[code] ?? "").trim();
-									const expected = String(targetVal ?? "1").trim();
-
-									if (parentVal === "") return false;
-
-									if (expected === "1") {
-										return (
-											parentVal === "1" ||
-											parentVal === "true" ||
-											parentVal.toLowerCase() === "yes"
-										);
-									}
-									if (expected === "0") {
-										return (
-											parentVal === "0" ||
-											parentVal === "false" ||
-											parentVal.toLowerCase() === "no"
-										);
-									}
-
-									return parentVal === expected;
-								};
-
-								// Gate 1 AND Gate 2 must both pass
-								return (
-									checkSingleGate(parentFieldCode, showOnValue) &&
-									checkSingleGate(parentFieldCode2, showOnValue2)
-								);
-							};
-
 							// 1. Check if the entire group is gated by parent binary fields outside of this group
 							const isParentFieldInThisGroup = group.parentFieldCode
 								? group.fields.some((f) => f.formFieldName === group.parentFieldCode)
@@ -2033,13 +2033,46 @@ export default function DynamicHealthDataForm({
 						<div className="space-y-4">
 							<h4 className="font-medium text-gray-900 border-b pb-2">Entered Values</h4>
 							{indicatorGroups.map((group) => {
-								// Only show fields that have values entered
-								const fieldsWithValue = group.fields.map(field => {
+								// 1. Check if the entire group is gated by parent binary fields outside of this group
+								const isParentFieldInThisGroup = group.parentFieldCode
+									? group.fields.some((f) => f.formFieldName === group.parentFieldCode)
+									: false;
+								const isParentField2InThisGroup = group.parentFieldCode2
+									? group.fields.some((f) => f.formFieldName === group.parentFieldCode2)
+									: false;
+
+								if (
+									group.parentFieldCode &&
+									!isParentFieldInThisGroup &&
+									!isParentField2InThisGroup &&
+									!isConditionalItemVisible(
+										group.parentFieldCode,
+										group.showOnValue,
+										group.parentFieldCode2,
+										group.showOnValue2
+									)
+								) {
+									return null;
+								}
+
+								// 2. Filter to only fields that are visible to the user based on gating conditions
+								const visibleGroupFields = group.fields.filter((field) =>
+									isConditionalItemVisible(
+										field.parentFieldCode,
+										field.showOnValue,
+										field.parentFieldCode2,
+										field.showOnValue2
+									)
+								);
+
+								if (visibleGroupFields.length === 0) return null;
+
+								const displayFields = visibleGroupFields.map((field) => {
 									let value = formData[field.formFieldName];
 									
 									// Convert boolean toggles properly for display
 									if (field.fieldType === "BINARY") {
-										value = (value === "1" || value === true) ? "Yes" : "No";
+										value = (value === "1" || value === true || value === "true") ? "Yes" : "No";
 									} else if (value === "" || value === undefined || value === null) {
 										value = "N/A";
 									}
@@ -2052,38 +2085,11 @@ export default function DynamicHealthDataForm({
 									};
 								});
 
-								// Hide fields dependent on Yes/No conditional questions if the answer was No.
-								const isCt001ConditionalField = group.fields.some(f => f.formFieldName === "indicator_ct001_conditional_answer" || f.formFieldName === "indicator_ct001_conditional_answer_phc");
-								const isDc001ConditionalField = group.fields.some(f => f.formFieldName === "indicator_dc001_conditional_answer" || f.formFieldName === "indicator_dc001_conditional_answer_phc");
-
-								let groupAnswer = "yes";
-								if (isCt001ConditionalField) {
-									const answer = facilityType === "PHC" ? formData["indicator_ct001_conditional_answer_phc"] : formData["indicator_ct001_conditional_answer"];
-									groupAnswer = (answer === "1" || answer === true) ? "yes" : "no";
-								} else if (isDc001ConditionalField) {
-									const answer = facilityType === "PHC" ? formData["indicator_dc001_conditional_answer_phc"] : formData["indicator_dc001_conditional_answer"];
-									groupAnswer = (answer === "1" || answer === true) ? "yes" : "no";
-								} else if (indicatorAnswers[group.indicatorCode]) {
-									groupAnswer = indicatorAnswers[group.indicatorCode] || "yes";
-								}
-
-								const displayFields = fieldsWithValue.filter(f => {
-									// Skip the conditional answer fields themselves
-									if (f.name.includes("conditional_answer")) return false;
-
-									if ((f.name === "tb_contact_tracing_households" || f.name === "tb_differentiated_care_visits") && groupAnswer !== "yes") {
-										return false;
-									}
-									return true;
-								});
-								
-								if (displayFields.length === 0) return null;
-
 								return (
 									<div key={group.indicatorCode} className="text-sm">
 										<p className="font-semibold text-gray-800 mb-1">{group.indicatorName}</p>
 										<ul className="space-y-1 divide-y divide-gray-100 pl-2">
-											{displayFields.map(f => (
+											{displayFields.map((f) => (
 												<li key={f.id} className="pt-1 flex justify-between gap-4 text-xs">
 													<span className="text-gray-600 truncate">{f.description}</span>
 													<span className="font-medium shrink-0">{f.value}</span>
