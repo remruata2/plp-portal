@@ -224,6 +224,11 @@ export async function GET(
 			};
 		});
 
+		// Filter out indicators that were not triggered (max_remuneration === 0 due to condition gates)
+		const visibleIndicators = indicators.filter(
+			(ind) => (ind.max_remuneration || 0) > 0
+		);
+
 		const workers = workerRems.map((wr) => ({
 			id: wr.health_workers.id,
 			name: wr.health_workers.name,
@@ -235,12 +240,14 @@ export async function GET(
 		}));
 
 		const summary = {
-			totalIndicators: indicators.length,
-			achievedIndicators: indicators.filter((i: any) => i.status === "achieved")
-				.length,
-			partialIndicators: indicators.filter((i: any) => i.status === "partial")
-				.length,
-			notAchievedIndicators: indicators.filter(
+			totalIndicators: visibleIndicators.length,
+			achievedIndicators: visibleIndicators.filter(
+				(i: any) => i.status === "achieved"
+			).length,
+			partialIndicators: visibleIndicators.filter(
+				(i: any) => i.status === "partial"
+			).length,
+			notAchievedIndicators: visibleIndicators.filter(
 				(i: any) => i.status === "not_achieved"
 			).length,
 			workerCounts: workers.reduce((acc: Record<string, number>, w) => {
@@ -270,7 +277,7 @@ export async function GET(
 			performancePercentage: remunerationCalculation
 				? Number(remunerationCalculation.performance_percentage)
 				: 0,
-			indicators: sortIndicatorsBySourceOrder(indicators as any),
+			indicators: sortIndicatorsBySourceOrder(visibleIndicators as any),
 			workers,
 			summary,
 		};

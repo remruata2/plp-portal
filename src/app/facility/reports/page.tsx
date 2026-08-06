@@ -580,7 +580,9 @@ export default function FacilityReportsPage() {
 										</tr>
 									</thead>
 									<tbody>
-										{report.indicators.map((indicator) => {
+										{report.indicators
+											.filter((indicator) => indicator.max_remuneration === undefined || indicator.max_remuneration > 0)
+											.map((indicator) => {
 											const indicatorNumber = getIndicatorNumber(indicator);
 											return (
 												<tr
