@@ -1416,47 +1416,7 @@ export default function DynamicHealthDataForm({
 		}
 	};
 
-	// Helper to evaluate dynamic binary field gating conditions (supports dual AND gates)
-	const isConditionalItemVisible = (
-		parentFieldCode?: string | null,
-		showOnValue?: string | null,
-		parentFieldCode2?: string | null,
-		showOnValue2?: string | null
-	): boolean => {
-		const checkSingleGate = (
-			code?: string | null,
-			targetVal?: string | null
-		): boolean => {
-			if (!code) return true;
-			const parentVal = String(formData[code] ?? "").trim();
-			const expected = String(targetVal ?? "1").trim();
 
-			if (parentVal === "") return false;
-
-			if (expected === "1") {
-				return (
-					parentVal === "1" ||
-					parentVal === "true" ||
-					parentVal.toLowerCase() === "yes"
-				);
-			}
-			if (expected === "0") {
-				return (
-					parentVal === "0" ||
-					parentVal === "false" ||
-					parentVal.toLowerCase() === "no"
-				);
-			}
-
-			return parentVal === expected;
-		};
-
-		// Gate 1 AND Gate 2 must both pass
-		return (
-			checkSingleGate(parentFieldCode, showOnValue) &&
-			checkSingleGate(parentFieldCode2, showOnValue2)
-		);
-	};
 
 	if (loading || status === "loading") {
 		return (
