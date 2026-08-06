@@ -347,9 +347,9 @@ export class HealthDataRemunerationService {
 					? totalPercentage / indicatorsForPerformance.length
 					: 0;
 
-			// Get health workers for this facility
+			// Get active health workers for this facility
 			const healthWorkers = await tx.health_workers.findMany({
-				where: { facility_id: facilityId },
+				where: { facility_id: facilityId, is_active: true },
 			});
 
 			// Get worker allocation configs for proper worker role mapping
